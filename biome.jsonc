@@ -1,0 +1,78 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"files": {
+		"ignoreUnknown": false,
+		"ignore": [
+			"**/node_modules/**",
+			"**/.next/**",
+			"**/dist/**",
+			"**/build/**",
+			"**/coverage/**",
+			"**/*.test.ts",
+			"**/*.test.tsx",
+			"**/*.spec.ts",
+			"**/*.spec.tsx",
+			"**/*.stories.ts",
+			"**/*.stories.tsx",
+			"**/e2e/**",
+			"**/scripts/**",
+			"**/.storybook/**"
+		]
+	},
+	"overrides": [
+		{
+			"include": [
+				"src/lib/db/models/**/*.ts",
+				"src/server/api/routers/**/*.ts",
+				"src/app/api/**/*.ts",
+				"src/app/api/**/*.tsx",
+				"src/components/graph/**/*.tsx",
+				"src/components/education/**/*.tsx",
+				"src/app/**/*.tsx",
+				"src/app/**/*.ts"
+			],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						"noExplicitAny": "off"
+					}
+				}
+			}
+		}
+	],
+	"formatter": { "enabled": true },
+	"organizeImports": { "enabled": true },
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"nursery": {
+				"useSortedClasses": {
+					"level": "warn",
+					"fix": "safe",
+					"options": {
+						"functions": ["clsx", "cva", "cn"]
+					}
+				}
+			},
+			"recommended": true,
+			"complexity": {
+				"noForEach": "off"
+			},
+			"suspicious": {
+				"noArrayIndexKey": "warn",
+				"noExplicitAny": "warn"
+			},
+			"style": {
+				"noNonNullAssertion": "warn"
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "warn"
+			}
+		}
+	}
+}

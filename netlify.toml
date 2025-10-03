@@ -1,0 +1,57 @@
+# Netlify Configuration for Suplementor
+# Polish Educational Platform for Nootropics and Cognitive Enhancement
+
+[build]
+  command = "bun run build"
+  publish = ".next"
+
+[build.environment]
+  # Node.js version for Netlify
+  NODE_VERSION = "20"
+  # Use Bun for package management and builds
+  NPM_FLAGS = "--legacy-peer-deps"
+
+# Next.js Plugin for Netlify
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Redirects for Polish SEO (matching next.config.js)
+[[redirects]]
+  from = "/supplements"
+  to = "/suplementy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/brain"
+  to = "/wiedza"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/knowledge"
+  to = "/wiedza"
+  status = 301
+  force = true
+
+# Security headers (matching next.config.js)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; worker-src 'self' blob:;"
+
+# Cache static assets
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache API responses
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "public, max-age=300, s-maxage=300"
+
