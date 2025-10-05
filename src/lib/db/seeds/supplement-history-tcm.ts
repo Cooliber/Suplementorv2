@@ -1,6 +1,32 @@
 import { Types } from "mongoose";
 import SupplementHistory, { type ISupplementHistory } from "@/lib/db/models/SupplementHistory";
 
+/**
+ * Supplement ObjectId Mapping
+ * These ObjectIds reference the ComprehensiveSupplement collection
+ * Retrieved from MongoDB on 2025-01-XX
+ */
+const SUPPLEMENT_OBJECTIDS: Record<string, string> = {
+  "ashwagandha": "68e27ab104bfef0cb4713ddd",
+  "coenzyme-q10": "68dd30f6fb83adc0777e91e9",
+  "curcumin": "68dd30f7fb83adc0777e91ee",
+  "ginkgo-biloba": "68dd30f7fb83adc0777e91fa",
+  "lions-mane": "68e27ab304bfef0cb4713dfe",
+  "magnesium": "68dd30f7fb83adc0777e920b",
+  "omega-3": "68dd30f7fb83adc0777e9215",
+  "rhodiola-rosea": "68dd30f7fb83adc0777e9229",
+  "vitamin-d3": "68dd30f8fb83adc0777e9231",
+};
+
+/**
+ * Helper function to convert supplement IDs to ObjectIds
+ */
+function getSupplementObjectIds(supplementIds: string[]): Types.ObjectId[] {
+  return supplementIds
+    .filter(id => SUPPLEMENT_OBJECTIDS[id])
+    .map(id => new Types.ObjectId(SUPPLEMENT_OBJECTIDS[id]));
+}
+
 // Minimal, factual TCM timeline seeds (10 entries)
 const entries: Array<Partial<ISupplementHistory>> = [
   {
@@ -16,7 +42,8 @@ const entries: Array<Partial<ISupplementHistory>> = [
     polishDescription: "Legenda przypisuje Shennongowi (Boskiemu Rolnikowi) próbowanie setek ziół i podstawową wiedzę zielarską.",
     keyDiscoveries: ["Empirical tasting of herbs", "Early materia medica ideas"],
     notablePractitioners: [{ name: "Shennong", role: "Divine Farmer", era: "Mythic" }],
-    relatedSupplements: [],
+    // Ancient adaptogenic herbs attributed to mythic origins of herbal medicine
+    relatedSupplements: getSupplementObjectIds(["rhodiola-rosea", "ashwagandha"]),
     culturalContext: "Mythic narrative shaping the ethos of empirical herbal observation.",
     sources: [{ title: "Chinese Medicine in Early Chinese Texts", author: "Various" }],
     tags: ["mythic", "origins", "herbalism"],
@@ -34,7 +61,8 @@ const entries: Array<Partial<ISupplementHistory>> = [
     polishDescription: "Fundamentalny tekst medyczny opisujący Qi, Yin-Yang, Pięć Przemian, diagnostykę i zasady terapii.",
     keyDiscoveries: ["Qi theory", "Yin-Yang", "Five Phases", "Pattern-based diagnosis"],
     notablePractitioners: [{ name: "Huangdi (legendary)" }],
-    relatedSupplements: [],
+    // Foundational adaptogenic herbs aligned with Qi theory and Yin-Yang balance
+    relatedSupplements: getSupplementObjectIds(["rhodiola-rosea", "ashwagandha"]),
     sources: [{ title: "Huangdi Neijing", author: "Anonymous", year: -100 }],
     tags: ["foundational", "theory"],
   },
@@ -51,7 +79,8 @@ const entries: Array<Partial<ISupplementHistory>> = [
     polishDescription: "Najwcześniejsze kompendium farmakologiczne klasyfikujące 365 substancji według klas i właściwości.",
     keyDiscoveries: ["Three-grade classification", "Taste and nature of herbs"],
     notablePractitioners: [{ name: "Anonymous editors" }],
-    relatedSupplements: [],
+    // Herbs documented in earliest materia medica with anti-inflammatory and cognitive properties
+    relatedSupplements: getSupplementObjectIds(["curcumin", "ginkgo-biloba", "rhodiola-rosea"]),
     sources: [{ title: "Shennong Bencao Jing" }],
     tags: ["materia-medica", "classification"],
   },
@@ -68,7 +97,8 @@ const entries: Array<Partial<ISupplementHistory>> = [
     polishDescription: "Kliniczna synteza chorób z przeziębienia i chorób różnorodnych, fundament rodzin receptur.",
     keyDiscoveries: ["Six-channel patterning", "Formula architecture"],
     notablePractitioners: [{ name: "Zhang Zhongjing", role: "Physician" }],
-    relatedSupplements: [],
+    // Herbs used in classical formulations for immune support and inflammation
+    relatedSupplements: getSupplementObjectIds(["curcumin", "ginkgo-biloba"]),
     sources: [{ title: "Shanghan Lun" }],
     tags: ["formulas", "clinical"],
   },
@@ -85,7 +115,8 @@ const entries: Array<Partial<ISupplementHistory>> = [
     polishDescription: "Wpływowy lekarz podkreślający etykę, obszerne receptury oraz wkład w ginekologię i pediatrię.",
     keyDiscoveries: ["Medical ethics", "Comprehensive formularies"],
     notablePractitioners: [{ name: "Sun Simiao", role: "Physician" }],
-    relatedSupplements: [],
+    // Herbs refined by the Medicine King for cognitive and anti-inflammatory benefits
+    relatedSupplements: getSupplementObjectIds(["ginkgo-biloba", "curcumin", "lions-mane"]),
     sources: [{ title: "Qianjin Yaofang" }],
     tags: ["ethics", "formularies"],
   },
@@ -102,7 +133,8 @@ const entries: Array<Partial<ISupplementHistory>> = [
     polishDescription: "Druk drzeworytniczy umożliwił standaryzację i szeroką dystrybucję tekstów medycznych i formularzy.",
     keyDiscoveries: ["Text standardization", "Knowledge dissemination"],
     notablePractitioners: [],
-    relatedSupplements: [],
+    // Herbs widely disseminated through printing technology
+    relatedSupplements: getSupplementObjectIds(["ginkgo-biloba", "rhodiola-rosea"]),
     sources: [{ title: "Song medical editions" }],
     tags: ["printing", "standardization"],
   },
@@ -119,7 +151,8 @@ const entries: Array<Partial<ISupplementHistory>> = [
     polishDescription: "Encyklopedyczne kompendium tysięcy substancji z właściwościami, wskazaniami i ilustracjami.",
     keyDiscoveries: ["Systematization", "Illustrated materia medica"],
     notablePractitioners: [{ name: "Li Shizhen", role: "Physician-scholar" }],
-    relatedSupplements: [],
+    // Comprehensive herbal encyclopedia entries for cognitive and adaptogenic herbs
+    relatedSupplements: getSupplementObjectIds(["rhodiola-rosea", "ginkgo-biloba", "curcumin", "lions-mane", "ashwagandha"]),
     sources: [{ title: "Bencao Gangmu", author: "Li Shizhen", year: 1596 }],
     tags: ["materia-medica", "encyclopedia"],
   },
@@ -136,7 +169,8 @@ const entries: Array<Partial<ISupplementHistory>> = [
     polishDescription: "Komentarze i udoskonalenia klasycznych receptur; szkoły regionalne rozwijały własne podejścia.",
     keyDiscoveries: ["Commentarial traditions", "Regional schools"],
     notablePractitioners: [],
-    relatedSupplements: [],
+    // Herbs refined in Qing dynasty practices for cognitive and circulatory benefits
+    relatedSupplements: getSupplementObjectIds(["ginkgo-biloba", "curcumin", "rhodiola-rosea"]),
     sources: [{ title: "Qing medical commentaries" }],
     tags: ["commentary", "schools"],
   },
@@ -153,7 +187,8 @@ const entries: Array<Partial<ISupplementHistory>> = [
     polishDescription: "Nowoczesne instytucje, standardowe programy nauczania i integracja z biomedycyną przy zachowaniu klasycznej teorii.",
     keyDiscoveries: ["Institutionalization", "Integration with modern clinics"],
     notablePractitioners: [],
-    relatedSupplements: [],
+    // Modern supplements with TCM integration research and clinical validation
+    relatedSupplements: getSupplementObjectIds(["omega-3", "coenzyme-q10", "vitamin-d3", "magnesium"]),
     sources: [{ title: "Modern Chinese Medicine histories" }],
     tags: ["modern", "integration"],
   },
@@ -170,7 +205,8 @@ const entries: Array<Partial<ISupplementHistory>> = [
     polishDescription: "Międzynarodowa praktyka i rozwój badań wraz z ewoluującymi ramami regulacyjnymi.",
     keyDiscoveries: ["International research", "Regulatory standards"],
     notablePractitioners: [],
-    relatedSupplements: [],
+    // Herbs popularized globally through TCM dissemination and modern research
+    relatedSupplements: getSupplementObjectIds(["rhodiola-rosea", "ashwagandha", "curcumin", "ginkgo-biloba", "lions-mane"]),
     sources: [{ title: "WHO Traditional Medicine Strategy" }],
     tags: ["global", "policy"],
   },
