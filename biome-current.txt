@@ -1,0 +1,5 @@
+The number of diagnostics exceeds the number allowed by Biome.
+Diagnostics not shown: 214.
+Checked 332 files in 316ms. No fixes applied.
+Found 64 errors.
+Found 347 warnings.

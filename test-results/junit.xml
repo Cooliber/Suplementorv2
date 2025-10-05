@@ -1,0 +1,2366 @@
+<testsuites id="" name="" tests="576" failures="0" skipped="576" errors="0" time="0.621856">
+<testsuite name="accessibility.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="chromium" tests="42" failures="0" skipped="42" time="0" errors="0">
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should pass WCAG AA compliance on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper heading hierarchy on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper ARIA labels on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should support keyboard navigation on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have visible focus indicators on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper color contrast on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper form labels on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have alt text for images on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper language attribute on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have skip to main content link on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should pass WCAG AA compliance on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper heading hierarchy on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper ARIA labels on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should support keyboard navigation on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have visible focus indicators on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper color contrast on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper form labels on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have alt text for images on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper language attribute on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have skip to main content link on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should pass WCAG AA compliance on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper heading hierarchy on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper ARIA labels on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should support keyboard navigation on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have visible focus indicators on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper color contrast on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper form labels on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have alt text for images on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper language attribute on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have skip to main content link on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should pass WCAG AA compliance on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper heading hierarchy on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper ARIA labels on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should support keyboard navigation on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have visible focus indicators on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper color contrast on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper form labels on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have alt text for images on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper language attribute on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have skip to main content link on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › should support screen reader announcements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › should have proper landmark roles" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="homepage.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="chromium" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="Homepage › should load successfully and display Polish content" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have proper SEO meta tags" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display navigation menu" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should be accessible (WCAG AA)" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should support keyboard navigation" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should be responsive on mobile devices" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should load within performance budget" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display supplement showcase" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have working links to main sections" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display footer with proper information" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should handle dark mode toggle if available" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should not have console errors" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have proper heading hierarchy" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should load images with proper alt text" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="knowledge-graph.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="chromium" tests="13" failures="0" skipped="13" time="0" errors="0">
+<testcase name="Knowledge Graph Visualization › should load knowledge graph page" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph visualization canvas or SVG" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should have graph controls" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph legend" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should show node details on interaction" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should have search functionality for nodes" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should filter nodes by type" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should export graph data" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph statistics" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should handle graph performance with many nodes" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should be accessible with keyboard navigation" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display Polish node names and descriptions" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should not have console errors during graph rendering" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="chromium" tests="12" failures="0" skipped="12" time="0" errors="0">
+<testcase name="Performance Metrics › should meet Core Web Vitals thresholds on homepage" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should load page within performance budget" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should have acceptable bundle size" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should render 3D graph with acceptable performance" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should handle large datasets efficiently" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should lazy load images" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should use efficient caching strategies" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should minimize layout shifts" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should have fast Time to Interactive" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should optimize font loading" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should minimize main thread blocking" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should handle scroll performance" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="supplements.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="chromium" tests="15" failures="0" skipped="15" time="0" errors="0">
+<testcase name="Supplements Page › should load supplements page with Polish content" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display supplement cards or list" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should have search functionality" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should filter supplements by category" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should navigate to supplement detail page" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display supplement information in Polish" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should be accessible on supplements page" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should support keyboard navigation through supplements" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should show supplement categories" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display evidence levels" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should handle empty search results gracefully" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should load supplement images" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should have proper meta tags for SEO" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should be responsive on mobile" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should not have JavaScript errors" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="accessibility.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="firefox" tests="42" failures="0" skipped="42" time="0" errors="0">
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should pass WCAG AA compliance on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper heading hierarchy on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper ARIA labels on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should support keyboard navigation on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have visible focus indicators on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper color contrast on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper form labels on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have alt text for images on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper language attribute on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have skip to main content link on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should pass WCAG AA compliance on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper heading hierarchy on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper ARIA labels on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should support keyboard navigation on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have visible focus indicators on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper color contrast on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper form labels on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have alt text for images on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper language attribute on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have skip to main content link on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should pass WCAG AA compliance on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper heading hierarchy on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper ARIA labels on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should support keyboard navigation on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have visible focus indicators on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper color contrast on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper form labels on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have alt text for images on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper language attribute on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have skip to main content link on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should pass WCAG AA compliance on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper heading hierarchy on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper ARIA labels on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should support keyboard navigation on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have visible focus indicators on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper color contrast on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper form labels on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have alt text for images on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper language attribute on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have skip to main content link on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › should support screen reader announcements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › should have proper landmark roles" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="homepage.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="firefox" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="Homepage › should load successfully and display Polish content" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have proper SEO meta tags" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display navigation menu" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should be accessible (WCAG AA)" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should support keyboard navigation" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should be responsive on mobile devices" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should load within performance budget" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display supplement showcase" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have working links to main sections" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display footer with proper information" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should handle dark mode toggle if available" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should not have console errors" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have proper heading hierarchy" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should load images with proper alt text" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="knowledge-graph.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="firefox" tests="13" failures="0" skipped="13" time="0" errors="0">
+<testcase name="Knowledge Graph Visualization › should load knowledge graph page" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph visualization canvas or SVG" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should have graph controls" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph legend" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should show node details on interaction" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should have search functionality for nodes" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should filter nodes by type" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should export graph data" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph statistics" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should handle graph performance with many nodes" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should be accessible with keyboard navigation" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display Polish node names and descriptions" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should not have console errors during graph rendering" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="firefox" tests="12" failures="0" skipped="12" time="0" errors="0">
+<testcase name="Performance Metrics › should meet Core Web Vitals thresholds on homepage" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should load page within performance budget" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should have acceptable bundle size" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should render 3D graph with acceptable performance" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should handle large datasets efficiently" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should lazy load images" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should use efficient caching strategies" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should minimize layout shifts" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should have fast Time to Interactive" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should optimize font loading" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should minimize main thread blocking" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should handle scroll performance" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="supplements.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="firefox" tests="15" failures="0" skipped="15" time="0" errors="0">
+<testcase name="Supplements Page › should load supplements page with Polish content" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display supplement cards or list" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should have search functionality" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should filter supplements by category" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should navigate to supplement detail page" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display supplement information in Polish" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should be accessible on supplements page" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should support keyboard navigation through supplements" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should show supplement categories" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display evidence levels" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should handle empty search results gracefully" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should load supplement images" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should have proper meta tags for SEO" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should be responsive on mobile" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should not have JavaScript errors" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="accessibility.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="webkit" tests="42" failures="0" skipped="42" time="0" errors="0">
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should pass WCAG AA compliance on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper heading hierarchy on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper ARIA labels on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should support keyboard navigation on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have visible focus indicators on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper color contrast on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper form labels on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have alt text for images on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper language attribute on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have skip to main content link on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should pass WCAG AA compliance on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper heading hierarchy on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper ARIA labels on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should support keyboard navigation on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have visible focus indicators on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper color contrast on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper form labels on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have alt text for images on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper language attribute on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have skip to main content link on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should pass WCAG AA compliance on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper heading hierarchy on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper ARIA labels on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should support keyboard navigation on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have visible focus indicators on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper color contrast on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper form labels on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have alt text for images on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper language attribute on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have skip to main content link on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should pass WCAG AA compliance on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper heading hierarchy on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper ARIA labels on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should support keyboard navigation on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have visible focus indicators on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper color contrast on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper form labels on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have alt text for images on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper language attribute on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have skip to main content link on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › should support screen reader announcements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › should have proper landmark roles" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="homepage.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="webkit" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="Homepage › should load successfully and display Polish content" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have proper SEO meta tags" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display navigation menu" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should be accessible (WCAG AA)" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should support keyboard navigation" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should be responsive on mobile devices" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should load within performance budget" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display supplement showcase" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have working links to main sections" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display footer with proper information" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should handle dark mode toggle if available" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should not have console errors" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have proper heading hierarchy" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should load images with proper alt text" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="knowledge-graph.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="webkit" tests="13" failures="0" skipped="13" time="0" errors="0">
+<testcase name="Knowledge Graph Visualization › should load knowledge graph page" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph visualization canvas or SVG" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should have graph controls" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph legend" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should show node details on interaction" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should have search functionality for nodes" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should filter nodes by type" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should export graph data" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph statistics" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should handle graph performance with many nodes" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should be accessible with keyboard navigation" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display Polish node names and descriptions" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should not have console errors during graph rendering" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="webkit" tests="12" failures="0" skipped="12" time="0" errors="0">
+<testcase name="Performance Metrics › should meet Core Web Vitals thresholds on homepage" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should load page within performance budget" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should have acceptable bundle size" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should render 3D graph with acceptable performance" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should handle large datasets efficiently" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should lazy load images" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should use efficient caching strategies" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should minimize layout shifts" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should have fast Time to Interactive" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should optimize font loading" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should minimize main thread blocking" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should handle scroll performance" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="supplements.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="webkit" tests="15" failures="0" skipped="15" time="0" errors="0">
+<testcase name="Supplements Page › should load supplements page with Polish content" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display supplement cards or list" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should have search functionality" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should filter supplements by category" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should navigate to supplement detail page" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display supplement information in Polish" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should be accessible on supplements page" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should support keyboard navigation through supplements" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should show supplement categories" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display evidence levels" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should handle empty search results gracefully" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should load supplement images" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should have proper meta tags for SEO" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should be responsive on mobile" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should not have JavaScript errors" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="accessibility.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="Mobile Chrome" tests="42" failures="0" skipped="42" time="0" errors="0">
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should pass WCAG AA compliance on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper heading hierarchy on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper ARIA labels on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should support keyboard navigation on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have visible focus indicators on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper color contrast on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper form labels on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have alt text for images on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper language attribute on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have skip to main content link on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should pass WCAG AA compliance on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper heading hierarchy on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper ARIA labels on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should support keyboard navigation on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have visible focus indicators on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper color contrast on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper form labels on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have alt text for images on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper language attribute on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have skip to main content link on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should pass WCAG AA compliance on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper heading hierarchy on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper ARIA labels on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should support keyboard navigation on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have visible focus indicators on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper color contrast on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper form labels on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have alt text for images on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper language attribute on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have skip to main content link on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should pass WCAG AA compliance on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper heading hierarchy on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper ARIA labels on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should support keyboard navigation on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have visible focus indicators on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper color contrast on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper form labels on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have alt text for images on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper language attribute on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have skip to main content link on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › should support screen reader announcements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › should have proper landmark roles" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="homepage.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="Mobile Chrome" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="Homepage › should load successfully and display Polish content" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have proper SEO meta tags" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display navigation menu" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should be accessible (WCAG AA)" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should support keyboard navigation" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should be responsive on mobile devices" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should load within performance budget" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display supplement showcase" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have working links to main sections" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display footer with proper information" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should handle dark mode toggle if available" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should not have console errors" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have proper heading hierarchy" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should load images with proper alt text" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="knowledge-graph.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="Mobile Chrome" tests="13" failures="0" skipped="13" time="0" errors="0">
+<testcase name="Knowledge Graph Visualization › should load knowledge graph page" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph visualization canvas or SVG" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should have graph controls" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph legend" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should show node details on interaction" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should have search functionality for nodes" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should filter nodes by type" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should export graph data" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph statistics" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should handle graph performance with many nodes" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should be accessible with keyboard navigation" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display Polish node names and descriptions" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should not have console errors during graph rendering" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="Mobile Chrome" tests="12" failures="0" skipped="12" time="0" errors="0">
+<testcase name="Performance Metrics › should meet Core Web Vitals thresholds on homepage" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should load page within performance budget" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should have acceptable bundle size" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should render 3D graph with acceptable performance" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should handle large datasets efficiently" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should lazy load images" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should use efficient caching strategies" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should minimize layout shifts" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should have fast Time to Interactive" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should optimize font loading" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should minimize main thread blocking" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should handle scroll performance" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="supplements.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="Mobile Chrome" tests="15" failures="0" skipped="15" time="0" errors="0">
+<testcase name="Supplements Page › should load supplements page with Polish content" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display supplement cards or list" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should have search functionality" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should filter supplements by category" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should navigate to supplement detail page" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display supplement information in Polish" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should be accessible on supplements page" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should support keyboard navigation through supplements" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should show supplement categories" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display evidence levels" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should handle empty search results gracefully" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should load supplement images" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should have proper meta tags for SEO" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should be responsive on mobile" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should not have JavaScript errors" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="accessibility.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="Mobile Safari" tests="42" failures="0" skipped="42" time="0" errors="0">
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should pass WCAG AA compliance on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper heading hierarchy on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper ARIA labels on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should support keyboard navigation on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have visible focus indicators on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper color contrast on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper form labels on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have alt text for images on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper language attribute on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have skip to main content link on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should pass WCAG AA compliance on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper heading hierarchy on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper ARIA labels on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should support keyboard navigation on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have visible focus indicators on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper color contrast on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper form labels on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have alt text for images on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper language attribute on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have skip to main content link on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should pass WCAG AA compliance on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper heading hierarchy on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper ARIA labels on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should support keyboard navigation on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have visible focus indicators on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper color contrast on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper form labels on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have alt text for images on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper language attribute on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have skip to main content link on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should pass WCAG AA compliance on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper heading hierarchy on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper ARIA labels on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should support keyboard navigation on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have visible focus indicators on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper color contrast on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper form labels on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have alt text for images on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper language attribute on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have skip to main content link on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › should support screen reader announcements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › should have proper landmark roles" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="homepage.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="Mobile Safari" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="Homepage › should load successfully and display Polish content" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have proper SEO meta tags" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display navigation menu" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should be accessible (WCAG AA)" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should support keyboard navigation" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should be responsive on mobile devices" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should load within performance budget" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display supplement showcase" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have working links to main sections" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display footer with proper information" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should handle dark mode toggle if available" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should not have console errors" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have proper heading hierarchy" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should load images with proper alt text" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="knowledge-graph.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="Mobile Safari" tests="13" failures="0" skipped="13" time="0" errors="0">
+<testcase name="Knowledge Graph Visualization › should load knowledge graph page" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph visualization canvas or SVG" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should have graph controls" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph legend" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should show node details on interaction" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should have search functionality for nodes" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should filter nodes by type" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should export graph data" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph statistics" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should handle graph performance with many nodes" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should be accessible with keyboard navigation" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display Polish node names and descriptions" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should not have console errors during graph rendering" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="Mobile Safari" tests="12" failures="0" skipped="12" time="0" errors="0">
+<testcase name="Performance Metrics › should meet Core Web Vitals thresholds on homepage" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should load page within performance budget" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should have acceptable bundle size" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should render 3D graph with acceptable performance" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should handle large datasets efficiently" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should lazy load images" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should use efficient caching strategies" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should minimize layout shifts" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should have fast Time to Interactive" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should optimize font loading" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should minimize main thread blocking" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should handle scroll performance" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="supplements.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="Mobile Safari" tests="15" failures="0" skipped="15" time="0" errors="0">
+<testcase name="Supplements Page › should load supplements page with Polish content" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display supplement cards or list" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should have search functionality" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should filter supplements by category" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should navigate to supplement detail page" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display supplement information in Polish" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should be accessible on supplements page" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should support keyboard navigation through supplements" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should show supplement categories" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display evidence levels" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should handle empty search results gracefully" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should load supplement images" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should have proper meta tags for SEO" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should be responsive on mobile" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should not have JavaScript errors" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="accessibility.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="iPad" tests="42" failures="0" skipped="42" time="0" errors="0">
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should pass WCAG AA compliance on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper heading hierarchy on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper ARIA labels on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should support keyboard navigation on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have visible focus indicators on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper color contrast on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper form labels on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have alt text for images on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have proper language attribute on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Homepage Page Accessibility › should have skip to main content link on Homepage" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should pass WCAG AA compliance on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper heading hierarchy on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper ARIA labels on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should support keyboard navigation on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have visible focus indicators on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper color contrast on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper form labels on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have alt text for images on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have proper language attribute on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Supplements Page Accessibility › should have skip to main content link on Supplements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should pass WCAG AA compliance on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper heading hierarchy on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper ARIA labels on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should support keyboard navigation on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have visible focus indicators on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper color contrast on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper form labels on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have alt text for images on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have proper language attribute on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Knowledge Page Accessibility › should have skip to main content link on Knowledge" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should pass WCAG AA compliance on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper heading hierarchy on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper ARIA labels on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should support keyboard navigation on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have visible focus indicators on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper color contrast on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper form labels on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have alt text for images on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have proper language attribute on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › Psychology Page Accessibility › should have skip to main content link on Psychology" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › should support screen reader announcements" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility Compliance › should have proper landmark roles" classname="accessibility.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="homepage.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="iPad" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="Homepage › should load successfully and display Polish content" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have proper SEO meta tags" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display navigation menu" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should be accessible (WCAG AA)" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should support keyboard navigation" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should be responsive on mobile devices" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should load within performance budget" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display supplement showcase" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have working links to main sections" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should display footer with proper information" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should handle dark mode toggle if available" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should not have console errors" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should have proper heading hierarchy" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Homepage › should load images with proper alt text" classname="homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="knowledge-graph.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="iPad" tests="13" failures="0" skipped="13" time="0" errors="0">
+<testcase name="Knowledge Graph Visualization › should load knowledge graph page" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph visualization canvas or SVG" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should have graph controls" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph legend" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should show node details on interaction" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should have search functionality for nodes" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should filter nodes by type" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should export graph data" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display graph statistics" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should handle graph performance with many nodes" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should be accessible with keyboard navigation" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should display Polish node names and descriptions" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Knowledge Graph Visualization › should not have console errors during graph rendering" classname="knowledge-graph.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="iPad" tests="12" failures="0" skipped="12" time="0" errors="0">
+<testcase name="Performance Metrics › should meet Core Web Vitals thresholds on homepage" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should load page within performance budget" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should have acceptable bundle size" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should render 3D graph with acceptable performance" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should handle large datasets efficiently" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should lazy load images" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should use efficient caching strategies" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should minimize layout shifts" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should have fast Time to Interactive" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should optimize font loading" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should minimize main thread blocking" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Metrics › should handle scroll performance" classname="performance.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="supplements.spec.ts" timestamp="2025-09-30T10:20:48.692Z" hostname="iPad" tests="15" failures="0" skipped="15" time="0" errors="0">
+<testcase name="Supplements Page › should load supplements page with Polish content" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display supplement cards or list" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should have search functionality" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should filter supplements by category" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should navigate to supplement detail page" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display supplement information in Polish" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should be accessible on supplements page" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should support keyboard navigation through supplements" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should show supplement categories" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should display evidence levels" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should handle empty search results gracefully" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should load supplement images" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should have proper meta tags for SEO" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should be responsive on mobile" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Supplements Page › should not have JavaScript errors" classname="supplements.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

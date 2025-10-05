@@ -1,5 +1,9 @@
-import { postRouter } from "kek/server/api/routers/post";
-import { createCallerFactory, createTRPCRouter } from "kek/server/api/trpc";
+import { advancedSearchRouter } from "@/server/api/routers/advanced-search";
+import { knowledgeRouter } from "@/server/api/routers/knowledge";
+import { postRouter } from "@/server/api/routers/post";
+import { recommendationsRouter } from "@/server/api/routers/recommendations";
+import { supplementRouter } from "@/server/api/routers/supplement";
+import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +12,10 @@ import { createCallerFactory, createTRPCRouter } from "kek/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
 	post: postRouter,
+	supplement: supplementRouter,
+	knowledge: knowledgeRouter,
+	advancedSearch: advancedSearchRouter,
+	recommendations: recommendationsRouter,
 });
 
 // export type definition of API

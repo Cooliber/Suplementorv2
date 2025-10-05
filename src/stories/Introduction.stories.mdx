@@ -1,0 +1,166 @@
+import { Meta } from '@storybook/blocks';
+import { LinkTo } from '@storybook/addon-links';
+
+<Meta title="Wprowadzenie/Graf Wiedzy o Suplementach" />
+
+# Graf Wiedzy o Suplementach
+
+Witaj w dokumentacji komponentów grafu wiedzy dla aplikacji Suplementor! 
+
+Ta biblioteka komponentów została stworzona specjalnie dla polskiego rynku suplementów i zawiera zaawansowane narzędzia do wizualizacji połączeń między suplementami, neurotransmiterami, regionami mózgu i funkcjami poznawczymi.
+
+## 🧠 Główne funkcjonalności
+
+### Wizualizacja interaktywna
+- **Graf 2D/3D**: Interaktywne wizualizacje używające D3.js i Three.js
+- **Polskie nazwy**: Pełna lokalizacja z obsługą polskich znaków diakrytycznych
+- **Responsywność**: Optymalizacja dla urządzeń mobilnych i desktopowych
+
+### Wydajność
+- **Wirtualizacja**: Obsługa tysięcy węzłów bez utraty płynności
+- **Progressive loading**: Stopniowe ładowanie dużych zbiorów danych
+- **Monitoring wydajności**: Automatyczne dostosowanie jakości do możliwości urządzenia
+
+### Dane medyczne
+- **Baza suplementów**: Kompletne informacje o polskich suplementach
+- **Dowody naukowe**: Klasyfikacja według siły dowodów (STRONG, MODERATE, WEAK)
+- **Interakcje**: Synergie, antagonizmy i modulacje między substancjami
+
+## 📚 Struktura komponentów
+
+### Główne komponenty
+
+<LinkTo kind="Graf" story="Default">
+  **GraphDashboard**
+</LinkTo>
+- Główny dashboard z pełną funkcjonalnością
+- Sidebar z filtrami i kontrolkami
+- Legenda typów węzłów i relacji
+
+<LinkTo kind="Graf" story="Default">
+  **D3GraphVisualization**
+</LinkTo>
+- Wizualizacja 2D używająca D3.js
+- Symulacja fizyki i animacje
+- Interaktywne etykiety w języku polskim
+
+<LinkTo kind="Graf" story="Default">
+  **WebGLGraphVisualization**
+</LinkTo>
+- Wizualizacja 3D używająca Three.js
+- Automatyczne wykrywanie obsługi WebGL
+- Adaptacyjna jakość renderowania
+
+### Komponenty pomocnicze
+
+<LinkTo kind="Graf" story="Default">
+  **PerformanceMonitor**
+</LinkTo>
+- Monitoring FPS, pamięci i czasu renderowania
+- Polskie komunikaty o problemach wydajności
+- Automatyczne rekomendacje optymalizacji
+
+<LinkTo kind="Graf" story="Default">
+  **VirtualizedNodeList**
+</LinkTo>
+- Wirtualizowana lista węzłów dla dużych zbiorów
+- Wyszukiwanie z obsługą polskich znaków
+- Grupowanie według typów
+
+<LinkTo kind="Graf" story="Default">
+  **ProgressiveGraphLoader**
+</LinkTo>
+- Stopniowe ładowanie danych w pakietach
+- Animowane szkielety ładowania
+- Kontrola prędkości ładowania
+
+## 🇵🇱 Lokalizacja polska
+
+Wszystkie komponenty zostały zaprojektowane z myślą o polskim użytkowniku:
+
+### Terminologia medyczna
+- **Suplementy**: Kwasy tłuszczowe Omega-3, Magnez, Witamina D3
+- **Neurotransmitery**: Dopamina, Serotonina, GABA, Acetylocholina
+- **Regiony mózgu**: Hipokamp, Kora przedczołowa, Ciało migdałowate
+- **Funkcje poznawcze**: Pamięć, Uwaga, Koncentracja, Neuroplastyczność
+
+### Mechanizmy działania
+- **Synergie**: "Wzmocnienie płynności błon komórkowych"
+- **Modulacje**: "Regulacja receptorów NMDA"
+- **Antagonizmy**: "Hamowanie wchłaniania składników"
+
+### Komunikaty użytkownika
+- Wszystkie komunikaty błędów w języku polskim
+- Tooltips z polskimi opisami
+- Instrukcje obsługi w języku polskim
+
+## 🚀 Wydajność i optymalizacja
+
+### Automatyczne dostosowanie
+- **Adaptacyjna jakość**: Automatyczne obniżanie jakości przy niskim FPS
+- **Zarządzanie pamięcią**: Monitoring i ostrzeżenia o wysokim zużyciu
+- **Batch processing**: Przetwarzanie polskiego tekstu w pakietach
+
+### Optymalizacje dla polskiego tekstu
+- **Normalizacja NFD**: Efektywne przetwarzanie znaków diakrytycznych
+- **Cache wyszukiwania**: Buforowanie wyników wyszukiwania polskich fraz
+- **Kompresja tekstu**: Optymalizacja długich polskich opisów
+
+## 📱 Responsywność
+
+### Breakpointy
+- **Mobile**: 320px - 768px (uproszczony interfejs)
+- **Tablet**: 768px - 1024px (średnia funkcjonalność)
+- **Desktop**: 1024px+ (pełna funkcjonalność)
+
+### Adaptacje mobilne
+- Dotykowe gesty nawigacji
+- Większe obszary klikalne
+- Uproszczone menu i kontrolki
+- Optymalizacja dla małych ekranów
+
+## 🧪 Testowanie
+
+### Scenariusze testowe
+- **Małe zbiory**: 10-50 węzłów (szybkie testy)
+- **Średnie zbiory**: 50-200 węzłów (typowe użycie)
+- **Duże zbiory**: 200-500 węzłów (test wydajności)
+- **Bardzo duże**: 500+ węzłów (test graniczny)
+
+### Typy danych
+- **Tylko suplementy**: Analiza interakcji między suplementami
+- **Pełny graf**: Wszystkie typy węzłów i relacji
+- **Wysokie dowody**: Tylko relacje z silnymi dowodami
+- **Polskie znaki**: Test obsługi ąćęłńóśźż
+
+## 🔧 Konfiguracja
+
+### Zmienne środowiskowe
+```bash
+NEXT_PUBLIC_DEFAULT_LOCALE=pl
+NEXT_PUBLIC_SUPPORTED_LOCALES=pl,en
+NEXT_PUBLIC_MAX_GRAPH_NODES=500
+NEXT_PUBLIC_ENABLE_WEBGL=true
+```
+
+### Opcje wydajności
+```typescript
+const graphOptions = {
+  maxNodes: 500,
+  enablePhysics: true,
+  qualityLevel: 'medium', // 'low' | 'medium' | 'high'
+  autoOptimize: true,
+  progressiveLoading: true
+};
+```
+
+## 📖 Dalsze kroki
+
+1. **Eksploruj komponenty**: Przejrzyj poszczególne stories komponentów
+2. **Testuj scenariusze**: Wypróbuj różne rozmiary danych i konfiguracje
+3. **Sprawdź wydajność**: Użyj PerformanceMonitor do analizy
+4. **Dostosuj do potrzeb**: Skonfiguruj komponenty dla swojego przypadku użycia
+
+---
+
+*Dokumentacja została stworzona dla zespołu Suplementor w celu ułatwienia rozwoju i utrzymania komponentów grafu wiedzy.*

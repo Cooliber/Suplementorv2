@@ -1,10 +1,8 @@
 import { z } from "zod";
 
-import {
-	createTRPCRouter,
-	protectedProcedure,
-	publicProcedure,
-} from "kek/server/api/trpc";
+import { randomUUID } from "crypto";
+
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const postRouter = createTRPCRouter({
 	hello: publicProcedure
@@ -18,22 +16,36 @@ export const postRouter = createTRPCRouter({
 	create: protectedProcedure
 		.input(z.object({ name: z.string().min(1) }))
 		.mutation(async ({ ctx, input }) => {
-			return ctx.db.post.create({
-				data: {
+			try {
+				const userId = ctx.session.user.id;
+				const post = await ctx.db.post.create({
+					id: randomUUID(),
 					name: input.name,
-					createdBy: { connect: { id: ctx.session.user.id } },
-				},
-			});
+					userId,
+					createdAt: new Date(),
+				});
+				return {
+					id: post.id,
+					name: post.name,
+					createdAt: post.createdAt,
+				};
+			} catch (err) {
+				throw new Error("Failed to create post");
+			}
 		}),
 
-	getLatest: protectedProcedure.query(async ({ ctx }) => {
-		const post = await ctx.db.post.findFirst({
-			orderBy: { createdAt: "desc" },
-			where: { createdBy: { id: ctx.session.user.id } },
-		});
-
-		return post ?? null;
-	}),
+	getLatest: protectedProcedure.query(
+		async ({ ctx }): Promise<{ id: string; name: string; createdAt: Date } | null> => {
+			const userId = ctx.session.user.id;
+			const latest = await ctx.db.post
+				.findOne({ userId })
+				.sort({ createdAt: -1 })
+				.lean();
+			return latest
+				? { id: latest.id, name: latest.name, createdAt: latest.createdAt }
+				: null;
+		},
+	),
 
 	getSecretMessage: protectedProcedure.query(() => {
 		return "you can now see this secret message!";

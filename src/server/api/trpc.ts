@@ -11,8 +11,9 @@ import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { auth } from "kek/server/auth";
-import { db } from "kek/server/db";
+import * as models from "@/lib/db/models";
+import connectToDatabase from "@/lib/db/mongodb";
+import { auth } from "@/server/auth";
 
 /**
  * 1. CONTEXT
@@ -29,9 +30,31 @@ import { db } from "kek/server/db";
 export const createTRPCContext = async (opts: { headers: Headers }) => {
 	const session = await auth();
 
+	// Ensure MongoDB connection
+	await connectToDatabase();
+
+	// Provide Mongoose models with Prisma-like interface
+	const db = {
+		knowledgeNode: models.KnowledgeNode,
+		knowledgeRelationship: models.KnowledgeRelationship,
+		supplement: models.Supplement,
+		comprehensiveSupplement: models.ComprehensiveSupplement,
+		brainRegion: models.BrainRegion,
+		neurotransmitterSystem: models.NeurotransmitterSystem,
+		researchStudy: models.ResearchStudy,
+		supplementIntakeLog: models.SupplementIntakeLog,
+		effectMeasurement: models.EffectMeasurement,
+		supplementSchedule: models.SupplementSchedule,
+		progressInsight: models.ProgressInsight,
+		userHealthProfile: models.UserHealthProfileModel,
+		aiRecommendation: models.AIRecommendationModel,
+		drugSupplementInteraction: models.DrugSupplementInteraction,
+		post: models.Post,
+	};
+
 	return {
-		db,
 		session,
+		db,
 		...opts,
 	};
 };

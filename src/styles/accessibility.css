@@ -1,0 +1,424 @@
+/**
+ * Accessibility Styles for WCAG 2.1 AA Compliance
+ * Includes high contrast mode, focus indicators, and screen reader utilities
+ */
+
+/* Screen reader only content */
+.sr-only {
+	position: absolute !important;
+	width: 1px !important;
+	height: 1px !important;
+	padding: 0 !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	clip: rect(0, 0, 0, 0) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+}
+
+/* Focus indicators with high contrast support */
+.focus-visible,
+*:focus-visible {
+	outline: 2px solid var(--focus-color, #2563eb);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+
+/* High contrast mode variables */
+:root {
+	--graph-high-contrast: 0;
+	--focus-color: #2563eb;
+	--text-color: #1f2937;
+	--background-color: #ffffff;
+	--border-color: #d1d5db;
+	--node-color: #10b981;
+	--relationship-color: #6b7280;
+}
+
+/* High contrast mode overrides */
+[data-high-contrast="true"],
+:root[style*="--graph-high-contrast: 1"] {
+	--focus-color: #000000;
+	--text-color: #000000;
+	--background-color: #ffffff;
+	--border-color: #000000;
+	--node-color: #000000;
+	--relationship-color: #000000;
+}
+
+/* System high contrast detection */
+@media (prefers-contrast: high) {
+	:root {
+		--focus-color: #000000;
+		--text-color: #000000;
+		--background-color: #ffffff;
+		--border-color: #000000;
+	}
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* Graph accessibility styles */
+.graph-container {
+	position: relative;
+}
+
+.graph-container:focus-within {
+	outline: 2px solid var(--focus-color);
+	outline-offset: 2px;
+}
+
+/* Node accessibility styles */
+[data-graph-element="node"] {
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+[data-graph-element="node"]:hover,
+[data-graph-element="node"]:focus {
+	stroke: var(--focus-color);
+	stroke-width: 3px;
+	filter: drop-shadow(0 0 4px var(--focus-color));
+}
+
+[data-graph-element="node"][aria-selected="true"] {
+	stroke: var(--focus-color);
+	stroke-width: 4px;
+	filter: drop-shadow(0 0 6px var(--focus-color));
+}
+
+/* High contrast node styles */
+:root[style*="--graph-high-contrast: 1"] [data-graph-element="node"] {
+	fill: #ffffff;
+	stroke: #000000;
+	stroke-width: 2px;
+}
+
+:root[style*="--graph-high-contrast: 1"] [data-graph-element="node"]:hover,
+:root[style*="--graph-high-contrast: 1"] [data-graph-element="node"]:focus {
+	stroke-width: 4px;
+	fill: #000000;
+	stroke: #ffffff;
+}
+
+/* Relationship accessibility styles */
+[data-graph-element="relationship"] {
+	transition: all 0.2s ease;
+	pointer-events: stroke;
+	stroke-width: 2px;
+}
+
+[data-graph-element="relationship"]:hover,
+[data-graph-element="relationship"]:focus {
+	stroke: var(--focus-color);
+	stroke-width: 3px;
+	filter: drop-shadow(0 0 2px var(--focus-color));
+}
+
+/* High contrast relationship styles */
+:root[style*="--graph-high-contrast: 1"] [data-graph-element="relationship"] {
+	stroke: #000000;
+	stroke-width: 3px;
+}
+
+/* Text accessibility styles */
+[data-graph-element="text"] {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	font-size: 12px;
+	fill: var(--text-color);
+	pointer-events: none;
+	user-select: none;
+}
+
+/* High contrast text styles */
+:root[style*="--graph-high-contrast: 1"] [data-graph-element="text"] {
+	fill: #000000;
+	font-weight: bold;
+	font-size: 14px;
+	stroke: #ffffff;
+	stroke-width: 0.5px;
+	paint-order: stroke fill;
+}
+
+/* Keyboard navigation indicators */
+.keyboard-navigation-active [data-graph-element="node"] {
+	outline: 2px dashed var(--focus-color);
+	outline-offset: 4px;
+}
+
+.keyboard-navigation-active
+	[data-graph-element="node"][data-keyboard-selected="true"] {
+	outline: 3px solid var(--focus-color);
+	outline-offset: 2px;
+	animation: pulse-focus 1.5s infinite;
+}
+
+@keyframes pulse-focus {
+	0%,
+	100% {
+		outline-color: var(--focus-color);
+		outline-width: 3px;
+	}
+	50% {
+		outline-color: transparent;
+		outline-width: 5px;
+	}
+}
+
+/* Screen reader mode styles */
+.screen-reader-mode {
+	/* Enhanced text visibility */
+}
+
+.screen-reader-mode [data-graph-element="text"] {
+	font-size: 14px;
+	font-weight: 600;
+	fill: var(--text-color);
+}
+
+.screen-reader-mode .node-info-panel {
+	border: 2px solid var(--focus-color);
+	background: var(--background-color);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Tooltip accessibility */
+.graph-tooltip {
+	background: var(--background-color);
+	border: 1px solid var(--border-color);
+	border-radius: 6px;
+	padding: 8px 12px;
+	font-size: 14px;
+	color: var(--text-color);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	max-width: 300px;
+	word-wrap: break-word;
+	z-index: 1000;
+}
+
+.graph-tooltip[aria-hidden="false"] {
+	display: block;
+}
+
+.graph-tooltip[aria-hidden="true"] {
+	display: none;
+}
+
+/* High contrast tooltip */
+:root[style*="--graph-high-contrast: 1"] .graph-tooltip {
+	background: #ffffff;
+	border: 2px solid #000000;
+	color: #000000;
+	font-weight: bold;
+}
+
+/* Button accessibility */
+.accessibility-button {
+	min-width: 44px;
+	min-height: 44px;
+	padding: 8px;
+	border: 2px solid var(--border-color);
+	background: var(--background-color);
+	color: var(--text-color);
+	border-radius: 6px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.accessibility-button:hover {
+	border-color: var(--focus-color);
+	background: color-mix(
+		in srgb,
+		var(--focus-color) 10%,
+		var(--background-color)
+	);
+}
+
+.accessibility-button:focus {
+	outline: 2px solid var(--focus-color);
+	outline-offset: 2px;
+}
+
+.accessibility-button[aria-pressed="true"] {
+	background: var(--focus-color);
+	color: #ffffff;
+	border-color: var(--focus-color);
+}
+
+/* High contrast buttons */
+:root[style*="--graph-high-contrast: 1"] .accessibility-button {
+	border: 3px solid #000000;
+	background: #ffffff;
+	color: #000000;
+	font-weight: bold;
+}
+
+:root[style*="--graph-high-contrast: 1"] .accessibility-button:hover {
+	background: #000000;
+	color: #ffffff;
+}
+
+:root[style*="--graph-high-contrast: 1"]
+	.accessibility-button[aria-pressed="true"] {
+	background: #000000;
+	color: #ffffff;
+}
+
+/* Keyboard help modal */
+.keyboard-help-modal {
+	background: var(--background-color);
+	border: 2px solid var(--border-color);
+	border-radius: 8px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+	max-height: 80vh;
+	overflow-y: auto;
+}
+
+.keyboard-help-modal kbd {
+	background: color-mix(in srgb, var(--text-color) 10%, var(--background-color));
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
+	padding: 2px 6px;
+	font-family: monospace;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+/* High contrast keyboard help */
+:root[style*="--graph-high-contrast: 1"] .keyboard-help-modal {
+	border: 3px solid #000000;
+	background: #ffffff;
+}
+
+:root[style*="--graph-high-contrast: 1"] .keyboard-help-modal kbd {
+	background: #000000;
+	color: #ffffff;
+	border: 2px solid #000000;
+}
+
+/* Status announcements */
+.status-announcement {
+	position: fixed;
+	bottom: 20px;
+	left: 20px;
+	background: var(--background-color);
+	border: 2px solid var(--focus-color);
+	border-radius: 6px;
+	padding: 12px 16px;
+	color: var(--text-color);
+	font-weight: 500;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	z-index: 1000;
+	max-width: 400px;
+}
+
+/* Progress indicators */
+.accessibility-progress {
+	background: var(--background-color);
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
+	height: 8px;
+	overflow: hidden;
+}
+
+.accessibility-progress-bar {
+	background: var(--focus-color);
+	height: 100%;
+	transition: width 0.3s ease;
+}
+
+/* High contrast progress */
+:root[style*="--graph-high-contrast: 1"] .accessibility-progress {
+	border: 2px solid #000000;
+	background: #ffffff;
+}
+
+:root[style*="--graph-high-contrast: 1"] .accessibility-progress-bar {
+	background: #000000;
+}
+
+/* Loading states */
+.accessibility-loading {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--text-color);
+}
+
+.accessibility-loading::before {
+	content: "";
+	width: 16px;
+	height: 16px;
+	border: 2px solid var(--border-color);
+	border-top: 2px solid var(--focus-color);
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Error states */
+.accessibility-error {
+	color: #dc2626;
+	border-color: #dc2626;
+}
+
+:root[style*="--graph-high-contrast: 1"] .accessibility-error {
+	color: #000000;
+	border-color: #000000;
+	background: #ffffff;
+	font-weight: bold;
+}
+
+/* Success states */
+.accessibility-success {
+	color: #059669;
+	border-color: #059669;
+}
+
+:root[style*="--graph-high-contrast: 1"] .accessibility-success {
+	color: #000000;
+	border-color: #000000;
+	background: #ffffff;
+	font-weight: bold;
+}
+
+/* Print styles for accessibility */
+@media print {
+	.accessibility-button,
+	.keyboard-help-modal,
+	.status-announcement {
+		display: none !important;
+	}
+
+	[data-graph-element="node"] {
+		fill: #ffffff !important;
+		stroke: #000000 !important;
+		stroke-width: 2px !important;
+	}
+
+	[data-graph-element="relationship"] {
+		stroke: #000000 !important;
+		stroke-width: 1px !important;
+	}
+
+	[data-graph-element="text"] {
+		fill: #000000 !important;
+		font-size: 12px !important;
+		font-weight: bold !important;
+	}
+}

@@ -1,0 +1,64 @@
+# Suplementor Project Configuration for Augment AI Development
+# Polish Educational App for Nootropics and Cognitive Enhancement
+
+project:
+  name: "Suplementor"
+  version: "2.0.0"
+  description: "Polish educational platform for nootropics and cognitive enhancement with 3D brain visualization"
+  
+  # Core Technologies
+  stack:
+    framework: "Next.js 15.3.3"
+    language: "TypeScript 5.8+"
+    database: "MongoDB with Prisma"
+    api: "tRPC"
+    auth: "NextAuth.js"
+    ui: "shadcn/ui with TailwindCSS 4.0.9+"
+    3d: "React Three Fiber 9.3+ with Drei 10.7+"
+    state: "Zustand with slice-based stores"
+    validation: "Zod 3.25+"
+    testing: "Vitest 3.0+ with JSDOM"
+
+  # Polish Localization Requirements
+  localization:
+    primary_language: "pl-PL"
+    secondary_language: "en-US"
+    medical_terminology: "Polish Medical Dictionary 2025"
+    cultural_context: "EU/Poland healthcare system"
+    currency: "EUR (€)"
+    regulatory_compliance: "EFSA, Polish Ministry of Health"
+
+  # Educational Focus
+  domain:
+    primary: "Nootropics and Cognitive Enhancement"
+    secondary: "Brain Anatomy and Neuroscience"
+    target_audience: "Polish students, professionals, healthcare providers"
+    evidence_standard: "Evidence-based medicine with PubMed integration"
+
+  # Technical Requirements
+  performance:
+    target_devices: ["Desktop", "Mobile", "Tablet"]
+    3d_optimization: "WebGL with fallbacks"
+    accessibility: "WCAG 2.1 AA compliance"
+    browser_support: ["Chrome 90+", "Firefox 88+", "Safari 14+", "Edge 90+"]
+
+  # Content Standards
+  content:
+    supplement_database: "21+ profiles with Polish translations"
+    brain_regions: "3D interactive models with Polish anatomy"
+    research_integration: "PubMed studies with quality scoring"
+    educational_modules: "Interactive learning with progress tracking"
+
+  # Quality Assurance
+  qa:
+    typescript_strict: true
+    eslint_zero_warnings: true
+    polish_character_support: "ą, ć, ę, ł, ń, ó, ś, ź, ż"
+    medical_accuracy: "Reviewed by Polish medical professionals"
+    
+  # Development Workflow
+  workflow:
+    prompt_library: "1,380 prompts across 37 categories"
+    ai_development: "Augment-guided with Polish context"
+    testing_strategy: "Unit, integration, accessibility, localization"
+    deployment: "Vercel with EU data residency"

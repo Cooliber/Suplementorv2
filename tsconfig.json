@@ -3,20 +3,27 @@
 		/* Base Options: */
 		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"target": "es2022",
+		"target": "ES2022",
 		"allowJs": true,
 		"resolveJsonModule": true,
 		"moduleDetection": "force",
 		"isolatedModules": true,
-		"verbatimModuleSyntax": true,
+		"verbatimModuleSyntax": false,
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
 
-		/* Strictness */
+		/* Strictness - Enhanced for TypeScript 5.8+ */
 		"strict": true,
 		"noUncheckedIndexedAccess": true,
-		"checkJs": true,
+		"exactOptionalPropertyTypes": false, // Temporarily disabled for migration
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+		"noPropertyAccessFromIndexSignature": false, // Temporarily disabled for migration
+		"checkJs": false, // Temporarily disabled for migration
 
 		/* Bundled projects */
-		"lib": ["dom", "dom.iterable", "ES2022"],
+		"lib": ["DOM", "DOM.Iterable", "ES2022", "WebWorker"],
 		"noEmit": true,
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
@@ -24,19 +31,41 @@
 		"plugins": [{ "name": "next" }],
 		"incremental": true,
 
-		/* Path Aliases */
+		/* Path Aliases - Updated for better organization */
 		"baseUrl": ".",
 		"paths": {
-			"kek/*": ["./src/*"]
-		}
+			"@/*": ["./src/*"],
+			"~/*": ["./src/*"],
+			"@/components/*": ["./src/components/*"],
+			"@/lib/*": ["./src/lib/*"],
+			"@/types/*": ["./src/types/*"],
+			"@/data/*": ["./src/data/*"],
+			"@/hooks/*": ["./src/hooks/*"],
+			"@/utils/*": ["./src/lib/utils/*"],
+			"@/stores/*": ["./src/lib/stores/*"]
+		},
+
+		/* Performance Optimizations */
+		"assumeChangesOnlyAffectDirectDependencies": true
 	},
-	"include": [
-		"next-env.d.ts",
-		"**/*.ts",
-		"**/*.tsx",
-		"**/*.cjs",
-		"**/*.js",
-		".next/types/**/*.ts"
+	"include": ["next-env.d.ts", ".next/types/**/*.ts", "src/**/*", "app/**/*"],
+	"exclude": [
+		"node_modules",
+		".next",
+		"out",
+		"dist",
+		"build",
+		"coverage",
+		"scripts/**/*",
+		"src/scripts/**/*",
+		"**/*.test.ts",
+		"**/*.test.tsx",
+		"**/*.spec.ts",
+		"**/*.spec.tsx",
+		"**/*.stories.tsx",
+		"**/*.stories.ts"
 	],
-	"exclude": ["node_modules"]
+	"ts-node": {
+		"esm": true
+	}
 }

@@ -1,17 +1,16 @@
-import { PrismaClient } from "@prisma/client";
+/**
+ * Database connection for Suplementor
+ * Uses MongoDB via Mongoose
+ */
 
-import { env } from "kek/env";
+import { connectToDatabase } from "../lib/db/mongodb";
 
-const createPrismaClient = () =>
-	new PrismaClient({
-		log:
-			env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
-	});
-
-const globalForPrisma = globalThis as unknown as {
-	prisma: ReturnType<typeof createPrismaClient> | undefined;
+// Export MongoDB connection function
+export const db = {
+	connect: connectToDatabase,
 };
 
-export const db = globalForPrisma.prisma ?? createPrismaClient();
-
-if (env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+// Auto-connect in development
+if (process.env.NODE_ENV === "development") {
+	connectToDatabase().catch(console.error);
+}

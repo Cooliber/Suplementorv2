@@ -7,13 +7,14 @@ export const env = createEnv({
 	 * isn't built with invalid env vars.
 	 */
 	server: {
-		AUTH_SECRET:
+		NEXTAUTH_SECRET:
 			process.env.NODE_ENV === "production"
 				? z.string()
 				: z.string().optional(),
-		AUTH_DISCORD_ID: z.string(),
-		AUTH_DISCORD_SECRET: z.string(),
-		DATABASE_URL: z.string().url(),
+		NEXTAUTH_URL: z.string().url().optional(),
+		GOOGLE_CLIENT_ID: z.string().optional(),
+		GOOGLE_CLIENT_SECRET: z.string().optional(),
+		MONGODB_URI: z.string(),
 		NODE_ENV: z
 			.enum(["development", "test", "production"])
 			.default("development"),
@@ -33,10 +34,11 @@ export const env = createEnv({
 	 * middlewares) or client-side so we need to destruct manually.
 	 */
 	runtimeEnv: {
-		AUTH_SECRET: process.env.AUTH_SECRET,
-		AUTH_DISCORD_ID: process.env.AUTH_DISCORD_ID,
-		AUTH_DISCORD_SECRET: process.env.AUTH_DISCORD_SECRET,
-		DATABASE_URL: process.env.DATABASE_URL,
+		NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+		NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+		GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+		GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+		MONGODB_URI: process.env.MONGODB_URI,
 		NODE_ENV: process.env.NODE_ENV,
 	},
 	/**

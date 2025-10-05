@@ -1,0 +1,34 @@
+{
+	"environment": "development",
+	"port": 3000,
+	"database": {
+		"url": "mongodb://localhost:27017",
+		"name": "suplementor_dev",
+		"enableLogging": true
+	},
+	"auth": {
+		"secret": "your-secret-key-change-in-production",
+		"providers": ["credentials", "google", "github"]
+	},
+	"localization": {
+		"defaultLanguage": "pl",
+		"supportedLanguages": ["pl", "en"],
+		"enableMedicalTerms": true,
+		"enableValidation": true
+	},
+	"componentGeneration": {
+		"outputDirectory": "src/components/generated",
+		"templateDirectory": "scripts/component-generator/templates",
+		"enablePolishLocalization": true,
+		"enableAccessibility": true,
+		"enablePerformanceOptimizations": true
+	},
+	"development": {
+		"enableHotReload": true,
+		"enableSourceMaps": true,
+		"enableDebugMode": true,
+		"enableComponentValidation": true
+	},
+	"lastUpdated": "2025-09-29T10:02:13.451Z",
+	"version": "1.0.0"
+}
