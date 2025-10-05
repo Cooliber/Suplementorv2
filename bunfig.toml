@@ -21,7 +21,8 @@ exact = false
 
 [run]
 # Shell configuration for scripts
-shell = "bash"
+# Use 'system' for Netlify compatibility (bash not supported in Bun on Netlify)
+shell = "system"
 bun = true
 
 [test]
