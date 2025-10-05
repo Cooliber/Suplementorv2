@@ -10,6 +10,7 @@ import KnowledgeRelationship from "./KnowledgeRelationship";
 import Supplement from "./Supplement";
 
 import Post from "./Post";
+import SupplementHistory from "./SupplementHistory";
 
 // Brain and neuroscience models
 import BrainRegion from "./BrainRegion";
@@ -39,7 +40,11 @@ export {
 	KnowledgeNode,
 	KnowledgeRelationship,
 	Post,
+		SupplementHistory,
+
 	// Brain and neuroscience models
+
+
 	BrainRegion,
 	NeurotransmitterSystem,
 	// Research models
@@ -76,6 +81,8 @@ export type {
 } from "./KnowledgeRelationship";
 
 export type { IComprehensiveSupplement } from "./ComprehensiveSupplement";
+export type { ISupplementHistory } from "./SupplementHistory";
+
 export type { IBrainRegion } from "./BrainRegion";
 export type { INeurotransmitterSystem } from "./NeurotransmitterSystem";
 export type { IResearchStudy } from "./ResearchEvidence";
@@ -92,6 +99,8 @@ export default {
 	Supplement,
 	ComprehensiveSupplement,
 	KnowledgeNode,
+		SupplementHistory,
+
 	KnowledgeRelationship,
 	Post,
 

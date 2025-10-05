@@ -35,6 +35,8 @@ import SynergyAnalyzer from "@/components/supplements/SynergyAnalyzer";
 import BrainRegionDiagram from "@/components/visualization/BrainRegionDiagram";
 import SupplementEffectChart from "@/components/visualization/SupplementEffectChart";
 import SupplementInteractionNetwork from "@/components/visualization/SupplementInteractionNetwork";
+import RelatedHistory from "@/components/history/RelatedHistory";
+import { api } from "@/trpc/server";
 
 interface SupplementDetailPageProps {
 	params: {
@@ -146,37 +148,49 @@ const mockSupplementData: Record<string, SupplementData> = {
 export async function generateMetadata({
 	params,
 }: SupplementDetailPageProps): Promise<Metadata> {
-	const supplement = mockSupplementData[params.id];
+	try {
+		const supplement = await api.supplement.getById({ id: params.id });
 
-	if (!supplement) {
+		return {
+			title: `${supplement.polishName} | SUPLEMENTOR - Szczegółowa Analiza`,
+			description: `Kompleksowa analiza ${supplement.polishName}: mechanizm działania, dawkowanie, interakcje, badania naukowe i bezpieczeństwo stosowania.`,
+			keywords: `${supplement.polishName}, ${supplement.name}, suplementy, dawkowanie, interakcje, badania naukowe`,
+			openGraph: {
+				title: `${supplement.polishName} | SUPLEMENTOR`,
+				description: supplement.polishDescription,
+				type: "article",
+				locale: "pl_PL",
+			},
+		};
+	} catch {
 		return {
 			title: "Suplement nie znaleziony | SUPLEMENTOR",
 			description:
 				"Szukany suplement nie został znaleziony w naszej bazie danych.",
 		};
 	}
-
-	return {
-		title: `${supplement.polishName} | SUPLEMENTOR - Szczegółowa Analiza`,
-		description: `Kompleksowa analiza ${supplement.polishName}: mechanizm działania, dawkowanie, interakcje, badania naukowe i bezpieczeństwo stosowania.`,
-		keywords: `${supplement.polishName}, ${supplement.name}, suplementy, dawkowanie, interakcje, badania naukowe`,
-		openGraph: {
-			title: `${supplement.polishName} | SUPLEMENTOR`,
-			description: supplement.polishDescription,
-			type: "article",
-			locale: "pl_PL",
-		},
-	};
 }
 
-const SupplementDetailPage: React.FC<SupplementDetailPageProps> = ({
+const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 	params,
 }) => {
-	const supplement = mockSupplementData[params.id];
+	let supplement;
+	let supplementMongoId: string | undefined;
 
-	if (!supplement) {
+	try {
+		const data = await api.supplement.getById({ id: params.id });
+		supplement = data;
+		// Extract MongoDB _id for RelatedHistory
+		supplementMongoId = (data as any)._id?.toString();
+	} catch {
 		notFound();
 	}
+
+	// Fallback to mock data if real data doesn't have required fields
+	const displayData = {
+		...mockSupplementData[params.id],
+		...supplement,
+	};
 
 	const handleDosageCalculated = (dosage: any) => {
 		console.log("Calculated dosage:", dosage);
@@ -202,33 +216,33 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = ({
 					<div className="flex-1">
 						<div className="mb-4 flex items-center gap-3">
 							<Badge variant="secondary" className="text-sm">
-								{supplement.polishCategory}
+								{displayData.polishCategory}
 							</Badge>
 							<Badge
 								variant={
-									supplement.evidenceLevel === "STRONG" ? "default" : "outline"
+									displayData.evidenceLevel === "STRONG" ? "default" : "outline"
 								}
 								className="text-sm"
 							>
-								Dowody: {supplement.polishEvidenceLevel}
+								Dowody: {displayData.polishEvidenceLevel}
 							</Badge>
 							<div className="flex items-center gap-1">
 								<Star className="h-4 w-4 fill-current text-yellow-500" />
 								<span className="font-medium text-sm">
-									{supplement.userRating}
+									{displayData.userRating}
 								</span>
 							</div>
 						</div>
 
 						<h1 className="mb-2 font-bold text-4xl text-gray-900">
-							{supplement.polishName}
+							{displayData.polishName}
 						</h1>
 						<p className="mb-4 text-gray-600 text-lg">
-							{supplement.polishDescription}
+							{displayData.polishDescription}
 						</p>
 
 						<div className="mb-6 flex flex-wrap gap-2">
-							{supplement.polishPrimaryBenefits.map((benefit, index) => (
+							{displayData.polishPrimaryBenefits.map((benefit: string, index: number) => (
 								<Badge key={index} variant="outline" className="text-sm">
 									{benefit}
 								</Badge>
@@ -253,7 +267,7 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = ({
 				</div>
 
 				{/* Safety Alert */}
-				{supplement.safetyRating < 8 && (
+				{displayData.safetyRating < 8 && (
 					<Alert className="border-yellow-200 bg-yellow-50">
 						<AlertTriangle className="h-4 w-4 text-yellow-600" />
 						<AlertDescription className="text-yellow-800">
@@ -281,11 +295,11 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = ({
 										<div className="h-2 w-16 overflow-hidden rounded-full bg-gray-200">
 											<div
 												className="h-full rounded-full bg-green-500"
-												style={{ width: `${supplement.safetyRating * 10}%` }}
+												style={{ width: `${displayData.safetyRating * 10}%` }}
 											/>
 										</div>
 										<span className="font-medium text-sm">
-											{supplement.safetyRating}/10
+											{displayData.safetyRating}/10
 										</span>
 									</div>
 								</div>
@@ -293,23 +307,23 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = ({
 								<div className="flex items-center justify-between">
 									<span className="text-gray-600 text-sm">Badania Naukowe</span>
 									<span className="font-medium text-sm">
-										{supplement.studyCount.toLocaleString("pl-PL")}
+										{displayData.studyCount.toLocaleString("pl-PL")}
 									</span>
 								</div>
 
 								<div className="flex items-center justify-between">
 									<span className="text-gray-600 text-sm">Zakres Cen</span>
 									<span className="font-medium text-sm">
-										{supplement.price.min}-{supplement.price.max}{" "}
-										{supplement.price.currency}
+										{displayData.price.min}-{displayData.price.max}{" "}
+										{displayData.price.currency}
 									</span>
 								</div>
 
 								<div className="flex items-center justify-between">
 									<span className="text-gray-600 text-sm">Dawka Dzienna</span>
 									<span className="font-medium text-sm">
-										{supplement.dosageRange.min}-{supplement.dosageRange.max}{" "}
-										{supplement.dosageRange.unit}
+										{displayData.dosageRange.min}-{displayData.dosageRange.max}{" "}
+										{displayData.dosageRange.unit}
 									</span>
 								</div>
 							</CardContent>
@@ -363,6 +377,9 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = ({
 								<div className="py-12 text-center text-gray-500">
 									Szczegółowe informacje o mechanizmach działania
 								</div>
+									{/* Historia powiązana */}
+									<RelatedHistory supplementMongoId={supplementMongoId} />
+
 							</TabsContent>
 
 							{/* Mechanism Tab */}
@@ -377,7 +394,7 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = ({
 									<CardContent>
 										<div className="prose max-w-none">
 											<p className="text-gray-700 leading-relaxed">
-												{supplement.polishMechanismOfAction}
+												{displayData.polishMechanismOfAction}
 											</p>
 										</div>
 									</CardContent>
@@ -455,7 +472,7 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = ({
 									</CardHeader>
 									<CardContent>
 										<EvidenceBasedInformationPanel
-											supplementId={supplement.id}
+											supplementId={displayData.id}
 											condition="cognitive enhancement"
 											polishCondition="poprawa funkcji poznawczych"
 										/>
@@ -480,9 +497,9 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = ({
 										<div className="h-96">
 											<SupplementEffectChart
 												supplementData={{
-													supplementId: supplement.id,
-													supplementName: supplement.name,
-													polishSupplementName: supplement.polishName,
+													supplementId: displayData.id,
+													supplementName: displayData.name,
+													polishSupplementName: displayData.polishName,
 													neurotransmitterEffects: [],
 													brainRegionEffects: [],
 													effectTimeline: [],
@@ -501,7 +518,7 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = ({
 										</CardHeader>
 										<CardContent>
 											<ul className="space-y-2">
-												{supplement.polishSideEffects.map((effect, index) => (
+												{displayData.polishSideEffects.map((effect: string, index: number) => (
 													<li
 														key={index}
 														className="flex items-center gap-2 text-sm"
@@ -520,8 +537,8 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = ({
 										</CardHeader>
 										<CardContent>
 											<ul className="space-y-2">
-												{supplement.polishContraindications.map(
-													(contraindication, index) => (
+												{displayData.polishContraindications.map(
+													(contraindication: string, index: number) => (
 														<li
 															key={index}
 															className="flex items-center gap-2 text-sm"
@@ -568,7 +585,7 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = ({
 									<CardContent>
 										<div className="prose max-w-none">
 											<p className="text-gray-700 leading-relaxed">
-												{supplement.polishName} wpływa na funkcjonowanie mózgu
+												{displayData.polishName} wpływa na funkcjonowanie mózgu
 												poprzez modulację błon komórkowych neuronów, wpływ na
 												syntezę neuroprzekaźników oraz regulację procesów
 												zapalnych w tkance nerwowej.

@@ -312,6 +312,7 @@ const ComprehensiveSupplementSchema = new Schema(
 		},
 		description: { type: String, required: true },
 		polishDescription: { type: String, required: true },
+		sourceUrl: { type: String }, // Source URL for attribution (e.g., SwissHerbal product page)
 		evidenceLevel: {
 			type: String,
 			enum: ["STRONG", "MODERATE", "WEAK", "INSUFFICIENT"],

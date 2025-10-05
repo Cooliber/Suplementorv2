@@ -85,6 +85,9 @@ export function MainNavigation() {
 							<ListItem href="/suplementy" title="Suplementy">
 								Szczegółowa baza danych suplementów
 							</ListItem>
+							<ListItem href="/historia-suplementow" title="Historia Suplementów">
+								Oś czasu TCM, Ajurweda i inne systemy medyczne
+							</ListItem>
 							<ListItem href="/sledzenie" title="Śledzenie">
 								Monitoruj swoje suplementy i postępy
 							</ListItem>
