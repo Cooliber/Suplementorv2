@@ -44,19 +44,6 @@ test.describe("Homepage", () => {
 		expect(htmlLang).toBe("pl");
 	});
 
-	test("should display navigation menu", async ({ page }) => {
-		// Check for main navigation
-		const nav = page.locator("nav").first();
-		await expect(nav).toBeVisible();
-
-		// Check for key navigation links
-		const supplementsLink = page.getByRole("link", { name: /suplementy/i });
-		await expect(supplementsLink).toBeVisible();
-
-		const knowledgeLink = page.getByRole("link", { name: /wiedza/i });
-		await expect(knowledgeLink).toBeVisible();
-	});
-
 	test("should be accessible (WCAG AA)", async ({
 		accessiblePage,
 		checkAccessibility,
@@ -138,19 +125,39 @@ test.describe("Homepage", () => {
 		}
 	});
 
-	test("should have working links to main sections", async ({ page }) => {
-		// Test navigation to supplements page
-		const supplementsLink = page
-			.getByRole("link", { name: /suplementy/i })
-			.first();
-		if (await supplementsLink.isVisible()) {
-			await supplementsLink.click();
-			await waitForNetworkIdle(page);
-			expect(page.url()).toContain("suplementy");
+	test.describe("Main Section Navigation", () => {
+		const sections = [
+			{ name: "Suplementy", path: "/suplementy", testId: "nav-suplementy" },
+			{ name: "Wiedza", path: "/wiedza", testId: "nav-wiedza" },
+			{
+				name: "Rekomendacje",
+				path: "/rekomendacje",
+				testId: "nav-rekomendacje",
+			},
+			{
+				name: "Wyszukiwanie",
+				path: "/wyszukiwanie",
+				testId: "nav-wyszukiwanie",
+			},
+		];
 
-			// Go back
-			await page.goBack();
-			await waitForNetworkIdle(page);
+		for (const section of sections) {
+			test(`should navigate to the ${section.name} page from the main navigation`, async ({
+				page,
+			}) => {
+				// Best Practice: Use a unique test ID for the primary navigation link.
+				// This avoids ambiguity with other links on the page.
+				const navLink = page.getByTestId(section.testId);
+
+				await expect(
+					navLink,
+					`Primary navigation link for "${section.name}" should be visible`,
+				).toBeVisible();
+
+				await navLink.click();
+				await waitForNetworkIdle(page);
+				await expect(page).toHaveURL(new RegExp(`${section.path}$`));
+			});
 		}
 	});
 

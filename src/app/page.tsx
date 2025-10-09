@@ -46,13 +46,19 @@ export default function HomePage() {
 							</div>
 						</div>
 						<div className="flex gap-2">
-							<Link href="/wyszukiwanie">
+							<Link href="/suplementy" data-testid="nav-suplementy">
+								<Button variant="ghost">Suplementy</Button>
+							</Link>
+							<Link href="/wiedza" data-testid="nav-wiedza">
+								<Button variant="ghost">Wiedza</Button>
+							</Link>
+							<Link href="/wyszukiwanie" data-testid="nav-wyszukiwanie">
 								<Button variant="outline">
 									<Search className="mr-2 h-4 w-4" />
 									Wyszukiwanie
 								</Button>
 							</Link>
-							<Link href="/rekomendacje">
+							<Link href="/rekomendacje" data-testid="nav-rekomendacje">
 								<Button variant="outline">
 									<Sparkles className="mr-2 h-4 w-4" />
 									Rekomendacje AI
@@ -194,9 +200,11 @@ export default function HomePage() {
 									Aktualizacje oparte na nowych badaniach
 								</li>
 							</ul>
-							<Button className="mt-4 w-full" variant="outline">
-								Dowiedz się więcej
-							</Button>
+							<Link href="/wiedza" className="mt-4 block w-full">
+								<Button className="w-full" variant="outline">
+									Dowiedz się więcej
+								</Button>
+							</Link>
 						</CardContent>
 					</Card>
 				</div>
