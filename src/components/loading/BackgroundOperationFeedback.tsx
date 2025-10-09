@@ -267,7 +267,6 @@ export const FloatingNotification: React.FC<FloatingNotificationProps> = ({
 						animate={{ opacity: 1, x: 0, scale: 1 }}
 						exit={{ opacity: 0, x: position.includes("right") ? 300 : -300, scale: 0.8 }}
 						transition={{
-							type: "spring",
 							...springs.gentle,
 						}}
 						className="bg-background border rounded-lg shadow-lg p-3 max-w-sm"

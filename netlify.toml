@@ -2,14 +2,12 @@
 # Polish Educational Platform for Nootropics and Cognitive Enhancement
 
 [build]
-  command = "bun run build"
+  command = "npm run build"
   publish = ".next"
 
 [build.environment]
   # Node.js version for Netlify
   NODE_VERSION = "20"
-  # Use Bun for package management and builds
-  NPM_FLAGS = "--legacy-peer-deps"
 
 # Next.js Plugin for Netlify
 [[plugins]]
@@ -34,7 +32,7 @@
   status = 301
   force = true
 
-# Security headers (matching next.config.js)
+# Security and cache headers (matching next.config.js)
 [[headers]]
   for = "/*"
   [headers.values]
@@ -42,14 +40,27 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; worker-src 'self' blob:;"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
-# Cache static assets
+# Cache static assets with long expiry
 [[headers]]
   for = "/_next/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Cache API responses
+# Cache images with long expiry
+[[headers]]
+  for = "/_next/image/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache fonts with long expiry
+[[headers]]
+  for = "/_next/static/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache API responses with shorter expiry
 [[headers]]
   for = "/api/*"
   [headers.values]

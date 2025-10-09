@@ -389,7 +389,6 @@ export const SkeletonListWithStagger: React.FC<SkeletonListWithStaggerProps> = (
 							animate={{ scale: 1 }}
 							transition={{
 								delay: i * 0.08 + 0.1,
-								type: "spring",
 								...springs.gentle,
 							}}
 						>

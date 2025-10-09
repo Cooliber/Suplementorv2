@@ -21,17 +21,21 @@ import { cdpCholineProfile } from "./cdp-choline";
 import { coq10Profile } from "./coenzyme-q10";
 import { creatineProfile } from "./creatine";
 import { curcuminProfile } from "./curcumin";
+import { fiveHTPProfile } from "./5-htp";
 import { ginkgoBilobaProfile } from "./ginkgo-biloba";
 import { ironBisglycinateProfile } from "./iron-bisglycinate";
 import { lTheanineProfile } from "./l-theanine";
 import { lionsManeProfile } from "./lions-mane";
 import { lTyrosineProfile } from "./l-tyrosine";
 import { magnesiumProfile } from "./magnesium";
+import { melatoninProfile } from "./melatonin";
 import { nAcetylCysteineProfile } from "./n-acetyl-cysteine";
 import { noopeptProfile } from "./noopept";
 import { omega3Profile } from "./omega-3";
 import { phosphatidylserineProfile } from "./phosphatidylserine";
 import { piracetamProfile } from "./piracetam";
+import { probioticsProfile } from "./probiotics";
+import { pqqProfile } from "./pqq";
 import { pterostilbeneProfile } from "./pterostilbene";
 import { pycnogenolProfile } from "./pycnogenol";
 import { resveratrolProfile } from "./resveratrol";
@@ -40,6 +44,8 @@ import { samEProfile } from "./sam-e";
 import { seleniumMethionineProfile } from "./selenium-methionine";
 import { stJohnsWortProfile } from "./st-johns-wort";
 import { taurineProfile } from "./taurine";
+import { vitaminB12Profile } from "./vitamin-b12";
+import { vitaminCProfile } from "./vitamin-c";
 import { vitaminD3Profile } from "./vitamin-d3";
 import { vitaminK2MK7Profile } from "./vitamin-k2-mk7";
 import { zincProfile } from "./zinc";
@@ -61,17 +67,21 @@ export {
 	coq10Profile,
 	creatineProfile,
 	curcuminProfile,
+	fiveHTPProfile,
 	ginkgoBilobaProfile,
 	ironBisglycinateProfile,
 	lTheanineProfile,
 	lionsManeProfile,
 	lTyrosineProfile,
 	magnesiumProfile,
+	melatoninProfile,
 	nAcetylCysteineProfile,
 	noopeptProfile,
 	omega3Profile,
 	phosphatidylserineProfile,
 	piracetamProfile,
+	probioticsProfile,
+	pqqProfile,
 	pterostilbeneProfile,
 	pycnogenolProfile,
 	resveratrolProfile,
@@ -80,6 +90,8 @@ export {
 	seleniumMethionineProfile,
 	stJohnsWortProfile,
 	taurineProfile,
+	vitaminB12Profile,
+	vitaminCProfile,
 	vitaminD3Profile,
 	vitaminK2MK7Profile,
 	zincProfile,
@@ -102,17 +114,21 @@ export const supplementProfiles = {
 	"coenzyme-q10": coq10Profile,
 	creatine: creatineProfile,
 	curcumin: curcuminProfile,
+	"5-htp": fiveHTPProfile,
 	"ginkgo-biloba": ginkgoBilobaProfile,
 	"iron-bisglycinate": ironBisglycinateProfile,
 	"l-theanine": lTheanineProfile,
 	"lions-mane": lionsManeProfile,
 	"l-tyrosine": lTyrosineProfile,
 	magnesium: magnesiumProfile,
+	melatonin: melatoninProfile,
 	"n-acetyl-cysteine": nAcetylCysteineProfile,
 	noopept: noopeptProfile,
 	"omega-3": omega3Profile,
 	phosphatidylserine: phosphatidylserineProfile,
 	piracetam: piracetamProfile,
+	probiotics: probioticsProfile,
+	pqq: pqqProfile,
 	pterostilbene: pterostilbeneProfile,
 	pycnogenol: pycnogenolProfile,
 	resveratrol: resveratrolProfile,
@@ -121,6 +137,8 @@ export const supplementProfiles = {
 	"selenium-methionine": seleniumMethionineProfile,
 	"st-johns-wort": stJohnsWortProfile,
 	taurine: taurineProfile,
+	"vitamin-b12": vitaminB12Profile,
+	"vitamin-c": vitaminCProfile,
 	"vitamin-d3": vitaminD3Profile,
 	"vitamin-k2-mk7": vitaminK2MK7Profile,
 	zinc: zincProfile,
@@ -143,17 +161,21 @@ export const allSupplementProfiles = [
 	coq10Profile,
 	creatineProfile,
 	curcuminProfile,
+	fiveHTPProfile,
 	ginkgoBilobaProfile,
 	ironBisglycinateProfile,
 	lTheanineProfile,
 	lionsManeProfile,
 	lTyrosineProfile,
 	magnesiumProfile,
+	melatoninProfile,
 	nAcetylCysteineProfile,
 	noopeptProfile,
 	omega3Profile,
 	phosphatidylserineProfile,
 	piracetamProfile,
+	probioticsProfile,
+	pqqProfile,
 	pterostilbeneProfile,
 	pycnogenolProfile,
 	resveratrolProfile,
@@ -162,6 +184,8 @@ export const allSupplementProfiles = [
 	seleniumMethionineProfile,
 	stJohnsWortProfile,
 	taurineProfile,
+	vitaminB12Profile,
+	vitaminCProfile,
 	vitaminD3Profile,
 	vitaminK2MK7Profile,
 	zincProfile,

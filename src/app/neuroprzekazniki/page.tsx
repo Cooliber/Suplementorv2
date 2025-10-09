@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { Zap, Brain, Activity, TrendingUp, Sparkles, AlertCircle } from "lucide-react";
+import { Zap, Brain, Activity, TrendingUp, Sparkles, AlertCircle, ChevronRight, Clock, Users, BookOpen, Star } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Separator } from "@/components/ui/separator";
 import { BreadcrumbNavigation } from "@/components/navigation/BreadcrumbNavigation";
 import NeurotransmitterEducationModule from "@/components/education/NeurotransmitterEducationModule";
 
@@ -185,11 +187,13 @@ export default function NeurotransmittersPage() {
 				{NEUROTRANSMITTERS.map((nt) => {
 					const Icon = nt.icon;
 					return (
-						<Card key={nt.id} className={`border-2 ${nt.borderColor}`}>
-							<CardHeader className={nt.bgColor}>
+						<Card key={nt.id} className={`border-2 ${nt.borderColor} hover:shadow-lg transition-all group`}>
+							<CardHeader className={`${nt.bgColor} group-hover:bg-opacity-70 transition-colors`}>
 								<div className="flex items-center gap-3 mb-2">
-									<Icon className={`h-8 w-8 ${nt.color}`} />
-									<div>
+									<div className={`p-2 rounded-lg bg-white/50 group-hover:scale-110 transition-transform`}>
+										<Icon className={`h-6 w-6 ${nt.color}`} />
+									</div>
+									<div className="flex-1">
 										<CardTitle className="text-xl">{nt.polishName}</CardTitle>
 										<CardDescription className="text-xs">{nt.name}</CardDescription>
 									</div>
@@ -198,58 +202,133 @@ export default function NeurotransmittersPage() {
 							<CardContent className="pt-6 space-y-4">
 								{/* Primary Functions */}
 								<div>
-									<h4 className="font-semibold mb-2 text-sm text-muted-foreground">
-										Główne Funkcje
-									</h4>
-									<div className="flex flex-wrap gap-2">
-										{nt.primaryFunctions.map((func, idx) => (
-											<Badge key={idx} variant="secondary">
-												{func}
-											</Badge>
-										))}
-									</div>
+									<Accordion type="single" collapsible className="w-full">
+										<AccordionItem value={`${nt.id}-functions`} className="border-muted">
+											<AccordionTrigger className="text-left hover:no-underline">
+												<div className="flex items-center gap-2">
+													<Star className="h-4 w-4 text-muted-foreground" />
+													<span className="font-semibold text-sm text-muted-foreground">
+														Główne Funkcje ({nt.primaryFunctions.length})
+													</span>
+												</div>
+											</AccordionTrigger>
+											<AccordionContent>
+												<div className="space-y-3 mt-2">
+													<div className="flex flex-wrap gap-2">
+														{nt.primaryFunctions.map((func, idx) => (
+															<Badge key={idx} variant="secondary" className="text-xs">
+																{func}
+															</Badge>
+														))}
+													</div>
+												</div>
+											</AccordionContent>
+										</AccordionItem>
+									</Accordion>
 								</div>
+
+								<Separator />
 
 								{/* Pathways */}
 								<div>
-									<h4 className="font-semibold mb-2 text-sm text-muted-foreground">
-										Szlaki Nerwowe
-									</h4>
-									<p className="text-xs text-muted-foreground">
-										{nt.pathways}
-									</p>
+									<Accordion type="single" collapsible className="w-full">
+										<AccordionItem value={`${nt.id}-pathways`} className="border-muted">
+											<AccordionTrigger className="text-left hover:no-underline">
+												<div className="flex items-center gap-2">
+													<Brain className="h-4 w-4 text-muted-foreground" />
+													<span className="font-semibold text-sm text-muted-foreground">
+														Szlaki Nerwowe
+													</span>
+												</div>
+											</AccordionTrigger>
+											<AccordionContent>
+												<div className="mt-2">
+													<p className="text-xs text-muted-foreground leading-relaxed">
+														{nt.pathways}
+													</p>
+												</div>
+											</AccordionContent>
+										</AccordionItem>
+									</Accordion>
 								</div>
+
+								<Separator />
 
 								{/* Related Supplements */}
 								<div>
-									<h4 className="font-semibold mb-3 text-sm text-muted-foreground">
-										Powiązane Suplementy
-									</h4>
-									<div className="space-y-2">
-										{nt.relatedSupplements.map((supp, idx) => (
-											<div key={idx} className="bg-muted p-3 rounded-lg">
-												<div className="font-medium text-sm mb-1">
-													{supp.polishName}
+									<Accordion type="single" collapsible className="w-full">
+										<AccordionItem value={`${nt.id}-supplements`} className="border-muted">
+											<AccordionTrigger className="text-left hover:no-underline">
+												<div className="flex items-center gap-2">
+													<Users className="h-4 w-4 text-muted-foreground" />
+													<span className="font-semibold text-sm text-muted-foreground">
+														Powiązane Suplementy ({nt.relatedSupplements.length})
+													</span>
 												</div>
-												<div className="text-xs text-muted-foreground">
-													{supp.effect}
+											</AccordionTrigger>
+											<AccordionContent>
+												<div className="space-y-3 mt-2">
+													{nt.relatedSupplements.map((supp, idx) => (
+														<div key={idx} className="bg-muted/50 p-3 rounded-lg border border-muted/70 hover:bg-muted transition-colors">
+															<div className="flex items-start justify-between">
+																<div className="flex-1">
+																	<div className="font-medium text-sm mb-1">
+																		{supp.polishName}
+																	</div>
+																	<div className="text-xs text-muted-foreground">
+																		{supp.effect}
+																	</div>
+																</div>
+																<Badge variant="outline" className="text-xs ml-2">
+																	{nt.polishName.split(' ')[0]}
+																</Badge>
+															</div>
+														</div>
+													))}
 												</div>
-											</div>
-										))}
-									</div>
+											</AccordionContent>
+										</AccordionItem>
+									</Accordion>
 								</div>
+
+								<Separator />
 
 								{/* Associated Disorders */}
 								<div>
-									<h4 className="font-semibold mb-2 text-sm text-muted-foreground">
-										Powiązane Zaburzenia
-									</h4>
-									<div className="flex flex-wrap gap-1">
-										{nt.disorders.map((disorder, idx) => (
-											<Badge key={idx} variant="outline" className="text-xs">
-												{disorder}
-											</Badge>
-										))}
+									<Accordion type="single" collapsible className="w-full">
+										<AccordionItem value={`${nt.id}-disorders`} className="border-muted">
+											<AccordionTrigger className="text-left hover:no-underline">
+												<div className="flex items-center gap-2">
+													<AlertCircle className="h-4 w-4 text-muted-foreground" />
+													<span className="font-semibold text-sm text-muted-foreground">
+														Powiązane Zaburzenia ({nt.disorders.length})
+													</span>
+												</div>
+											</AccordionTrigger>
+											<AccordionContent>
+												<div className="mt-2">
+													<div className="flex flex-wrap gap-1">
+														{nt.disorders.map((disorder, idx) => (
+															<Badge key={idx} variant="outline" className="text-xs">
+																{disorder}
+															</Badge>
+														))}
+													</div>
+												</div>
+											</AccordionContent>
+										</AccordionItem>
+									</Accordion>
+								</div>
+
+								{/* Quick Stats */}
+								<div className="flex items-center justify-between text-xs text-muted-foreground pt-2">
+									<div className="flex items-center gap-1">
+										<Users className="h-3 w-3" />
+										<span>{nt.relatedSupplements.length} suplementów</span>
+									</div>
+									<div className="flex items-center gap-1">
+										<Clock className="h-3 w-3" />
+										<span>3-5 min. czytania</span>
 									</div>
 								</div>
 							</CardContent>
@@ -259,29 +338,129 @@ export default function NeurotransmittersPage() {
 			</div>
 
 			{/* Balance Information */}
-			<Card>
-				<CardHeader>
-					<CardTitle>Równowaga Neuroprzekaźników</CardTitle>
+			<Card className="border-2 border-primary/20">
+				<CardHeader className="bg-primary/5">
+					<CardTitle className="flex items-center gap-2">
+						<Brain className="h-5 w-5 text-primary" />
+						Równowaga Neuroprzekaźników
+					</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-4">
-					<p className="text-sm leading-relaxed">
-						Zdrowie mózgu zależy od delikatnej równowagi między różnymi systemami neuroprzekaźnikowymi. 
-						Zbyt wysoki lub zbyt niski poziom któregokolwiek neuroprzekaźnika może prowadzić do problemów zdrowotnych.
-					</p>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-						<div className="bg-green-50 p-4 rounded-lg border border-green-200">
-							<h4 className="font-semibold mb-2 text-green-800">Równowaga Pobudzenie-Hamowanie</h4>
-							<p className="text-sm text-green-700">
-								Glutaminian (pobudzający) i GABA (hamujący) muszą być w równowadze dla optymalnej funkcji mózgu.
-							</p>
-						</div>
-						<div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-							<h4 className="font-semibold mb-2 text-blue-800">Modulacja Nastroju</h4>
-							<p className="text-sm text-blue-700">
-								Serotonina, dopamina i noradrenalina współpracują w regulacji nastroju i emocji.
-							</p>
-						</div>
-					</div>
+					<Accordion type="multiple" className="w-full">
+						<AccordionItem value="balance-intro" className="border-muted">
+							<AccordionTrigger className="text-left hover:no-underline">
+								<div className="flex items-center gap-2">
+									<BookOpen className="h-4 w-4 text-primary" />
+									<span className="font-semibold">Podstawy Równowagi</span>
+								</div>
+							</AccordionTrigger>
+							<AccordionContent>
+								<div className="space-y-3">
+									<p className="text-sm leading-relaxed">
+										Zdrowie mózgu zależy od delikatnej równowagi między różnymi systemami neuroprzekaźnikowymi.
+										Zbyt wysoki lub zbyt niski poziom któregokolwiek neuroprzekaźnika może prowadzić do problemów zdrowotnych.
+									</p>
+									<div className="grid grid-cols-2 gap-2">
+										{[
+											"Homeostaza",
+											"Regulacja",
+											"Adaptacja",
+											"Neuroplastyczność"
+										].map((concept, index) => (
+											<Badge key={index} variant="secondary" className="text-xs justify-center">
+												{concept}
+											</Badge>
+										))}
+									</div>
+								</div>
+							</AccordionContent>
+						</AccordionItem>
+
+						<AccordionItem value="excitation-inhibition" className="border-muted">
+							<AccordionTrigger className="text-left hover:no-underline">
+								<div className="flex items-center gap-2">
+									<Activity className="h-4 w-4 text-primary" />
+									<span className="font-semibold">Równowaga Pobudzenie-Hamowanie</span>
+								</div>
+							</AccordionTrigger>
+							<AccordionContent>
+								<div className="space-y-3">
+									<div className="bg-green-50 p-4 rounded-lg border border-green-200">
+										<h4 className="font-semibold mb-2 text-green-800 flex items-center gap-2">
+											<Zap className="h-4 w-4" />
+											Glutaminian ↔ GABA
+										</h4>
+										<p className="text-sm text-green-700 leading-relaxed">
+											Glutaminian (pobudzający) i GABA (hamujący) muszą być w równowadze dla optymalnej funkcji mózgu.
+										</p>
+										<div className="mt-2 flex gap-2">
+											<Badge variant="outline" className="text-green-700 text-xs">Uczenie się</Badge>
+											<Badge variant="outline" className="text-green-700 text-xs">Spokój</Badge>
+											<Badge variant="outline" className="text-green-700 text-xs">Fokus</Badge>
+										</div>
+									</div>
+								</div>
+							</AccordionContent>
+						</AccordionItem>
+
+						<AccordionItem value="mood-modulation" className="border-muted">
+							<AccordionTrigger className="text-left hover:no-underline">
+								<div className="flex items-center gap-2">
+									<TrendingUp className="h-4 w-4 text-primary" />
+									<span className="font-semibold">Modulacja Nastroju</span>
+								</div>
+							</AccordionTrigger>
+							<AccordionContent>
+								<div className="space-y-3">
+									<div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+										<h4 className="font-semibold mb-2 text-blue-800 flex items-center gap-2">
+											<Sparkles className="h-4 w-4" />
+											Serotonina • Dopamina • Noradrenalina
+										</h4>
+										<p className="text-sm text-blue-700 leading-relaxed">
+											Serotonina, dopamina i noradrenalina współpracują w regulacji nastroju i emocji.
+										</p>
+										<div className="mt-2 flex gap-2">
+											<Badge variant="outline" className="text-blue-700 text-xs">Motywacja</Badge>
+											<Badge variant="outline" className="text-blue-700 text-xs">Radość</Badge>
+											<Badge variant="outline" className="text-blue-700 text-xs">Energia</Badge>
+										</div>
+									</div>
+								</div>
+							</AccordionContent>
+						</AccordionItem>
+
+						<AccordionItem value="imbalance-symptoms" className="border-muted">
+							<AccordionTrigger className="text-left hover:no-underline">
+								<div className="flex items-center gap-2">
+									<AlertCircle className="h-4 w-4 text-primary" />
+									<span className="font-semibold">Objawy Nierównowagi</span>
+								</div>
+							</AccordionTrigger>
+							<AccordionContent>
+								<div className="space-y-3">
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+										<div className="bg-orange-50 p-3 rounded-lg border border-orange-200">
+											<h5 className="font-medium text-sm text-orange-800 mb-1">Nadmiar Pobudzenia</h5>
+											<ul className="text-xs text-orange-700 space-y-1">
+												<li>• Lęk i niepokój</li>
+												<li>• Problemy ze snem</li>
+												<li>• Rozdrażnienie</li>
+											</ul>
+										</div>
+										<div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
+											<h5 className="font-medium text-sm text-purple-800 mb-1">Nadmiar Hamowania</h5>
+											<ul className="text-xs text-purple-700 space-y-1">
+												<li>• Apatia</li>
+												<li>• Spowolnienie</li>
+												<li>• Problemy z koncentracją</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</AccordionContent>
+						</AccordionItem>
+					</Accordion>
 				</CardContent>
 			</Card>
 

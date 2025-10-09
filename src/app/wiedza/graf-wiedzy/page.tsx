@@ -1,6 +1,56 @@
 "use client";
 
+import { Metadata } from "next";
 import type React from "react";
+
+// Enhanced metadata for educational knowledge graph page
+export const metadata: Metadata = {
+	title: "Graf Wiedzy Edukacyjnej - Interaktywna Nauka o Suplementach",
+	description: "Interaktywny graf wiedzy edukacyjnej o suplementach. Ścieżki nauki, postępy i wizualizacje 3D mózgu dla efektywnej nauki o suplementacji.",
+	keywords: [
+		"graf wiedzy edukacyjnej",
+		"interaktywna nauka",
+		"ścieżki nauki suplementów",
+		"wizualizacja wiedzy",
+		"edukacja o suplementacji",
+		"postęp w nauce",
+		"3D mózg edukacja",
+		"polska platforma edukacyjna",
+		"kursy online suplementy",
+		"materiały edukacyjne"
+	],
+	openGraph: {
+		title: "Graf Wiedzy Edukacyjnej - Interaktywna Platforma Nauki",
+		description: "Poznaj suplementy poprzez interaktywny graf wiedzy z ścieżkami nauki, postępami i wizualizacjami 3D mózgu.",
+		type: "website",
+		locale: "pl_PL",
+		images: [
+			{
+				url: "/og-educational-graph.png",
+				width: 1200,
+				height: 630,
+				alt: "Graf wiedzy edukacyjnej o suplementach",
+			},
+		],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "Graf Wiedzy Edukacyjnej",
+		description: "Interaktywna platforma nauki o suplementach z grafem wiedzy i ścieżkami edukacyjnymi.",
+		images: ["/twitter-educational-graph.png"],
+	},
+	robots: {
+		index: true,
+		follow: true,
+		googleBot: {
+			index: true,
+			follow: true,
+			"max-video-preview": -1,
+			"max-image-preview": "large",
+			"max-snippet": -1,
+		},
+	},
+};
 import { Suspense, useEffect, useState } from "react";
 
 import { useGraphData } from "@/hooks/useGraphData";
@@ -378,7 +428,7 @@ const KnowledgeGraphEducationPage: React.FC = () => {
 						onValueChange={(value) => setActiveTab(value as any)}
 						className="space-y-4"
 					>
-						<TabsList className="grid w-full grid-cols-3">
+						<TabsList className="grid w-full grid-cols-1 sm:grid-cols-3">
 							<TabsTrigger value="graph" className="flex items-center gap-2">
 								<Network className="h-4 w-4" />
 								Graf Interaktywny
@@ -404,7 +454,7 @@ const KnowledgeGraphEducationPage: React.FC = () => {
 									</CardTitle>
 								</CardHeader>
 								<CardContent>
-									<div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+									<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
 										<Button
 											variant="outline"
 											onClick={() => handleEducationalFilter("memory")}

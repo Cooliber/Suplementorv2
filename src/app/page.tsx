@@ -74,27 +74,27 @@ export default function HomePage() {
 				<div className="mx-auto max-w-3xl text-center">
 					<FadeIn>
 						<h2 className="mb-6 font-bold text-5xl text-gray-900 dark:text-white">
-							Odkryj Moc Suplementów
+							Twoje Centrum Wiedzy o Suplementach
 						</h2>
 					</FadeIn>
 					<SlideIn direction="up" delay={0.2}>
 						<p className="mb-8 text-gray-600 text-xl dark:text-gray-300">
-							Kompleksowa platforma edukacyjna z zaawansowanym wyszukiwaniem,
-							rekomendacjami AI i polską lokalizacją
+							Zgłębiaj wiedzę opartą na badaniach naukowych. Odkrywaj,
+							analizuj i porównuj suplementy w jednym miejscu.
 						</p>
 					</SlideIn>
 					<SlideIn direction="up" delay={0.4}>
 						<div className="flex justify-center gap-4">
-							<Link href="/wyszukiwanie">
+							<Link href="/wiedza">
 								<Button size="lg" className="gap-2">
-									<Search className="h-5 w-5" />
-									Zacznij Wyszukiwanie
+									<BookOpen className="h-5 w-5" />
+									Przeglądaj Bazę Wiedzy
 								</Button>
 							</Link>
-							<Link href="/rekomendacje">
+							<Link href="/suplementy">
 								<Button size="lg" variant="outline" className="gap-2">
-									<Sparkles className="h-5 w-5" />
-									Otrzymaj Rekomendacje
+									<Zap className="h-5 w-5" />
+									Zobacz Listę Suplementów
 								</Button>
 							</Link>
 						</div>
@@ -110,6 +110,39 @@ export default function HomePage() {
 					</h3>
 				</FadeIn>
 				<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+					{/* Feature 3: Evidence-Based (Moved to first position) */}
+					<Card className="transition-shadow hover:shadow-lg">
+						<CardHeader>
+							<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
+								<BookOpen className="h-6 w-6 text-green-600 dark:text-green-400" />
+							</div>
+							<CardTitle>Oparte na Dowodach</CardTitle>
+							<CardDescription>
+								Wszystkie informacje poparte badaniami naukowymi
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<ul className="space-y-2 text-gray-600 text-sm dark:text-gray-400">
+								<li className="flex items-center gap-2">
+									<Shield className="h-4 w-4 text-green-500" />5 poziomów
+									dowodów naukowych
+								</li>
+								<li className="flex items-center gap-2">
+									<Shield className="h-4 w-4 text-green-500" />
+									Referencje do badań klinicznych
+								</li>
+								<li className="flex items-center gap-2">
+									<Shield className="h-4 w-4 text-green-500" />
+									Aktualizacje oparte na nowych badaniach
+								</li>
+							</ul>
+							<Link href="/wiedza" className="mt-4 block w-full">
+								<Button className="w-full" variant="outline">
+									Dowiedz się więcej
+								</Button>
+							</Link>
+						</CardContent>
+					</Card>
 					{/* Feature 1: Advanced Search */}
 					<Card className="transition-shadow hover:shadow-lg">
 						<CardHeader>
@@ -173,40 +206,6 @@ export default function HomePage() {
 							</Link>
 						</CardContent>
 					</Card>
-
-					{/* Feature 3: Evidence-Based */}
-					<Card className="transition-shadow hover:shadow-lg">
-						<CardHeader>
-							<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
-								<BookOpen className="h-6 w-6 text-green-600 dark:text-green-400" />
-							</div>
-							<CardTitle>Oparte na Dowodach</CardTitle>
-							<CardDescription>
-								Wszystkie informacje poparte badaniami naukowymi
-							</CardDescription>
-						</CardHeader>
-						<CardContent>
-							<ul className="space-y-2 text-gray-600 text-sm dark:text-gray-400">
-								<li className="flex items-center gap-2">
-									<Shield className="h-4 w-4 text-green-500" />5 poziomów
-									dowodów naukowych
-								</li>
-								<li className="flex items-center gap-2">
-									<Shield className="h-4 w-4 text-green-500" />
-									Referencje do badań klinicznych
-								</li>
-								<li className="flex items-center gap-2">
-									<Shield className="h-4 w-4 text-green-500" />
-									Aktualizacje oparte na nowych badaniach
-								</li>
-							</ul>
-							<Link href="/wiedza" className="mt-4 block w-full">
-								<Button className="w-full" variant="outline">
-									Dowiedz się więcej
-								</Button>
-							</Link>
-						</CardContent>
-					</Card>
 				</div>
 			</section>
 
@@ -228,35 +227,6 @@ export default function HomePage() {
 						</div>
 					</div>
 				</div>
-			</section>
-
-			{/* CTA Section */}
-			<section className="container mx-auto px-4 py-16">
-				<Card className="border-2 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900">
-					<CardContent className="p-12 text-center">
-						<h3 className="mb-4 font-bold text-3xl text-gray-900 dark:text-white">
-							Gotowy na Rozpoczęcie?
-						</h3>
-						<p className="mx-auto mb-8 max-w-2xl text-gray-600 text-xl dark:text-gray-300">
-							Odkryj najlepsze suplementy dla Twoich potrzeb z pomocą
-							zaawansowanego wyszukiwania i rekomendacji AI
-						</p>
-						<div className="flex justify-center gap-4">
-							<Link href="/wyszukiwanie">
-								<Button size="lg" className="gap-2">
-									<Search className="h-5 w-5" />
-									Wyszukaj Suplementy
-								</Button>
-							</Link>
-							<Link href="/rekomendacje">
-								<Button size="lg" variant="outline" className="gap-2">
-									<Sparkles className="h-5 w-5" />
-									Otrzymaj Rekomendacje
-								</Button>
-							</Link>
-						</div>
-					</CardContent>
-				</Card>
 			</section>
 
 			{/* Footer */}

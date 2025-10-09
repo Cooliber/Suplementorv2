@@ -10,21 +10,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import {
   Database,
   Trash2,
@@ -50,6 +40,7 @@ export function CacheManagement({ className, compact = false }: CacheManagementP
   const [syncStatus, setSyncStatus] = useState<SyncStatus | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
 
   const cachingService = CachingService.getInstance();
 
@@ -233,28 +224,30 @@ export function CacheManagement({ className, compact = false }: CacheManagementP
                           Synchronizuj
                         </Button>
 
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
+                        <Dialog open={isClearDialogOpen} onOpenChange={setIsClearDialogOpen}>
+                          <DialogTrigger asChild>
                             <Button variant="outline" size="sm">
                               <Trash2 className="h-4 w-4 mr-2" />
                               Wyczyść
                             </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Wyczyść pamięć podręczną?</AlertDialogTitle>
-                              <AlertDialogDescription>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Wyczyść pamięć podręczną?</DialogTitle>
+                              <DialogDescription>
                                 Ta akcja usunie wszystkie dane z pamięci podręcznej. Dane zostaną ponownie pobrane przy następnym użyciu.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Anuluj</AlertDialogCancel>
-                              <AlertDialogAction onClick={handleClearCache}>
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                              <Button variant="outline" onClick={() => setIsClearDialogOpen(false)}>
+                                Anuluj
+                              </Button>
+                              <Button onClick={() => { handleClearCache(); setIsClearDialogOpen(false); }}>
                                 Wyczyść
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     </div>
                   )}
@@ -398,28 +391,30 @@ export function CacheManagement({ className, compact = false }: CacheManagementP
                 Wymus synchronizację
               </Button>
 
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
+              <Dialog open={isClearDialogOpen} onOpenChange={setIsClearDialogOpen}>
+                <DialogTrigger asChild>
                   <Button variant="outline">
                     <Trash2 className="h-4 w-4 mr-2" />
                     Wyczyść pamięć
                   </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Wyczyść pamięć podręczną?</AlertDialogTitle>
-                    <AlertDialogDescription>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Wyczyść pamięć podręczną?</DialogTitle>
+                    <DialogDescription>
                       Ta akcja usunie wszystkie dane z pamięci podręcznej. Dane zostaną ponownie pobrane przy następnym użyciu.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Anuluj</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleClearCache}>
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsClearDialogOpen(false)}>
+                      Anuluj
+                    </Button>
+                    <Button onClick={() => { handleClearCache(); setIsClearDialogOpen(false); }}>
                       Wyczyść pamięć podręczną
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </>
         )}

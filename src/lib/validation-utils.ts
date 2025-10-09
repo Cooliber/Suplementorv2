@@ -171,30 +171,22 @@ export const UserProfileSchema = z.object({
 
   healthConditions: z
     .array(z.string().min(1, "Stan zdrowia nie może być pusty"))
-    .max(15, "Maksymalnie 15 stanów zdrowia")
-    .optional()
-    .default([]),
+    .max(15, "Maksymalnie 15 stanów zdrowia"),
 
   currentMedications: z
     .array(z.string().min(1, "Nazwa leku nie może być pusta"))
-    .max(20, "Maksymalnie 20 leków")
-    .optional()
-    .default([]),
+    .max(20, "Maksymalnie 20 leków"),
 
   allergies: z
     .array(z.string().min(1, "Alergia nie może być pusta"))
-    .max(15, "Maksymalnie 15 alergii")
-    .optional()
-    .default([]),
+    .max(15, "Maksymalnie 15 alergii"),
 
-  pregnant: z.boolean().default(false),
-  breastfeeding: z.boolean().default(false),
+  pregnant: z.boolean(),
+  breastfeeding: z.boolean(),
 
   goals: z
     .array(z.string().min(1, "Cel nie może być pusty"))
-    .max(10, "Maksymalnie 10 celów")
-    .optional()
-    .default([]),
+    .max(10, "Maksymalnie 10 celów"),
 
   preferences: z
     .object({
@@ -203,9 +195,7 @@ export const UserProfileSchema = z.object({
       glutenFree: z.boolean().default(false),
       lactoseFree: z.boolean().default(false),
       organic: z.boolean().default(false),
-    })
-    .optional()
-    .default({}),
+    }),
 });
 
 export type UserProfileData = z.infer<typeof UserProfileSchema>;

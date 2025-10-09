@@ -124,10 +124,10 @@ const CONTENT_STRUCTURE: ContentCategory[] = [
 			{
 				id: "endocannabinoid-system",
 				name: "Endocannabinoid System",
-				polishName: "System Endokannabinoidowy",
+				polishName: "Układ Endokannabinoidowy",
 				url: "/system-endokannabinoidowy",
 				description: "Comprehensive information about the endocannabinoid system",
-				polishDescription: "Kompleksowe informacje o systemie endokannabinoidowym",
+				polishDescription: "Kompleksowe informacje o układzie endokannabinoidowym",
 			},
 		],
 	},

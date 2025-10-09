@@ -62,6 +62,7 @@ export function ReviewForm({
 		handleSubmit,
 		setValue,
 		watch,
+		control,
 		formState: { errors, isSubmitting },
 	} = useForm<ReviewFormData>({
 		resolver: zodResolver(CreateReviewSchema.omit({
@@ -266,7 +267,7 @@ export function ReviewForm({
 								<div className="space-y-2">
 									<Slider
 										value={[currentValue]}
-										onValueChange={(value) => setValue(rating.name as keyof ReviewFormData, value[0])}
+										onValueChange={(value) => setValue(rating.name as any, value[0])}
 										max={5}
 										min={1}
 										step={1}
@@ -303,7 +304,7 @@ export function ReviewForm({
 					<div className="space-y-6">
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 							<FormField
-								control={form.control}
+								control={control}
 								name="title"
 								render={({ field }) => (
 									<FormItem>
@@ -339,7 +340,7 @@ export function ReviewForm({
 						{/* Review content */}
 						<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 							<FormField
-								control={form.control}
+								control={control}
 								name="content"
 								render={({ field }) => (
 									<FormItem>
@@ -362,7 +363,7 @@ export function ReviewForm({
 							/>
 
 							<FormField
-								control={form.control}
+								control={control}
 								name="polishContent"
 								render={({ field }) => (
 									<FormItem>

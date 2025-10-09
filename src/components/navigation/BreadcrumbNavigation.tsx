@@ -50,6 +50,8 @@ const pathMap: Record<
 	"/suplementy": { title: "Suplementy", icon: Pill },
 	"/sledzenie": { title: "Śledzenie", icon: Target },
 	"/wiedza": { title: "Wiedza", icon: BookOpen },
+	"/wiedza/graf-wiedzy": { title: "Graf wiedzy", icon: Brain },
+	"/wiedza/integracja-grafu": { title: "Integracja grafu", icon: Network },
 	"/badania": { title: "Badania naukowe", icon: FileText },
 	"/mechanizmy": { title: "Mechanizmy działania", icon: Activity },
 	"/neuroprzekazniki": { title: "Neuroprzekaźniki", icon: Zap },

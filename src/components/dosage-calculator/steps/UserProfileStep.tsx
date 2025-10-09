@@ -16,12 +16,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Plus, X, Info, CheckCircle, AlertCircle, User, Activity, Heart, Pill } from "lucide-react";
 import { EnhancedInput, EnhancedSelect, ValidationSummary } from "@/components/ui/enhanced-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { UserProfileSchema, type UserProfileData } from "@/lib/validation-utils";
+import { UserProfileSchema as ValidationUserProfileSchema, type UserProfileData } from "@/lib/validation-utils";
 import { type DosageCalculationInput } from "@/types/dosage-calculator";
 
 interface UserProfileStepProps {
-	userProfile: Partial<DosageCalculationInput["userProfile"]>;
-	onUserProfileChange: (profile: Partial<DosageCalculationInput["userProfile"]>) => void;
+	userProfile: Partial<UserProfileData>;
+	onUserProfileChange: (profile: Partial<UserProfileData>) => void;
 	isPolish: boolean;
 }
 
@@ -52,7 +52,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
  	const [newAllergy, setNewAllergy] = useState("");
 
  	const form = useForm<UserProfileData>({
- 		resolver: zodResolver(UserProfileSchema),
+ 		resolver: zodResolver(ValidationUserProfileSchema),
  		defaultValues: {
  			age: userProfile.age || 25,
  			gender: userProfile.gender || "other",
@@ -69,6 +69,8 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
  		},
  		mode: "onChange",
  	});
+
+ 	const { register, handleSubmit, setValue, watch, control, formState: { errors, isSubmitting } } = form;
 
  	const { fields: conditionFields, append: appendCondition, remove: removeCondition } = useFieldArray({
  		control: form.control,
@@ -132,7 +134,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 						<CardContent className="space-y-6">
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 								<FormField
-									control={form.control}
+									control={control}
 									name="age"
 									render={({ field }) => (
 										<FormItem>
@@ -168,7 +170,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 								/>
 
 								<FormField
-									control={form.control}
+									control={control}
 									name="gender"
 									render={({ field }) => (
 										<FormItem>
@@ -190,7 +192,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 								/>
 
 								<FormField
-									control={form.control}
+									control={control}
 									name="weight"
 									render={({ field }) => (
 										<FormItem>
@@ -227,7 +229,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 								/>
 
 								<FormField
-									control={form.control}
+									control={control}
 									name="height"
 									render={({ field }) => (
 										<FormItem>
@@ -249,7 +251,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 							</div>
 
 							<FormField
-								control={form.control}
+								control={control}
 								name="activityLevel"
 								render={({ field }) => (
 									<FormItem>
@@ -292,7 +294,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 									</span>
 									<span className="text-sm text-muted-foreground">
 										{Object.values(form.watch()).filter((value) =>
-											value !== undefined && value !== null && value !== ""
+											value !== undefined && value !== null && (typeof value !== "string" || value !== "")
 										).length}/5
 									</span>
 								</div>
@@ -301,7 +303,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 										className="bg-gradient-to-r from-primary to-primary/80 h-2 rounded-full transition-all duration-300"
 										style={{
 											width: `${(Object.values(form.watch()).filter((value) =>
-												value !== undefined && value !== null && value !== ""
+												value !== undefined && value !== null && (typeof value !== "string" || value !== "")
 											).length / 5) * 100}%`
 										}}
 									/>
@@ -514,7 +516,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<FormField
-								control={form.control}
+								control={control}
 								name="pregnant"
 								render={({ field }) => (
 									<FormItem className="flex items-center space-x-2">
@@ -530,7 +532,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 							/>
 
 							<FormField
-								control={form.control}
+								control={control}
 								name="breastfeeding"
 								render={({ field }) => (
 									<FormItem className="flex items-center space-x-2">

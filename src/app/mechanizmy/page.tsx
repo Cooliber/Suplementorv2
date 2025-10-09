@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Activity, Zap, Lock, Wrench, TrendingUp, BookOpen } from "lucide-react";
+import { Activity, Zap, Lock, Wrench, TrendingUp, BookOpen, ChevronDown, ChevronRight, Clock, Users, Star } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Separator } from "@/components/ui/separator";
 import { BreadcrumbNavigation } from "@/components/navigation/BreadcrumbNavigation";
 
 type DifficultyLevel = "beginner" | "intermediate" | "expert";
@@ -194,40 +196,85 @@ export default function MechanismsPage() {
 				{MECHANISMS.map((mechanism) => {
 					const Icon = mechanism.icon;
 					return (
-						<Card key={mechanism.id} className={`border-2 ${mechanism.borderColor}`}>
-							<CardHeader className={mechanism.bgColor}>
+						<Card key={mechanism.id} className={`border-2 ${mechanism.borderColor} hover:shadow-lg transition-all group`}>
+							<CardHeader className={`${mechanism.bgColor} group-hover:bg-opacity-70 transition-colors`}>
 								<div className="flex items-center gap-3 mb-2">
-									<Icon className={`h-8 w-8 ${mechanism.color}`} />
+									<div className={`p-2 rounded-lg bg-white/50 group-hover:scale-110 transition-transform`}>
+										<Icon className={`h-6 w-6 ${mechanism.color}`} />
+									</div>
 									<CardTitle className="text-xl">{mechanism.name}</CardTitle>
 								</div>
 							</CardHeader>
 							<CardContent className="pt-6 space-y-4">
 								{/* Mechanism Description */}
 								<div>
-									<h4 className="font-semibold mb-2 text-sm text-muted-foreground">
-										Jak to działa?
-									</h4>
-									<p className="text-sm leading-relaxed">
-										{mechanism.descriptions[difficultyLevel]}
-									</p>
+									<Accordion type="single" collapsible className="w-full">
+										<AccordionItem value={`${mechanism.id}-description`} className="border-muted">
+											<AccordionTrigger className="text-left hover:no-underline">
+												<div className="flex items-center gap-2">
+													<BookOpen className="h-4 w-4 text-muted-foreground" />
+													<span className="font-semibold text-sm text-muted-foreground">
+														Jak to działa?
+													</span>
+												</div>
+											</AccordionTrigger>
+											<AccordionContent>
+												<p className="text-sm leading-relaxed mt-2">
+													{mechanism.descriptions[difficultyLevel]}
+												</p>
+											</AccordionContent>
+										</AccordionItem>
+									</Accordion>
 								</div>
+
+								<Separator />
 
 								{/* Supplement Examples */}
 								<div>
-									<h4 className="font-semibold mb-3 text-sm text-muted-foreground">
-										Przykładowe Suplementy
-									</h4>
-									<div className="space-y-2">
-										{mechanism.supplements.map((supp, idx) => (
-											<div key={idx} className="bg-muted p-3 rounded-lg">
-												<div className="font-medium text-sm mb-1">
-													{supp.polishName}
+									<Accordion type="single" collapsible className="w-full">
+										<AccordionItem value={`${mechanism.id}-supplements`} className="border-muted">
+											<AccordionTrigger className="text-left hover:no-underline">
+												<div className="flex items-center gap-2">
+													<Users className="h-4 w-4 text-muted-foreground" />
+													<span className="font-semibold text-sm text-muted-foreground">
+														Przykładowe Suplementy ({mechanism.supplements.length})
+													</span>
 												</div>
-												<div className="text-xs text-muted-foreground">
-													{supp.mechanism}
+											</AccordionTrigger>
+											<AccordionContent>
+												<div className="space-y-3 mt-2">
+													{mechanism.supplements.map((supp, idx) => (
+														<div key={idx} className="bg-muted/50 p-3 rounded-lg border border-muted/70 hover:bg-muted transition-colors">
+															<div className="flex items-start justify-between">
+																<div className="flex-1">
+																	<div className="font-medium text-sm mb-1">
+																		{supp.polishName}
+																	</div>
+																	<div className="text-xs text-muted-foreground">
+																		{supp.mechanism}
+																	</div>
+																</div>
+																<Badge variant="outline" className="text-xs ml-2">
+																	{mechanism.name.split(' ')[0]}
+																</Badge>
+															</div>
+														</div>
+													))}
 												</div>
-											</div>
-										))}
+											</AccordionContent>
+										</AccordionItem>
+									</Accordion>
+								</div>
+
+								{/* Quick Stats */}
+								<div className="flex items-center justify-between text-xs text-muted-foreground pt-2">
+									<div className="flex items-center gap-1">
+										<Users className="h-3 w-3" />
+										<span>{mechanism.supplements.length} suplementów</span>
+									</div>
+									<div className="flex items-center gap-1">
+										<Clock className="h-3 w-3" />
+										<span>5-10 min. czytania</span>
 									</div>
 								</div>
 							</CardContent>
@@ -237,29 +284,90 @@ export default function MechanismsPage() {
 			</div>
 
 			{/* Additional Information */}
-			<Card>
-				<CardHeader>
-					<CardTitle>Ważne Informacje</CardTitle>
+			<Card className="border-2 border-primary/20">
+				<CardHeader className="bg-primary/5">
+					<CardTitle className="flex items-center gap-2">
+						<BookOpen className="h-5 w-5 text-primary" />
+						Ważne Informacje
+					</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-4">
-					<div>
-						<h4 className="font-semibold mb-2">Wielokierunkowe Działanie</h4>
-						<p className="text-sm text-muted-foreground">
-							Większość suplementów działa poprzez wiele mechanizmów jednocześnie. Na przykład, kurkumina wykazuje działanie przeciwzapalne, antyoksydacyjne i moduluje ekspresję genów.
-						</p>
-					</div>
-					<div>
-						<h4 className="font-semibold mb-2">Synergizm</h4>
-						<p className="text-sm text-muted-foreground">
-							Niektóre suplementy działają synergistycznie - ich łączne działanie jest silniejsze niż suma działań pojedynczych składników.
-						</p>
-					</div>
-					<div>
-						<h4 className="font-semibold mb-2">Indywidualna Odpowiedź</h4>
-						<p className="text-sm text-muted-foreground">
-							Efektywność mechanizmów może się różnić w zależności od genetyki, wieku, stanu zdrowia i innych czynników indywidualnych.
-						</p>
-					</div>
+					<Accordion type="multiple" className="w-full">
+						<AccordionItem value="multidirectional" className="border-muted">
+							<AccordionTrigger className="text-left hover:no-underline">
+								<div className="flex items-center gap-2">
+									<TrendingUp className="h-4 w-4 text-primary" />
+									<span className="font-semibold">Wielokierunkowe Działanie</span>
+								</div>
+							</AccordionTrigger>
+							<AccordionContent>
+								<div className="space-y-3">
+									<p className="text-sm text-muted-foreground leading-relaxed">
+										Większość suplementów działa poprzez wiele mechanizmów jednocześnie. Na przykład, kurkumina wykazuje działanie przeciwzapalne, antyoksydacyjne i moduluje ekspresję genów.
+									</p>
+									<div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+										<Badge variant="secondary" className="justify-center">Przeciwzapalne</Badge>
+										<Badge variant="secondary" className="justify-center">Antyoksydacyjne</Badge>
+										<Badge variant="secondary" className="justify-center">Epigenetyczne</Badge>
+									</div>
+								</div>
+							</AccordionContent>
+						</AccordionItem>
+
+						<AccordionItem value="synergy" className="border-muted">
+							<AccordionTrigger className="text-left hover:no-underline">
+								<div className="flex items-center gap-2">
+									<Users className="h-4 w-4 text-primary" />
+									<span className="font-semibold">Synergizm</span>
+								</div>
+							</AccordionTrigger>
+							<AccordionContent>
+								<div className="space-y-3">
+									<p className="text-sm text-muted-foreground leading-relaxed">
+										Niektóre suplementy działają synergistycznie - ich łączne działanie jest silniejsze niż suma działań pojedynczych składników.
+									</p>
+									<div className="bg-muted/50 p-3 rounded-lg">
+										<h5 className="font-medium text-sm mb-2">Przykłady synergii:</h5>
+										<ul className="space-y-1 text-xs text-muted-foreground">
+											<li>• Witamina D + K2 - lepsze wchłanianie</li>
+											<li>• Magnez + B6 - wspieranie układu nerwowego</li>
+											<li>• Kurkumina + piperyna - zwiększona biodostępność</li>
+										</ul>
+									</div>
+								</div>
+							</AccordionContent>
+						</AccordionItem>
+
+						<AccordionItem value="individual" className="border-muted">
+							<AccordionTrigger className="text-left hover:no-underline">
+								<div className="flex items-center gap-2">
+									<Star className="h-4 w-4 text-primary" />
+									<span className="font-semibold">Indywidualna Odpowiedź</span>
+								</div>
+							</AccordionTrigger>
+							<AccordionContent>
+								<div className="space-y-3">
+									<p className="text-sm text-muted-foreground leading-relaxed">
+										Efektywność mechanizmów może się różnić w zależności od genetyki, wieku, stanu zdrowia i innych czynników indywidualnych.
+									</p>
+									<div className="grid grid-cols-2 gap-2">
+										{[
+											"Genetyka",
+											"Wiek",
+											"Stan zdrowia",
+											"Dieta",
+											"Styl życia",
+											"Mikrobiom"
+										].map((factor, index) => (
+											<Badge key={index} variant="outline" className="text-xs justify-center">
+												{factor}
+											</Badge>
+										))}
+									</div>
+								</div>
+							</AccordionContent>
+						</AccordionItem>
+					</Accordion>
 				</CardContent>
 			</Card>
 		</div>

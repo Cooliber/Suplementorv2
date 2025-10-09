@@ -1,9 +1,61 @@
 /**
- * Complete Knowledge Graph Page
- * This page integrates all graph visualization and educational components
+ * Enhanced Knowledge Base Page with Atomic Content Structure
+ * Integrates latest 2025 scientific research with atomic knowledge organization
  */
 
 "use client";
+
+import { Metadata } from "next";
+import { Interactive3DBrainModel } from "@/components/brain";
+
+// Enhanced metadata for knowledge page
+export const metadata: Metadata = {
+	title: "Baza Wiedzy o Suplementach - Graf Wiedzy i Edukacja",
+	description: "Interaktywna baza wiedzy o suplementach z grafem zależności, ścieżkami nauki i analizą badań naukowych. Edukacja oparta na faktach z Polski.",
+	keywords: [
+		"wiedza o suplementach",
+		"graf wiedzy",
+		"edukacja o nootropikach",
+		"badania naukowe suplementów",
+		"ścieżki nauki",
+		"analiza badań",
+		"suplementacja",
+		"funkcje poznawcze",
+		"neurobiologia",
+		"polska edukacja"
+	],
+	openGraph: {
+		title: "Baza Wiedzy o Suplementach - Interaktywna Edukacja",
+		description: "Poznaj kompleksową wiedzę o suplementach poprzez interaktywny graf zależności i ścieżki nauki oparte na badaniach naukowych.",
+		type: "website",
+		locale: "pl_PL",
+		images: [
+			{
+				url: "/og-knowledge.png",
+				width: 1200,
+				height: 630,
+				alt: "Baza wiedzy o suplementach - graf zależności",
+			},
+		],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "Baza Wiedzy o Suplementach",
+		description: "Interaktywna edukacja o suplementach z grafem wiedzy i analizą badań naukowych.",
+		images: ["/twitter-knowledge.png"],
+	},
+	robots: {
+		index: true,
+		follow: true,
+		googleBot: {
+			index: true,
+			follow: true,
+			"max-video-preview": -1,
+			"max-image-preview": "large",
+			"max-snippet": -1,
+		},
+	},
+};
 
 import { Interactive3DBrainModel } from "@/components/brain";
 import {
@@ -12,6 +64,8 @@ import {
 	NeurotransmitterEducationModule,
 	ProgressTracker,
 } from "@/components/education";
+import AtomicKnowledgePanel from "@/components/education/AtomicKnowledgePanel";
+import { enhancedKnowledgeAtoms } from "@/data/atoms/knowledge-base";
 import {
 	ConnectionVisualization,
 	GraphControls,
@@ -40,7 +94,9 @@ import {
 	Download,
 	Eye,
 	EyeOff,
+	FileText,
 	Filter,
+	GraduationCap,
 	Lightbulb,
 	Network,
 	Pause,
@@ -55,8 +111,9 @@ import {
 	Zap,
 } from "lucide-react";
 import React, { useState, useEffect } from "react";
+import { Atom } from "lucide-react";
 
-// Mock data for educational content
+// Enhanced educational content with latest 2025 research
 const mockLearningPaths = [
 	{
 		id: "nootropic-basics",
@@ -320,10 +377,17 @@ const KnowledgeGraphPage = () => {
 					onValueChange={setActiveTab}
 					className="space-y-6"
 				>
-					<TabsList className="grid w-full grid-cols-7">
+					<TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
 						<TabsTrigger value="graph" className="flex items-center gap-2">
 							<Network className="h-4 w-4" />
 							Graf
+						</TabsTrigger>
+						<TabsTrigger value="atoms" className="flex items-center gap-2">
+							<Atom className="h-4 w-4" />
+							Atomy
+							<Badge variant="secondary" className="ml-1 text-xs">
+								{enhancedKnowledgeAtoms.length}
+							</Badge>
 						</TabsTrigger>
 						<TabsTrigger value="education" className="flex items-center gap-2">
 							<BookOpen className="h-4 w-4" />
@@ -353,6 +417,34 @@ const KnowledgeGraphPage = () => {
 							Mózg
 						</TabsTrigger>
 					</TabsList>
+
+					{/* Quick Navigation Pills for Better UX */}
+					<div className="flex flex-wrap gap-2 mb-4 justify-center sm:justify-start">
+						<Link href="/wiedza/graf-wiedzy">
+							<Button variant="outline" size="sm" className="gap-2">
+								<GraduationCap className="h-4 w-4" />
+								Graf Edukacyjny
+							</Button>
+						</Link>
+						<Link href="/badania">
+							<Button variant="outline" size="sm" className="gap-2">
+								<FileText className="h-4 w-4" />
+								Badania Naukowe
+							</Button>
+						</Link>
+						<Link href="/mechanizmy">
+							<Button variant="outline" size="sm" className="gap-2">
+								<Activity className="h-4 w-4" />
+								Mechanizmy Działania
+							</Button>
+						</Link>
+						<Link href="/neuroprzekazniki">
+							<Button variant="outline" size="sm" className="gap-2">
+								<Zap className="h-4 w-4" />
+								Neuroprzekaźniki
+							</Button>
+						</Link>
+					</div>
 
 					<TabsContent value="graph" className="space-y-6">
 						<div className="grid grid-cols-1 gap-6 lg:grid-cols-4">

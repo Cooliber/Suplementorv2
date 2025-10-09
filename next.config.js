@@ -53,6 +53,9 @@ const config = {
 	compress: true,
 	poweredByHeader: false,
 
+	// Static generation optimizations for Netlify
+	generateEtags: false,
+
 	// Bundle optimization for 3D libraries and Polish content
 	webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
 		// Optimize Three.js and WebGL libraries
@@ -182,8 +185,7 @@ const config = {
 	},
 
 	// Output configuration for deployment
-	// Disabled standalone mode due to Windows symlink permission issues
-	// output: "standalone",
+	output: "standalone",
 
 	// Logging configuration
 	logging: {

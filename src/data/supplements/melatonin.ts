@@ -1,0 +1,348 @@
+/**
+ * Melatonin Supplement Profile
+ * Comprehensive scientific data for sleep regulation and circadian rhythm support
+ */
+
+import type { SupplementWithRelations } from "../../types/supplement";
+
+export const melatoninProfile: SupplementWithRelations = {
+	id: "melatonin",
+	name: "Melatonin",
+	polishName: "Melatonina",
+	scientificName: "N-acetyl-5-methoxytryptamine",
+	commonNames: ["Sleep hormone", "Circadian regulator", "Pinealgland hormone"],
+	polishCommonNames: ["Hormon snu", "Regulator rytmu dobowego", "Hormon szyszynki"],
+	category: "OTHER",
+	description:
+		"Melatonin is a hormone naturally produced by the pineal gland that regulates the sleep-wake cycle. As a supplement, it is used to treat sleep disorders, jet lag, and circadian rhythm disruptions. It also functions as an antioxidant and immune modulator.",
+	polishDescription:
+		"Melatonina to hormon naturalnie produkowany przez szyszynkę, który reguluje cykl snu i czuwania. Jako suplement, jest stosowana w leczeniu zaburzeń snu, jet lag i zakłóceń rytmu dobowego. Działa również jako antyoksydant i modulator immunologiczny.",
+
+	// Active compounds with detailed bioavailability data
+	activeCompounds: [
+		{
+			name: "Melatonin",
+			polishName: "Melatonina",
+			concentration: "1-10mg",
+			bioavailability: 15,
+			halfLife: "0.5-1 hour",
+			metabolicPathway: ["Hepatic metabolism", "6-hydroxylation", "Glucuronidation"],
+			targetReceptors: ["MT1 receptors", "MT2 receptors", "Calmodulin binding"],
+		},
+		{
+			name: "6-Hydroxymelatonin",
+			polishName: "6-Hydroksymelatonina",
+			concentration: "Metabolite",
+			bioavailability: 0,
+			halfLife: "1-2 hours",
+			metabolicPathway: ["Sulfate conjugation", "Urinary excretion"],
+			targetReceptors: ["No direct receptor activity"],
+		},
+	],
+
+	// Clinical applications with Polish translations
+	clinicalApplications: [
+		{
+			condition: "Insomnia and sleep disorders",
+			polishCondition: "Bezsenność i zaburzenia snu",
+			indication: "Treatment of primary insomnia and sleep onset difficulties",
+			polishIndication: "Leczenie bezsenności pierwotnej i trudności z zasypianiem",
+			efficacy: "high",
+			effectivenessRating: 8,
+			evidenceLevel: "STRONG",
+			recommendedDose: "0.5-5mg 30-60 minutes before bedtime",
+			duration: "Short-term use (weeks to months)",
+			effectSize: 0.6,
+			studyCount: 60,
+			participantCount: 8000,
+			recommendationGrade: "A",
+		},
+		{
+			condition: "Jet lag and circadian rhythm disorders",
+			polishCondition: "Jet lag i zaburzenia rytmu dobowego",
+			indication: "Management of jet lag and shift work sleep disorder",
+			polishIndication: "Zarządzanie jet lag i zaburzeniami snu w pracy zmianowej",
+			efficacy: "high",
+			effectivenessRating: 8,
+			evidenceLevel: "STRONG",
+			recommendedDose: "0.5-5mg at bedtime",
+			duration: "3-5 days",
+			effectSize: 0.7,
+			studyCount: 40,
+			participantCount: 4000,
+			recommendationGrade: "A",
+		},
+		{
+			condition: "Anxiety and mood disorders",
+			polishCondition: "Lęk i zaburzenia nastroju",
+			indication: "Adjunctive treatment for anxiety and depressive symptoms",
+			polishIndication: "Leczenie wspomagające objawów lęku i depresji",
+			efficacy: "moderate",
+			effectivenessRating: 6,
+			evidenceLevel: "MODERATE",
+			recommendedDose: "1-3mg daily",
+			duration: "4-8 weeks",
+			effectSize: 0.3,
+			studyCount: 25,
+			participantCount: 2500,
+			recommendationGrade: "B",
+		},
+		{
+			condition: "Antioxidant and anti-inflammatory support",
+			polishCondition: "Wsparcie antyoksydacyjne i przeciwzapalne",
+			indication: "General antioxidant protection and immune modulation",
+			polishIndication: "Ogólna ochrona antyoksydacyjna i modulacja immunologiczna",
+			efficacy: "moderate",
+			effectivenessRating: 5,
+			evidenceLevel: "WEAK",
+			recommendedDose: "1-3mg daily",
+			duration: "Ongoing",
+			effectSize: 0.25,
+			studyCount: 20,
+			participantCount: 2000,
+			recommendationGrade: "C",
+		},
+	],
+
+	// Mechanisms of action with detailed pathways
+	mechanisms: [
+		{
+			id: "sleep-regulation",
+			name: "Sleep-wake cycle regulation",
+			polishName: "Regulacja cyklu snu i czuwania",
+			pathway: "Circadian rhythm regulation",
+			polishPathway: "Regulacja rytmu dobowego",
+			description:
+				"Melatonin binds to MT1 and MT2 receptors in the suprachiasmatic nucleus, promoting sleep onset by reducing core body temperature and inhibiting wake-promoting neurons.",
+			polishDescription:
+				"Melatonina wiąże się z receptorami MT1 i MT2 w jądrze nadskrzyżowaniowym, promując zasypianie poprzez obniżenie temperatury ciała i hamowanie neuronów promujących czuwanie.",
+			evidenceLevel: "STRONG",
+			targetSystems: [
+				"Suprachiasmatic nucleus",
+				"MT1/MT2 receptors",
+				"Body temperature regulation",
+				"Sleep architecture",
+			],
+			timeToEffect: "30-60 minutes",
+			duration: "4-8 hours",
+		},
+		{
+			id: "antioxidant-activity",
+			name: "Antioxidant and free radical scavenging",
+			polishName: "Aktywność antyoksydacyjna i wychwytywanie wolnych rodników",
+			pathway: "Oxidative stress protection",
+			polishPathway: "Ochrona przed stresem oksydacyjnym",
+			description:
+				"Melatonin acts as a potent antioxidant, scavenging free radicals and stimulating antioxidant enzymes. It is particularly effective in protecting mitochondrial DNA and cellular membranes.",
+			polishDescription:
+				"Melatonina działa jako silny antyoksydant, wychwytując wolne rodniki i stymulując enzymy antyoksydacyjne. Jest szczególnie skuteczna w ochronie mitochondrialnego DNA i błon komórkowych.",
+			evidenceLevel: "STRONG",
+			targetSystems: [
+				"Mitochondrial protection",
+				"DNA protection",
+				"Lipid peroxidation inhibition",
+				"Antioxidant enzyme stimulation",
+			],
+			timeToEffect: "1-2 hours",
+			duration: "6-8 hours",
+		},
+		{
+			id: "immune-modulation",
+			name: "Immune system modulation",
+			polishName: "Modulacja układu odpornościowego",
+			pathway: "Immune regulation",
+			polishPathway: "Regulacja odporności",
+			description:
+				"Melatonin modulates immune function through receptor-mediated effects on cytokine production and immune cell activity, with both pro-inflammatory and anti-inflammatory actions depending on context.",
+			polishDescription:
+				"Melatonina moduluje funkcję immunologiczną poprzez efekty receptorowe na produkcję cytokin i aktywność komórek immunologicznych, z działaniami zarówno prozapalnymi, jak i przeciwzapalnymi w zależności od kontekstu.",
+			evidenceLevel: "MODERATE",
+			targetSystems: [
+				"Cytokine production",
+				"Immune cell activity",
+				"Inflammatory response",
+				"Immune cell receptors",
+			],
+			timeToEffect: "2-4 hours",
+			duration: "8-12 hours",
+		},
+	],
+
+	// Comprehensive dosage guidelines
+	dosageGuidelines: {
+		therapeuticRange: {
+			min: 0.3,
+			max: 10,
+			unit: "mg",
+		},
+		timing: ["evening", "before_bed"],
+		withFood: false,
+		contraindications: ["Autoimmune diseases", "Depression", "Seizure disorders"],
+		polishContraindications: ["Choroby autoimmunologiczne", "Depresja", "Zaburzenia napadowe"],
+		interactions: [
+			{
+				substance: "Benzodiazepines",
+				polishSubstance: "Benzodiazepiny",
+				type: "synergistic",
+				severity: "moderate",
+				description: "Enhanced sedative effects",
+				polishDescription: "Wzmocnione efekty uspokajające",
+				clinicalSignificance: "Increased risk of excessive sedation",
+				polishClinicalSignificance: "Zwiększone ryzyko nadmiernej sedacji",
+				mechanism: "Additive GABAergic effects",
+				polishMechanism: "Addytywne efekty GABAergiczne",
+				recommendation: "Use caution when combining",
+				polishRecommendation: "Ostrożność przy łączeniu",
+				evidenceLevel: "MODERATE",
+			},
+			{
+				substance: "Caffeine",
+				polishSubstance: "Kofeina",
+				type: "antagonistic",
+				severity: "minor",
+				description: "Caffeine may reduce melatonin effectiveness",
+				polishDescription: "Kofeina może zmniejszać skuteczność melatoniny",
+				clinicalSignificance: "Reduced sleep-promoting effects",
+				polishClinicalSignificance: "Zmniejszone efekty promujące sen",
+				mechanism: "Adenosine receptor antagonism",
+				polishMechanism: "Antagonizm receptorów adenozynowych",
+				recommendation: "Avoid caffeine close to bedtime",
+				polishRecommendation: "Unikaj kofeiny blisko pory snu",
+				evidenceLevel: "WEAK",
+			},
+		],
+	},
+
+	// Side effects with frequency and management
+	sideEffects: [
+		{
+			effect: "Morning grogginess",
+			polishEffect: "Poranna senność",
+			frequency: "common",
+			severity: "mild",
+			reversible: true,
+			dosageDependent: true,
+			timeToOnset: "Next morning",
+			management: "Reduce dose, take earlier in evening",
+			polishManagement: "Zmniejsz dawkę, przyjmuj wcześniej wieczorem",
+		},
+		{
+			effect: "Headache",
+			polishEffect: "Ból głowy",
+			frequency: "uncommon",
+			severity: "mild",
+			reversible: true,
+			dosageDependent: true,
+			timeToOnset: "1-2 hours",
+			management: "Reduce dose, ensure adequate hydration",
+			polishManagement: "Zmniejsz dawkę, zapewnij odpowiednie nawodnienie",
+		},
+		{
+			effect: "Vivid dreams",
+			polishEffect: "Żywe sny",
+			frequency: "uncommon",
+			severity: "mild",
+			reversible: true,
+			dosageDependent: true,
+			timeToOnset: "During sleep",
+			management: "Reduce dose if disturbing",
+			polishManagement: "Zmniejsz dawkę jeśli niepokojące",
+		},
+	],
+
+	// Supplement interactions
+	interactions: [
+		{
+			substance: "Magnesium",
+			polishSubstance: "Magnez",
+			type: "synergistic",
+			severity: "beneficial",
+			description: "Enhanced sleep quality and relaxation",
+			polishDescription: "Poprawiona jakość snu i relaksacja",
+			clinicalSignificance: "Improved sleep outcomes",
+			polishClinicalSignificance: "Poprawione wyniki snu",
+			mechanism: "Complementary GABAergic and circadian effects",
+			polishMechanism: "Komplementarne efekty GABAergiczne i okołodobowe",
+			recommendation: "Often beneficial for sleep support",
+			polishRecommendation: "Często korzystne dla wsparcia snu",
+			evidenceLevel: "MODERATE",
+		},
+		{
+			substance: "Alcohol",
+			polishSubstance: "Alkohol",
+			type: "antagonistic",
+			severity: "moderate",
+			description: "Alcohol disrupts melatonin production and sleep architecture",
+			polishDescription: "Alkohol zakłóca produkcję melatoniny i architekturę snu",
+			clinicalSignificance: "Reduced sleep quality and hormone disruption",
+			polishClinicalSignificance: "Zmniejszona jakość snu i zaburzenia hormonalne",
+			mechanism: "Suppression of endogenous melatonin production",
+			polishMechanism: "Tłumienie endogennej produkcji melatoniny",
+			recommendation: "Avoid alcohol near bedtime",
+			polishRecommendation: "Unikaj alkoholu blisko pory snu",
+			evidenceLevel: "MODERATE",
+		},
+	],
+
+	// Evidence level and research studies
+	evidenceLevel: "STRONG",
+	researchStudies: [
+		{
+			id: "ferris-2013",
+			title: "Efficacy of melatonin for sleep disturbance in adults: a systematic review",
+			polishTitle: "Skuteczność melatoniny w zaburzeniach snu u dorosłych: przegląd systematyczny",
+			authors: ["Ferracioli-Oda E", "Qawasmi A", "Bloch MH"],
+			journal: "Sleep Medicine Reviews",
+			year: 2013,
+			studyType: "META_ANALYSIS",
+			primaryOutcome: "Sleep onset latency reduction",
+			polishPrimaryOutcome: "Redukcja latencji zasypiania",
+			findings: "Melatonin significantly reduces sleep onset latency",
+			polishFindings: "Melatonina znacząco redukuje latencję zasypiania",
+			evidenceLevel: "STRONG",
+			lastUpdated: "2024-01-15T00:00:00Z",
+			pubmedId: "23625185",
+			doi: "10.1016/j.smrv.2012.06.004",
+			sampleSize: 0,
+			qualityScore: 9.0,
+		},
+		{
+			id: "brzezinski-1997",
+			title: "Melatonin in humans",
+			polishTitle: "Melatonina u ludzi",
+			authors: ["Brzezinski A"],
+			journal: "New England Journal of Medicine",
+			year: 1997,
+			studyType: "SYSTEMATIC_REVIEW",
+			primaryOutcome: "Melatonin physiology and clinical applications",
+			polishPrimaryOutcome: "Fizjologia melatoniny i zastosowania kliniczne",
+			findings: "Melatonin is effective for circadian rhythm disorders",
+			polishFindings: "Melatonina jest skuteczna w zaburzeniach rytmu dobowego",
+			evidenceLevel: "STRONG",
+			lastUpdated: "2024-01-15T00:00:00Z",
+			pubmedId: "8988888",
+			doi: "10.1056/NEJM199701163360306",
+			sampleSize: 0,
+			qualityScore: 9.5,
+		},
+	],
+
+	// Metadata
+	tags: [
+		"melatonin",
+		"sleep",
+		"circadian rhythm",
+		"insomnia",
+		"jet lag",
+		"antioxidant",
+		"hormone",
+		"sleep aid",
+	],
+	lastUpdated: "2024-01-15T00:00:00Z",
+	createdAt: "2024-01-15T00:00:00Z",
+
+	// Additional fields for Prisma compatibility
+	knowledgeNodeId: null,
+};
+
+export default melatoninProfile;
