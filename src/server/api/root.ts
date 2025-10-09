@@ -1,4 +1,6 @@
 import { advancedSearchRouter } from "@/server/api/routers/advanced-search";
+// import { circadianTimingRouter } from "@/server/api/routers/circadianTiming"; // Temporarily disabled
+import { dosageCalculatorRouter } from "@/server/api/routers/dosage-calculator";
 import { knowledgeRouter } from "@/server/api/routers/knowledge";
 import { postRouter } from "@/server/api/routers/post";
 import { recommendationsRouter } from "@/server/api/routers/recommendations";
@@ -16,10 +18,11 @@ export const appRouter = createTRPCRouter({
 	post: postRouter,
 	supplement: supplementRouter,
 	knowledge: knowledgeRouter,
-		supplementHistory: supplementHistoryRouter,
-
+	supplementHistory: supplementHistoryRouter,
+	// circadianTiming: circadianTimingRouter, // Temporarily disabled
 	advancedSearch: advancedSearchRouter,
 	recommendations: recommendationsRouter,
+	dosageCalculator: dosageCalculatorRouter,
 });
 
 // export type definition of API

@@ -87,7 +87,7 @@ interface NeurotransmitterPathway {
 }
 
 // Brain regions data with Polish translations
-const brainRegions: BrainRegion[] = [
+export const brainRegions: BrainRegion[] = [
 	{
 		id: "prefrontal-cortex",
 		name: "Prefrontal Cortex",
@@ -690,5 +690,5 @@ const Interactive3DBrainModel: React.FC<Interactive3DBrainModelProps> = ({
 
 export default Interactive3DBrainModel;
 
-// Export brain regions data for use in other components
-export { brainRegions, neurotransmitterPathways };
+// Export neurotransmitter pathways data for use in other components
+export { neurotransmitterPathways };

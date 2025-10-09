@@ -537,15 +537,45 @@ export const DEFAULT_TRANSLATIONS: TranslationDictionary = {
 	"brain.oxidativeStress": "Stres oksydacyjny",
 
 	// Component specific translations
-	"components.button.loading": "Ładowanie...",
-	"components.button.submit": "Wyślij",
-	"components.button.cancel": "Anuluj",
-	"components.button.confirm": "Potwierdź",
-	"components.button.delete": "Usuń",
-	"components.button.edit": "Edytuj",
-	"components.button.add": "Dodaj",
-	"components.button.save": "Zapisz",
-	"components.button.close": "Zamknij",
+		"components.button.loading": "Ładowanie...",
+		"components.button.submit": "Wyślij",
+		"components.button.cancel": "Anuluj",
+		"components.button.confirm": "Potwierdź",
+		"components.button.delete": "Usuń",
+		"components.button.edit": "Edytuj",
+		"components.button.add": "Dodaj",
+		"components.button.save": "Zapisz",
+		"components.button.close": "Zamknij",
+		"components.button.retry": "Spróbuj ponownie",
+
+		// Error specific translations
+		"errors.network.title": "Problem z połączeniem",
+		"errors.network.message": "Sprawdź połączenie internetowe i spróbuj ponownie",
+		"errors.server.title": "Błąd serwera",
+		"errors.server.message": "Tymczasowy problem z serwerem. Spróbuj ponownie za chwilę",
+		"errors.validation.title": "Błąd walidacji",
+		"errors.validation.message": "Sprawdź poprawność wprowadzonych danych",
+		"errors.timeout.title": "Przekroczono limit czasu",
+		"errors.timeout.message": "Operacja trwa zbyt długo. Spróbuj ponownie",
+		"errors.permission.title": "Brak uprawnień",
+		"errors.permission.message": "Nie masz uprawnień do wykonania tej czynności",
+		"errors.supplement.title": "Błąd suplementu",
+		"errors.supplement.message": "Nie udało się załadować danych suplementu",
+		"errors.dosage.title": "Błąd kalkulacji",
+		"errors.dosage.message": "Wystąpił błąd podczas obliczania dawki",
+		"errors.review.title": "Błąd opinii",
+		"errors.review.message": "Nie udało się wysłać opinii",
+
+		// Error actions
+		"errors.actions.retry": "Spróbuj ponownie",
+		"errors.actions.dismiss": "Zamknij",
+		"errors.actions.details": "Szczegóły błędu",
+		"errors.actions.contact": "Skontaktuj się z nami",
+
+		// Error details
+		"errors.details.stack": "Stack trace",
+		"errors.details.timestamp": "Czas wystąpienia",
+		"errors.details.context": "Kontekst błędu",
 
 	// Graph/Visualization terms
 	"graph.nodes": "Węzły",

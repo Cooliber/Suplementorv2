@@ -33,6 +33,9 @@ import { AIRecommendation, UserHealthProfile } from "./AIRecommendations";
 // Drug interaction models
 import { DrugSupplementInteraction } from "./DrugInteractions";
 
+// Circadian rhythm models
+import CircadianSupplementTiming from "./CircadianSupplementTiming";
+
 export {
 	// Core models
 	Supplement,
@@ -59,6 +62,8 @@ export {
 	AIRecommendation,
 	// Drug interaction models
 	DrugSupplementInteraction,
+	// Circadian rhythm models
+	CircadianSupplementTiming,
 	// Aliases for backward compatibility
 	UserHealthProfile as UserHealthProfileModel,
 	AIRecommendation as AIRecommendationModel,
@@ -93,6 +98,8 @@ export type {
 	IProgressInsight,
 } from "./UserTracking";
 
+export type { ICircadianSupplementTiming } from "./CircadianSupplementTiming";
+
 // Re-export for convenience
 export default {
 	// Core models
@@ -120,4 +127,7 @@ export default {
 	// AI recommendation models
 	UserHealthProfile,
 	AIRecommendation,
+
+	// Circadian rhythm models
+	CircadianSupplementTiming,
 };

@@ -41,6 +41,21 @@ const MEDICAL_TERMS = new Map<string, PolishMedicalTerm>([
 	["kidney", { english: "kidney", polish: "nerka", category: "anatomy" }],
 	["neuron", { english: "neuron", polish: "neuron", category: "anatomy" }],
 	["synapse", { english: "synapse", polish: "synapsa", category: "anatomy" }],
+	["stomach", { english: "stomach", polish: "żołądek", category: "anatomy" }],
+	["intestine", { english: "intestine", polish: "jelito", category: "anatomy" }],
+	["lung", { english: "lung", polish: "płuco", category: "anatomy" }],
+	["thymus", { english: "thymus", polish: "grasica", category: "anatomy" }],
+	["spleen", { english: "spleen", polish: "śledziona", category: "anatomy" }],
+	["lymph node", { english: "lymph node", polish: "węzeł chłonny", category: "anatomy" }],
+	["artery", { english: "artery", polish: "tętnica", category: "anatomy" }],
+	["vein", { english: "vein", polish: "żyła", category: "anatomy" }],
+	
+	// Body systems
+	["cardiovascular system", { english: "cardiovascular system", polish: "układ sercowo-naczyniowy", category: "anatomy" }],
+	["digestive system", { english: "digestive system", polish: "układ pokarmowy", category: "anatomy" }],
+	["immune system", { english: "immune system", polish: "układ odpornościowy", category: "anatomy" }],
+	["respiratory system", { english: "respiratory system", polish: "układ oddechowy", category: "anatomy" }],
+	["endocrine system", { english: "endocrine system", polish: "układ hormonalny", category: "anatomy" }],
 
 	// Supplement terms
 	[

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 // Breadcrumb Navigation Component
@@ -71,7 +73,7 @@ interface BreadcrumbNavProps {
 	className?: string;
 }
 
-export function BreadcrumbNav({ className }: BreadcrumbNavProps) {
+export function BreadcrumbNavigation({ className }: BreadcrumbNavProps) {
 	const pathname = usePathname();
 	const pathParts = pathname.split("/").filter(Boolean);
 

@@ -39,8 +39,8 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
 		knowledgeRelationship: models.KnowledgeRelationship,
 		supplement: models.Supplement,
 		comprehensiveSupplement: models.ComprehensiveSupplement,
-			supplementHistory: models.SupplementHistory,
-
+		supplementHistory: models.SupplementHistory,
+		circadianSupplementTiming: models.CircadianSupplementTiming,
 		brainRegion: models.BrainRegion,
 		neurotransmitterSystem: models.NeurotransmitterSystem,
 		researchStudy: models.ResearchStudy,

@@ -13,8 +13,10 @@ import {
 	ComprehensiveSupplement,
 	KnowledgeNode,
 	KnowledgeRelationship,
+	CircadianSupplementTiming,
 } from "./models";
 import connectToDatabase, { disconnectFromDatabase } from "./mongodb";
+import circadianTimingData from "./seeds/circadian-timing";
 
 // Color codes for console output
 const colors = {
@@ -1101,6 +1103,57 @@ function getImportanceScore(supplement: any): number {
 	return Math.min(score, 1.0);
 }
 
+async function seedCircadianTiming() {
+	try {
+		console.log(
+			`\n${colors.bright}${colors.cyan}⏰ Starting circadian timing data seeding...${colors.reset}\n`,
+		);
+
+		await connectToDatabase();
+
+		// Clear existing circadian timing data
+		await CircadianSupplementTiming.collection.drop().catch(() => {
+			// Ignore error if collection doesn't exist
+		});
+		console.log(
+			`${colors.yellow}   Cleared existing circadian timing entries${colors.reset}`,
+		);
+
+		// Insert circadian timing data
+		const insertedDocs = await CircadianSupplementTiming.insertMany(
+			circadianTimingData as any,
+		);
+
+		console.log(
+			`${colors.green}   ✓ Inserted ${insertedDocs.length} circadian timing entries${colors.reset}`,
+		);
+
+		// Display summary
+		console.log(`\n${colors.bright}Circadian Timing Summary:${colors.reset}`);
+		for (const entry of insertedDocs) {
+			console.log(
+				`   ${colors.cyan}${entry.polishTimeOfDay}${colors.reset} (${entry.timeRange})`,
+			);
+			console.log(
+				`      Recommended: ${entry.recommendedSupplements.length} supplements`,
+			);
+			console.log(
+				`      Avoid: ${entry.avoidSupplements.length} supplements`,
+			);
+		}
+
+		console.log(
+			`\n${colors.bright}${colors.green}✓ Circadian timing seeding completed successfully!${colors.reset}`,
+		);
+	} catch (error) {
+		console.error(
+			`${colors.bright}${colors.red}✗ Circadian timing seeding failed:${colors.reset}`,
+			error,
+		);
+		throw error;
+	}
+}
+
 async function main() {
 	const startTime = Date.now();
 
@@ -1117,6 +1170,7 @@ async function main() {
 
 		await seedSupplements();
 		await seedKnowledgeGraph();
+		await seedCircadianTiming();
 
 		const duration = ((Date.now() - startTime) / 1000).toFixed(2);
 
@@ -1155,5 +1209,5 @@ async function main() {
 // Always run when executed directly
 main().catch(console.error);
 
-export { seedSupplements, seedKnowledgeGraph, transformSupplementData };
+export { seedSupplements, seedKnowledgeGraph, seedCircadianTiming, transformSupplementData };
 export default main;

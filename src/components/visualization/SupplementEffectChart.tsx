@@ -14,6 +14,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { Star } from "lucide-react";
+import { SkeletonChart } from "@/components/loading/SkeletonCard";
 import {
 	Activity,
 	Brain,
@@ -98,6 +99,7 @@ interface SupplementEffectChartProps {
 	comparisonData?: SupplementEffectData[];
 	showComparison?: boolean;
 	className?: string;
+	isLoading?: boolean;
 }
 
 const SupplementEffectChart: React.FC<SupplementEffectChartProps> = ({
@@ -105,6 +107,7 @@ const SupplementEffectChart: React.FC<SupplementEffectChartProps> = ({
 	comparisonData = [],
 	showComparison = false,
 	className = "",
+	isLoading = false,
 }) => {
 	const [activeView, setActiveView] = useState("neurotransmitters");
 	const [selectedTimeframe, setSelectedTimeframe] = useState("24h");
@@ -206,6 +209,10 @@ const SupplementEffectChart: React.FC<SupplementEffectChartProps> = ({
 		}
 		return null;
 	};
+
+	if (isLoading) {
+		return <SkeletonChart />;
+	}
 
 	return (
 		<Card className={cn("w-full", className)}>

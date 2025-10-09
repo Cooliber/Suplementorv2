@@ -1,3 +1,10 @@
 export { default as BrainRegionDiagram } from "./BrainRegionDiagram";
 export { default as SupplementEffectChart } from "./SupplementEffectChart";
 export { default as SupplementInteractionNetwork } from "./SupplementInteractionNetwork";
+export { default as SupplementAnalyticsDashboard } from "./SupplementAnalyticsDashboard";
+export { default as SupplementEffectivenessCharts } from "./SupplementEffectivenessCharts";
+export { default as SupplementRatingsVisualization } from "./SupplementRatingsVisualization";
+export { default as SupplementComparisonTools } from "./SupplementComparisonTools";
+export { default as DosageSafetyVisualization } from "./DosageSafetyVisualization";
+export { default as ReviewAnalyticsCharts } from "./ReviewAnalyticsCharts";
+export { default as AnalyticsExportUtils } from "./AnalyticsExportUtils";

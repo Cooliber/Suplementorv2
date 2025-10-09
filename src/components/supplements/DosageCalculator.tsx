@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calculator, Clock, Target } from "lucide-react";
 import React, { useState } from "react";
+import { SkeletonDosageCalculator, SkeletonDosageResult } from "@/components/loading/SkeletonCard";
 
 export interface DosageCalculatorProps {
 	supplement?: any;
@@ -14,6 +15,7 @@ export interface DosageCalculatorProps {
 	age?: number;
 	gender?: string;
 	className?: string;
+	isLoading?: boolean;
 }
 
 // Mock dosage data
@@ -60,6 +62,7 @@ export default function DosageCalculator({
 	age = 30,
 	gender = "male",
 	className,
+	isLoading = false,
 }: DosageCalculatorProps) {
 	const [selectedSupplement, setSelectedSupplement] = useState<string>(
 		supplement?.id || "",
@@ -90,6 +93,10 @@ export default function DosageCalculator({
 
 	const personalizedDose = calculatePersonalizedDose();
 
+	if (isLoading) {
+		return <SkeletonDosageCalculator />;
+	}
+
 	return (
 		<Card className={className}>
 			<CardHeader>
@@ -108,6 +115,7 @@ export default function DosageCalculator({
 							value={selectedSupplement}
 							onChange={(e) => setSelectedSupplement(e.target.value)}
 							className="w-full rounded-md border p-2"
+							aria-label="Wybierz suplement do kalkulacji dawkowania"
 						>
 							<option value="">-- Wybierz suplement --</option>
 							{mockSupplementDosages.map((supplement) => (

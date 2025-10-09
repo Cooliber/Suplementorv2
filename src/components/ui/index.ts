@@ -21,3 +21,7 @@ export * from "./tabs";
 export * from "./toast";
 export * from "./toaster";
 export * from "./tooltip";
+export * from "./cache-status-indicator";
+export * from "./offline-notification";
+export * from "./cache-management";
+export * from "./sync-status-indicator";

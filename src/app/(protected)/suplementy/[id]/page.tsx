@@ -1,7 +1,7 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
 	AlertTriangle,
@@ -36,6 +36,10 @@ import BrainRegionDiagram from "@/components/visualization/BrainRegionDiagram";
 import SupplementEffectChart from "@/components/visualization/SupplementEffectChart";
 import SupplementInteractionNetwork from "@/components/visualization/SupplementInteractionNetwork";
 import RelatedHistory from "@/components/history/RelatedHistory";
+import { RelatedContent, createRelatedContentItem, type RelatedContentItem } from "@/components/education/RelatedContent";
+import { CircadianTimingPanel } from "@/components/education/CircadianTimingPanel";
+import { ReviewList } from "@/components/reviews/ReviewList";
+import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { api } from "@/trpc/server";
 
 interface SupplementDetailPageProps {
@@ -186,6 +190,71 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 		notFound();
 	}
 
+	// Prepare related educational content
+	const relatedResearch: RelatedContentItem[] = [
+		createRelatedContentItem(
+			{
+				id: "research-omega3-cognition",
+				title: "Omega-3 and Cognitive Function",
+				polishTitle: "Omega-3 a Funkcje Poznawcze",
+				polishDescription: "Przegląd badań nad wpływem kwasów omega-3 na pamięć i koncentrację",
+				tags: ["omega-3", "cognition", "memory"],
+				polishTags: ["omega-3", "poznanie", "pamięć"],
+			},
+			"research",
+			"/badania",
+			{ evidenceLevel: "STRONG", readTime: "10 min" }
+		),
+	];
+
+	const relatedMechanisms: RelatedContentItem[] = [
+		createRelatedContentItem(
+			{
+				id: "mechanism-receptor-binding",
+				title: "Receptor Binding",
+				polishTitle: "Wiązanie z Receptorami",
+				polishDescription: "Jak suplementy łączą się z receptorami komórkowymi",
+				tags: ["mechanism", "receptors"],
+				polishTags: ["mechanizm", "receptory"],
+			},
+			"mechanism",
+			"/mechanizmy",
+			{ difficulty: "intermediate" }
+		),
+	];
+
+	const relatedNeurotransmitters: RelatedContentItem[] = [
+		createRelatedContentItem(
+			{
+				id: "neurotransmitter-serotonin",
+				title: "Serotonin",
+				polishTitle: "Serotonina",
+				polishDescription: "Neuroprzekaźnik odpowiedzialny za regulację nastroju",
+				tags: ["serotonin", "mood"],
+				polishTags: ["serotonina", "nastrój"],
+			},
+			"neurotransmitter",
+			"/neuroprzekazniki",
+			{ difficulty: "beginner" }
+		),
+	];
+
+	const relatedBrainRegions: RelatedContentItem[] = [
+		createRelatedContentItem(
+			{
+				id: "brain-region-hippocampus",
+				title: "Hippocampus",
+				polishTitle: "Hipokamp",
+				polishDescription: "Obszar mózgu kluczowy dla pamięci i uczenia się",
+				tags: ["hippocampus", "memory"],
+				polishTags: ["hipokamp", "pamięć"],
+			},
+			"brain-region",
+			"/obszary-mozgu",
+			{ difficulty: "intermediate" }
+		),
+	];
+
 	// Fallback to mock data if real data doesn't have required fields
 	const displayData = {
 		...mockSupplementData[params.id],
@@ -326,6 +395,19 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 										{displayData.dosageRange.unit}
 									</span>
 								</div>
+
+								<div className="flex items-center justify-between">
+									<span className="text-gray-600 text-sm">Ocena Użytkowników</span>
+									<div className="flex items-center gap-1">
+										<Star className="h-4 w-4 fill-current text-yellow-500" />
+										<span className="font-medium text-sm">
+											{displayData.userRating}
+										</span>
+										<span className="text-gray-500 text-xs">
+											(0 opinii)
+										</span>
+									</div>
+								</div>
 							</CardContent>
 						</Card>
 
@@ -359,13 +441,14 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 					{/* Main Content Area */}
 					<div className="lg:col-span-3">
 						<Tabs defaultValue="overview" className="space-y-6">
-							<TabsList className="grid w-full grid-cols-6">
+							<TabsList className="grid w-full grid-cols-7">
 								<TabsTrigger value="overview">Przegląd</TabsTrigger>
 								<TabsTrigger value="mechanism">Mechanizm</TabsTrigger>
 								<TabsTrigger value="interactions">Interakcje</TabsTrigger>
 								<TabsTrigger value="research">Badania</TabsTrigger>
 								<TabsTrigger value="effects">Efekty</TabsTrigger>
 								<TabsTrigger value="brain">Mózg</TabsTrigger>
+								<TabsTrigger value="reviews">Opinie</TabsTrigger>
 							</TabsList>
 
 							{/* Overview Tab */}
@@ -594,7 +677,108 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 									</CardContent>
 								</Card>
 							</TabsContent>
+
+							{/* Reviews Tab */}
+							<TabsContent value="reviews" className="space-y-6">
+								<Card>
+									<CardHeader>
+										<CardTitle className="flex items-center gap-2">
+											<Users className="h-5 w-5 text-blue-500" />
+											Opinie użytkowników
+										</CardTitle>
+									</CardHeader>
+									<CardContent>
+										<ReviewList
+											reviews={[]} // TODO: Fetch reviews for this supplement
+											totalCount={0}
+											averageRating={0}
+											showStats={true}
+											emptyMessage="Ten suplement nie ma jeszcze żadnych opinii. Bądź pierwszy i podziel się swoją opinią!"
+											onPageChange={(page) => console.log("Page change:", page)}
+											onSortChange={(sortBy, sortOrder) => console.log("Sort change:", sortBy, sortOrder)}
+											onHelpful={(reviewId, helpful) => console.log("Helpful vote:", reviewId, helpful)}
+										/>
+									</CardContent>
+								</Card>
+
+								<Card>
+									<CardHeader>
+										<CardTitle>Dodaj swoją opinię</CardTitle>
+									</CardHeader>
+									<CardContent>
+										<ReviewForm
+											supplementId={params.id}
+											userId="current-user-id" // This should come from authentication
+											supplementName={displayData.polishName}
+											onSubmit={async (reviewData) => {
+												// Handle review submission
+												console.log("Submitting review:", reviewData);
+												// TODO: Implement actual API call
+											}}
+										/>
+									</CardContent>
+								</Card>
+							</TabsContent>
 						</Tabs>
+
+						{/* Educational Content Sections */}
+						<div className="mt-12 space-y-8">
+							{/* Related Research */}
+							<RelatedContent
+								items={relatedResearch}
+								title="Powiązane Badania Naukowe"
+								description="Dowody naukowe dotyczące tego suplementu"
+								maxItems={4}
+								showViewAll={true}
+								viewAllUrl="/badania"
+							/>
+
+							{/* Related Mechanisms */}
+							<RelatedContent
+								items={relatedMechanisms}
+								title="Powiązane Mechanizmy Działania"
+								description="Poznaj molekularne mechanizmy działania"
+								maxItems={4}
+								showViewAll={true}
+								viewAllUrl="/mechanizmy"
+							/>
+
+							{/* Related Neurotransmitters */}
+							<RelatedContent
+								items={relatedNeurotransmitters}
+								title="Powiązane Neuroprzekaźniki"
+								description="Systemy neuroprzekaźnikowe modulowane przez ten suplement"
+								maxItems={4}
+								showViewAll={true}
+								viewAllUrl="/neuroprzekazniki"
+							/>
+
+							{/* Related Brain Regions */}
+							<RelatedContent
+								items={relatedBrainRegions}
+								title="Powiązane Obszary Mózgu"
+								description="Regiony mózgu, na które wpływa ten suplement"
+								maxItems={4}
+								showViewAll={true}
+								viewAllUrl="/obszary-mozgu"
+							/>
+
+							{/* Optimal Timing */}
+							<Card>
+								<CardHeader>
+									<CardTitle className="flex items-center gap-2">
+										<Clock className="h-5 w-5" />
+										Optymalne Dawkowanie w Ciągu Dnia
+									</CardTitle>
+									<CardDescription>
+										Dowiedz się, kiedy najlepiej przyjmować ten suplement zgodnie z rytmem dobowym organizmu
+									</CardDescription>
+								</CardHeader>
+								<CardContent>
+									<CircadianTimingPanel />
+								</CardContent>
+							</Card>
+						</div>
 					</div>
 				</div>
 			</div>
