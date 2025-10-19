@@ -192,7 +192,7 @@
 		"cannon-es": "^0.20.0",
 		"@react-three/cannon": "^6.5.1",
 		"@react-three/postprocessing": "^2.16.2",
-		"leva": "^0.9.35",
+		"leva": "^0.10.0",
 		"react-spring": "^9.7.4",
 		"react-use-gesture": "^9.1.3",
 		"react-intersection-observer": "^9.13.1",
