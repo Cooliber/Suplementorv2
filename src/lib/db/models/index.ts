@@ -43,10 +43,8 @@ export {
 	KnowledgeNode,
 	KnowledgeRelationship,
 	Post,
-		SupplementHistory,
-
+	SupplementHistory,
 	// Brain and neuroscience models
-
 
 	BrainRegion,
 	NeurotransmitterSystem,
@@ -106,7 +104,7 @@ export default {
 	Supplement,
 	ComprehensiveSupplement,
 	KnowledgeNode,
-		SupplementHistory,
+	SupplementHistory,
 
 	KnowledgeRelationship,
 	Post,

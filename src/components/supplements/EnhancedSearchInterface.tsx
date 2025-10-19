@@ -2,7 +2,13 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -67,13 +73,19 @@ export function EnhancedSearchInterface({
 	totalResults,
 }: EnhancedSearchInterfaceProps) {
 	const [searchQuery, setSearchQuery] = useState("");
-	const [selectedCategories, setSelectedCategories] = useState<SupplementCategory[]>([]);
-	const [selectedEvidenceLevels, setSelectedEvidenceLevels] = useState<EvidenceLevel[]>([]);
+	const [selectedCategories, setSelectedCategories] = useState<
+		SupplementCategory[]
+	>([]);
+	const [selectedEvidenceLevels, setSelectedEvidenceLevels] = useState<
+		EvidenceLevel[]
+	>([]);
 	const [safetyRange, setSafetyRange] = useState<[number, number]>([0, 10]);
 	const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
 	const [hasStudies, setHasStudies] = useState(false);
 	const [hasReviews, setHasReviews] = useState(false);
-	const [sortBy, setSortBy] = useState<"relevance" | "name" | "evidence" | "safety" | "rating" | "price">("relevance");
+	const [sortBy, setSortBy] = useState<
+		"relevance" | "name" | "evidence" | "safety" | "rating" | "price"
+	>("relevance");
 	const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 	const [showAdvanced, setShowAdvanced] = useState(false);
 
@@ -143,18 +155,16 @@ export function EnhancedSearchInterface({
 	};
 
 	const toggleCategory = (category: SupplementCategory) => {
-		setSelectedCategories(prev =>
+		setSelectedCategories((prev) =>
 			prev.includes(category)
-				? prev.filter(c => c !== category)
-				: [...prev, category]
+				? prev.filter((c) => c !== category)
+				: [...prev, category],
 		);
 	};
 
 	const toggleEvidenceLevel = (level: EvidenceLevel) => {
-		setSelectedEvidenceLevels(prev =>
-			prev.includes(level)
-				? prev.filter(l => l !== level)
-				: [...prev, level]
+		setSelectedEvidenceLevels((prev) =>
+			prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level],
 		);
 	};
 
@@ -193,25 +203,26 @@ export function EnhancedSearchInterface({
 							Zaawansowane wyszukiwanie suplementów
 						</CardTitle>
 						<CardDescription>
-							Znajdź suplementy dostosowane do Twoich potrzeb z zaawansowaną analizą i rankingiem
+							Znajdź suplementy dostosowane do Twoich potrzeb z zaawansowaną
+							analizą i rankingiem
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
 						<div className="flex gap-2">
 							<div className="relative flex-1">
-								<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+								<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
 								<Input
 									placeholder="Szukaj suplementów, korzyści, składników..."
 									value={searchQuery}
 									onChange={(e) => setSearchQuery(e.target.value)}
 									onKeyPress={handleKeyPress}
-									className="pl-10 pr-10"
+									className="pr-10 pl-10"
 								/>
 								{searchQuery && (
 									<Button
 										variant="ghost"
 										size="sm"
-										className="absolute right-1 top-1/2 h-6 w-6 -translate-y-1/2 p-0"
+										className="-translate-y-1/2 absolute top-1/2 right-1 h-6 w-6 p-0"
 										onClick={() => setSearchQuery("")}
 									>
 										<X className="h-3 w-3" />
@@ -236,7 +247,10 @@ export function EnhancedSearchInterface({
 											<h4 className="mb-3 font-medium">Kategorie</h4>
 											<div className="grid grid-cols-2 gap-2">
 												{categories.map((category) => (
-													<div key={category} className="flex items-center space-x-2">
+													<div
+														key={category}
+														className="flex items-center space-x-2"
+													>
 														<input
 															type="checkbox"
 															id={`category-${category}`}
@@ -245,7 +259,10 @@ export function EnhancedSearchInterface({
 															className="rounded"
 															aria-label={`Kategoria: ${categoryLabels[category]}`}
 														/>
-														<Label htmlFor={`category-${category}`} className="cursor-pointer text-sm">
+														<Label
+															htmlFor={`category-${category}`}
+															className="cursor-pointer text-sm"
+														>
 															{categoryLabels[category]}
 														</Label>
 													</div>
@@ -258,7 +275,10 @@ export function EnhancedSearchInterface({
 											<h4 className="mb-3 font-medium">Poziom dowodów</h4>
 											<div className="space-y-2">
 												{evidenceLevels.map((level) => (
-													<div key={level} className="flex items-center space-x-2">
+													<div
+														key={level}
+														className="flex items-center space-x-2"
+													>
 														<input
 															type="checkbox"
 															id={`evidence-${level}`}
@@ -267,7 +287,10 @@ export function EnhancedSearchInterface({
 															className="rounded"
 															aria-label={`Poziom dowodów: ${evidenceLabels[level]}`}
 														/>
-														<Label htmlFor={`evidence-${level}`} className="cursor-pointer text-sm">
+														<Label
+															htmlFor={`evidence-${level}`}
+															className="cursor-pointer text-sm"
+														>
 															{evidenceLabels[level]}
 														</Label>
 													</div>
@@ -281,13 +304,15 @@ export function EnhancedSearchInterface({
 											<div className="px-2">
 												<Slider
 													value={safetyRange}
-													onValueChange={(value) => setSafetyRange(value as [number, number])}
+													onValueChange={(value) =>
+														setSafetyRange(value as [number, number])
+													}
 													max={10}
 													min={0}
 													step={1}
 													className="w-full"
 												/>
-												<div className="flex justify-between text-xs text-muted-foreground mt-1">
+												<div className="mt-1 flex justify-between text-muted-foreground text-xs">
 													<span>{safetyRange[0]}</span>
 													<span>{safetyRange[1]}</span>
 												</div>
@@ -297,7 +322,10 @@ export function EnhancedSearchInterface({
 										{/* Additional Filters */}
 										<div className="space-y-3 border-t pt-4">
 											<div className="flex items-center justify-between">
-												<Label htmlFor="hasStudies" className="cursor-pointer text-sm">
+												<Label
+													htmlFor="hasStudies"
+													className="cursor-pointer text-sm"
+												>
 													Tylko suplementy z badaniami
 												</Label>
 												<Switch
@@ -308,7 +336,10 @@ export function EnhancedSearchInterface({
 											</div>
 
 											<div className="flex items-center justify-between">
-												<Label htmlFor="hasReviews" className="cursor-pointer text-sm">
+												<Label
+													htmlFor="hasReviews"
+													className="cursor-pointer text-sm"
+												>
 													Tylko suplementy z opiniami
 												</Label>
 												<Switch
@@ -381,29 +412,36 @@ export function EnhancedSearchInterface({
 
 						{/* Results Info */}
 						{totalResults !== undefined && (
-							<div className="flex items-center justify-between text-sm text-muted-foreground">
+							<div className="flex items-center justify-between text-muted-foreground text-sm">
 								<span>
 									Znaleziono {totalResults} suplementów
-									{searchQuery && (
-										<span> dla zapytania "{searchQuery}"</span>
-									)}
+									{searchQuery && <span> dla zapytania "{searchQuery}"</span>}
 								</span>
 
-								<Select value={`${sortBy}-${sortOrder}`} onValueChange={(value) => {
-									const [sort, order] = value.split('-');
-									setSortBy(sort as any);
-									setSortOrder(order as any);
-								}}>
+								<Select
+									value={`${sortBy}-${sortOrder}`}
+									onValueChange={(value) => {
+										const [sort, order] = value.split("-");
+										setSortBy(sort as any);
+										setSortOrder(order as any);
+									}}
+								>
 									<SelectTrigger className="w-48">
 										<SelectValue />
 									</SelectTrigger>
 									<SelectContent>
-										<SelectItem value="relevance-desc">Trafność (malejąco)</SelectItem>
+										<SelectItem value="relevance-desc">
+											Trafność (malejąco)
+										</SelectItem>
 										<SelectItem value="name-asc">Nazwa (A-Z)</SelectItem>
 										<SelectItem value="name-desc">Nazwa (Z-A)</SelectItem>
-										<SelectItem value="evidence-desc">Poziom dowodów</SelectItem>
+										<SelectItem value="evidence-desc">
+											Poziom dowodów
+										</SelectItem>
 										<SelectItem value="safety-desc">Bezpieczeństwo</SelectItem>
-										<SelectItem value="rating-desc">Ocena użytkowników</SelectItem>
+										<SelectItem value="rating-desc">
+											Ocena użytkowników
+										</SelectItem>
 										<SelectItem value="price-asc">Cena (rosnąco)</SelectItem>
 										<SelectItem value="price-desc">Cena (malejąco)</SelectItem>
 									</SelectContent>
@@ -414,70 +452,71 @@ export function EnhancedSearchInterface({
 				</Card>
 
 				{/* Suggestions and Popular Searches */}
-				{!searchQuery && (suggestions.length > 0 || popularSearches.length > 0) && (
-					<div className="grid gap-6 lg:grid-cols-2">
-						{/* AI Suggestions */}
-						{suggestions.length > 0 && (
-							<Card>
-								<CardHeader>
-									<CardTitle className="flex items-center gap-2">
-										<Sparkles className="h-5 w-5 text-primary" />
-										Sugerowane wyszukiwania AI
-									</CardTitle>
-									<CardDescription>
-										Dopasowane do Twoich potrzeb i celów zdrowotnych
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<div className="flex flex-wrap gap-2">
-										{suggestions.map((suggestion, index) => (
-											<Button
-												key={index}
-												variant="outline"
-												size="sm"
-												onClick={() => {
-													setSearchQuery(suggestion);
-													onSuggestionClick?.(suggestion);
-												}}
-											>
-												{suggestion}
-											</Button>
-										))}
-									</div>
-								</CardContent>
-							</Card>
-						)}
+				{!searchQuery &&
+					(suggestions.length > 0 || popularSearches.length > 0) && (
+						<div className="grid gap-6 lg:grid-cols-2">
+							{/* AI Suggestions */}
+							{suggestions.length > 0 && (
+								<Card>
+									<CardHeader>
+										<CardTitle className="flex items-center gap-2">
+											<Sparkles className="h-5 w-5 text-primary" />
+											Sugerowane wyszukiwania AI
+										</CardTitle>
+										<CardDescription>
+											Dopasowane do Twoich potrzeb i celów zdrowotnych
+										</CardDescription>
+									</CardHeader>
+									<CardContent>
+										<div className="flex flex-wrap gap-2">
+											{suggestions.map((suggestion, index) => (
+												<Button
+													key={index}
+													variant="outline"
+													size="sm"
+													onClick={() => {
+														setSearchQuery(suggestion);
+														onSuggestionClick?.(suggestion);
+													}}
+												>
+													{suggestion}
+												</Button>
+											))}
+										</div>
+									</CardContent>
+								</Card>
+							)}
 
-						{/* Popular Searches */}
-						{popularSearches.length > 0 && (
-							<Card>
-								<CardHeader>
-									<CardTitle className="flex items-center gap-2">
-										<TrendingUp className="h-5 w-5 text-green-600" />
-										Popularne wyszukiwania
-									</CardTitle>
-									<CardDescription>
-										To czego szukają inni użytkownicy
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<div className="flex flex-wrap gap-2">
-										{popularSearches.slice(0, 8).map((search, index) => (
-											<Button
-												key={index}
-												variant="ghost"
-												size="sm"
-												onClick={() => setSearchQuery(search)}
-											>
-												{search}
-											</Button>
-										))}
-									</div>
-								</CardContent>
-							</Card>
-						)}
-					</div>
-				)}
+							{/* Popular Searches */}
+							{popularSearches.length > 0 && (
+								<Card>
+									<CardHeader>
+										<CardTitle className="flex items-center gap-2">
+											<TrendingUp className="h-5 w-5 text-green-600" />
+											Popularne wyszukiwania
+										</CardTitle>
+										<CardDescription>
+											To czego szukają inni użytkownicy
+										</CardDescription>
+									</CardHeader>
+									<CardContent>
+										<div className="flex flex-wrap gap-2">
+											{popularSearches.slice(0, 8).map((search, index) => (
+												<Button
+													key={index}
+													variant="ghost"
+													size="sm"
+													onClick={() => setSearchQuery(search)}
+												>
+													{search}
+												</Button>
+											))}
+										</div>
+									</CardContent>
+								</Card>
+							)}
+						</div>
+					)}
 
 				{/* Advanced Filters Toggle */}
 				<Card>
@@ -487,7 +526,7 @@ export function EnhancedSearchInterface({
 							onClick={() => setShowAdvanced(!showAdvanced)}
 							className="w-full"
 						>
-							<Filter className="h-4 w-4 mr-2" />
+							<Filter className="mr-2 h-4 w-4" />
 							{showAdvanced ? "Ukryj" : "Pokaż"} filtry zaawansowane
 						</Button>
 
@@ -495,17 +534,21 @@ export function EnhancedSearchInterface({
 							<div className="mt-4 space-y-4 border-t pt-4">
 								<div className="grid gap-4 md:grid-cols-2">
 									<div>
-										<Label className="text-sm font-medium">Zakres cenowy (PLN)</Label>
-										<div className="px-2 mt-2">
+										<Label className="font-medium text-sm">
+											Zakres cenowy (PLN)
+										</Label>
+										<div className="mt-2 px-2">
 											<Slider
 												value={priceRange}
-												onValueChange={(value) => setPriceRange(value as [number, number])}
+												onValueChange={(value) =>
+													setPriceRange(value as [number, number])
+												}
 												max={500}
 												min={0}
 												step={10}
 												className="w-full"
 											/>
-											<div className="flex justify-between text-xs text-muted-foreground mt-1">
+											<div className="mt-1 flex justify-between text-muted-foreground text-xs">
 												<span>{priceRange[0]} zł</span>
 												<span>{priceRange[1]} zł</span>
 											</div>
@@ -513,8 +556,11 @@ export function EnhancedSearchInterface({
 									</div>
 
 									<div>
-										<Label className="text-sm font-medium">Sortowanie</Label>
-										<Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+										<Label className="font-medium text-sm">Sortowanie</Label>
+										<Select
+											value={sortBy}
+											onValueChange={(value: any) => setSortBy(value)}
+										>
 											<SelectTrigger className="mt-2">
 												<SelectValue />
 											</SelectTrigger>
@@ -523,7 +569,9 @@ export function EnhancedSearchInterface({
 												<SelectItem value="name">Nazwa</SelectItem>
 												<SelectItem value="evidence">Poziom dowodów</SelectItem>
 												<SelectItem value="safety">Bezpieczeństwo</SelectItem>
-												<SelectItem value="rating">Ocena użytkowników</SelectItem>
+												<SelectItem value="rating">
+													Ocena użytkowników
+												</SelectItem>
 												<SelectItem value="price">Cena</SelectItem>
 											</SelectContent>
 										</Select>

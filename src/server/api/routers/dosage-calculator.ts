@@ -11,11 +11,11 @@ import {
 	publicProcedure,
 } from "@/server/api/trpc";
 import {
+	type DosageCalculationInput,
 	DosageCalculationInputSchema,
+	type UserProfile,
 	validateDosageCalculationInput,
 	validateUserProfile,
-	type DosageCalculationInput,
-	type UserProfile,
 } from "@/types/dosage-calculator";
 import { z } from "zod";
 
@@ -26,20 +26,33 @@ const CalculateDosageInputSchema = z.object({
 		gender: z.enum(["male", "female", "other"]),
 		weight: z.number().min(30).max(300),
 		height: z.number().min(100).max(250),
-		activityLevel: z.enum(["sedentary", "light", "moderate", "active", "very_active"]),
+		activityLevel: z.enum([
+			"sedentary",
+			"light",
+			"moderate",
+			"active",
+			"very_active",
+		]),
 		healthConditions: z.array(z.string()),
 		currentMedications: z.array(z.string()),
 		allergies: z.array(z.string()),
 		pregnant: z.boolean().default(false),
 		breastfeeding: z.boolean().default(false),
 	}),
-	supplements: z.array(z.object({
-		supplementId: z.string().cuid(),
-		desiredEffect: z.enum(["therapeutic", "preventive", "optimal"]),
-		customDosage: z.number().positive().optional(),
-		timingPreference: z.array(z.enum(["morning", "afternoon", "evening", "night"])).optional(),
-		withFood: z.boolean().optional(),
-	})).min(1).max(10),
+	supplements: z
+		.array(
+			z.object({
+				supplementId: z.string().cuid(),
+				desiredEffect: z.enum(["therapeutic", "preventive", "optimal"]),
+				customDosage: z.number().positive().optional(),
+				timingPreference: z
+					.array(z.enum(["morning", "afternoon", "evening", "night"]))
+					.optional(),
+				withFood: z.boolean().optional(),
+			}),
+		)
+		.min(1)
+		.max(10),
 	calculationType: z.enum(["individual", "stack"]).default("stack"),
 	includeInteractions: z.boolean().default(true),
 	includeContraindications: z.boolean().default(true),
@@ -52,7 +65,13 @@ const GetSupplementSafetyInputSchema = z.object({
 		gender: z.enum(["male", "female", "other"]),
 		weight: z.number().min(30).max(300),
 		height: z.number().min(100).max(250),
-		activityLevel: z.enum(["sedentary", "light", "moderate", "active", "very_active"]),
+		activityLevel: z.enum([
+			"sedentary",
+			"light",
+			"moderate",
+			"active",
+			"very_active",
+		]),
 		healthConditions: z.array(z.string()),
 		currentMedications: z.array(z.string()),
 		allergies: z.array(z.string()),
@@ -76,19 +95,25 @@ export const dosageCalculatorRouter = createTRPCRouter({
 				// Validate input
 				const validation = validateDosageCalculationInput(input);
 				if (!validation.success) {
-					throw new Error(`Validation failed: ${validation.error.map(e => e.message).join(", ")}`);
+					throw new Error(
+						`Validation failed: ${validation.error.map((e) => e.message).join(", ")}`,
+					);
 				}
 
 				// Get supplement data from database
 				const supplementData = new Map();
 				for (const supplementInput of input.supplements) {
-					const supplement = await ctx.db.comprehensiveSupplement.findOne({
-						id: supplementInput.supplementId,
-						isActive: true,
-					}).lean();
+					const supplement = await ctx.db.comprehensiveSupplement
+						.findOne({
+							id: supplementInput.supplementId,
+							isActive: true,
+						})
+						.lean();
 
 					if (!supplement) {
-						throw new Error(`Supplement not found: ${supplementInput.supplementId}`);
+						throw new Error(
+							`Supplement not found: ${supplementInput.supplementId}`,
+						);
 					}
 
 					supplementData.set(supplementInput.supplementId, supplement);
@@ -102,7 +127,10 @@ export const dosageCalculatorRouter = createTRPCRouter({
 				const dosageResult = await calculationEngine.calculateDosage(input);
 
 				// Perform safety analysis
-				const safetyResult = await safetyEngine.analyzeSafety(input, supplementData);
+				const safetyResult = await safetyEngine.analyzeSafety(
+					input,
+					supplementData,
+				);
 
 				// Combine results
 				const result = {
@@ -131,7 +159,9 @@ export const dosageCalculatorRouter = createTRPCRouter({
 				return result;
 			} catch (error) {
 				console.error("Dosage calculation error:", error);
-				throw new Error(`Calculation failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+				throw new Error(
+					`Calculation failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+				);
 			}
 		}),
 
@@ -145,14 +175,18 @@ export const dosageCalculatorRouter = createTRPCRouter({
 				// Validate user profile
 				const validation = validateUserProfile(input.userProfile);
 				if (!validation.success) {
-					throw new Error(`User profile validation failed: ${validation.error.map(e => e.message).join(", ")}`);
+					throw new Error(
+						`User profile validation failed: ${validation.error.map((e) => e.message).join(", ")}`,
+					);
 				}
 
 				// Get supplement data
-				const supplement = await ctx.db.comprehensiveSupplement.findOne({
-					id: input.supplementId,
-					isActive: true,
-				}).lean();
+				const supplement = await ctx.db.comprehensiveSupplement
+					.findOne({
+						id: input.supplementId,
+						isActive: true,
+					})
+					.lean();
 
 				if (!supplement) {
 					throw new Error(`Supplement not found: ${input.supplementId}`);
@@ -162,7 +196,7 @@ export const dosageCalculatorRouter = createTRPCRouter({
 				const safetyEngine = new SafetyEngine();
 				const safetyProfile = safetyEngine.getSupplementSafetyProfile(
 					supplement as any,
-					input.userProfile
+					input.userProfile,
 				);
 
 				return {
@@ -174,7 +208,9 @@ export const dosageCalculatorRouter = createTRPCRouter({
 				};
 			} catch (error) {
 				console.error("Safety analysis error:", error);
-				throw new Error(`Safety analysis failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+				throw new Error(
+					`Safety analysis failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+				);
 			}
 		}),
 
@@ -185,18 +221,22 @@ export const dosageCalculatorRouter = createTRPCRouter({
 		.input(GetSupplementDataInputSchema)
 		.query(async ({ ctx, input }) => {
 			try {
-				const supplements = await ctx.db.comprehensiveSupplement.find({
-					id: { $in: input.supplementIds },
-					isActive: true,
-				}).lean();
+				const supplements = await ctx.db.comprehensiveSupplement
+					.find({
+						id: { $in: input.supplementIds },
+						isActive: true,
+					})
+					.lean();
 
 				if (supplements.length !== input.supplementIds.length) {
-					const foundIds = supplements.map(s => s.id);
-					const missingIds = input.supplementIds.filter(id => !foundIds.includes(id));
+					const foundIds = supplements.map((s) => s.id);
+					const missingIds = input.supplementIds.filter(
+						(id) => !foundIds.includes(id),
+					);
 					throw new Error(`Supplements not found: ${missingIds.join(", ")}`);
 				}
 
-				return supplements.map(supplement => ({
+				return supplements.map((supplement) => ({
 					id: supplement.id,
 					name: supplement.name,
 					polishName: supplement.polishName,
@@ -208,7 +248,9 @@ export const dosageCalculatorRouter = createTRPCRouter({
 				}));
 			} catch (error) {
 				console.error("Supplement data fetch error:", error);
-				throw new Error(`Failed to fetch supplement data: ${error instanceof Error ? error.message : "Unknown error"}`);
+				throw new Error(
+					`Failed to fetch supplement data: ${error instanceof Error ? error.message : "Unknown error"}`,
+				);
 			}
 		}),
 
@@ -216,10 +258,12 @@ export const dosageCalculatorRouter = createTRPCRouter({
 	 * Get dosage calculation history for a user (protected endpoint)
 	 */
 	getCalculationHistory: protectedProcedure
-		.input(z.object({
-			limit: z.number().min(1).max(50).default(10),
-			offset: z.number().min(0).default(0),
-		}))
+		.input(
+			z.object({
+				limit: z.number().min(1).max(50).default(10),
+				offset: z.number().min(0).default(0),
+			}),
+		)
 		.query(async ({ ctx, input }) => {
 			try {
 				// This would typically fetch from a user calculations history table
@@ -229,11 +273,14 @@ export const dosageCalculatorRouter = createTRPCRouter({
 					totalCount: 0,
 					hasMore: false,
 					message: "Calculation history not yet implemented",
-					polishMessage: "Historia obliczeń nie została jeszcze zaimplementowana",
+					polishMessage:
+						"Historia obliczeń nie została jeszcze zaimplementowana",
 				};
 			} catch (error) {
 				console.error("Calculation history error:", error);
-				throw new Error(`Failed to fetch calculation history: ${error instanceof Error ? error.message : "Unknown error"}`);
+				throw new Error(
+					`Failed to fetch calculation history: ${error instanceof Error ? error.message : "Unknown error"}`,
+				);
 			}
 		}),
 
@@ -241,11 +288,13 @@ export const dosageCalculatorRouter = createTRPCRouter({
 	 * Save dosage calculation for future reference (protected endpoint)
 	 */
 	saveCalculation: protectedProcedure
-		.input(z.object({
-			calculationData: z.any(), // Would use proper schema validation
-			name: z.string().min(1).max(100),
-			description: z.string().max(500).optional(),
-		}))
+		.input(
+			z.object({
+				calculationData: z.any(), // Would use proper schema validation
+				name: z.string().min(1).max(100),
+				description: z.string().max(500).optional(),
+			}),
+		)
 		.mutation(async ({ ctx, input }) => {
 			try {
 				// This would typically save to a user calculations table
@@ -258,7 +307,9 @@ export const dosageCalculatorRouter = createTRPCRouter({
 				};
 			} catch (error) {
 				console.error("Save calculation error:", error);
-				throw new Error(`Failed to save calculation: ${error instanceof Error ? error.message : "Unknown error"}`);
+				throw new Error(
+					`Failed to save calculation: ${error instanceof Error ? error.message : "Unknown error"}`,
+				);
 			}
 		}),
 
@@ -266,9 +317,11 @@ export const dosageCalculatorRouter = createTRPCRouter({
 	 * Get popular supplement combinations for dosage calculation
 	 */
 	getPopularCombinations: publicProcedure
-		.input(z.object({
-			limit: z.number().min(1).max(20).default(10),
-		}))
+		.input(
+			z.object({
+				limit: z.number().min(1).max(20).default(10),
+			}),
+		)
 		.query(async ({ ctx, input }) => {
 			try {
 				// This would typically analyze historical calculation data
@@ -283,8 +336,10 @@ export const dosageCalculatorRouter = createTRPCRouter({
 							{ category: "VITAMIN", count: 72 },
 							{ category: "AMINO_ACID", count: 68 },
 						],
-						description: "Popular combination for cognitive function and mental clarity",
-						polishDescription: "Popularna kombinacja na poprawę funkcji poznawczych i jasność umysłu",
+						description:
+							"Popular combination for cognitive function and mental clarity",
+						polishDescription:
+							"Popularna kombinacja na poprawę funkcji poznawczych i jasność umysłu",
 					},
 					{
 						id: "energy_performance",
@@ -295,8 +350,10 @@ export const dosageCalculatorRouter = createTRPCRouter({
 							{ category: "AMINO_ACID", count: 65 },
 							{ category: "MINERAL", count: 59 },
 						],
-						description: "Common combination for sustained energy and physical performance",
-						polishDescription: "Powszechna kombinacja na utrzymaną energię i wydolność fizyczną",
+						description:
+							"Common combination for sustained energy and physical performance",
+						polishDescription:
+							"Powszechna kombinacja na utrzymaną energię i wydolność fizyczną",
 					},
 					{
 						id: "stress_relief",
@@ -307,15 +364,19 @@ export const dosageCalculatorRouter = createTRPCRouter({
 							{ category: "HERB", count: 71 },
 							{ category: "MINERAL", count: 64 },
 						],
-						description: "Popular combination for stress management and relaxation",
-						polishDescription: "Popularna kombinacja na zarządzanie stresem i relaksację",
+						description:
+							"Popular combination for stress management and relaxation",
+						polishDescription:
+							"Popularna kombinacja na zarządzanie stresem i relaksację",
 					},
 				];
 
 				return popularCombinations.slice(0, input.limit);
 			} catch (error) {
 				console.error("Popular combinations error:", error);
-				throw new Error(`Failed to fetch popular combinations: ${error instanceof Error ? error.message : "Unknown error"}`);
+				throw new Error(
+					`Failed to fetch popular combinations: ${error instanceof Error ? error.message : "Unknown error"}`,
+				);
 			}
 		}),
 
@@ -329,13 +390,17 @@ export const dosageCalculatorRouter = createTRPCRouter({
 				const validation = validateDosageCalculationInput(input);
 				return {
 					valid: validation.success,
-					errors: validation.success ? [] : validation.error.map(e => e.message),
+					errors: validation.success
+						? []
+						: validation.error.map((e) => e.message),
 					warnings: [], // Could add specific validation warnings
 				};
 			} catch (error) {
 				return {
 					valid: false,
-					errors: [`Validation error: ${error instanceof Error ? error.message : "Unknown error"}`],
+					errors: [
+						`Validation error: ${error instanceof Error ? error.message : "Unknown error"}`,
+					],
 					warnings: [],
 				};
 			}

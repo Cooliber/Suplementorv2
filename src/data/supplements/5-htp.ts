@@ -25,7 +25,11 @@ export const fiveHTPProfile: SupplementWithRelations = {
 			concentration: "50-300mg",
 			bioavailability: 70,
 			halfLife: "2-4 hours",
-			metabolicPathway: ["Serotonin synthesis", "Decarboxylation", "Blood-brain barrier transport"],
+			metabolicPathway: [
+				"Serotonin synthesis",
+				"Decarboxylation",
+				"Blood-brain barrier transport",
+			],
 			targetReceptors: ["Aromatic L-amino acid decarboxylase"],
 		},
 	],
@@ -35,7 +39,8 @@ export const fiveHTPProfile: SupplementWithRelations = {
 			condition: "Depression and mood disorders",
 			polishCondition: "Depresja i zaburzenia nastroju",
 			indication: "Adjunctive treatment for mild to moderate depression",
-			polishIndication: "Leczenie wspomagające łagodnej do umiarkowanej depresji",
+			polishIndication:
+				"Leczenie wspomagające łagodnej do umiarkowanej depresji",
 			efficacy: "moderate",
 			effectivenessRating: 6,
 			evidenceLevel: "MODERATE",
@@ -95,7 +100,11 @@ export const fiveHTPProfile: SupplementWithRelations = {
 		timing: ["evening"],
 		withFood: false,
 		contraindications: ["MAOI use", "Serotonin syndrome risk", "Pregnancy"],
-		polishContraindications: ["Stosowanie IMAO", "Ryzyko zespołu serotoninowego", "Ciąża"],
+		polishContraindications: [
+			"Stosowanie IMAO",
+			"Ryzyko zespołu serotoninowego",
+			"Ciąża",
+		],
 		interactions: [
 			{
 				substance: "SSRIs",
@@ -105,7 +114,8 @@ export const fiveHTPProfile: SupplementWithRelations = {
 				description: "Risk of serotonin syndrome",
 				polishDescription: "Ryzyko zespołu serotoninowego",
 				clinicalSignificance: "Potentially dangerous serotonin excess",
-				polishClinicalSignificance: "Potencjalnie niebezpieczny nadmiar serotoniny",
+				polishClinicalSignificance:
+					"Potencjalnie niebezpieczny nadmiar serotoniny",
 				mechanism: "Additive serotonin increase",
 				polishMechanism: "Addytywny wzrost serotoniny",
 				recommendation: "Contraindicated combination",

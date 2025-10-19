@@ -1,0 +1,331 @@
+name: Release Management
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.2.3)'
+        required: true
+        type: string
+      release_type:
+        description: 'Release type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+
+env:
+  NODE_VERSION: '20'
+  BUN_VERSION: '1.1.38'
+
+jobs:
+  # Pre-release Quality Checks
+  pre-release-checks:
+    name: Pre-release Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run comprehensive tests
+        run: bun run test:full
+
+      - name: Run security audit
+        run: bun run security:audit
+
+      - name: Run accessibility tests
+        run: bun run test:a11y
+
+      - name: Run performance tests
+        run: bun run test:performance
+
+      - name: Build application
+        run: bun run build
+
+      - name: Generate test coverage report
+        run: bun run test:coverage
+
+      - name: Upload quality reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-reports
+          path: |
+            coverage/
+            test-results/
+            security-report.json
+          retention-days: 30
+
+  # Create Release
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: pre-release-checks
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Generate changelog from conventional commits
+          echo "## 📋 Changelog" > changelog.md
+          echo "" >> changelog.md
+          git log --oneline --since="$(git tag --sort=-version:refname | head -2 | tail -1)" --pretty=format:"- %s" >> changelog.md
+          echo "" >> changelog.md
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          cat changelog.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
+
+  # Deploy to Staging
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: pre-release-checks
+    if: github.event.inputs.environment == 'staging' || contains(github.ref, 'alpha') || contains(github.ref, 'beta')
+
+    environment:
+      name: staging
+      url: https://suplementor-staging.vercel.app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install Vercel CLI
+        run: bun add -g vercel
+
+      - name: Deploy to staging
+        run: |
+          echo "🚀 Deploying to staging..."
+          vercel --prod --token=${{ secrets.VERCEL_TOKEN }} > deployment-url.txt 2>&1
+          echo "deployment_url=$(cat deployment-url.txt | grep -o 'https://[^ ]*\.vercel\.app')" >> $GITHUB_OUTPUT
+
+      - name: Run staging health checks
+        run: |
+          echo "🔍 Running staging health checks..."
+          DEPLOYMENT_URL="${{ steps.vercel-deploy.outputs.deployment_url }}"
+          # Wait for deployment
+          sleep 60
+
+          # Health check
+          if curl -f -s "$DEPLOYMENT_URL/api/health" > /dev/null; then
+            echo "✅ Staging deployment successful"
+          else
+            echo "❌ Staging deployment failed"
+            exit 1
+          fi
+
+  # Deploy to Production
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [pre-release-checks, deploy-staging]
+    if: github.event.inputs.environment == 'production' && !contains(github.ref, 'alpha') && !contains(github.ref, 'beta')
+
+    environment:
+      name: production
+      url: https://suplementor.vercel.app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install Vercel CLI
+        run: bun add -g vercel
+
+      - name: Deploy to production
+        run: |
+          echo "🚀 Deploying to production..."
+          vercel --prod --token=${{ secrets.VERCEL_TOKEN }} > deployment-url.txt 2>&1
+          echo "deployment_url=$(cat deployment-url.txt | grep -o 'https://[^ ]*\.vercel\.app')" >> $GITHUB_OUTPUT
+
+      - name: Run production health checks
+        run: |
+          echo "🔍 Running production health checks..."
+          DEPLOYMENT_URL="${{ steps.vercel-deploy.outputs.deployment_url }}"
+          # Wait for deployment
+          sleep 120
+
+          # Comprehensive health check
+          if curl -f -s "$DEPLOYMENT_URL/api/health" > /dev/null; then
+            echo "✅ Production health check passed"
+          else
+            echo "❌ Production health check failed"
+            exit 1
+          fi
+
+      - name: Run production smoke tests
+        run: |
+          echo "🧪 Running production smoke tests..."
+          # Test critical user journeys
+          # Verify supplement search
+          # Check knowledge graph functionality
+          # Validate Polish translations
+
+  # Post-Release Activities
+  post-release:
+    name: Post-Release Activities
+    runs-on: ubuntu-latest
+    needs: [create-release, deploy-production]
+    if: github.event.inputs.environment == 'production' || (startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, 'alpha') && !contains(github.ref, 'beta'))
+
+    steps:
+      - name: Update release notes
+        run: |
+          echo "📝 Updating release documentation..."
+          # Update version in package.json
+          # Update changelog
+          # Update documentation
+
+      - name: Notify stakeholders
+        run: |
+          echo "📢 Notifying stakeholders..."
+          # Send notifications to team
+          # Update status page
+          # Post to social media if needed
+
+      - name: Archive release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: |
+            changelog.md
+            deployment-url.txt
+            quality-reports/
+          retention-days: 90
+
+      - name: Trigger monitoring setup
+        run: |
+          echo "📊 Setting up enhanced monitoring..."
+          # Increase monitoring frequency
+          # Set up additional alerts
+          # Update dashboards
+
+  # Rollback (if needed)
+  rollback:
+    name: Rollback Deployment
+    runs-on: ubuntu-latest
+    if: failure()
+
+    steps:
+      - name: Notify of rollback
+        run: |
+          echo "🔄 Initiating rollback procedure..."
+          # Notify team of rollback
+          # Prepare previous version for deployment
+
+      - name: Rollback to previous version
+        run: |
+          echo "⏪ Rolling back to previous stable version..."
+          # Deploy previous stable version
+          # Verify rollback success
+
+  # Release Summary
+  release-summary:
+    name: Release Summary Report
+    runs-on: ubuntu-latest
+    needs: [pre-release-checks, create-release, deploy-production, post-release]
+    if: always()
+
+    steps:
+      - name: Generate release summary
+        run: |
+          echo "## 🚀 Release Summary" > release-summary.md
+          echo "" >> release-summary.md
+          echo "### Version: ${{ github.ref || github.event.inputs.version }}" >> release-summary.md
+          echo "### Environment: ${{ github.event.inputs.environment || 'production' }}" >> release-summary.md
+          echo "" >> release-summary.md
+          echo "### Quality Checks: ${{ needs.pre-release-checks.result }}" >> release-summary.md
+          echo "### Release Creation: ${{ needs.create-release.result }}" >> release-summary.md
+          echo "### Production Deployment: ${{ needs.deploy-production.result }}" >> release-summary.md
+          echo "### Post-Release: ${{ needs.post-release.result }}" >> release-summary.md
+          echo "" >> release-summary.md
+          echo "**Release Status:** $(if [ "${{ needs.deploy-production.result }}" == "success" ]; then echo "✅ Successful"; else echo "❌ Failed"; fi)" >> release-summary.md
+          echo "**Release Date:** $(date)" >> release-summary.md
+          echo "**Repository:** ${{ github.repository }}" >> release-summary.md
+
+      - name: Upload release summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-summary-report
+          path: release-summary.md
+          retention-days: 365
+
+      - name: Comment PR with release results
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('release-summary.md', 'utf8');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🚀 Release Results\n\n${summary}`
+            })

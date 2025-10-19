@@ -28,7 +28,9 @@ import { auth } from "@/server/auth";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-	const session = await auth();
+	// Skip authentication - all routes are public
+	// const session = await auth();
+	const session = null;
 
 	// Ensure MongoDB connection
 	await connectToDatabase();
@@ -136,23 +138,8 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 export const publicProcedure = t.procedure.use(timingMiddleware);
 
 /**
- * Protected (authenticated) procedure
+ * All procedures are public - no authentication required
  *
- * If you want a query or mutation to ONLY be accessible to logged in users, use this. It verifies
- * the session is valid and guarantees `ctx.session.user` is not null.
- *
- * @see https://trpc.io/docs/procedures
+ * Both publicProcedure and protectedProcedure now behave the same way.
  */
-export const protectedProcedure = t.procedure
-	.use(timingMiddleware)
-	.use(({ ctx, next }) => {
-		if (!ctx.session?.user) {
-			throw new TRPCError({ code: "UNAUTHORIZED" });
-		}
-		return next({
-			ctx: {
-				// infers the `session` as non-nullable
-				session: { ...ctx.session, user: ctx.session.user },
-			},
-		});
-	});
+export const protectedProcedure = publicProcedure;

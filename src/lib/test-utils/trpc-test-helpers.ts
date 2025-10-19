@@ -4,17 +4,19 @@
  */
 
 import type { Session } from "next-auth";
-import { vi, expect } from "vitest";
+import { expect, vi } from "vitest";
 
 /**
  * Creates a mock tRPC context for testing
  * @param overrides - Optional context overrides
  * @returns Mock context object
  */
-export function createMockContext(overrides: {
-	session?: Session | null;
-	db?: any;
-} = {}) {
+export function createMockContext(
+	overrides: {
+		session?: Session | null;
+		db?: any;
+	} = {},
+) {
 	const mockDb = overrides.db || createMockDb();
 
 	return {
@@ -70,7 +72,7 @@ export function createMockDb() {
  * @param userId - Optional user ID
  * @returns Mock session object
  */
-export function createMockSession(userId: string = "test-user-id"): Session {
+export function createMockSession(userId = "test-user-id"): Session {
 	return {
 		user: {
 			id: userId,
@@ -153,7 +155,7 @@ export function createMockUserProfile(overrides: any = {}) {
  */
 export async function expectTRPCError(
 	fn: () => Promise<any>,
-	code: string = "BAD_REQUEST",
+	code = "BAD_REQUEST",
 ) {
 	try {
 		await fn();
@@ -190,26 +192,26 @@ export function mockLeanQuery(data: any) {
 
 /**
  * Example test using these helpers:
- * 
+ *
  * ```typescript
  * import { createMockContext, createMockSupplement } from '@/lib/test-utils/trpc-test-helpers';
  * import { supplementRouter } from '@/server/api/routers/supplement';
- * 
+ *
  * describe('supplementRouter.getById', () => {
  *   it('should return supplement by id', async () => {
  *     const mockSupplement = createMockSupplement();
  *     const ctx = createMockContext();
- *     
+ *
  *     ctx.db.comprehensiveSupplement.findOne.mockReturnValue({
  *       lean: vi.fn().mockResolvedValue(mockSupplement),
  *     });
- *     
+ *
  *     const caller = supplementRouter.createCaller(ctx);
- *     const result = await caller.getById({ 
+ *     const result = await caller.getById({
  *       id: 'test-supplement-id',
- *       includeRelations: false 
+ *       includeRelations: false
  *     });
- *     
+ *
  *     expect(result).toEqual(mockSupplement);
  *     expect(ctx.db.comprehensiveSupplement.findOne).toHaveBeenCalledWith({
  *       id: 'test-supplement-id',
@@ -219,4 +221,3 @@ export function mockLeanQuery(data: any) {
  * });
  * ```
  */
-

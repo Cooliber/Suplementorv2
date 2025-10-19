@@ -27,7 +27,11 @@ export const taurineProfile: SupplementWithRelations = {
 			concentration: "1000mg",
 			bioavailability: 85,
 			halfLife: "1-2 hours",
-			metabolicPathway: ["Osmoregulation", "Antioxidant systems", "Cardiac metabolism"],
+			metabolicPathway: [
+				"Osmoregulation",
+				"Antioxidant systems",
+				"Cardiac metabolism",
+			],
 			targetReceptors: [
 				"GABA-A receptors",
 				"Glycine receptors",
@@ -57,7 +61,8 @@ export const taurineProfile: SupplementWithRelations = {
 			condition: "Exercise performance",
 			polishCondition: "Wydajność wysiłkowa",
 			indication: "Enhanced endurance and reduced muscle fatigue",
-			polishIndication: "Zwiększona wytrzymałość i zmniejszone zmęczenie mięśni",
+			polishIndication:
+				"Zwiększona wytrzymałość i zmniejszone zmęczenie mięśni",
 			efficacy: "high",
 			effectivenessRating: 8,
 			evidenceLevel: "STRONG",
@@ -87,7 +92,8 @@ export const taurineProfile: SupplementWithRelations = {
 			condition: "Metabolic health",
 			polishCondition: "Zdrowie metaboliczne",
 			indication: "Insulin sensitivity and glucose metabolism support",
-			polishIndication: "Wsparcie wrażliwości insulinowej i metabolizmu glukozy",
+			polishIndication:
+				"Wsparcie wrażliwości insulinowej i metabolizmu glukozy",
 			efficacy: "moderate",
 			effectivenessRating: 6,
 			evidenceLevel: "MODERATE",
@@ -148,7 +154,11 @@ export const taurineProfile: SupplementWithRelations = {
 			polishDescription:
 				"Tauryna wychwytuje reaktywne formy tlenu, moduluje ścieżki zapalne i wspiera funkcję mitochondriów, zapewniając ochronę komórkową przed uszkodzeniami oksydacyjnymi.",
 			evidenceLevel: "MODERATE",
-			targetSystems: ["Antioxidant systems", "Inflammatory pathways", "Mitochondria"],
+			targetSystems: [
+				"Antioxidant systems",
+				"Inflammatory pathways",
+				"Mitochondria",
+			],
 			timeToEffect: "1-2 hours",
 			duration: "6-8 hours",
 		},
@@ -298,8 +308,10 @@ export const taurineProfile: SupplementWithRelations = {
 			studyType: "META_ANALYSIS",
 			primaryOutcome: "Cardiovascular risk reduction",
 			polishPrimaryOutcome: "Redukcja ryzyka sercowo-naczyniowego",
-			findings: "Taurine supplementation significantly reduced cardiovascular risk factors",
-			polishFindings: "Suplementacja tauryny znacząco zmniejszyła czynniki ryzyka sercowo-naczyniowego",
+			findings:
+				"Taurine supplementation significantly reduced cardiovascular risk factors",
+			polishFindings:
+				"Suplementacja tauryny znacząco zmniejszyła czynniki ryzyka sercowo-naczyniowego",
 			evidenceLevel: "STRONG",
 			lastUpdated: "2024-01-15T00:00:00Z",
 			pubmedId: "20717126",
@@ -314,7 +326,8 @@ export const taurineProfile: SupplementWithRelations = {
 			title: "The effect of acute taurine ingestion on 3km running performance",
 			polishTitle: "Efekt ostrego spożycia tauryny na wydajność biegu na 3km",
 			authors: ["Balshaw TG", "Bampouras TM", "Barry TJ", "Sparks SA"],
-			journal: "International Journal of Sport Nutrition and Exercise Metabolism",
+			journal:
+				"International Journal of Sport Nutrition and Exercise Metabolism",
 			year: 2013,
 			studyType: "RANDOMIZED_CONTROLLED_TRIAL",
 			primaryOutcome: "Exercise performance",
@@ -332,9 +345,19 @@ export const taurineProfile: SupplementWithRelations = {
 		},
 		{
 			id: "zhang-2004",
-			title: "Taurine ameliorates chronic streptozotocin-induced diabetic nephropathy",
-			polishTitle: "Tauryna poprawia przewlekłą nefropatię cukrzycową wywołaną streptozotocyną",
-			authors: ["Zhang M", "Izumi I", "Kagamimori S", "Sokejima S", "Yamagami T", "Liu Z", "Qi B"],
+			title:
+				"Taurine ameliorates chronic streptozotocin-induced diabetic nephropathy",
+			polishTitle:
+				"Tauryna poprawia przewlekłą nefropatię cukrzycową wywołaną streptozotocyną",
+			authors: [
+				"Zhang M",
+				"Izumi I",
+				"Kagamimori S",
+				"Sokejima S",
+				"Yamagami T",
+				"Liu Z",
+				"Qi B",
+			],
 			journal: "Amino Acids",
 			year: 2004,
 			studyType: "ANIMAL_STUDY",

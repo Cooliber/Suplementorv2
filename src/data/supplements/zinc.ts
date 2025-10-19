@@ -39,7 +39,11 @@ export const zincProfile: SupplementWithRelations = {
 			concentration: "50mg",
 			bioavailability: 85,
 			halfLife: "3-5 hours",
-			metabolicPathway: ["Intestinal absorption", "Blood transport", "Cellular uptake"],
+			metabolicPathway: [
+				"Intestinal absorption",
+				"Blood transport",
+				"Cellular uptake",
+			],
 			targetReceptors: ["Zinc transporters", "Metalloenzymes"],
 		},
 		{
@@ -68,7 +72,8 @@ export const zincProfile: SupplementWithRelations = {
 			condition: "Immune system support",
 			polishCondition: "Wsparcie układu odpornościowego",
 			indication: "Common cold prevention and immune function enhancement",
-			polishIndication: "Zapobieganie przeziębieniom i wzmacnianie funkcji odpornościowej",
+			polishIndication:
+				"Zapobieganie przeziębieniom i wzmacnianie funkcji odpornościowej",
 			efficacy: "high",
 			effectivenessRating: 8,
 			evidenceLevel: "STRONG",
@@ -83,7 +88,8 @@ export const zincProfile: SupplementWithRelations = {
 			condition: "Testosterone production",
 			polishCondition: "Produkcja testosteronu",
 			indication: "Hormonal balance and reproductive health support",
-			polishIndication: "Wsparcie równowagi hormonalnej i zdrowia reprodukcyjnego",
+			polishIndication:
+				"Wsparcie równowagi hormonalnej i zdrowia reprodukcyjnego",
 			efficacy: "moderate",
 			effectivenessRating: 7,
 			evidenceLevel: "MODERATE",
@@ -231,11 +237,11 @@ export const zincProfile: SupplementWithRelations = {
 				type: "antagonistic",
 				severity: "moderate",
 				description: "Zinc may interfere with copper absorption",
-				clinicalSignificance: "May lead to copper deficiency with long-term use",
+				clinicalSignificance:
+					"May lead to copper deficiency with long-term use",
 				polishClinicalSignificance:
 					"Może prowadzić do niedoboru miedzi przy długoterminowym stosowaniu",
-				polishDescription:
-					"Cynk może zakłócać wchłanianie miedzi",
+				polishDescription: "Cynk może zakłócać wchłanianie miedzi",
 				recommendation: "Monitor copper status or supplement together",
 				polishRecommendation: "Monitoruj status miedzi lub suplementuj razem",
 				evidenceLevel: "STRONG",
@@ -247,10 +253,8 @@ export const zincProfile: SupplementWithRelations = {
 				severity: "minor",
 				description: "May compete for absorption",
 				clinicalSignificance: "May reduce absorption of both minerals",
-				polishClinicalSignificance:
-					"Może zmniejszyć wchłanianie obu minerałów",
-				polishDescription:
-					"Może konkurować o wchłanianie",
+				polishClinicalSignificance: "Może zmniejszyć wchłanianie obu minerałów",
+				polishDescription: "Może konkurować o wchłanianie",
 				recommendation: "Take at different times or 2 hours apart",
 				polishRecommendation: "Przyjmuj w różnych porach lub 2 godziny odstępu",
 				evidenceLevel: "MODERATE",
@@ -262,12 +266,12 @@ export const zincProfile: SupplementWithRelations = {
 				severity: "moderate",
 				description: "Zinc may reduce antibiotic absorption",
 				clinicalSignificance: "May decrease antibiotic effectiveness",
-				polishClinicalSignificance:
-					"Może zmniejszyć skuteczność antybiotyku",
-				polishDescription:
-					"Cynk może zmniejszyć wchłanianie antybiotyku",
-				recommendation: "Take antibiotics 2 hours before or 4-6 hours after zinc",
-				polishRecommendation: "Przyjmuj antybiotyki 2 godziny przed lub 4-6 godzin po cynku",
+				polishClinicalSignificance: "Może zmniejszyć skuteczność antybiotyku",
+				polishDescription: "Cynk może zmniejszyć wchłanianie antybiotyku",
+				recommendation:
+					"Take antibiotics 2 hours before or 4-6 hours after zinc",
+				polishRecommendation:
+					"Przyjmuj antybiotyki 2 godziny przed lub 4-6 godzin po cynku",
 				evidenceLevel: "MODERATE",
 			},
 		],
@@ -306,7 +310,8 @@ export const zincProfile: SupplementWithRelations = {
 			dosageDependent: false,
 			timeToOnset: "Months of high-dose use",
 			management: "Monitor copper levels, supplement copper if needed",
-			polishManagement: "Monitoruj poziom miedzi, suplementuj miedź jeśli potrzeba",
+			polishManagement:
+				"Monitoruj poziom miedzi, suplementuj miedź jeśli potrzeba",
 		},
 	],
 
@@ -318,14 +323,14 @@ export const zincProfile: SupplementWithRelations = {
 			type: "synergistic",
 			severity: "beneficial",
 			description: "Complementary roles in immune function and vision",
-			polishDescription: "Komplementarne role w funkcji odpornościowej i wzroku",
+			polishDescription:
+				"Komplementarne role w funkcji odpornościowej i wzroku",
 			clinicalSignificance: "Enhanced immune and visual health benefits",
 			polishClinicalSignificance: "Wzmocnione korzyści dla odporności i wzroku",
 			mechanism: "Complementary nutrient interactions",
 			polishMechanism: "Komplementarne interakcje składników odżywczych",
 			recommendation: "Beneficial combination for immune support",
-			polishRecommendation:
-				"Korzystne połączenie dla wsparcia odporności",
+			polishRecommendation: "Korzystne połączenie dla wsparcia odporności",
 			evidenceLevel: "MODERATE",
 		},
 		{
@@ -342,8 +347,7 @@ export const zincProfile: SupplementWithRelations = {
 			polishDescription:
 				"Cynk i magnez wspierają wzajemne wchłanianie i funkcje enzymów",
 			recommendation: "Often beneficial when supplemented together",
-			polishRecommendation:
-				"Często korzystne gdy suplementowane razem",
+			polishRecommendation: "Często korzystne gdy suplementowane razem",
 			evidenceLevel: "MODERATE",
 		},
 	],
@@ -360,7 +364,8 @@ export const zincProfile: SupplementWithRelations = {
 			year: 2013,
 			studyType: "SYSTEMATIC_REVIEW",
 			primaryOutcome: "Zinc supplementation for cold treatment and prevention",
-			polishPrimaryOutcome: "Suplementacja cynku w leczeniu i zapobieganiu przeziębieniu",
+			polishPrimaryOutcome:
+				"Suplementacja cynku w leczeniu i zapobieganiu przeziębieniu",
 			findings:
 				"Zinc supplementation may reduce cold duration and severity when taken within 24 hours of symptom onset",
 			polishFindings:

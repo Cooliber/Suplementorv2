@@ -26,12 +26,12 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import SupplementEffectivenessCharts from "./SupplementEffectivenessCharts";
-import SupplementRatingsVisualization from "./SupplementRatingsVisualization";
-import SupplementComparisonTools from "./SupplementComparisonTools";
+import AnalyticsExportUtils from "./AnalyticsExportUtils";
 import DosageSafetyVisualization from "./DosageSafetyVisualization";
 import ReviewAnalyticsCharts from "./ReviewAnalyticsCharts";
-import AnalyticsExportUtils from "./AnalyticsExportUtils";
+import SupplementComparisonTools from "./SupplementComparisonTools";
+import SupplementEffectivenessCharts from "./SupplementEffectivenessCharts";
+import SupplementRatingsVisualization from "./SupplementRatingsVisualization";
 
 interface SupplementAnalyticsData {
 	supplementId: string;
@@ -41,7 +41,12 @@ interface SupplementAnalyticsData {
 	averageEffectiveness: number;
 	averageRating: number;
 	totalReviews: number;
-	evidenceLevel: "STRONG" | "MODERATE" | "WEAK" | "INSUFFICIENT" | "CONFLICTING";
+	evidenceLevel:
+		| "STRONG"
+		| "MODERATE"
+		| "WEAK"
+		| "INSUFFICIENT"
+		| "CONFLICTING";
 	sideEffectCount: number;
 	interactionCount: number;
 	monthlyCost: number;
@@ -63,39 +68,41 @@ interface SupplementAnalyticsDashboardProps {
 	className?: string;
 }
 
-const SupplementAnalyticsDashboard: React.FC<SupplementAnalyticsDashboardProps> = ({
-	data,
-	isLoading = false,
-	onExport,
-	onRefresh,
-	className = "",
-}) => {
+const SupplementAnalyticsDashboard: React.FC<
+	SupplementAnalyticsDashboardProps
+> = ({ data, isLoading = false, onExport, onRefresh, className = "" }) => {
 	const [activeTab, setActiveTab] = useState("overview");
 	const [filters, setFilters] = useState<AnalyticsFilters>({});
-	const [sortBy, setSortBy] = useState<"effectiveness" | "rating" | "popularity" | "cost">("effectiveness");
+	const [sortBy, setSortBy] = useState<
+		"effectiveness" | "rating" | "popularity" | "cost"
+	>("effectiveness");
 
 	// Filter and sort data
-	const filteredData = data.filter((item) => {
-		if (filters.category && item.category !== filters.category) return false;
-		if (filters.evidenceLevel && item.evidenceLevel !== filters.evidenceLevel) return false;
-		if (filters.minRating && item.averageRating < filters.minRating) return false;
-		if (filters.maxCost && item.monthlyCost > filters.maxCost) return false;
-		return true;
-	}).sort((a, b) => {
-		switch (sortBy) {
-			case "rating":
-				return b.averageRating - a.averageRating;
-			case "popularity":
-				return b.popularityScore - a.popularityScore;
-			case "cost":
-				return a.monthlyCost - b.monthlyCost;
-			default:
-				return b.averageEffectiveness - a.averageEffectiveness;
-		}
-	});
+	const filteredData = data
+		.filter((item) => {
+			if (filters.category && item.category !== filters.category) return false;
+			if (filters.evidenceLevel && item.evidenceLevel !== filters.evidenceLevel)
+				return false;
+			if (filters.minRating && item.averageRating < filters.minRating)
+				return false;
+			if (filters.maxCost && item.monthlyCost > filters.maxCost) return false;
+			return true;
+		})
+		.sort((a, b) => {
+			switch (sortBy) {
+				case "rating":
+					return b.averageRating - a.averageRating;
+				case "popularity":
+					return b.popularityScore - a.popularityScore;
+				case "cost":
+					return a.monthlyCost - b.monthlyCost;
+				default:
+					return b.averageEffectiveness - a.averageEffectiveness;
+			}
+		});
 
-	const categories = [...new Set(data.map(item => item.category))];
-	const evidenceLevels = [...new Set(data.map(item => item.evidenceLevel))];
+	const categories = [...new Set(data.map((item) => item.category))];
+	const evidenceLevels = [...new Set(data.map((item) => item.evidenceLevel))];
 
 	const getCategoryColor = (category: string) => {
 		const colors: Record<string, string> = {
@@ -156,10 +163,15 @@ const SupplementAnalyticsDashboard: React.FC<SupplementAnalyticsDashboardProps> 
 	// Statistics calculations
 	const stats = {
 		totalSupplements: data.length,
-		averageEffectiveness: data.reduce((sum, item) => sum + item.averageEffectiveness, 0) / data.length || 0,
-		averageRating: data.reduce((sum, item) => sum + item.averageRating, 0) / data.length || 0,
+		averageEffectiveness:
+			data.reduce((sum, item) => sum + item.averageEffectiveness, 0) /
+				data.length || 0,
+		averageRating:
+			data.reduce((sum, item) => sum + item.averageRating, 0) / data.length ||
+			0,
 		totalReviews: data.reduce((sum, item) => sum + item.totalReviews, 0),
-		averageCost: data.reduce((sum, item) => sum + item.monthlyCost, 0) / data.length || 0,
+		averageCost:
+			data.reduce((sum, item) => sum + item.monthlyCost, 0) / data.length || 0,
 	};
 
 	return (
@@ -177,7 +189,9 @@ const SupplementAnalyticsDashboard: React.FC<SupplementAnalyticsDashboardProps> 
 							onClick={onRefresh}
 							disabled={isLoading}
 						>
-							<RefreshCw className={cn("h-3 w-3", isLoading && "animate-spin")} />
+							<RefreshCw
+								className={cn("h-3 w-3", isLoading && "animate-spin")}
+							/>
 						</Button>
 						<AnalyticsExportUtils
 							data={filteredData}
@@ -192,14 +206,16 @@ const SupplementAnalyticsDashboard: React.FC<SupplementAnalyticsDashboardProps> 
 				<div className="flex flex-wrap gap-2 pt-4">
 					<Select
 						value={filters.category || ""}
-						onValueChange={(value) => setFilters(prev => ({ ...prev, category: value || undefined }))}
+						onValueChange={(value) =>
+							setFilters((prev) => ({ ...prev, category: value || undefined }))
+						}
 					>
 						<SelectTrigger className="w-40">
 							<SelectValue placeholder="Kategoria" />
 						</SelectTrigger>
 						<SelectContent>
 							<SelectItem value="">Wszystkie</SelectItem>
-							{categories.map(category => (
+							{categories.map((category) => (
 								<SelectItem key={category} value={category}>
 									{getCategoryText(category)}
 								</SelectItem>
@@ -209,14 +225,19 @@ const SupplementAnalyticsDashboard: React.FC<SupplementAnalyticsDashboardProps> 
 
 					<Select
 						value={filters.evidenceLevel || ""}
-						onValueChange={(value) => setFilters(prev => ({ ...prev, evidenceLevel: value || undefined }))}
+						onValueChange={(value) =>
+							setFilters((prev) => ({
+								...prev,
+								evidenceLevel: value || undefined,
+							}))
+						}
 					>
 						<SelectTrigger className="w-40">
 							<SelectValue placeholder="Poziom dowodów" />
 						</SelectTrigger>
 						<SelectContent>
 							<SelectItem value="">Wszystkie</SelectItem>
-							{evidenceLevels.map(level => (
+							{evidenceLevels.map((level) => (
 								<SelectItem key={level} value={level}>
 									{getEvidenceLevelText(level)}
 								</SelectItem>
@@ -278,7 +299,9 @@ const SupplementAnalyticsDashboard: React.FC<SupplementAnalyticsDashboardProps> 
 									<div className="flex items-center justify-between">
 										<div>
 											<p className="text-gray-600 text-sm">Suplementy</p>
-											<p className="font-bold text-lg">{stats.totalSupplements}</p>
+											<p className="font-bold text-lg">
+												{stats.totalSupplements}
+											</p>
 										</div>
 										<PieChart className="h-4 w-4 text-blue-500" />
 									</div>
@@ -289,8 +312,12 @@ const SupplementAnalyticsDashboard: React.FC<SupplementAnalyticsDashboardProps> 
 								<CardContent className="p-4">
 									<div className="flex items-center justify-between">
 										<div>
-											<p className="text-gray-600 text-sm">Średnia skuteczność</p>
-											<p className="font-bold text-lg">{stats.averageEffectiveness.toFixed(1)}/10</p>
+											<p className="text-gray-600 text-sm">
+												Średnia skuteczność
+											</p>
+											<p className="font-bold text-lg">
+												{stats.averageEffectiveness.toFixed(1)}/10
+											</p>
 										</div>
 										<TrendingUp className="h-4 w-4 text-green-500" />
 									</div>
@@ -302,7 +329,9 @@ const SupplementAnalyticsDashboard: React.FC<SupplementAnalyticsDashboardProps> 
 									<div className="flex items-center justify-between">
 										<div>
 											<p className="text-gray-600 text-sm">Średnia ocena</p>
-											<p className="font-bold text-lg">{stats.averageRating.toFixed(1)}/5</p>
+											<p className="font-bold text-lg">
+												{stats.averageRating.toFixed(1)}/5
+											</p>
 										</div>
 										<Star className="h-4 w-4 text-yellow-500" />
 									</div>
@@ -326,7 +355,9 @@ const SupplementAnalyticsDashboard: React.FC<SupplementAnalyticsDashboardProps> 
 									<div className="flex items-center justify-between">
 										<div>
 											<p className="text-gray-600 text-sm">Średni koszt</p>
-											<p className="font-bold text-lg">{Math.round(stats.averageCost)}€</p>
+											<p className="font-bold text-lg">
+												{Math.round(stats.averageCost)}€
+											</p>
 										</div>
 										<LineChart className="h-4 w-4 text-orange-500" />
 									</div>
@@ -342,31 +373,46 @@ const SupplementAnalyticsDashboard: React.FC<SupplementAnalyticsDashboardProps> 
 							<CardContent>
 								<div className="space-y-3">
 									{filteredData.slice(0, 10).map((supplement, index) => (
-										<div key={supplement.supplementId} className="flex items-center justify-between rounded-lg border p-3">
+										<div
+											key={supplement.supplementId}
+											className="flex items-center justify-between rounded-lg border p-3"
+										>
 											<div className="flex items-center gap-3">
 												<div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-600 text-sm">
 													{index + 1}
 												</div>
 												<div>
-													<h4 className="font-medium text-sm">{supplement.polishName}</h4>
-													<p className="text-gray-600 text-xs">{getCategoryText(supplement.category)}</p>
+													<h4 className="font-medium text-sm">
+														{supplement.polishName}
+													</h4>
+													<p className="text-gray-600 text-xs">
+														{getCategoryText(supplement.category)}
+													</p>
 												</div>
 											</div>
 											<div className="flex items-center gap-4">
 												<div className="text-center">
 													<div className="flex items-center gap-1">
 														<Star className="h-3 w-3 text-yellow-500" />
-														<span className="font-medium text-sm">{supplement.averageRating.toFixed(1)}</span>
+														<span className="font-medium text-sm">
+															{supplement.averageRating.toFixed(1)}
+														</span>
 													</div>
-													<p className="text-gray-600 text-xs">{supplement.totalReviews} recenzji</p>
+													<p className="text-gray-600 text-xs">
+														{supplement.totalReviews} recenzji
+													</p>
 												</div>
 												<div className="text-center">
-													<p className="font-medium text-sm">{supplement.averageEffectiveness.toFixed(1)}/10</p>
+													<p className="font-medium text-sm">
+														{supplement.averageEffectiveness.toFixed(1)}/10
+													</p>
 													<p className="text-gray-600 text-xs">skuteczność</p>
 												</div>
 												<Badge
 													style={{
-														backgroundColor: getEvidenceLevelColor(supplement.evidenceLevel),
+														backgroundColor: getEvidenceLevelColor(
+															supplement.evidenceLevel,
+														),
 													}}
 													className="text-white text-xs"
 												>

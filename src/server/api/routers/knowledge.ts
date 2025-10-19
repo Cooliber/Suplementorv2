@@ -151,7 +151,8 @@ export const knowledgeRouter = createTRPCRouter({
 					properties: node.properties as any,
 					position: node.position as any,
 				})) as KnowledgeNodeWithRelations[],
-				relationships: relationshipsWithNodes as KnowledgeRelationshipWithNodes[],
+				relationships:
+					relationshipsWithNodes as KnowledgeRelationshipWithNodes[],
 				totalNodes: nodes.length,
 				totalRelationships: relationships.length,
 				metadata: {
@@ -175,9 +176,7 @@ export const knowledgeRouter = createTRPCRouter({
 		.query(async ({ ctx, input }) => {
 			const { id, includeRelationships, maxRelationships } = input;
 
-			const node = await ctx.db.knowledgeNode
-				.findOne({ _id: id })
-				.lean();
+			const node = await ctx.db.knowledgeNode.findOne({ _id: id }).lean();
 
 			if (!node) return null;
 
@@ -199,8 +198,6 @@ export const knowledgeRouter = createTRPCRouter({
 				sourceRelationships,
 				targetRelationships,
 			} as any;
-
-
 		}),
 
 	/**
@@ -338,7 +335,8 @@ export const knowledgeRouter = createTRPCRouter({
 
 					// Order nodes according to the path
 					const orderedNodes = current.path.map(
-						(id) => pathNodes.find((node: any) => (node._id ?? node.id) === id)!,
+						(id) =>
+							pathNodes.find((node: any) => (node._id ?? node.id) === id)!,
 					);
 
 					return {
@@ -358,7 +356,9 @@ export const knowledgeRouter = createTRPCRouter({
 
 				// Get connected nodes
 				const relationships = await ctx.db.knowledgeRelationship
-					.find({ $or: [{ sourceId: current.nodeId }, { targetId: current.nodeId }] })
+					.find({
+						$or: [{ sourceId: current.nodeId }, { targetId: current.nodeId }],
+					})
 					.lean();
 
 				relationships.forEach((rel) => {

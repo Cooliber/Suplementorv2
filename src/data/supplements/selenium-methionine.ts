@@ -39,8 +39,15 @@ export const seleniumMethionineProfile: SupplementWithRelations = {
 			concentration: "200mcg",
 			bioavailability: 95,
 			halfLife: "24-48 hours",
-			metabolicPathway: ["Amino acid metabolism", "Selenoprotein synthesis", "Glutathione peroxidase pathway"],
-			targetReceptors: ["Selenocysteine insertion machinery", "Thyroid hormone receptors"],
+			metabolicPathway: [
+				"Amino acid metabolism",
+				"Selenoprotein synthesis",
+				"Glutathione peroxidase pathway",
+			],
+			targetReceptors: [
+				"Selenocysteine insertion machinery",
+				"Thyroid hormone receptors",
+			],
 		},
 		{
 			name: "Elemental selenium",
@@ -48,7 +55,11 @@ export const seleniumMethionineProfile: SupplementWithRelations = {
 			concentration: "90mcg",
 			bioavailability: 98,
 			halfLife: "24-48 hours",
-			metabolicPathway: ["Selenide formation", "Selenophosphate synthesis", "Selenoprotein incorporation"],
+			metabolicPathway: [
+				"Selenide formation",
+				"Selenophosphate synthesis",
+				"Selenoprotein incorporation",
+			],
 			targetReceptors: ["Selenoprotein P receptors", "Glutathione peroxidase"],
 		},
 	],
@@ -74,7 +85,8 @@ export const seleniumMethionineProfile: SupplementWithRelations = {
 			condition: "Thyroid function support",
 			polishCondition: "Wsparcie funkcji tarczycy",
 			indication: "Thyroid hormone metabolism and autoimmune thyroiditis",
-			polishIndication: "Metabolizm hormonów tarczycy i autoimmunologiczne zapalenie tarczycy",
+			polishIndication:
+				"Metabolizm hormonów tarczycy i autoimmunologiczne zapalenie tarczycy",
 			efficacy: "moderate",
 			effectivenessRating: 7,
 			evidenceLevel: "MODERATE",
@@ -137,7 +149,8 @@ export const seleniumMethionineProfile: SupplementWithRelations = {
 		{
 			id: "antioxidant-defense",
 			name: "Antioxidant defense and glutathione peroxidase activity",
-			polishName: "Obrona przeciwutleniająca i aktywność peroksydazy glutationowej",
+			polishName:
+				"Obrona przeciwutleniająca i aktywność peroksydazy glutationowej",
 			pathway: "Selenoprotein synthesis",
 			polishPathway: "Synteza selenoprotein",
 			description:
@@ -145,7 +158,11 @@ export const seleniumMethionineProfile: SupplementWithRelations = {
 			polishDescription:
 				"Selen jest niezbędny dla aktywności peroksydazy glutationowej, chroniąc komórki przed uszkodzeniami oksydacyjnymi i wspierając system obrony przeciwutleniającej organizmu.",
 			evidenceLevel: "STRONG",
-			targetSystems: ["Antioxidant enzymes", "Cellular protection", "Glutathione system"],
+			targetSystems: [
+				"Antioxidant enzymes",
+				"Cellular protection",
+				"Glutathione system",
+			],
 			timeToEffect: "1-2 weeks",
 			duration: "Ongoing for antioxidant protection",
 		},
@@ -160,7 +177,11 @@ export const seleniumMethionineProfile: SupplementWithRelations = {
 			polishDescription:
 				"Selen wspiera funkcję tarczycy poprzez enzymy dejodynazy, które przekształcają T4 w aktywny T3 i chronią komórki tarczycy przed uszkodzeniami oksydacyjnymi.",
 			evidenceLevel: "STRONG",
-			targetSystems: ["Thyroid gland", "Endocrine system", "Hormone metabolism"],
+			targetSystems: [
+				"Thyroid gland",
+				"Endocrine system",
+				"Hormone metabolism",
+			],
 			timeToEffect: "2-4 weeks",
 			duration: "Chronic supplementation required",
 		},
@@ -175,7 +196,11 @@ export const seleniumMethionineProfile: SupplementWithRelations = {
 			polishDescription:
 				"Selen wspiera funkcję odpornościową poprzez zwiększoną aktywność komórek NK, produkcję cytokin i regulację odpowiedzi zapalnych.",
 			evidenceLevel: "MODERATE",
-			targetSystems: ["Immune system", "Natural killer cells", "Cytokine production"],
+			targetSystems: [
+				"Immune system",
+				"Natural killer cells",
+				"Cytokine production",
+			],
 			timeToEffect: "2-4 weeks",
 			duration: "Ongoing for immune maintenance",
 		},
@@ -226,7 +251,8 @@ export const seleniumMethionineProfile: SupplementWithRelations = {
 				polishClinicalSignificance: "Wzmocnione efekty przeciwutleniające",
 				polishDescription: "Komplementarna ochrona przeciwutleniająca",
 				recommendation: "Beneficial combination for antioxidant support",
-				polishRecommendation: "Korzystne połączenie dla wsparcia przeciwutleniającego",
+				polishRecommendation:
+					"Korzystne połączenie dla wsparcia przeciwutleniającego",
 				evidenceLevel: "MODERATE",
 			},
 			{
@@ -239,7 +265,8 @@ export const seleniumMethionineProfile: SupplementWithRelations = {
 				polishClinicalSignificance: "Poprawiona regeneracja przeciwutleniaczy",
 				polishDescription: "Wzmocniona regeneracja glutationu",
 				recommendation: "Beneficial for comprehensive antioxidant protection",
-				polishRecommendation: "Korzystne dla kompleksowej ochrony przeciwutleniającej",
+				polishRecommendation:
+					"Korzystne dla kompleksowej ochrony przeciwutleniającej",
 				evidenceLevel: "MODERATE",
 			},
 		],
@@ -290,13 +317,19 @@ export const seleniumMethionineProfile: SupplementWithRelations = {
 			type: "synergistic",
 			severity: "beneficial",
 			description: "Complementary antioxidant protection and immune support",
-			polishDescription: "Komplementarna ochrona przeciwutleniająca i wsparcie odporności",
+			polishDescription:
+				"Komplementarna ochrona przeciwutleniająca i wsparcie odporności",
 			clinicalSignificance: "Enhanced antioxidant and immune effects",
-			polishClinicalSignificance: "Wzmocnione efekty przeciwutleniające i odpornościowe",
-			mechanism: "Selenium and vitamin E work together in glutathione peroxidase",
-			polishMechanism: "Selen i witamina E współpracują w peroksydazie glutationowej",
-			recommendation: "Beneficial combination for comprehensive antioxidant protection",
-			polishRecommendation: "Korzystne połączenie dla kompleksowej ochrony przeciwutleniającej",
+			polishClinicalSignificance:
+				"Wzmocnione efekty przeciwutleniające i odpornościowe",
+			mechanism:
+				"Selenium and vitamin E work together in glutathione peroxidase",
+			polishMechanism:
+				"Selen i witamina E współpracują w peroksydazie glutationowej",
+			recommendation:
+				"Beneficial combination for comprehensive antioxidant protection",
+			polishRecommendation:
+				"Korzystne połączenie dla kompleksowej ochrony przeciwutleniającej",
 			evidenceLevel: "MODERATE",
 		},
 		{
@@ -304,7 +337,8 @@ export const seleniumMethionineProfile: SupplementWithRelations = {
 			polishSubstance: "Jod",
 			type: "synergistic",
 			clinicalSignificance: "Enhanced thyroid function and hormone production",
-			polishClinicalSignificance: "Wzmocniona funkcja tarczycy i produkcja hormonów",
+			polishClinicalSignificance:
+				"Wzmocniona funkcja tarczycy i produkcja hormonów",
 			severity: "beneficial",
 			mechanism: "Complementary roles in thyroid hormone metabolism",
 			polishMechanism: "Komplementarne role w metabolizmie hormonów tarczycy",
@@ -350,7 +384,8 @@ export const seleniumMethionineProfile: SupplementWithRelations = {
 			year: 2008,
 			studyType: "RANDOMIZED_CONTROLLED_TRIAL",
 			primaryOutcome: "Selenium supplementation in autoimmune thyroid disease",
-			polishPrimaryOutcome: "Suplementacja selenu w autoimmunologicznych chorobach tarczycy",
+			polishPrimaryOutcome:
+				"Suplementacja selenu w autoimmunologicznych chorobach tarczycy",
 			findings:
 				"Selenium supplementation may benefit patients with autoimmune thyroiditis",
 			polishFindings:

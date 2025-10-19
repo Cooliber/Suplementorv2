@@ -25,10 +25,10 @@ import type React from "react";
 import { useMemo, useState } from "react";
 import {
 	Bar,
-	BarChart as RechartsBarChart,
 	CartesianGrid,
 	Cell,
 	Pie,
+	BarChart as RechartsBarChart,
 	PieChart as RechartsPieChart,
 	ResponsiveContainer,
 	Tooltip,
@@ -62,15 +62,16 @@ interface SupplementRatingsVisualizationProps {
 	className?: string;
 }
 
-const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationProps> = ({
-	data,
-	showTrends = true,
-	comparisonMode = false,
-	className = "",
-}) => {
-	const [viewMode, setViewMode] = useState<"distribution" | "comparison" | "trends">("distribution");
+const SupplementRatingsVisualization: React.FC<
+	SupplementRatingsVisualizationProps
+> = ({ data, showTrends = true, comparisonMode = false, className = "" }) => {
+	const [viewMode, setViewMode] = useState<
+		"distribution" | "comparison" | "trends"
+	>("distribution");
 	const [selectedCategory, setSelectedCategory] = useState<string>("all");
-	const [sortBy, setSortBy] = useState<"rating" | "reviews" | "trending">("rating");
+	const [sortBy, setSortBy] = useState<"rating" | "reviews" | "trending">(
+		"rating",
+	);
 
 	// Color schemes
 	const categoryColors = {
@@ -112,9 +113,10 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 
 	// Filter and sort data
 	const filteredData = useMemo(() => {
-		let filtered = selectedCategory === "all"
-			? data
-			: data.filter(item => item.category === selectedCategory);
+		const filtered =
+			selectedCategory === "all"
+				? data
+				: data.filter((item) => item.category === selectedCategory);
 
 		return filtered.sort((a, b) => {
 			switch (sortBy) {
@@ -132,13 +134,33 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 
 	// Prepare rating distribution data
 	const distributionData = useMemo(() => {
-		const total = filteredData.reduce((sum, item) => sum + item.totalReviews, 0);
-		return [5, 4, 3, 2, 1].map(rating => ({
-			rating: `${rating} ${rating === 1 ? 'gwiazdka' : 'gwiazdki'}`,
-			count: filteredData.reduce((sum, item) => sum + item.ratingDistribution[rating as keyof typeof item.ratingDistribution], 0),
-			percentage: total > 0
-				? (filteredData.reduce((sum, item) => sum + item.ratingDistribution[rating as keyof typeof item.ratingDistribution], 0) / total * 100)
-				: 0,
+		const total = filteredData.reduce(
+			(sum, item) => sum + item.totalReviews,
+			0,
+		);
+		return [5, 4, 3, 2, 1].map((rating) => ({
+			rating: `${rating} ${rating === 1 ? "gwiazdka" : "gwiazdki"}`,
+			count: filteredData.reduce(
+				(sum, item) =>
+					sum +
+					item.ratingDistribution[
+						rating as keyof typeof item.ratingDistribution
+					],
+				0,
+			),
+			percentage:
+				total > 0
+					? (filteredData.reduce(
+							(sum, item) =>
+								sum +
+								item.ratingDistribution[
+									rating as keyof typeof item.ratingDistribution
+								],
+							0,
+						) /
+							total) *
+						100
+					: 0,
 			color: ratingColors[rating as keyof typeof ratingColors],
 		}));
 	}, [filteredData]);
@@ -146,7 +168,10 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 	// Prepare comparison data
 	const comparisonData = useMemo(() => {
 		return filteredData.slice(0, 10).map((item) => ({
-			name: item.polishName.length > 15 ? `${item.polishName.substring(0, 15)}...` : item.polishName,
+			name:
+				item.polishName.length > 15
+					? `${item.polishName.substring(0, 15)}...`
+					: item.polishName,
 			fullName: item.polishName,
 			rating: item.averageRating,
 			reviews: item.totalReviews,
@@ -158,14 +183,22 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 	// Prepare trends data
 	const trendsData = useMemo(() => {
 		return filteredData
-			.filter(item => item.totalReviews >= 10)
+			.filter((item) => item.totalReviews >= 10)
 			.slice(0, 8)
 			.map((item) => ({
-				name: item.polishName.length > 12 ? `${item.polishName.substring(0, 12)}...` : item.polishName,
+				name:
+					item.polishName.length > 12
+						? `${item.polishName.substring(0, 12)}...`
+						: item.polishName,
 				fullName: item.polishName,
 				currentRating: item.averageRating,
 				trend: item.recentTrend,
-				change: item.recentTrend === "up" ? 0.3 : item.recentTrend === "down" ? -0.2 : 0,
+				change:
+					item.recentTrend === "up"
+						? 0.3
+						: item.recentTrend === "down"
+							? -0.2
+							: 0,
 				color: getCategoryColor(item.category),
 			}));
 	}, [filteredData]);
@@ -179,7 +212,8 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 					<p className="mb-2 font-medium text-sm">{data.fullName || label}</p>
 					<div className="space-y-1">
 						<p className="text-xs">
-							<span className="text-yellow-600">Ocena:</span> {data.rating || data.currentRating}/5
+							<span className="text-yellow-600">Ocena:</span>{" "}
+							{data.rating || data.currentRating}/5
 						</p>
 						{data.reviews && (
 							<p className="text-xs">
@@ -188,7 +222,8 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 						)}
 						{data.verified && (
 							<p className="text-xs">
-								<span className="text-green-600">Zweryfikowane:</span> {data.verified}
+								<span className="text-green-600">Zweryfikowane:</span>{" "}
+								{data.verified}
 							</p>
 						)}
 					</div>
@@ -198,7 +233,7 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 		return null;
 	};
 
-	const categories = [...new Set(data.map(item => item.category))];
+	const categories = [...new Set(data.map((item) => item.category))];
 
 	return (
 		<Card className={cn("w-full", className)}>
@@ -209,13 +244,16 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 						Wizualizacja ocen suplementów
 					</CardTitle>
 					<div className="flex items-center gap-2">
-						<Select value={selectedCategory} onValueChange={setSelectedCategory}>
+						<Select
+							value={selectedCategory}
+							onValueChange={setSelectedCategory}
+						>
 							<SelectTrigger className="w-40">
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="all">Wszystkie kategorie</SelectItem>
-								{categories.map(category => (
+								{categories.map((category) => (
 									<SelectItem key={category} value={category}>
 										{getCategoryText(category)}
 									</SelectItem>
@@ -223,7 +261,10 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 							</SelectContent>
 						</Select>
 
-						<Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+						<Select
+							value={sortBy}
+							onValueChange={(value: any) => setSortBy(value)}
+						>
 							<SelectTrigger className="w-32">
 								<SelectValue />
 							</SelectTrigger>
@@ -238,7 +279,11 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 			</CardHeader>
 
 			<CardContent>
-				<Tabs value={viewMode} onValueChange={(value: any) => setViewMode(value)} className="w-full">
+				<Tabs
+					value={viewMode}
+					onValueChange={(value: any) => setViewMode(value)}
+					className="w-full"
+				>
 					<TabsList className="grid w-full grid-cols-3">
 						<TabsTrigger value="distribution" className="text-xs">
 							<PieChart className="mr-1 h-3 w-3" />
@@ -270,7 +315,9 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 												cy="50%"
 												outerRadius={100}
 												dataKey="count"
-												label={(entry: any) => `${entry.rating}: ${Number(entry.percentage).toFixed(1)}%`}
+												label={(entry: any) =>
+													`${entry.rating}: ${Number(entry.percentage).toFixed(1)}%`
+												}
 											>
 												{distributionData.map((entry, index) => (
 													<Cell key={`cell-${index}`} fill={entry.color} />
@@ -285,7 +332,9 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 							{/* Rating Distribution List */}
 							<Card>
 								<CardHeader>
-									<CardTitle className="text-base">Szczegóły rozkładu</CardTitle>
+									<CardTitle className="text-base">
+										Szczegóły rozkładu
+									</CardTitle>
 								</CardHeader>
 								<CardContent>
 									<div className="space-y-4">
@@ -294,11 +343,17 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 												<div className="flex items-center justify-between">
 													<div className="flex items-center gap-2">
 														<Star className="h-4 w-4 text-yellow-500" />
-														<span className="font-medium text-sm">{item.rating}</span>
+														<span className="font-medium text-sm">
+															{item.rating}
+														</span>
 													</div>
 													<div className="flex items-center gap-2">
-														<span className="text-gray-600 text-sm">{item.count} recenzji</span>
-														<span className="font-medium text-sm">({item.percentage.toFixed(1)}%)</span>
+														<span className="text-gray-600 text-sm">
+															{item.count} recenzji
+														</span>
+														<span className="font-medium text-sm">
+															({item.percentage.toFixed(1)}%)
+														</span>
 													</div>
 												</div>
 												<Progress value={item.percentage} className="h-2" />
@@ -312,13 +367,22 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 											<div className="text-center">
 												<p className="text-gray-600 text-sm">Średnia ocena</p>
 												<p className="font-bold text-lg">
-													{(filteredData.reduce((sum, item) => sum + item.averageRating, 0) / filteredData.length || 0).toFixed(1)}/5
+													{(
+														filteredData.reduce(
+															(sum, item) => sum + item.averageRating,
+															0,
+														) / filteredData.length || 0
+													).toFixed(1)}
+													/5
 												</p>
 											</div>
 											<div className="text-center">
 												<p className="text-gray-600 text-sm">Łączne recenzje</p>
 												<p className="font-bold text-lg">
-													{filteredData.reduce((sum, item) => sum + item.totalReviews, 0)}
+													{filteredData.reduce(
+														(sum, item) => sum + item.totalReviews,
+														0,
+													)}
 												</p>
 											</div>
 										</div>
@@ -331,7 +395,9 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 					<TabsContent value="comparison" className="mt-6">
 						<Card>
 							<CardHeader>
-								<CardTitle className="text-base">Porównanie ocen suplementów</CardTitle>
+								<CardTitle className="text-base">
+									Porównanie ocen suplementów
+								</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<ResponsiveContainer width="100%" height={400}>
@@ -357,27 +423,38 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 								{/* Top Rated Supplements */}
 								<div className="mt-6 space-y-3">
 									{comparisonData.slice(0, 5).map((supplement, index) => (
-										<div key={index} className="flex items-center justify-between rounded-lg border p-3">
+										<div
+											key={index}
+											className="flex items-center justify-between rounded-lg border p-3"
+										>
 											<div className="flex items-center gap-3">
 												<div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-600 text-sm">
 													{index + 1}
 												</div>
 												<div>
-													<h4 className="font-medium text-sm">{supplement.fullName}</h4>
+													<h4 className="font-medium text-sm">
+														{supplement.fullName}
+													</h4>
 													<div className="flex items-center gap-2">
 														<div className="flex items-center gap-1">
 															<Star className="h-3 w-3 text-yellow-500" />
-															<span className="text-xs">{supplement.rating.toFixed(1)}</span>
+															<span className="text-xs">
+																{supplement.rating.toFixed(1)}
+															</span>
 														</div>
 														<span className="text-gray-600 text-xs">•</span>
-														<span className="text-gray-600 text-xs">{supplement.reviews} recenzji</span>
+														<span className="text-gray-600 text-xs">
+															{supplement.reviews} recenzji
+														</span>
 													</div>
 												</div>
 											</div>
 											<div className="text-right">
 												<div className="flex items-center gap-1">
 													<Users className="h-3 w-3 text-green-500" />
-													<span className="text-xs">{supplement.verified} zweryfikowanych</span>
+													<span className="text-xs">
+														{supplement.verified} zweryfikowanych
+													</span>
 												</div>
 											</div>
 										</div>
@@ -410,14 +487,22 @@ const SupplementRatingsVisualization: React.FC<SupplementRatingsVisualizationPro
 								{/* Trend Indicators */}
 								<div className="mt-6 space-y-3">
 									{trendsData.map((supplement, index) => (
-										<div key={index} className="flex items-center justify-between rounded-lg border p-3">
+										<div
+											key={index}
+											className="flex items-center justify-between rounded-lg border p-3"
+										>
 											<div className="flex items-center gap-3">
 												<div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-600 text-sm">
 													{index + 1}
 												</div>
 												<div>
-													<h4 className="font-medium text-sm">{supplement.fullName}</h4>
-													<p className="text-gray-600 text-xs">Aktualna ocena: {supplement.currentRating.toFixed(1)}/5</p>
+													<h4 className="font-medium text-sm">
+														{supplement.fullName}
+													</h4>
+													<p className="text-gray-600 text-xs">
+														Aktualna ocena:{" "}
+														{supplement.currentRating.toFixed(1)}/5
+													</p>
 												</div>
 											</div>
 											<div className="flex items-center gap-2">

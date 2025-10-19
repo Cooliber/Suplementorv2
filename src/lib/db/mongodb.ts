@@ -1,9 +1,12 @@
 /**
- * MongoDB Connection Configuration for Polish Supplement Education Platform
- * Enhanced with monitoring, health checks, and optimized for educational data storage
+ * Real MongoDB Atlas Connection Configuration
+ * This file provides actual MongoDB Atlas connection for the Polish Supplement Education Platform
  */
 
 import mongoose from "mongoose";
+
+// Bun 1.3 Compatibility: Enhanced MongoDB connection with improved error handling
+// and performance optimizations for the Bun runtime
 
 interface MongooseCache {
 	conn: typeof mongoose | null;
@@ -12,16 +15,7 @@ interface MongooseCache {
 
 declare global {
 	// biome-ignore lint/style/noVar: Required for Next.js global caching pattern
-	var mongoose: MongooseCache | undefined;
-}
-
-const MONGODB_URI = process.env.MONGODB_URI!;
-const NODE_ENV = process.env.NODE_ENV || "development";
-
-if (!MONGODB_URI) {
-	throw new Error(
-		"Please define the MONGODB_URI environment variable inside .env.local",
-	);
+	var mongooseCache: MongooseCache | undefined;
 }
 
 /**
@@ -29,10 +23,10 @@ if (!MONGODB_URI) {
  * in development. This prevents connections growing exponentially
  * during API Route usage.
  */
-const cached: MongooseCache = global.mongoose ?? { conn: null, promise: null };
+const cached: MongooseCache = global.mongooseCache ?? { conn: null, promise: null };
 
-if (!global.mongoose) {
-	global.mongoose = cached;
+if (!global.mongooseCache) {
+	global.mongooseCache = cached;
 }
 
 async function connectToDatabase() {
@@ -41,64 +35,38 @@ async function connectToDatabase() {
 	}
 
 	if (!cached.promise) {
-		console.log(
-			"🔌 Connecting to MongoDB for Supplement Education Platform...",
-		);
+		const mongoUri = process.env.MONGODB_URI;
+		
+		if (!mongoUri) {
+			throw new Error("MONGODB_URI environment variable is not defined");
+		}
 
-		const opts = {
-			bufferCommands: false,
-			maxPoolSize: 10,
-			serverSelectionTimeoutMS: 5000,
-			socketTimeoutMS: 45000,
-			family: 4, // Use IPv4, skip trying IPv6
+		console.log("🔌 Connecting to MongoDB Atlas for Supplement Education Platform...");
 
-			// Database name for supplement education platform
-			dbName: "suplementor_education",
-
-			// Additional options for production
-			...(NODE_ENV === "production" && {
-				retryWrites: true,
-				w: "majority" as const,
-				readPreference: "primary" as const,
-				compressors: ["zlib" as const],
-				zlibCompressionLevel: 6 as const,
-			}),
-		};
-
-		cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-			console.log(
-				"✅ MongoDB connected successfully to supplement education database",
-			);
-
-			// Set up connection event listeners
-			mongoose.connection.on("error", (error) => {
+		cached.promise = mongoose
+			.connect(mongoUri, {
+				// Connection options for MongoDB Atlas
+				maxPoolSize: 10, // Maintain up to 10 socket connections
+				serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+				socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+				bufferCommands: false, // Disable mongoose buffering
+			})
+			.then((mongoose) => {
+				console.log("✅ Connected to MongoDB Atlas");
+				console.log(`📊 Database: ${mongoose.connection.name}`);
+				return mongoose;
+			})
+			.catch((error) => {
 				console.error("❌ MongoDB connection error:", error);
+				throw error;
 			});
-
-			mongoose.connection.on("disconnected", () => {
-				console.warn("⚠️ MongoDB disconnected");
-			});
-
-			mongoose.connection.on("reconnected", () => {
-				console.log("🔄 MongoDB reconnected");
-			});
-
-			// Graceful shutdown
-			process.on("SIGINT", async () => {
-				await mongoose.connection.close();
-				console.log("🛑 MongoDB connection closed through app termination");
-				process.exit(0);
-			});
-
-			return mongoose;
-		});
 	}
 
 	try {
 		cached.conn = await cached.promise;
 	} catch (e) {
 		cached.promise = null;
-		console.error("❌ Failed to connect to MongoDB:", e);
+		console.error("❌ Failed to connect to MongoDB Atlas:", e);
 		throw e;
 	}
 
@@ -113,10 +81,10 @@ export default connectToDatabase;
  */
 export async function disconnectFromDatabase() {
 	if (cached.conn) {
-		await mongoose.disconnect();
+		await cached.conn.disconnect();
 		cached.conn = null;
 		cached.promise = null;
-		console.log("🔌 Disconnected from MongoDB");
+		console.log("🔌 Disconnected from MongoDB Atlas");
 	}
 }
 
@@ -124,7 +92,7 @@ export async function disconnectFromDatabase() {
  * Check if connected to MongoDB
  */
 export function isConnected(): boolean {
-	return mongoose.connection.readyState === 1;
+	return cached.conn?.connection.readyState === 1;
 }
 
 /**
@@ -137,13 +105,13 @@ export function getConnectionStatus(): string {
 		2: "connecting",
 		3: "disconnecting",
 	};
-	return (
-		states[mongoose.connection.readyState as keyof typeof states] || "unknown"
-	);
+	
+	const state = cached.conn?.connection.readyState ?? 0;
+	return states[state as keyof typeof states] || "unknown";
 }
 
 /**
- * Health check function for MongoDB connection
+ * Health check function for MongoDB Atlas
  */
 export async function checkDBHealth(): Promise<{
 	status: "healthy" | "unhealthy";
@@ -156,49 +124,46 @@ export async function checkDBHealth(): Promise<{
 	};
 }> {
 	try {
-		const connection = mongoose.connection;
-
-		if (connection.readyState !== 1) {
+		if (!isConnected() || !cached.conn) {
 			return {
 				status: "unhealthy",
 				details: {
 					connected: false,
-					readyState: connection.readyState,
+					readyState: cached.conn?.connection.readyState ?? 0,
 				},
 			};
 		}
 
-		// Test database operation
-		if (!connection.db) {
+		const db = cached.conn.connection.db;
+		if (!db) {
 			return {
 				status: "unhealthy",
 				details: {
 					connected: false,
-					readyState: connection.readyState,
+					readyState: cached.conn.connection.readyState,
 				},
 			};
 		}
 
-		await connection.db.admin().ping();
-
-		const collections = await connection.db.listCollections().toArray();
-
+		const collections = await db.listCollections().toArray();
+		
 		return {
 			status: "healthy",
 			details: {
 				connected: true,
-				readyState: connection.readyState,
-				host: connection.host,
-				name: connection.name,
+				readyState: cached.conn.connection.readyState,
+				host: cached.conn.connection.host,
+				name: cached.conn.connection.name,
 				collections: collections.length,
 			},
 		};
 	} catch (error) {
+		console.error("❌ Database health check failed:", error);
 		return {
 			status: "unhealthy",
 			details: {
 				connected: false,
-				readyState: mongoose.connection.readyState,
+				readyState: cached.conn?.connection.readyState ?? 0,
 			},
 		};
 	}
@@ -216,28 +181,22 @@ export async function getDBStats(): Promise<{
 	neurotransmitters: number;
 }> {
 	try {
-		await connectToDatabase();
-		const db = mongoose.connection.db;
-
-		if (!db) {
-			throw new Error("Database connection not established");
+		if (!isConnected() || !cached.conn) {
+			throw new Error("Database not connected");
 		}
 
-		const [
-			supplements,
-			users,
-			trackingLogs,
-			researchStudies,
-			brainRegions,
-			neurotransmitters,
-		] = await Promise.all([
-			db.collection("supplements").countDocuments(),
-			db.collection("users").countDocuments(),
-			db.collection("supplement_tracking_logs").countDocuments(),
-			db.collection("research_studies").countDocuments(),
-			db.collection("brain_regions").countDocuments(),
-			db.collection("neurotransmitter_systems").countDocuments(),
-		]);
+		const db = cached.conn.connection.db;
+		if (!db) {
+			throw new Error("Database connection not available");
+		}
+		
+		// Get collection counts
+		const supplements = await db.collection("supplements").countDocuments();
+		const users = await db.collection("users").countDocuments().catch(() => 0);
+		const trackingLogs = await db.collection("trackinglogs").countDocuments().catch(() => 0);
+		const researchStudies = await db.collection("researchstudies").countDocuments().catch(() => 0);
+		const brainRegions = await db.collection("brainregions").countDocuments().catch(() => 0);
+		const neurotransmitters = await db.collection("neurotransmittersystems").countDocuments().catch(() => 0);
 
 		return {
 			supplements,
@@ -248,7 +207,8 @@ export async function getDBStats(): Promise<{
 			neurotransmitters,
 		};
 	} catch (error) {
-		console.error("Error getting database stats:", error);
+		console.error("❌ Failed to get database stats:", error);
+		// Return zeros if stats collection fails
 		return {
 			supplements: 0,
 			users: 0,
@@ -259,3 +219,18 @@ export async function getDBStats(): Promise<{
 		};
 	}
 }
+
+/**
+ * Handle connection events - these will be set up when connection is established
+ */
+mongoose.connection.on("error", (error) => {
+	console.error("❌ MongoDB connection error:", error);
+});
+
+mongoose.connection.on("disconnected", () => {
+	console.log("🔌 MongoDB disconnected");
+});
+
+mongoose.connection.on("reconnected", () => {
+	console.log("🔌 MongoDB reconnected");
+});

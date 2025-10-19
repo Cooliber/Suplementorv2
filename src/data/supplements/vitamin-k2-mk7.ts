@@ -39,8 +39,15 @@ export const vitaminK2MK7Profile: SupplementWithRelations = {
 			concentration: "100mcg",
 			bioavailability: 95,
 			halfLife: "72 hours",
-			metabolicPathway: ["Vitamin K cycle", "Gamma-carboxylation", "Calcium-binding protein activation"],
-			targetReceptors: ["Vitamin K epoxide reductase", "Gamma-glutamyl carboxylase"],
+			metabolicPathway: [
+				"Vitamin K cycle",
+				"Gamma-carboxylation",
+				"Calcium-binding protein activation",
+			],
+			targetReceptors: [
+				"Vitamin K epoxide reductase",
+				"Gamma-glutamyl carboxylase",
+			],
 		},
 		{
 			name: "Vitamin K2",
@@ -48,7 +55,11 @@ export const vitaminK2MK7Profile: SupplementWithRelations = {
 			concentration: "100mcg",
 			bioavailability: 98,
 			halfLife: "72 hours",
-			metabolicPathway: ["Osteocalcin activation", "MGP carboxylation", "Bone mineralization"],
+			metabolicPathway: [
+				"Osteocalcin activation",
+				"MGP carboxylation",
+				"Bone mineralization",
+			],
 			targetReceptors: ["Gla proteins", "Calcium channels"],
 		},
 	],
@@ -89,7 +100,8 @@ export const vitaminK2MK7Profile: SupplementWithRelations = {
 			condition: "Calcium metabolism optimization",
 			polishCondition: "Optymalizacja metabolizmu wapnia",
 			indication: "Proper calcium utilization and soft tissue protection",
-			polishIndication: "Prawidłowe wykorzystanie wapnia i ochrona tkanek miękkich",
+			polishIndication:
+				"Prawidłowe wykorzystanie wapnia i ochrona tkanek miękkich",
 			efficacy: "high",
 			effectivenessRating: 8,
 			evidenceLevel: "STRONG",
@@ -160,7 +172,11 @@ export const vitaminK2MK7Profile: SupplementWithRelations = {
 			polishDescription:
 				"Witamina K2 aktywuje białko matrix Gla (MGP), które zapobiega odkładaniu wapnia w ścianach tętnic i wspiera zdrowie naczyń.",
 			evidenceLevel: "MODERATE",
-			targetSystems: ["Cardiovascular system", "Arteries", "Vascular smooth muscle"],
+			targetSystems: [
+				"Cardiovascular system",
+				"Arteries",
+				"Vascular smooth muscle",
+			],
 			timeToEffect: "4-8 weeks",
 			duration: "Chronic supplementation for vascular effects",
 		},
@@ -221,12 +237,17 @@ export const vitaminK2MK7Profile: SupplementWithRelations = {
 				polishSubstance: "Witamina D",
 				type: "synergistic",
 				severity: "beneficial",
-				description: "Complementary roles in calcium metabolism and bone health",
-				clinicalSignificance: "Enhanced bone mineralization and calcium absorption",
-				polishClinicalSignificance: "Wzmocniona mineralizacja kości i wchłanianie wapnia",
-				polishDescription: "Komplementarne role w metabolizmie wapnia i zdrowiu kości",
+				description:
+					"Complementary roles in calcium metabolism and bone health",
+				clinicalSignificance:
+					"Enhanced bone mineralization and calcium absorption",
+				polishClinicalSignificance:
+					"Wzmocniona mineralizacja kości i wchłanianie wapnia",
+				polishDescription:
+					"Komplementarne role w metabolizmie wapnia i zdrowiu kości",
 				recommendation: "Essential combination for optimal bone health",
-				polishRecommendation: "Niezbędne połączenie dla optymalnego zdrowia kości",
+				polishRecommendation:
+					"Niezbędne połączenie dla optymalnego zdrowia kości",
 				evidenceLevel: "STRONG",
 			},
 			{
@@ -234,12 +255,16 @@ export const vitaminK2MK7Profile: SupplementWithRelations = {
 				polishSubstance: "Suplementy wapnia",
 				type: "synergistic",
 				severity: "beneficial",
-				description: "Vitamin K2 directs calcium to bones and prevents vascular calcification",
+				description:
+					"Vitamin K2 directs calcium to bones and prevents vascular calcification",
 				clinicalSignificance: "Improved calcium utilization and safety",
-				polishClinicalSignificance: "Poprawione wykorzystanie wapnia i bezpieczeństwo",
-				polishDescription: "Witamina K2 kieruje wapń do kości i zapobiega wapnieniu naczyń",
+				polishClinicalSignificance:
+					"Poprawione wykorzystanie wapnia i bezpieczeństwo",
+				polishDescription:
+					"Witamina K2 kieruje wapń do kości i zapobiega wapnieniu naczyń",
 				recommendation: "Essential combination for proper calcium metabolism",
-				polishRecommendation: "Niezbędne połączenie dla prawidłowego metabolizmu wapnia",
+				polishRecommendation:
+					"Niezbędne połączenie dla prawidłowego metabolizmu wapnia",
 				evidenceLevel: "STRONG",
 			},
 			{
@@ -252,7 +277,8 @@ export const vitaminK2MK7Profile: SupplementWithRelations = {
 				polishClinicalSignificance: "Może zwiększyć ryzyko krzepnięcia",
 				polishDescription: "Witamina K2 może zmniejszyć skuteczność warfaryny",
 				recommendation: "Avoid concurrent use or monitor INR closely",
-				polishRecommendation: "Unikaj jednoczesnego stosowania lub monitoruj INR uważnie",
+				polishRecommendation:
+					"Unikaj jednoczesnego stosowania lub monitoruj INR uważnie",
 				evidenceLevel: "STRONG",
 			},
 		],
@@ -302,22 +328,31 @@ export const vitaminK2MK7Profile: SupplementWithRelations = {
 			polishSubstance: "Witamina D3",
 			type: "synergistic",
 			severity: "beneficial",
-			description: "Essential partnership for calcium metabolism and bone health",
-			polishDescription: "Niezbędne partnerstwo dla metabolizmu wapnia i zdrowia kości",
-			clinicalSignificance: "Enhanced bone mineralization and reduced fracture risk",
-			polishClinicalSignificance: "Wzmocniona mineralizacja kości i zmniejszone ryzyko złamań",
+			description:
+				"Essential partnership for calcium metabolism and bone health",
+			polishDescription:
+				"Niezbędne partnerstwo dla metabolizmu wapnia i zdrowia kości",
+			clinicalSignificance:
+				"Enhanced bone mineralization and reduced fracture risk",
+			polishClinicalSignificance:
+				"Wzmocniona mineralizacja kości i zmniejszone ryzyko złamań",
 			mechanism: "Complementary roles in calcium absorption and utilization",
-			polishMechanism: "Komplementarne role we wchłanianiu i wykorzystaniu wapnia",
-			recommendation: "Essential combination for optimal bone and cardiovascular health",
-			polishRecommendation: "Niezbędne połączenie dla optymalnego zdrowia kości i serca",
+			polishMechanism:
+				"Komplementarne role we wchłanianiu i wykorzystaniu wapnia",
+			recommendation:
+				"Essential combination for optimal bone and cardiovascular health",
+			polishRecommendation:
+				"Niezbędne połączenie dla optymalnego zdrowia kości i serca",
 			evidenceLevel: "STRONG",
 		},
 		{
 			substance: "Calcium",
 			polishSubstance: "Wapń",
 			type: "synergistic",
-			clinicalSignificance: "Vitamin K2 ensures proper calcium deposition in bones",
-			polishClinicalSignificance: "Witamina K2 zapewnia prawidłowe odkładanie wapnia w kościach",
+			clinicalSignificance:
+				"Vitamin K2 ensures proper calcium deposition in bones",
+			polishClinicalSignificance:
+				"Witamina K2 zapewnia prawidłowe odkładanie wapnia w kościach",
 			severity: "beneficial",
 			mechanism: "Activation of calcium-binding proteins in bone tissue",
 			polishMechanism: "Aktywacja białek wiążących wapń w tkance kostnej",
@@ -325,8 +360,10 @@ export const vitaminK2MK7Profile: SupplementWithRelations = {
 				"Vitamin K2 directs calcium to bones and prevents vascular calcification",
 			polishDescription:
 				"Witamina K2 kieruje wapń do kości i zapobiega wapnieniu naczyń",
-			recommendation: "Essential for safe and effective calcium supplementation",
-			polishRecommendation: "Niezbędne dla bezpiecznej i skutecznej suplementacji wapnia",
+			recommendation:
+				"Essential for safe and effective calcium supplementation",
+			polishRecommendation:
+				"Niezbędne dla bezpiecznej i skutecznej suplementacji wapnia",
 			evidenceLevel: "STRONG",
 		},
 	],
@@ -336,8 +373,10 @@ export const vitaminK2MK7Profile: SupplementWithRelations = {
 	researchStudies: [
 		{
 			id: "koshihara-1987",
-			title: "Vitamin K2 enhances osteocalcin accumulation in the extracellular matrix",
-			polishTitle: "Witamina K2 wzmacnia akumulację osteokalcyne w macierzy zewnątrzkomórkowej",
+			title:
+				"Vitamin K2 enhances osteocalcin accumulation in the extracellular matrix",
+			polishTitle:
+				"Witamina K2 wzmacnia akumulację osteokalcyne w macierzy zewnątrzkomórkowej",
 			authors: ["Koshihara Y", "Hoshi K"],
 			journal: "Journal of Biological Chemistry",
 			year: 1987,
@@ -356,8 +395,10 @@ export const vitaminK2MK7Profile: SupplementWithRelations = {
 		},
 		{
 			id: "schurgers-2007",
-			title: "Vitamin K-containing dietary supplements: comparison of synthetic vitamin K1 and natto-derived MK-7",
-			polishTitle: "Suplementy diety zawierające witaminę K: porównanie syntetycznej witaminy K1 i MK-7 z natto",
+			title:
+				"Vitamin K-containing dietary supplements: comparison of synthetic vitamin K1 and natto-derived MK-7",
+			polishTitle:
+				"Suplementy diety zawierające witaminę K: porównanie syntetycznej witaminy K1 i MK-7 z natto",
 			authors: ["Schurgers LJ", "Teunissen KJ", "Hamulyák K"],
 			journal: "Blood",
 			year: 2007,

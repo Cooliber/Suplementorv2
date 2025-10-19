@@ -1,12 +1,18 @@
-import React from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import React from "react";
 
 /**
  * Test component to verify shadcn/ui setup is working correctly
@@ -22,7 +28,7 @@ export function ShadcnTestComponent() {
 	}, []);
 
 	return (
-		<div className="p-8 max-w-4xl mx-auto space-y-8">
+		<div className="mx-auto max-w-4xl space-y-8 p-8">
 			<Card>
 				<CardHeader>
 					<CardTitle>shadcn/ui Component Test</CardTitle>
@@ -33,7 +39,7 @@ export function ShadcnTestComponent() {
 				<CardContent className="space-y-6">
 					{/* Button variants */}
 					<div className="space-y-4">
-						<h3 className="text-lg font-semibold">Button Variants</h3>
+						<h3 className="font-semibold text-lg">Button Variants</h3>
 						<div className="flex flex-wrap gap-2">
 							<Button variant="default">Default</Button>
 							<Button variant="destructive">Destructive</Button>
@@ -48,7 +54,7 @@ export function ShadcnTestComponent() {
 
 					{/* Form elements */}
 					<div className="space-y-4">
-						<h3 className="text-lg font-semibold">Form Elements</h3>
+						<h3 className="font-semibold text-lg">Form Elements</h3>
 						<div className="grid grid-cols-2 gap-4">
 							<div className="space-y-2">
 								<Label htmlFor="test-input">Test Input</Label>
@@ -72,7 +78,7 @@ export function ShadcnTestComponent() {
 
 					{/* Badge and Progress */}
 					<div className="space-y-4">
-						<h3 className="text-lg font-semibold">Status Elements</h3>
+						<h3 className="font-semibold text-lg">Status Elements</h3>
 						<div className="space-y-4">
 							<div className="flex flex-wrap gap-2">
 								<Badge variant="default">Default Badge</Badge>
@@ -91,18 +97,20 @@ export function ShadcnTestComponent() {
 
 					{/* Card demo */}
 					<div className="space-y-4">
-						<h3 className="text-lg font-semibold">Card Layout</h3>
+						<h3 className="font-semibold text-lg">Card Layout</h3>
 						<Card>
 							<CardHeader>
 								<CardTitle>Supplement Information</CardTitle>
 								<CardDescription>
-									This card demonstrates proper shadcn/ui styling with CSS variables
+									This card demonstrates proper shadcn/ui styling with CSS
+									variables
 								</CardDescription>
 							</CardHeader>
 							<CardContent>
 								<p className="text-muted-foreground">
-									The shadcn/ui components are now properly configured with CSS variables
-									for theming support, including light and dark mode compatibility.
+									The shadcn/ui components are now properly configured with CSS
+									variables for theming support, including light and dark mode
+									compatibility.
 								</p>
 							</CardContent>
 						</Card>

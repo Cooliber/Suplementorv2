@@ -3,8 +3,7 @@
  * Handles CRUD operations for supplements with MongoDB integration
  */
 
-import { ComprehensiveSupplement } from "@/lib/db/models";
-import connectToDatabase from "@/lib/db/mongodb";
+import { comprehensiveSupplementsDatabase } from "@/data/comprehensive-supplements";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -44,34 +43,61 @@ const CreateSupplementSchema = z.object({
 
 /**
  * GET /api/supplements
- * Retrieve supplements with filtering, searching, and pagination
+ * Retrieve supplements with filtering, searching, and pagination using hardcoded data
  */
 export async function GET(request: NextRequest) {
 	try {
-		await connectToDatabase();
-
 		const { searchParams } = new URL(request.url);
 		const params = Object.fromEntries(searchParams.entries());
 
 		// Validate query parameters
 		const validatedParams = GetSupplementsSchema.parse(params);
 
-		// Build MongoDB query
-		const query: any = { isActive: true };
+		// Start with all supplements from hardcoded data
+		let supplements = [...comprehensiveSupplementsDatabase];
 
 		// Category filter
 		if (validatedParams.category) {
-			query.category = validatedParams.category.toUpperCase();
+			supplements = supplements.filter(
+				(s) => s.category === validatedParams.category?.toUpperCase(),
+			);
 		}
 
 		// Evidence level filter
 		if (validatedParams.evidenceLevel) {
-			query.evidenceLevel = validatedParams.evidenceLevel.toUpperCase();
+			supplements = supplements.filter(
+				(s) => s.evidenceLevel === validatedParams.evidenceLevel?.toUpperCase(),
+			);
 		}
 
 		// Text search
 		if (validatedParams.search) {
-			query.$text = { $search: validatedParams.search };
+			const searchLower = validatedParams.search.toLowerCase();
+			supplements = supplements.filter((s) => {
+				const searchableText = [
+					s.name,
+					s.polishName,
+					s.description || "",
+					s.polishDescription || "",
+					...s.commonNames,
+					...s.polishCommonNames,
+					...s.tags,
+					...s.activeCompounds.map((compound) =>
+						validatedParams.language === "pl"
+							? compound.polishName || compound.name
+							: compound.name,
+					),
+					...s.clinicalApplications.map((app) =>
+						validatedParams.language === "pl"
+							? app.polishCondition
+							: app.condition,
+					),
+				]
+					.join(" ")
+					.toLowerCase();
+
+				return searchableText.includes(searchLower);
+			});
 		}
 
 		// Build sort object
@@ -80,20 +106,54 @@ export async function GET(request: NextRequest) {
 				? "polishName"
 				: validatedParams.sortBy;
 		const sortOrder = validatedParams.sortOrder === "desc" ? -1 : 1;
-		const sort: Record<string, 1 | -1> = { [sortField]: sortOrder };
+
+		supplements.sort((a, b) => {
+			let aValue: string | number = "";
+			let bValue: string | number = "";
+
+			switch (sortField) {
+				case "name":
+					aValue = a.name.toLowerCase();
+					bValue = b.name.toLowerCase();
+					break;
+				case "polishName":
+					aValue = a.polishName.toLowerCase();
+					bValue = b.polishName.toLowerCase();
+					break;
+				case "evidenceLevel": {
+					const evidenceOrder = {
+						STRONG: 4,
+						MODERATE: 3,
+						WEAK: 2,
+						INSUFFICIENT: 1,
+						CONFLICTING: 0,
+					};
+					aValue = evidenceOrder[a.evidenceLevel] || 0;
+					bValue = evidenceOrder[b.evidenceLevel] || 0;
+					break;
+				}
+				case "lastUpdated":
+					aValue = new Date(a.lastUpdated).getTime();
+					bValue = new Date(b.lastUpdated).getTime();
+					break;
+				default:
+					aValue = a.polishName.toLowerCase();
+					bValue = b.polishName.toLowerCase();
+			}
+
+			if (typeof aValue === "string" && typeof bValue === "string") {
+				return sortOrder * aValue.localeCompare(bValue);
+			}
+			return sortOrder * ((aValue as number) - (bValue as number));
+		});
 
 		// Calculate pagination
 		const skip = (validatedParams.page - 1) * validatedParams.limit;
-
-		// Execute query with pagination
-		const [supplements, totalCount] = await Promise.all([
-			ComprehensiveSupplement.find(query)
-				.sort(sort)
-				.skip(skip)
-				.limit(validatedParams.limit)
-				.lean(),
-			ComprehensiveSupplement.countDocuments(query),
-		]);
+		const totalCount = supplements.length;
+		const paginatedSupplements = supplements.slice(
+			skip,
+			skip + validatedParams.limit,
+		);
 
 		// Calculate pagination metadata
 		const totalPages = Math.ceil(totalCount / validatedParams.limit);
@@ -102,7 +162,7 @@ export async function GET(request: NextRequest) {
 
 		return NextResponse.json({
 			success: true,
-			data: supplements,
+			data: paginatedSupplements,
 			pagination: {
 				currentPage: validatedParams.page,
 				totalPages,
@@ -144,21 +204,19 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/supplements
- * Create a new supplement
+ * Create a new supplement (using hardcoded data - no persistence)
  */
 export async function POST(request: NextRequest) {
 	try {
-		await connectToDatabase();
-
 		const body = await request.json();
 
 		// Validate request body
 		const validatedData = CreateSupplementSchema.parse(body);
 
-		// Check if supplement with this ID already exists
-		const existingSupplement = await ComprehensiveSupplement.findOne({
-			id: validatedData.id,
-		});
+		// Check if supplement with this ID already exists in hardcoded data
+		const existingSupplement = comprehensiveSupplementsDatabase.find(
+			(s) => s.id === validatedData.id,
+		);
 
 		if (existingSupplement) {
 			return NextResponse.json(
@@ -170,21 +228,20 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		// Create new supplement
-		const newSupplement = new ComprehensiveSupplement({
+		// For hardcoded deployment, return success but don't actually create
+		// In a real deployment, this would be handled differently
+		const mockSupplement = {
 			...validatedData,
 			lastUpdated: new Date(),
 			version: "1.0.0",
 			isActive: true,
-		});
-
-		const savedSupplement = await newSupplement.save();
+		};
 
 		return NextResponse.json(
 			{
 				success: true,
-				data: savedSupplement,
-				message: "Supplement created successfully",
+				data: mockSupplement,
+				message: "Supplement creation request received (hardcoded data mode)",
 			},
 			{ status: 201 },
 		);
@@ -214,12 +271,10 @@ export async function POST(request: NextRequest) {
 
 /**
  * PUT /api/supplements
- * Bulk update supplements
+ * Bulk update supplements (using hardcoded data - no persistence)
  */
 export async function PUT(request: NextRequest) {
 	try {
-		await connectToDatabase();
-
 		const body = await request.json();
 		const { supplements } = body;
 
@@ -237,24 +292,30 @@ export async function PUT(request: NextRequest) {
 
 		for (const supplementData of supplements) {
 			try {
-				const result = await ComprehensiveSupplement.findOneAndUpdate(
-					{ id: supplementData.id },
-					{
-						...supplementData,
-						lastUpdated: new Date(),
-					},
-					{
-						new: true,
-						upsert: true,
-						runValidators: true,
-					},
+				// Check if supplement exists in hardcoded data
+				const existingIndex = comprehensiveSupplementsDatabase.findIndex(
+					(s) => s.id === supplementData.id,
 				);
 
-				results.push({
-					id: supplementData.id,
-					success: true,
-					data: result,
-				});
+				if (existingIndex >= 0) {
+					// In a real implementation, this would update the data
+					// For hardcoded deployment, we simulate success
+					results.push({
+						id: supplementData.id,
+						success: true,
+						data: {
+							...comprehensiveSupplementsDatabase[existingIndex],
+							...supplementData,
+							lastUpdated: new Date(),
+						},
+					});
+				} else {
+					results.push({
+						id: supplementData.id,
+						success: false,
+						error: "Supplement not found in hardcoded data",
+					});
+				}
 			} catch (error) {
 				results.push({
 					id: supplementData.id,
@@ -275,6 +336,7 @@ export async function PUT(request: NextRequest) {
 				successful: successCount,
 				failed: errorCount,
 			},
+			message: "Bulk update completed (hardcoded data mode)",
 		});
 	} catch (error) {
 		console.error("Error bulk updating supplements:", error);
@@ -291,12 +353,10 @@ export async function PUT(request: NextRequest) {
 
 /**
  * DELETE /api/supplements
- * Soft delete supplements (mark as inactive)
+ * Soft delete supplements (using hardcoded data - no persistence)
  */
 export async function DELETE(request: NextRequest) {
 	try {
-		await connectToDatabase();
-
 		const { searchParams } = new URL(request.url);
 		const ids = searchParams.get("ids")?.split(",") || [];
 
@@ -310,19 +370,16 @@ export async function DELETE(request: NextRequest) {
 			);
 		}
 
-		// Soft delete by marking as inactive
-		const result = await ComprehensiveSupplement.updateMany(
-			{ id: { $in: ids } },
-			{
-				isActive: false,
-				lastUpdated: new Date(),
-			},
+		// For hardcoded deployment, simulate deletion
+		// In a real implementation, this would mark items as inactive
+		const foundSupplements = comprehensiveSupplementsDatabase.filter((s) =>
+			ids.includes(s.id),
 		);
 
 		return NextResponse.json({
 			success: true,
-			message: `${result.modifiedCount} supplements deactivated`,
-			modifiedCount: result.modifiedCount,
+			message: `${foundSupplements.length} supplements would be deactivated (hardcoded data mode)`,
+			modifiedCount: foundSupplements.length,
 		});
 	} catch (error) {
 		console.error("Error deleting supplements:", error);

@@ -1,23 +1,64 @@
 "use client";
 
-import { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+	EnhancedInput,
+	EnhancedSelect,
+	ValidationSummary,
+} from "@/components/ui/enhanced-form";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Plus, X, Info, CheckCircle, AlertCircle, User, Activity, Heart, Pill } from "lucide-react";
-import { EnhancedInput, EnhancedSelect, ValidationSummary } from "@/components/ui/enhanced-form";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { UserProfileSchema as ValidationUserProfileSchema, type UserProfileData } from "@/lib/validation-utils";
-import { type DosageCalculationInput } from "@/types/dosage-calculator";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+	type UserProfileData,
+	UserProfileSchema as ValidationUserProfileSchema,
+} from "@/lib/validation-utils";
+import type { DosageCalculationInput } from "@/types/dosage-calculator";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+	Activity,
+	AlertCircle,
+	CheckCircle,
+	Heart,
+	Info,
+	Pill,
+	Plus,
+	User,
+	X,
+} from "lucide-react";
+import { useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 
 interface UserProfileStepProps {
 	userProfile: Partial<UserProfileData>;
@@ -28,9 +69,17 @@ interface UserProfileStepProps {
 const ACTIVITY_LEVELS = [
 	{ value: "sedentary", label: "Mała aktywność", englishLabel: "Sedentary" },
 	{ value: "light", label: "Lekka aktywność", englishLabel: "Light Activity" },
-	{ value: "moderate", label: "Umiarkowana aktywność", englishLabel: "Moderate Activity" },
+	{
+		value: "moderate",
+		label: "Umiarkowana aktywność",
+		englishLabel: "Moderate Activity",
+	},
 	{ value: "active", label: "Wysoka aktywność", englishLabel: "Active" },
-	{ value: "very_active", label: "Bardzo wysoka aktywność", englishLabel: "Very Active" },
+	{
+		value: "very_active",
+		label: "Bardzo wysoka aktywność",
+		englishLabel: "Very Active",
+	},
 ];
 
 const COMMON_CONDITIONS = [
@@ -46,71 +95,81 @@ const COMMON_CONDITIONS = [
 	"Arthritis/Artretyzm",
 ];
 
-export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: UserProfileStepProps) {
- 	const [newCondition, setNewCondition] = useState("");
- 	const [newMedication, setNewMedication] = useState("");
- 	const [newAllergy, setNewAllergy] = useState("");
+export function UserProfileStep({
+	userProfile,
+	onUserProfileChange,
+	isPolish,
+}: UserProfileStepProps) {
+	const [newCondition, setNewCondition] = useState("");
+	const [newMedication, setNewMedication] = useState("");
+	const [newAllergy, setNewAllergy] = useState("");
 
- 	const form = useForm<UserProfileData>({
- 		resolver: zodResolver(ValidationUserProfileSchema),
- 		defaultValues: {
- 			age: userProfile.age || 25,
- 			gender: userProfile.gender || "other",
- 			weight: userProfile.weight || 70,
- 			height: userProfile.height || 175,
- 			activityLevel: userProfile.activityLevel || "moderate",
- 			healthConditions: userProfile.healthConditions || [],
- 			currentMedications: userProfile.currentMedications || [],
- 			allergies: userProfile.allergies || [],
- 			pregnant: userProfile.pregnant || false,
- 			breastfeeding: userProfile.breastfeeding || false,
- 			goals: userProfile.goals || [],
- 			preferences: userProfile.preferences || {},
- 		},
- 		mode: "onChange",
- 	});
+	const form = useForm<UserProfileData>({
+		resolver: zodResolver(ValidationUserProfileSchema),
+		defaultValues: {
+			age: userProfile.age ?? 25,
+			gender: userProfile.gender ?? "other",
+			weight: userProfile.weight ?? 70,
+			height: userProfile.height ?? 175,
+			activityLevel: userProfile.activityLevel ?? "moderate",
+			healthConditions: userProfile.healthConditions ?? [],
+			currentMedications: userProfile.currentMedications ?? [],
+			allergies: userProfile.allergies ?? [],
+			pregnant: userProfile.pregnant ?? false,
+			breastfeeding: userProfile.breastfeeding ?? false,
+			goals: userProfile.goals ?? [],
+			preferences: {
+				vegetarian: Boolean(userProfile.preferences?.vegetarian ?? false),
+				vegan: Boolean(userProfile.preferences?.vegan ?? false),
+				glutenFree: Boolean(userProfile.preferences?.glutenFree ?? false),
+				lactoseFree: Boolean(userProfile.preferences?.lactoseFree ?? false),
+				organic: Boolean(userProfile.preferences?.organic ?? false),
+			},
+		},
+		mode: "onChange",
+	});
 
- 	const { register, handleSubmit, setValue, watch, control, formState: { errors, isSubmitting } } = form;
+	const {
+		register,
+		handleSubmit,
+		setValue,
+		watch,
+		control,
+		formState: { errors, isSubmitting },
+	} = form;
 
- 	const { fields: conditionFields, append: appendCondition, remove: removeCondition } = useFieldArray({
- 		control: form.control,
- 		name: "healthConditions",
- 	});
+	// Handle string arrays manually instead of useFieldArray for better compatibility
+	const healthConditions = watch("healthConditions") || [];
+	const currentMedications = watch("currentMedications") || [];
+	const allergies = watch("allergies") || [];
 
- 	const { fields: medicationFields, append: appendMedication, remove: removeMedication } = useFieldArray({
- 		control: form.control,
- 		name: "currentMedications",
- 	});
+	const onSubmit = (data: UserProfileData) => {
+		onUserProfileChange(data);
+	};
 
- 	const { fields: allergyFields, append: appendAllergy, remove: removeAllergy } = useFieldArray({
- 		control: form.control,
- 		name: "allergies",
- 	});
+	const addCondition = () => {
+		if (newCondition.trim()) {
+			setValue("healthConditions", [...healthConditions, newCondition.trim()]);
+			setNewCondition("");
+		}
+	};
 
- 	const onSubmit = (data: UserProfileData) => {
- 		onUserProfileChange(data);
- 	};
+	const addMedication = () => {
+		if (newMedication.trim()) {
+			setValue("currentMedications", [
+				...currentMedications,
+				newMedication.trim(),
+			]);
+			setNewMedication("");
+		}
+	};
 
- 	const addCondition = () => {
- 		if (newCondition.trim()) {
- 			appendCondition(newCondition.trim());
- 			setNewCondition("");
- 		}
- 	};
-
- 	const addMedication = () => {
- 		if (newMedication.trim()) {
- 			appendMedication(newMedication.trim());
- 			setNewMedication("");
- 		}
- 	};
-
- 	const addAllergy = () => {
- 		if (newAllergy.trim()) {
- 			appendAllergy(newAllergy.trim());
- 			setNewAllergy("");
- 		}
- 	};
+	const addAllergy = () => {
+		if (newAllergy.trim()) {
+			setValue("allergies", [...allergies, newAllergy.trim()]);
+			setNewAllergy("");
+		}
+	};
 
 	return (
 		<TooltipProvider>
@@ -120,7 +179,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 					<Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
 						<CardHeader className="pb-4">
 							<CardTitle className="flex items-center gap-3 text-xl">
-								<div className="p-2 bg-primary/10 rounded-lg">
+								<div className="rounded-lg bg-primary/10 p-2">
 									<User className="h-6 w-6 text-primary" />
 								</div>
 								{isPolish ? "Podstawowe informacje" : "Basic Information"}
@@ -132,7 +191,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-6">
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+							<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 								<FormField
 									control={control}
 									name="age"
@@ -159,9 +218,15 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 													placeholder={isPolish ? "np. 25" : "e.g. 25"}
 													min={18}
 													max={120}
-													tooltip={isPolish ? "Wiek wpływa na metabolizm i dawki suplementów" : "Age affects metabolism and supplement dosages"}
+													tooltip={
+														isPolish
+															? "Wiek wpływa na metabolizm i dawki suplementów"
+															: "Age affects metabolism and supplement dosages"
+													}
 													{...field}
-													onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+													onChange={(e) =>
+														field.onChange(Number.parseInt(e.target.value) || 0)
+													}
 												/>
 											</FormControl>
 											<FormMessage />
@@ -176,15 +241,29 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 										<FormItem>
 											<FormLabel>{isPolish ? "Płeć" : "Gender"}</FormLabel>
 											<FormControl>
-												<EnhancedSelect
-													placeholder={isPolish ? "Wybierz płeć" : "Select gender"}
-													options={[
-														{ value: "male", label: isPolish ? "Mężczyzna" : "Male" },
-														{ value: "female", label: isPolish ? "Kobieta" : "Female" },
-														{ value: "other", label: isPolish ? "Inna" : "Other" },
-													]}
-													{...field}
-												/>
+												<Select
+													value={field.value}
+													onValueChange={field.onChange}
+												>
+													<SelectTrigger>
+														<SelectValue
+															placeholder={
+																isPolish ? "Wybierz płeć" : "Select gender"
+															}
+														/>
+													</SelectTrigger>
+													<SelectContent>
+														<SelectItem value="male">
+															{isPolish ? "Mężczyzna" : "Male"}
+														</SelectItem>
+														<SelectItem value="female">
+															{isPolish ? "Kobieta" : "Female"}
+														</SelectItem>
+														<SelectItem value="other">
+															{isPolish ? "Inna" : "Other"}
+														</SelectItem>
+													</SelectContent>
+												</Select>
 											</FormControl>
 											<FormMessage />
 										</FormItem>
@@ -218,9 +297,17 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 													min={30}
 													max={300}
 													step={0.1}
-													tooltip={isPolish ? "Waga wpływa na dawki większości suplementów" : "Weight affects dosages for most supplements"}
+													tooltip={
+														isPolish
+															? "Waga wpływa na dawki większości suplementów"
+															: "Weight affects dosages for most supplements"
+													}
 													{...field}
-													onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+													onChange={(e) =>
+														field.onChange(
+															Number.parseFloat(e.target.value) || 0,
+														)
+													}
 												/>
 											</FormControl>
 											<FormMessage />
@@ -233,7 +320,9 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 									name="height"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>{isPolish ? "Wzrost (cm)" : "Height (cm)"}</FormLabel>
+											<FormLabel>
+												{isPolish ? "Wzrost (cm)" : "Height (cm)"}
+											</FormLabel>
 											<FormControl>
 												<EnhancedInput
 													type="number"
@@ -241,7 +330,9 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 													min={100}
 													max={250}
 													{...field}
-													onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+													onChange={(e) =>
+														field.onChange(Number.parseInt(e.target.value) || 0)
+													}
 												/>
 											</FormControl>
 											<FormMessage />
@@ -257,7 +348,9 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 									<FormItem>
 										<FormLabel className="flex items-center gap-2">
 											<Activity className="h-4 w-4" />
-											{isPolish ? "Poziom aktywności fizycznej" : "Physical Activity Level"}
+											{isPolish
+												? "Poziom aktywności fizycznej"
+												: "Physical Activity Level"}
 											<Tooltip>
 												<TooltipTrigger>
 													<Info className="h-4 w-4 text-muted-foreground" />
@@ -272,14 +365,27 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 											</Tooltip>
 										</FormLabel>
 										<FormControl>
-											<EnhancedSelect
-												placeholder={isPolish ? "Wybierz poziom aktywności" : "Select activity level"}
-												options={ACTIVITY_LEVELS.map((level) => ({
-													value: level.value,
-													label: isPolish ? level.label : level.englishLabel,
-												}))}
-												{...field}
-											/>
+											<Select
+												value={field.value}
+												onValueChange={field.onChange}
+											>
+												<SelectTrigger>
+													<SelectValue
+														placeholder={
+															isPolish
+																? "Wybierz poziom aktywności"
+																: "Select activity level"
+														}
+													/>
+												</SelectTrigger>
+												<SelectContent>
+													{ACTIVITY_LEVELS.map((level) => (
+														<SelectItem key={level.value} value={level.value}>
+															{isPolish ? level.label : level.englishLabel}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -287,24 +393,39 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 							/>
 
 							{/* Progress indicator for basic info */}
-							<div className="bg-muted/50 p-4 rounded-lg">
-								<div className="flex items-center justify-between mb-2">
-									<span className="text-sm font-medium">
+							<div className="rounded-lg bg-muted/50 p-4">
+								<div className="mb-2 flex items-center justify-between">
+									<span className="font-medium text-sm">
 										{isPolish ? "Ukończoność profilu" : "Profile completion"}
 									</span>
-									<span className="text-sm text-muted-foreground">
-										{Object.values(form.watch()).filter((value) =>
-											value !== undefined && value !== null && (typeof value !== "string" || value !== "")
-										).length}/5
+									<span className="text-muted-foreground text-sm">
+										{Math.min(
+											Object.values(form.watch()).filter(
+												(value) =>
+													value !== undefined &&
+													value !== null &&
+													(typeof value !== "string" || value.trim() !== ""),
+											).length,
+											5,
+										)}
+										/5
 									</span>
 								</div>
-								<div className="w-full bg-muted rounded-full h-2">
+								<div className="h-2 w-full rounded-full bg-muted">
 									<div
-										className="bg-gradient-to-r from-primary to-primary/80 h-2 rounded-full transition-all duration-300"
+										className="h-2 rounded-full bg-gradient-to-r from-primary to-primary/80 transition-all duration-300"
 										style={{
-											width: `${(Object.values(form.watch()).filter((value) =>
-												value !== undefined && value !== null && (typeof value !== "string" || value !== "")
-											).length / 5) * 100}%`
+											width: `${Math.min(
+												(Object.values(form.watch()).filter(
+													(value) =>
+														value !== undefined &&
+														value !== null &&
+														(typeof value !== "string" || value.trim() !== ""),
+												).length /
+													5) *
+													100,
+												100,
+											)}%`,
 										}}
 									/>
 								</div>
@@ -316,7 +437,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 					<Card className="border-2 border-amber-200 bg-gradient-to-br from-amber-50/50 to-transparent">
 						<CardHeader className="pb-4">
 							<CardTitle className="flex items-center gap-3 text-xl">
-								<div className="p-2 bg-amber-100 rounded-lg">
+								<div className="rounded-lg bg-amber-100 p-2">
 									<Heart className="h-6 w-6 text-amber-600" />
 								</div>
 								{isPolish ? "Stan zdrowia" : "Health Conditions"}
@@ -330,21 +451,29 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 						<CardContent className="space-y-4">
 							{/* Common conditions */}
 							<div className="space-y-2">
-								<Label>{isPolish ? "Powszechne schorzenia" : "Common Conditions"}</Label>
+								<Label>
+									{isPolish ? "Powszechne schorzenia" : "Common Conditions"}
+								</Label>
 								<div className="flex flex-wrap gap-2">
 									{COMMON_CONDITIONS.map((condition) => {
-										const isSelected = form.watch("healthConditions")?.includes(condition);
+										const isSelected = healthConditions?.includes(condition);
 										return (
 											<Button
 												key={condition}
 												variant={isSelected ? "default" : "outline"}
 												size="sm"
 												onClick={() => {
-													const currentConditions = form.watch("healthConditions") || [];
+													const currentConditions = healthConditions || [];
 													if (isSelected) {
-														form.setValue("healthConditions", currentConditions.filter(c => c !== condition));
+														form.setValue(
+															"healthConditions",
+															currentConditions.filter((c) => c !== condition),
+														);
 													} else {
-														form.setValue("healthConditions", [...currentConditions, condition]);
+														form.setValue("healthConditions", [
+															...currentConditions,
+															condition,
+														]);
 													}
 												}}
 											>
@@ -359,7 +488,11 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 
 							{/* Custom conditions */}
 							<div className="space-y-2">
-								<Label>{isPolish ? "Dodaj własne schorzenie" : "Add Custom Condition"}</Label>
+								<Label>
+									{isPolish
+										? "Dodaj własne schorzenie"
+										: "Add Custom Condition"}
+								</Label>
 								<div className="flex gap-2">
 									<Input
 										value={newCondition}
@@ -374,18 +507,29 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 							</div>
 
 							{/* Selected conditions */}
-							{form.watch("healthConditions") && form.watch("healthConditions").length > 0 && (
+							{healthConditions && healthConditions.length > 0 && (
 								<div className="space-y-2">
-									<Label>{isPolish ? "Wybrane schorzenia" : "Selected Conditions"}</Label>
+									<Label>
+										{isPolish ? "Wybrane schorzenia" : "Selected Conditions"}
+									</Label>
 									<div className="flex flex-wrap gap-2">
-										{form.watch("healthConditions").map((condition, index) => (
-											<Badge key={index} variant="secondary" className="flex items-center gap-1">
+										{healthConditions.map((condition, index) => (
+											<Badge
+												key={index}
+												variant="secondary"
+												className="flex items-center gap-1"
+											>
 												{condition}
 												<Button
 													variant="ghost"
 													size="sm"
-													className="h-auto p-0 ml-1"
-													onClick={() => removeCondition(index)}
+													className="ml-1 h-auto p-0"
+													onClick={() => {
+														const newConditions = healthConditions.filter(
+															(_, i) => i !== index,
+														);
+														setValue("healthConditions", newConditions);
+													}}
 												>
 													<X className="h-3 w-3" />
 												</Button>
@@ -401,7 +545,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 					<Card className="border-2 border-red-200 bg-gradient-to-br from-red-50/50 to-transparent">
 						<CardHeader className="pb-4">
 							<CardTitle className="flex items-center gap-3 text-xl">
-								<div className="p-2 bg-red-100 rounded-lg">
+								<div className="rounded-lg bg-red-100 p-2">
 									<Pill className="h-6 w-6 text-red-600" />
 								</div>
 								{isPolish ? "Aktualne leki" : "Current Medications"}
@@ -425,18 +569,29 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 								</Button>
 							</div>
 
-							{form.watch("currentMedications") && form.watch("currentMedications").length > 0 && (
+							{currentMedications && currentMedications.length > 0 && (
 								<div className="space-y-2">
-									<Label>{isPolish ? "Aktualne leki" : "Current Medications"}</Label>
+									<Label>
+										{isPolish ? "Aktualne leki" : "Current Medications"}
+									</Label>
 									<div className="flex flex-wrap gap-2">
-										{form.watch("currentMedications").map((medication, index) => (
-											<Badge key={index} variant="outline" className="flex items-center gap-1">
+										{currentMedications.map((medication, index) => (
+											<Badge
+												key={index}
+												variant="outline"
+												className="flex items-center gap-1"
+											>
 												{medication}
 												<Button
 													variant="ghost"
 													size="sm"
-													className="h-auto p-0 ml-1"
-													onClick={() => removeMedication(index)}
+													className="ml-1 h-auto p-0"
+													onClick={() => {
+														const newMedications = currentMedications.filter(
+															(_, i) => i !== index,
+														);
+														setValue("currentMedications", newMedications);
+													}}
 												>
 													<X className="h-3 w-3" />
 												</Button>
@@ -452,10 +607,12 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 					<Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50/50 to-transparent">
 						<CardHeader className="pb-4">
 							<CardTitle className="flex items-center gap-3 text-xl">
-								<div className="p-2 bg-orange-100 rounded-lg">
+								<div className="rounded-lg bg-orange-100 p-2">
 									<AlertCircle className="h-6 w-6 text-orange-600" />
 								</div>
-								{isPolish ? "Alergie i nietolerancje" : "Allergies & Intolerances"}
+								{isPolish
+									? "Alergie i nietolerancje"
+									: "Allergies & Intolerances"}
 							</CardTitle>
 							<CardDescription className="text-base">
 								{isPolish
@@ -476,18 +633,27 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 								</Button>
 							</div>
 
-							{form.watch("allergies") && form.watch("allergies").length > 0 && (
+							{allergies && allergies.length > 0 && (
 								<div className="space-y-2">
 									<Label>{isPolish ? "Alergie" : "Allergies"}</Label>
 									<div className="flex flex-wrap gap-2">
-										{form.watch("allergies").map((allergy, index) => (
-											<Badge key={index} variant="destructive" className="flex items-center gap-1">
+										{allergies.map((allergy, index) => (
+											<Badge
+												key={index}
+												variant="destructive"
+												className="flex items-center gap-1"
+											>
 												{allergy}
 												<Button
 													variant="ghost"
 													size="sm"
-													className="h-auto p-0 ml-1"
-													onClick={() => removeAllergy(index)}
+													className="ml-1 h-auto p-0"
+													onClick={() => {
+														const newAllergies = allergies.filter(
+															(_, i) => i !== index,
+														);
+														setValue("allergies", newAllergies);
+													}}
 												>
 													<X className="h-3 w-3" />
 												</Button>
@@ -503,7 +669,7 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 					<Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50/50 to-transparent">
 						<CardHeader className="pb-4">
 							<CardTitle className="flex items-center gap-3 text-xl">
-								<div className="p-2 bg-purple-100 rounded-lg">
+								<div className="rounded-lg bg-purple-100 p-2">
 									<Info className="h-6 w-6 text-purple-600" />
 								</div>
 								{isPolish ? "Specjalne okoliczności" : "Special Circumstances"}
@@ -526,7 +692,9 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 												onCheckedChange={field.onChange}
 											/>
 										</FormControl>
-										<FormLabel>{isPolish ? "Jestem w ciąży" : "I am pregnant"}</FormLabel>
+										<FormLabel>
+											{isPolish ? "Jestem w ciąży" : "I am pregnant"}
+										</FormLabel>
 									</FormItem>
 								)}
 							/>
@@ -542,7 +710,9 @@ export function UserProfileStep({ userProfile, onUserProfileChange, isPolish }: 
 												onCheckedChange={field.onChange}
 											/>
 										</FormControl>
-										<FormLabel>{isPolish ? "Karmię piersią" : "I am breastfeeding"}</FormLabel>
+										<FormLabel>
+											{isPolish ? "Karmię piersią" : "I am breastfeeding"}
+										</FormLabel>
 									</FormItem>
 								)}
 							/>

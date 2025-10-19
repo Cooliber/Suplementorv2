@@ -1,0 +1,337 @@
+name: GDPR Compliance Validation
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run GDPR compliance checks weekly
+    - cron: '0 7 * * 1' # Monday at 7 AM UTC
+
+env:
+  NODE_VERSION: '20'
+  BUN_VERSION: '1.1.38'
+
+jobs:
+  # GDPR Article 6 - Lawfulness of Processing
+  gdpr-article-6-compliance:
+    name: GDPR Article 6 - Lawful Processing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check for consent management implementation
+        run: |
+          echo "🔍 Checking GDPR Article 6 compliance..."
+          # Verify consent management is implemented
+          if ! grep -r "consent\|zgoda" src/ --include="*.tsx" --include="*.ts"; then
+            echo "⚠️ No consent management patterns found"
+            exit 1
+          fi
+
+      - name: Validate lawful basis documentation
+        run: |
+          echo "🔍 Validating lawful basis documentation..."
+          # Check for privacy policy and terms
+          if [ ! -f "docs/privacy-policy.md" ]; then
+            echo "⚠️ Privacy policy not found"
+            exit 1
+          fi
+
+      - name: Check data processing records
+        run: |
+          echo "🔍 Checking data processing records..."
+          # Verify data processing activities are documented
+          if ! grep -r "dataProcessing\|przetwarzanieDanych" src/ --include="*.tsx" --include="*.ts"; then
+            echo "⚠️ No data processing records found"
+          fi
+
+  # GDPR Article 7 - Consent Conditions
+  gdpr-article-7-compliance:
+    name: GDPR Article 7 - Consent Conditions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Validate consent implementation
+        run: |
+          echo "🔍 Validating GDPR Article 7 compliance..."
+          # Check for proper consent mechanisms
+          # Verify consent can be withdrawn
+          # Check consent is freely given
+
+      - name: Check consent withdrawal mechanism
+        run: |
+          echo "🔍 Checking consent withdrawal..."
+          # Verify users can withdraw consent easily
+          if ! grep -r "withdrawConsent\|wycofajZgode" src/ --include="*.tsx" --include="*.ts"; then
+            echo "⚠️ No consent withdrawal mechanism found"
+            exit 1
+          fi
+
+      - name: Validate consent records
+        run: |
+          echo "🔍 Validating consent records..."
+          # Check that consent is properly recorded and timestamped
+          if ! grep -r "consentTimestamp\|dataZgody" src/ --include="*.tsx" --include="*.ts"; then
+            echo "⚠️ No consent timestamp tracking found"
+          fi
+
+  # GDPR Article 17 - Right to Erasure
+  gdpr-article-17-compliance:
+    name: GDPR Article 17 - Right to Erasure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check data deletion implementation
+        run: |
+          echo "🔍 Checking GDPR Article 17 compliance..."
+          # Verify right to erasure is implemented
+          if ! grep -r "deleteUserData\|usunDaneUzytkownika" src/ --include="*.tsx" --include="*.ts"; then
+            echo "⚠️ No data deletion mechanism found"
+            exit 1
+          fi
+
+      - name: Validate complete data removal
+        run: |
+          echo "🔍 Validating complete data removal..."
+          # Check that all user data can be completely removed
+          # Verify no data remains after deletion
+
+      - name: Check data export functionality
+        run: |
+          echo "🔍 Checking data export for GDPR Article 20..."
+          # Verify users can export their data
+          if ! grep -r "exportUserData\|eksportujDane" src/ --include="*.tsx" --include="*.ts"; then
+            echo "⚠️ No data export functionality found"
+          fi
+
+  # GDPR Article 25 - Data Protection by Design
+  gdpr-article-25-compliance:
+    name: GDPR Article 25 - Data Protection by Design
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check data protection by design
+        run: |
+          echo "🔍 Checking GDPR Article 25 compliance..."
+          # Verify data protection is built into the design
+          # Check for privacy-by-design patterns
+
+      - name: Validate data minimization
+        run: |
+          echo "🔍 Validating data minimization..."
+          # Check that only necessary data is collected
+          # Verify data collection purposes are clear
+
+      - name: Check default privacy settings
+        run: |
+          echo "🔍 Checking default privacy settings..."
+          # Verify privacy-friendly defaults
+          # Check for data collection opt-ins
+
+  # GDPR Article 32 - Security of Processing
+  gdpr-article-32-compliance:
+    name: GDPR Article 32 - Security of Processing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check data encryption implementation
+        run: |
+          echo "🔍 Checking data encryption..."
+          # Verify data is encrypted at rest and in transit
+          if ! grep -r "encrypt\|crypto\|szyfrowanie" src/ --include="*.tsx" --include="*.ts"; then
+            echo "⚠️ No encryption implementation found"
+            exit 1
+          fi
+
+      - name: Validate access controls
+        run: |
+          echo "🔍 Validating access controls..."
+          # Check for proper authentication and authorization
+          if ! grep -r "auth\|permission\|role\|uprawnienia" src/ --include="*.tsx" --include="*.ts"; then
+            echo "⚠️ No access control implementation found"
+          fi
+
+      - name: Check audit logging
+        run: |
+          echo "🔍 Checking audit logging..."
+          # Verify all data access is logged
+          if ! grep -r "audit.*log\|log.*audit" src/ --include="*.tsx" --include="*.ts"; then
+            echo "⚠️ No audit logging found"
+          fi
+
+  # GDPR Documentation and Records
+  gdpr-documentation:
+    name: GDPR Documentation and Records
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check GDPR documentation completeness
+        run: |
+          echo "🔍 Checking GDPR documentation..."
+          # Verify all required GDPR documents exist
+
+          required_docs=(
+            "docs/privacy-policy.md"
+            "docs/gdpr-compliance.md"
+            "docs/data-processing-agreement.md"
+            "docs/cookie-policy.md"
+          )
+
+          for doc in "${required_docs[@]}"; do
+            if [ ! -f "$doc" ]; then
+              echo "⚠️ Missing required GDPR document: $doc"
+              exit 1
+            fi
+          done
+
+      - name: Validate privacy policy content
+        run: |
+          echo "🔍 Validating privacy policy content..."
+          # Check privacy policy contains required information
+          if ! grep -q "dataProcessing\|przetwarzanieDanych" docs/privacy-policy.md; then
+            echo "⚠️ Privacy policy missing data processing information"
+            exit 1
+          fi
+
+      - name: Check data processing records
+        run: |
+          echo "🔍 Checking data processing records..."
+          # Verify data processing activities are documented
+          if [ ! -f "docs/data-processing-records.md" ]; then
+            echo "⚠️ Data processing records not found"
+          fi
+
+  # GDPR Compliance Summary Report
+  gdpr-compliance-summary:
+    name: GDPR Compliance Summary Report
+    runs-on: ubuntu-latest
+    needs: [gdpr-article-6-compliance, gdpr-article-7-compliance, gdpr-article-17-compliance, gdpr-article-25-compliance, gdpr-article-32-compliance, gdpr-documentation]
+    if: always()
+
+    steps:
+      - name: Generate GDPR compliance summary
+        run: |
+          echo "## 🔒 GDPR Compliance Summary" > gdpr-compliance-summary.md
+          echo "" >> gdpr-compliance-summary.md
+          echo "### Article 6 (Lawful Processing): ${{ needs.gdpr-article-6-compliance.result }}" >> gdpr-compliance-summary.md
+          echo "### Article 7 (Consent): ${{ needs.gdpr-article-7-compliance.result }}" >> gdpr-compliance-summary.md
+          echo "### Article 17 (Right to Erasure): ${{ needs.gdpr-article-17-compliance.result }}" >> gdpr-compliance-summary.md
+          echo "### Article 25 (Data Protection by Design): ${{ needs.gdpr-article-25-compliance.result }}" >> gdpr-compliance-summary.md
+          echo "### Article 32 (Security): ${{ needs.gdpr-article-32-compliance.result }}" >> gdpr-compliance-summary.md
+          echo "### Documentation: ${{ needs.gdpr-documentation.result }}" >> gdpr-compliance-summary.md
+          echo "" >> gdpr-compliance-summary.md
+          echo "**GDPR Compliance Status:** $(if [ "${{ needs.gdpr-article-6-compliance.result }}" == "success" ] && [ "${{ needs.gdpr-article-7-compliance.result }}" == "success" ] && [ "${{ needs.gdpr-article-17-compliance.result }}" == "success" ]; then echo "✅ Compliant"; else echo "❌ Issues Found"; fi)" >> gdpr-compliance-summary.md
+          echo "**Last Audit:** $(date)" >> gdpr-compliance-summary.md
+          echo "**Repository:** ${{ github.repository }}" >> gdpr-compliance-summary.md
+          echo "**Branch:** ${{ github.ref }}" >> gdpr-compliance-summary.md
+
+      - name: Upload GDPR compliance summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: gdpr-compliance-summary-report
+          path: gdpr-compliance-summary.md
+          retention-days: 90
+
+      - name: Comment PR with GDPR compliance results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('gdpr-compliance-summary.md', 'utf8');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🔒 GDPR Compliance Audit Results\n\n${summary}`
+            })

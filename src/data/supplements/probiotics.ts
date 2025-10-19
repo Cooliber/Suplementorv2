@@ -10,8 +10,16 @@ export const probioticsProfile: SupplementWithRelations = {
 	name: "Probiotics",
 	polishName: "Probiotyki",
 	scientificName: "Live microorganisms",
-	commonNames: ["Probiotic bacteria", "Beneficial bacteria", "Microbiome support"],
-	polishCommonNames: ["Bakterie probiotyczne", "Bakterie korzystne", "Wsparcie mikrobiomu"],
+	commonNames: [
+		"Probiotic bacteria",
+		"Beneficial bacteria",
+		"Microbiome support",
+	],
+	polishCommonNames: [
+		"Bakterie probiotyczne",
+		"Bakterie korzystne",
+		"Wsparcie mikrobiomu",
+	],
 	category: "PROBIOTIC",
 	description:
 		"Probiotics are live microorganisms that, when administered in adequate amounts, confer health benefits to the host. They primarily support gut health, immune function, and may influence various physiological processes through the gut-brain axis.",
@@ -26,7 +34,11 @@ export const probioticsProfile: SupplementWithRelations = {
 			concentration: "10^9 CFU",
 			bioavailability: 40,
 			halfLife: "Transient colonization",
-			metabolicPathway: ["Lactic acid production", "Gut barrier maintenance", "Immune modulation"],
+			metabolicPathway: [
+				"Lactic acid production",
+				"Gut barrier maintenance",
+				"Immune modulation",
+			],
 			targetReceptors: ["Toll-like receptors", "Intestinal epithelial cells"],
 		},
 		{
@@ -35,7 +47,10 @@ export const probioticsProfile: SupplementWithRelations = {
 			concentration: "10^9 CFU",
 			bioavailability: 35,
 			halfLife: "Transient colonization",
-			metabolicPathway: ["Short-chain fatty acid production", "Gut-brain axis signaling"],
+			metabolicPathway: [
+				"Short-chain fatty acid production",
+				"Gut-brain axis signaling",
+			],
 			targetReceptors: ["Vagal nerve receptors", "Enteric nervous system"],
 		},
 		{
@@ -54,8 +69,10 @@ export const probioticsProfile: SupplementWithRelations = {
 		{
 			condition: "Digestive health and IBS",
 			polishCondition: "Zdrowie trawienne i IBS",
-			indication: "Management of irritable bowel syndrome and digestive disorders",
-			polishIndication: "Zarządzanie zespołem jelita drażliwego i zaburzeniami trawiennymi",
+			indication:
+				"Management of irritable bowel syndrome and digestive disorders",
+			polishIndication:
+				"Zarządzanie zespołem jelita drażliwego i zaburzeniami trawiennymi",
 			efficacy: "moderate",
 			effectivenessRating: 7,
 			evidenceLevel: "MODERATE",
@@ -70,7 +87,8 @@ export const probioticsProfile: SupplementWithRelations = {
 			condition: "Immune system support",
 			polishCondition: "Wsparcie układu odpornościowego",
 			indication: "Enhancement of immune function and infection prevention",
-			polishIndication: "Wzmocnienie funkcji immunologicznej i zapobieganie infekcjom",
+			polishIndication:
+				"Wzmocnienie funkcji immunologicznej i zapobieganie infekcjom",
 			efficacy: "moderate",
 			effectivenessRating: 6,
 			evidenceLevel: "MODERATE",
@@ -99,8 +117,10 @@ export const probioticsProfile: SupplementWithRelations = {
 		{
 			condition: "Antibiotic-associated diarrhea",
 			polishCondition: "Biegunka związana z antybiotykami",
-			indication: "Prevention and treatment of antibiotic-induced digestive issues",
-			polishIndication: "Zapobieganie i leczenie problemów trawiennych wywołanych antybiotykami",
+			indication:
+				"Prevention and treatment of antibiotic-induced digestive issues",
+			polishIndication:
+				"Zapobieganie i leczenie problemów trawiennych wywołanych antybiotykami",
 			efficacy: "high",
 			effectivenessRating: 8,
 			evidenceLevel: "STRONG",
@@ -186,8 +206,16 @@ export const probioticsProfile: SupplementWithRelations = {
 		},
 		timing: ["with_meal"],
 		withFood: true,
-		contraindications: ["Immunocompromised state", "Critical illness", "Central venous catheters"],
-		polishContraindications: ["Stan immunosupresji", "Choroba krytyczna", "Cewniki centralne"],
+		contraindications: [
+			"Immunocompromised state",
+			"Critical illness",
+			"Central venous catheters",
+		],
+		polishContraindications: [
+			"Stan immunosupresji",
+			"Choroba krytyczna",
+			"Cewniki centralne",
+		],
 		interactions: [
 			{
 				substance: "Antibiotics",
@@ -199,9 +227,11 @@ export const probioticsProfile: SupplementWithRelations = {
 				clinicalSignificance: "Reduced probiotic effectiveness",
 				polishClinicalSignificance: "Zmniejszona skuteczność probiotyków",
 				mechanism: "Direct antimicrobial action against bacteria",
-				polishMechanism: "Bezpośrednie działanie przeciwbakteryjne przeciwko bakteriom",
+				polishMechanism:
+					"Bezpośrednie działanie przeciwbakteryjne przeciwko bakteriom",
 				recommendation: "Take probiotics 2-3 hours apart from antibiotics",
-				polishRecommendation: "Przyjmuj probiotyki 2-3 godziny po antybiotykach",
+				polishRecommendation:
+					"Przyjmuj probiotyki 2-3 godziny po antybiotykach",
 				evidenceLevel: "STRONG",
 			},
 		],
@@ -256,11 +286,14 @@ export const probioticsProfile: SupplementWithRelations = {
 			type: "antagonistic",
 			severity: "moderate",
 			description: "Immunosuppressants may reduce probiotic effectiveness",
-			polishDescription: "Leki immunosupresyjne mogą zmniejszać skuteczność probiotyków",
+			polishDescription:
+				"Leki immunosupresyjne mogą zmniejszać skuteczność probiotyków",
 			clinicalSignificance: "Potential infection risk in immunocompromised",
-			polishClinicalSignificance: "Potencjalne ryzyko infekcji u osób z immunosupresją",
+			polishClinicalSignificance:
+				"Potencjalne ryzyko infekcji u osób z immunosupresją",
 			mechanism: "Suppressed immune response to probiotic colonization",
-			polishMechanism: "Stłumiona odpowiedź immunologiczna na kolonizację probiotyków",
+			polishMechanism:
+				"Stłumiona odpowiedź immunologiczna na kolonizację probiotyków",
 			recommendation: "Use caution in immunocompromised individuals",
 			polishRecommendation: "Ostrożność u osób z immunosupresją",
 			evidenceLevel: "WEAK",
@@ -272,8 +305,10 @@ export const probioticsProfile: SupplementWithRelations = {
 	researchStudies: [
 		{
 			id: "ford-2014",
-			title: "Efficacy of probiotics in irritable bowel syndrome: systematic review and meta-analysis",
-			polishTitle: "Skuteczność probiotyków w zespole jelita drażliwego: przegląd systematyczny i meta-analiza",
+			title:
+				"Efficacy of probiotics in irritable bowel syndrome: systematic review and meta-analysis",
+			polishTitle:
+				"Skuteczność probiotyków w zespole jelita drażliwego: przegląd systematyczny i meta-analiza",
 			authors: ["Ford AC", "Quigley EM", "Lacy BE"],
 			journal: "American Journal of Gastroenterology",
 			year: 2014,
@@ -291,15 +326,18 @@ export const probioticsProfile: SupplementWithRelations = {
 		},
 		{
 			id: "ritchie-2012",
-			title: "The gut-brain axis and the microbiome: mechanisms and clinical implications",
-			polishTitle: "Oś jelitowo-mózgowa i mikrobiom: mechanizmy i implikacje kliniczne",
+			title:
+				"The gut-brain axis and the microbiome: mechanisms and clinical implications",
+			polishTitle:
+				"Oś jelitowo-mózgowa i mikrobiom: mechanizmy i implikacje kliniczne",
 			authors: ["Ritchie ML", "Romanuk TN"],
 			journal: "Critical Care Medicine",
 			year: 2012,
 			studyType: "SYSTEMATIC_REVIEW",
 			primaryOutcome: "Gut-brain axis mechanisms",
 			polishPrimaryOutcome: "Mechanizmy osi jelitowo-mózgowej",
-			findings: "Microbiome influences brain function through multiple pathways",
+			findings:
+				"Microbiome influences brain function through multiple pathways",
 			polishFindings: "Mikrobiom wpływa na funkcję mózgu poprzez wiele ścieżek",
 			evidenceLevel: "MODERATE",
 			lastUpdated: "2024-01-15T00:00:00Z",

@@ -31,12 +31,12 @@ import {
 	Area,
 	AreaChart,
 	Bar,
-	BarChart as RechartsBarChart,
 	CartesianGrid,
 	Cell,
 	Line,
-	LineChart as RechartsLineChart,
 	Pie,
+	BarChart as RechartsBarChart,
+	LineChart as RechartsLineChart,
 	PieChart as RechartsPieChart,
 	ResponsiveContainer,
 	Tooltip,
@@ -131,7 +131,9 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 	};
 
 	const getFrequencyColor = (frequency: string) => {
-		return frequencyColors[frequency as keyof typeof frequencyColors] || "#6B7280";
+		return (
+			frequencyColors[frequency as keyof typeof frequencyColors] || "#6B7280"
+		);
 	};
 
 	const getSeverityColor = (severity: string) => {
@@ -155,7 +157,7 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 	// Get current supplement data
 	const currentSupplement = useMemo(() => {
 		if (selectedSupplement) {
-			return data.find(item => item.supplementId === selectedSupplement);
+			return data.find((item) => item.supplementId === selectedSupplement);
 		}
 		return data[0];
 	}, [data, selectedSupplement]);
@@ -164,7 +166,10 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 	const dosageCalculation = useMemo(() => {
 		if (!currentSupplement) return null;
 
-		const baseDose = (currentSupplement.recommendedDose.min + currentSupplement.recommendedDose.max) / 2;
+		const baseDose =
+			(currentSupplement.recommendedDose.min +
+				currentSupplement.recommendedDose.max) /
+			2;
 		let adjustedDose = baseDose;
 
 		// Weight-based adjustment (simplified)
@@ -191,7 +196,7 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 	const sideEffectsData = useMemo(() => {
 		if (!currentSupplement) return [];
 
-		return currentSupplement.sideEffects.map(effect => ({
+		return currentSupplement.sideEffects.map((effect) => ({
 			effect: effect.polishEffect,
 			frequency: effect.frequency,
 			severity: effect.severity,
@@ -205,10 +210,31 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 		if (!currentSupplement) return [];
 
 		return [
-			{ category: "Ryzyko ogólne", value: currentSupplement.overallRisk === "low" ? 25 : currentSupplement.overallRisk === "medium" ? 50 : 75, color: getRiskColor(currentSupplement.overallRisk) },
-			{ category: "Ryzyko wątrobowe", value: currentSupplement.hepaticRisk ? 60 : 20, color: currentSupplement.hepaticRisk ? "#EF4444" : "#10B981" },
-			{ category: "Ryzyko nerkowe", value: currentSupplement.renalRisk ? 60 : 20, color: currentSupplement.renalRisk ? "#EF4444" : "#10B981" },
-			{ category: "Ryzyko sercowe", value: currentSupplement.cardiacRisk ? 60 : 20, color: currentSupplement.cardiacRisk ? "#EF4444" : "#10B981" },
+			{
+				category: "Ryzyko ogólne",
+				value:
+					currentSupplement.overallRisk === "low"
+						? 25
+						: currentSupplement.overallRisk === "medium"
+							? 50
+							: 75,
+				color: getRiskColor(currentSupplement.overallRisk),
+			},
+			{
+				category: "Ryzyko wątrobowe",
+				value: currentSupplement.hepaticRisk ? 60 : 20,
+				color: currentSupplement.hepaticRisk ? "#EF4444" : "#10B981",
+			},
+			{
+				category: "Ryzyko nerkowe",
+				value: currentSupplement.renalRisk ? 60 : 20,
+				color: currentSupplement.renalRisk ? "#EF4444" : "#10B981",
+			},
+			{
+				category: "Ryzyko sercowe",
+				value: currentSupplement.cardiacRisk ? 60 : 20,
+				color: currentSupplement.cardiacRisk ? "#EF4444" : "#10B981",
+			},
 		];
 	}, [currentSupplement]);
 
@@ -219,7 +245,8 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 				<div className="rounded-lg border bg-white p-3 shadow-lg">
 					<p className="mb-2 font-medium text-sm">{label}</p>
 					<p className="text-xs">
-						<span style={{ color: payload[0].color }}>Wartość:</span> {payload[0].value}%
+						<span style={{ color: payload[0].color }}>Wartość:</span>{" "}
+						{payload[0].value}%
 					</p>
 				</div>
 			);
@@ -245,13 +272,19 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 						<Calculator className="h-5 w-5" />
 						Kalkulator dawkowania i bezpieczeństwo
 					</CardTitle>
-					<Select value={selectedSupplement || currentSupplement.supplementId} onValueChange={onSupplementChange}>
+					<Select
+						value={selectedSupplement || currentSupplement.supplementId}
+						onValueChange={onSupplementChange}
+					>
 						<SelectTrigger className="w-64">
 							<SelectValue />
 						</SelectTrigger>
 						<SelectContent>
-							{data.map(supplement => (
-								<SelectItem key={supplement.supplementId} value={supplement.supplementId}>
+							{data.map((supplement) => (
+								<SelectItem
+									key={supplement.supplementId}
+									value={supplement.supplementId}
+								>
 									{supplement.polishName}
 								</SelectItem>
 							))}
@@ -286,7 +319,9 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 							{/* User Parameters */}
 							<Card>
 								<CardHeader>
-									<CardTitle className="text-base">Parametry użytkownika</CardTitle>
+									<CardTitle className="text-base">
+										Parametry użytkownika
+									</CardTitle>
 								</CardHeader>
 								<CardContent className="space-y-4">
 									<div>
@@ -313,15 +348,24 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 									</div>
 									<div>
 										<Label htmlFor="condition">Stan zdrowia</Label>
-										<Select value={userCondition} onValueChange={setUserCondition}>
+										<Select
+											value={userCondition}
+											onValueChange={setUserCondition}
+										>
 											<SelectTrigger>
 												<SelectValue />
 											</SelectTrigger>
 											<SelectContent>
 												<SelectItem value="healthy">Zdrowy</SelectItem>
-												<SelectItem value="liver-disease">Choroba wątroby</SelectItem>
-												<SelectItem value="kidney-disease">Choroba nerek</SelectItem>
-												<SelectItem value="heart-disease">Choroba serca</SelectItem>
+												<SelectItem value="liver-disease">
+													Choroba wątroby
+												</SelectItem>
+												<SelectItem value="kidney-disease">
+													Choroba nerek
+												</SelectItem>
+												<SelectItem value="heart-disease">
+													Choroba serca
+												</SelectItem>
 												<SelectItem value="pregnant">Ciąża</SelectItem>
 											</SelectContent>
 										</Select>
@@ -338,8 +382,9 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 									{dosageCalculation && (
 										<div className="space-y-4">
 											<div className="text-center">
-												<p className="text-3xl font-bold text-blue-600">
-													{dosageCalculation.recommended} {dosageCalculation.unit}
+												<p className="font-bold text-3xl text-blue-600">
+													{dosageCalculation.recommended}{" "}
+													{dosageCalculation.unit}
 												</p>
 												<p className="text-gray-600 text-sm">dziennie</p>
 											</div>
@@ -347,18 +392,28 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 											<div className="space-y-2">
 												<div className="flex justify-between text-sm">
 													<span>Zakres:</span>
-													<span>{dosageCalculation.min} - {dosageCalculation.max} {dosageCalculation.unit}</span>
+													<span>
+														{dosageCalculation.min} - {dosageCalculation.max}{" "}
+														{dosageCalculation.unit}
+													</span>
 												</div>
 												<Progress
-													value={((dosageCalculation.recommended - dosageCalculation.min) / (dosageCalculation.max - dosageCalculation.min)) * 100}
+													value={
+														((dosageCalculation.recommended -
+															dosageCalculation.min) /
+															(dosageCalculation.max - dosageCalculation.min)) *
+														100
+													}
 													className="h-2"
 												/>
 											</div>
 
 											{currentSupplement.safeUpperLimit && (
 												<div className="rounded-lg bg-yellow-50 p-3">
-													<p className="text-yellow-800 text-sm">
-														<strong>Bezpieczny górny limit:</strong> {currentSupplement.safeUpperLimit} {currentSupplement.recommendedDose.unit}
+													<p className="text-sm text-yellow-800">
+														<strong>Bezpieczny górny limit:</strong>{" "}
+														{currentSupplement.safeUpperLimit}{" "}
+														{currentSupplement.recommendedDose.unit}
 													</p>
 												</div>
 											)}
@@ -366,7 +421,9 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 											{currentSupplement.toxicityThreshold && (
 												<div className="rounded-lg bg-red-50 p-3">
 													<p className="text-red-800 text-sm">
-														<strong>Próg toksyczności:</strong> {currentSupplement.toxicityThreshold} {currentSupplement.recommendedDose.unit}
+														<strong>Próg toksyczności:</strong>{" "}
+														{currentSupplement.toxicityThreshold}{" "}
+														{currentSupplement.recommendedDose.unit}
 													</p>
 												</div>
 											)}
@@ -386,10 +443,18 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 								</CardHeader>
 								<CardContent>
 									<ResponsiveContainer width="100%" height={300}>
-										<RechartsBarChart data={riskProfileData} layout="horizontal">
+										<RechartsBarChart
+											data={riskProfileData}
+											layout="horizontal"
+										>
 											<CartesianGrid strokeDasharray="3 3" />
 											<XAxis type="number" domain={[0, 100]} />
-											<YAxis type="category" dataKey="category" width={100} tick={{ fontSize: 12 }} />
+											<YAxis
+												type="category"
+												dataKey="category"
+												width={100}
+												tick={{ fontSize: 12 }}
+											/>
 											<Tooltip content={<CustomTooltip />} />
 											<Bar dataKey="value" radius={[0, 4, 4, 0]}>
 												{riskProfileData.map((entry, index) => (
@@ -404,7 +469,9 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 							{/* Population Safety */}
 							<Card>
 								<CardHeader>
-									<CardTitle className="text-base">Bezpieczeństwo dla grup</CardTitle>
+									<CardTitle className="text-base">
+										Bezpieczeństwo dla grup
+									</CardTitle>
 								</CardHeader>
 								<CardContent>
 									<div className="space-y-4">
@@ -426,18 +493,26 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 										<div className="flex items-center justify-between">
 											<span className="font-medium text-sm">Dzieci</span>
 											{currentSupplement.safeForChildren ? (
-												<Badge className="bg-green-100 text-green-800">Bezpieczny</Badge>
+												<Badge className="bg-green-100 text-green-800">
+													Bezpieczny
+												</Badge>
 											) : (
-												<Badge className="bg-red-100 text-red-800">Niebezpieczny</Badge>
+												<Badge className="bg-red-100 text-red-800">
+													Niebezpieczny
+												</Badge>
 											)}
 										</div>
 
 										<div className="flex items-center justify-between">
 											<span className="font-medium text-sm">Osoby starsze</span>
 											{currentSupplement.safeForElderly ? (
-												<Badge className="bg-green-100 text-green-800">Bezpieczny</Badge>
+												<Badge className="bg-green-100 text-green-800">
+													Bezpieczny
+												</Badge>
 											) : (
-												<Badge className="bg-red-100 text-red-800">Niebezpieczny</Badge>
+												<Badge className="bg-red-100 text-red-800">
+													Niebezpieczny
+												</Badge>
 											)}
 										</div>
 									</div>
@@ -446,14 +521,28 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 										<h4 className="mb-3 font-medium text-sm">Ogólne ryzyko</h4>
 										<div className="flex items-center gap-2">
 											<Progress
-												value={currentSupplement.overallRisk === "low" ? 25 : currentSupplement.overallRisk === "medium" ? 50 : 75}
+												value={
+													currentSupplement.overallRisk === "low"
+														? 25
+														: currentSupplement.overallRisk === "medium"
+															? 50
+															: 75
+												}
 												className="h-3 flex-1"
 											/>
 											<Badge
-												style={{ backgroundColor: getRiskColor(currentSupplement.overallRisk) }}
+												style={{
+													backgroundColor: getRiskColor(
+														currentSupplement.overallRisk,
+													),
+												}}
 												className="text-white"
 											>
-												{currentSupplement.overallRisk === "low" ? "Niskie" : currentSupplement.overallRisk === "medium" ? "Średnie" : "Wysokie"}
+												{currentSupplement.overallRisk === "low"
+													? "Niskie"
+													: currentSupplement.overallRisk === "medium"
+														? "Średnie"
+														: "Wysokie"}
 											</Badge>
 										</div>
 									</div>
@@ -473,19 +562,39 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 										{sideEffectsData.map((effect, index) => (
 											<div key={index} className="rounded-lg border p-4">
 												<div className="mb-3 flex items-center justify-between">
-													<h4 className="font-medium text-sm">{effect.effect}</h4>
+													<h4 className="font-medium text-sm">
+														{effect.effect}
+													</h4>
 													<div className="flex items-center gap-2">
 														<Badge
-															style={{ backgroundColor: getFrequencyColor(effect.frequency) }}
+															style={{
+																backgroundColor: getFrequencyColor(
+																	effect.frequency,
+																),
+															}}
 															className="text-white text-xs"
 														>
-															{effect.frequency === "common" ? "Częste" : effect.frequency === "uncommon" ? "Niezbyt częste" : effect.frequency === "rare" ? "Rzadkie" : "Bardzo rzadkie"}
+															{effect.frequency === "common"
+																? "Częste"
+																: effect.frequency === "uncommon"
+																	? "Niezbyt częste"
+																	: effect.frequency === "rare"
+																		? "Rzadkie"
+																		: "Bardzo rzadkie"}
 														</Badge>
 														<Badge
-															style={{ backgroundColor: getSeverityColor(effect.severity) }}
+															style={{
+																backgroundColor: getSeverityColor(
+																	effect.severity,
+																),
+															}}
 															className="text-white text-xs"
 														>
-															{effect.severity === "mild" ? "Łagodne" : effect.severity === "moderate" ? "Umiarkowane" : "Ciężkie"}
+															{effect.severity === "mild"
+																? "Łagodne"
+																: effect.severity === "moderate"
+																	? "Umiarkowane"
+																	: "Ciężkie"}
 														</Badge>
 													</div>
 												</div>
@@ -493,7 +602,8 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 												{effect.dosageDependent && (
 													<div className="rounded-lg bg-blue-50 p-2">
 														<p className="text-blue-800 text-xs">
-															⚠️ Zależne od dawki - wyższe dawki zwiększają ryzyko
+															⚠️ Zależne od dawki - wyższe dawki zwiększają
+															ryzyko
 														</p>
 													</div>
 												)}
@@ -501,7 +611,7 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 										))}
 									</div>
 								) : (
-									<div className="text-center text-gray-600 py-8">
+									<div className="py-8 text-center text-gray-600">
 										<ShieldCheck className="mx-auto mb-2 h-8 w-8 text-green-500" />
 										<p>Brak zgłoszonych skutków ubocznych</p>
 									</div>
@@ -513,52 +623,78 @@ const DosageSafetyVisualization: React.FC<DosageSafetyVisualizationProps> = ({
 					<TabsContent value="interactions" className="mt-6">
 						<Card>
 							<CardHeader>
-								<CardTitle className="text-base">Interakcje i przeciwwskazania</CardTitle>
+								<CardTitle className="text-base">
+									Interakcje i przeciwwskazania
+								</CardTitle>
 							</CardHeader>
 							<CardContent>
-								{currentSupplement.interactions.length > 0 || currentSupplement.contraindications.length > 0 ? (
+								{currentSupplement.interactions.length > 0 ||
+								currentSupplement.contraindications.length > 0 ? (
 									<div className="space-y-6">
 										{currentSupplement.interactions.length > 0 && (
 											<div>
-												<h4 className="mb-3 font-medium text-sm">Interakcje z innymi substancjami</h4>
+												<h4 className="mb-3 font-medium text-sm">
+													Interakcje z innymi substancjami
+												</h4>
 												<div className="space-y-2">
-													{currentSupplement.interactions.map((interaction, index) => (
-														<div key={index} className="flex items-center justify-between rounded-lg border p-3">
-															<span className="font-medium text-sm">{interaction.polishSubstance}</span>
-															<Badge
-																className={cn(
-																	"text-white text-xs",
-																	interaction.severity === "severe" && "bg-red-500",
-																	interaction.severity === "moderate" && "bg-yellow-500",
-																	interaction.severity === "minor" && "bg-blue-500"
-																)}
+													{currentSupplement.interactions.map(
+														(interaction, index) => (
+															<div
+																key={index}
+																className="flex items-center justify-between rounded-lg border p-3"
 															>
-																{interaction.severity === "severe" ? "Ciężka" : interaction.severity === "moderate" ? "Umiarkowana" : "Łagodna"}
-															</Badge>
-														</div>
-													))}
+																<span className="font-medium text-sm">
+																	{interaction.polishSubstance}
+																</span>
+																<Badge
+																	className={cn(
+																		"text-white text-xs",
+																		interaction.severity === "severe" &&
+																			"bg-red-500",
+																		interaction.severity === "moderate" &&
+																			"bg-yellow-500",
+																		interaction.severity === "minor" &&
+																			"bg-blue-500",
+																	)}
+																>
+																	{interaction.severity === "severe"
+																		? "Ciężka"
+																		: interaction.severity === "moderate"
+																			? "Umiarkowana"
+																			: "Łagodna"}
+																</Badge>
+															</div>
+														),
+													)}
 												</div>
 											</div>
 										)}
 
 										{currentSupplement.contraindications.length > 0 && (
 											<div>
-												<h4 className="mb-3 font-medium text-sm">Przeciwwskazania</h4>
+												<h4 className="mb-3 font-medium text-sm">
+													Przeciwwskazania
+												</h4>
 												<div className="rounded-lg bg-red-50 p-4">
 													<ul className="space-y-1">
-														{currentSupplement.contraindications.map((contraindication, index) => (
-															<li key={index} className="flex items-center gap-2 text-red-800 text-sm">
-																<AlertTriangle className="h-3 w-3" />
-																{contraindication}
-															</li>
-														))}
+														{currentSupplement.contraindications.map(
+															(contraindication, index) => (
+																<li
+																	key={index}
+																	className="flex items-center gap-2 text-red-800 text-sm"
+																>
+																	<AlertTriangle className="h-3 w-3" />
+																	{contraindication}
+																</li>
+															),
+														)}
 													</ul>
 												</div>
 											</div>
 										)}
 									</div>
 								) : (
-									<div className="text-center text-gray-600 py-8">
+									<div className="py-8 text-center text-gray-600">
 										<Shield className="mx-auto mb-2 h-8 w-8 text-green-500" />
 										<p>Brak znaczących interakcji lub przeciwwskazań</p>
 									</div>

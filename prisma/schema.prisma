@@ -1,0 +1,443 @@
+// Prisma schema for Suplementor Medical App
+// Provides type-safe database access with medical compliance features
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// USER MANAGEMENT & AUTHENTICATION
+// =============================================================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  image     String?
+
+  // Medical compliance fields
+  dataSubjectId     String? @unique @map("data_subject_id")
+  gdprConsentGiven  Boolean @default(false) @map("gdpr_consent_given")
+  consentVersion     String? @map("consent_version")
+  lastConsentDate   DateTime? @map("last_consent_date")
+  consentWithdrawalDate DateTime? @map("consent_withdrawal_date")
+
+  // Account status
+  emailVerified DateTime? @map("email_verified")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  supplementTracking SupplementTracking[]
+  healthMetrics HealthMetrics[]
+  consentRecords ConsentRecord[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// =============================================================================
+// MEDICAL DATA MODELS
+// =============================================================================
+
+model SupplementTracking {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+
+  // Supplement information
+  supplementName    String @map("supplement_name")
+  polishName        String? @map("polish_name")
+  category          String?
+  dosage            String?
+  frequency         String?
+  timing            String?
+
+  // Usage tracking
+  startDate         DateTime? @map("start_date")
+  endDate           DateTime? @map("end_date")
+  isActive          Boolean @default(true) @map("is_active")
+
+  // Medical compliance
+  dataClassification String @default("restricted") @map("data_classification")
+  requiresConsent    Boolean @default(true) @map("requires_consent")
+
+  // User experience
+  effectiveness      Int? // 1-10 scale
+  sideEffects       String? @map("side_effects")
+  notes             String? @db.Text
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, startDate])
+  @@map("supplement_tracking")
+}
+
+model HealthMetrics {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+
+  // Metric information
+  metricType        String @map("metric_type")
+  polishName        String? @map("polish_name")
+  metricValue       Decimal? @map("metric_value")
+  unit              String?
+  category          String? // e.g., "cognitive", "physical", "mental"
+
+  // Medical context
+  measurementMethod String? @map("measurement_method")
+  deviceUsed        String? @map("device_used")
+  conditions        String? @db.Text // Environmental or health conditions
+
+  // Medical compliance
+  dataClassification String @default("medical") @map("data_classification")
+  sensitivityLevel   String @default("high") @map("sensitivity_level")
+
+  // Metadata
+  recordedAt DateTime @default(now()) @map("recorded_at")
+  location   String?
+  notes      String? @db.Text
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, recordedAt])
+  @@map("health_metrics")
+}
+
+// =============================================================================
+// GDPR COMPLIANCE MODELS
+// =============================================================================
+
+model ConsentRecord {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+
+  // Consent details
+  consentType       String @map("consent_type") // necessary, analytics, medical_tracking, etc.
+  polishName        String? @map("polish_name")
+  description       String? @db.Text
+
+  // Consent status
+  granted           Boolean @default(false)
+  grantedAt         DateTime? @map("granted_at")
+  expiresAt         DateTime? @map("expires_at")
+  withdrawnAt       DateTime? @map("withdrawn_at")
+
+  // Version control
+  version           String @default("1.0")
+  previousVersion   String? @map("previous_version")
+
+  // Context
+  ipAddress         String? @map("ip_address")
+  userAgent         String? @map("user_agent")
+  source            String @default("web") // web, mobile, api
+  purpose           String? @db.Text
+
+  // Legal compliance
+  gdprBasis         String? @map("gdpr_basis") // consent, legitimate_interest, etc.
+  hipaaRelevant     Boolean @default(false) @map("hipaa_relevant")
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, consentType])
+  @@index([expiresAt])
+  @@map("consent_records")
+}
+
+// =============================================================================
+// AUDIT LOGGING FOR COMPLIANCE
+// =============================================================================
+
+model AuditLog {
+  id          String   @id @default(cuid())
+
+  // Event identification
+  eventType         String @map("event_type") // data_access, consent_change, etc.
+  action            String // read, write, delete, etc.
+  resource          String // table name or resource identifier
+
+  // User context
+  userId            String? @map("user_id")
+  sessionId         String? @map("session_id")
+  ipAddress         String? @map("ip_address")
+  userAgent         String? @map("user_agent")
+
+  // Medical compliance
+  gdprRelevant      Boolean @default(false) @map("gdpr_relevant")
+  hipaaRelevant     Boolean @default(false) @map("hipaa_relevant")
+  dataClassification String @default("internal") @map("data_classification")
+  consentVerified   Boolean @default(false) @map("consent_verified")
+
+  // Event details
+  details           Json? // Flexible storage for event-specific data
+  result            String @default("success") // success, failure, partial
+  errorMessage      String? @map("error_message")
+
+  // Performance tracking
+  processingTimeMs  Int? @map("processing_time_ms")
+
+  // Geographic compliance
+  country           String?
+  region            String?
+
+  // Timestamps
+  timestamp DateTime @default(now())
+
+  @@index([userId, timestamp])
+  @@index([eventType, timestamp])
+  @@index([gdprRelevant, timestamp])
+  @@index([hipaaRelevant, timestamp])
+  @@map("audit_logs")
+}
+
+// =============================================================================
+// EDUCATIONAL CONTENT
+// =============================================================================
+
+model BrainRegion {
+  id          String   @id @default(cuid())
+
+  // Basic information
+  name              String @unique
+  polishName        String @unique @map("polish_name")
+  description       String @db.Text
+  descriptionPolish String @db.Text @map("description_polish")
+
+  // 3D visualization data
+  color             String @default("#FF6B6B")
+  positionX         Float @default(0) @map("position_x")
+  positionY         Float @default(0) @map("position_y")
+  positionZ         Float @default(0) @map("position_z")
+  sizeWidth         Float @default(100) @map("size_width")
+  sizeHeight        Float @default(80) @map("size_height")
+  sizeDepth         Float @default(60) @map("size_depth")
+
+  // Functions and associations
+  functions         String[] // Array of function descriptions
+  functionsPolish   String[] @map("functions_polish")
+  associatedSupplements String[] @map("associated_supplements")
+  relatedRegions    String[] @map("related_regions")
+
+  // Medical relevance
+  medicalSignificance String? @map("medical_significance")
+  researchLinks     String[] @map("research_links")
+
+  // Content management
+  isActive          Boolean @default(true) @map("is_active")
+  version           String @default("1.0")
+  lastReviewed      DateTime? @map("last_reviewed")
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("brain_regions")
+}
+
+model Supplement {
+  id          String   @id @default(cuid())
+
+  // Basic information
+  name              String @unique
+  polishName        String @unique @map("polish_name")
+  category          String
+  subcategory       String?
+
+  // Description and benefits
+  description       String @db.Text
+  descriptionPolish String @db.Text @map("description_polish")
+  benefits          String[]
+  benefitsPolish    String[] @map("benefits_polish")
+
+  // Usage information
+  dosage            String?
+  timing            String?
+  duration          String?
+
+  // Composition (in Polish format)
+  skład             Json? // Active ingredients and composition
+
+  // Neurological effects
+  neuroEffects      String[] @map("neuro_effects")
+  neuroEffectsPolish String[] @map("neuro_effects_polish")
+
+  // Safety information
+  warnings          String[]
+  warningsPolish    String[] @map("warnings_polish")
+  contraindications String[] @map("contraindications")
+  interactions      String[] @map("interactions")
+
+  // Evidence and research
+  evidenceLevel     String @default("moderate") @map("evidence_level")
+  researchLinks     String[] @map("research_links")
+  clinicalTrials    String[] @map("clinical_trials")
+
+  // Commercial information
+  price             String?
+  availability      String?
+  source            String?
+
+  // Content management
+  isActive          Boolean @default(true) @map("is_active")
+  isApproved        Boolean @default(false) @map("is_approved")
+  approvalDate      DateTime? @map("approval_date")
+  version           String @default("1.0")
+  lastReviewed      DateTime? @map("last_reviewed")
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("supplements")
+}
+
+// =============================================================================
+// ANALYTICS & MONITORING
+// =============================================================================
+
+model UserActivity {
+  id          String   @id @default(cuid())
+  userId      String? @map("user_id")
+
+  // Activity tracking
+  activityType      String @map("activity_type")
+  resource          String?
+  details           Json?
+
+  // Session information
+  sessionId         String? @map("session_id")
+  duration          Int? // in milliseconds
+
+  // Medical compliance
+  dataClassification String @default("internal") @map("data_classification")
+  gdprRelevant      Boolean @default(false) @map("gdpr_relevant")
+
+  // Context
+  ipAddress         String? @map("ip_address")
+  userAgent         String? @map("user_agent")
+  referrer          String?
+
+  // Timestamps
+  timestamp DateTime @default(now())
+
+  @@index([userId, timestamp])
+  @@index([activityType, timestamp])
+  @@map("user_activity")
+}
+
+model SystemHealth {
+  id          String   @id @default(cuid())
+
+  // Health metrics
+  metricName        String @map("metric_name")
+  metricValue       String @map("metric_value")
+  unit              String?
+  status            String @default("healthy") // healthy, warning, critical
+
+  // Context
+  component         String? // database, api, frontend, etc.
+  environment       String @default("production")
+  region            String?
+
+  // Details
+  details           Json?
+  errorMessage      String? @map("error_message")
+
+  // Timestamps
+  timestamp DateTime @default(now())
+
+  @@index([component, timestamp])
+  @@index([status, timestamp])
+  @@map("system_health")
+}
+
+// =============================================================================
+// CONFIGURATION & SETTINGS
+// =============================================================================
+
+model SystemConfiguration {
+  id          String   @id @default(cuid())
+
+  // Configuration key
+  key           String @unique
+  value         Json
+
+  // Metadata
+  description   String?
+  category      String @default("general")
+  isSecret      Boolean @default(false) @map("is_secret")
+  isReadOnly    Boolean @default(false) @map("is_readonly")
+
+  // Environment targeting
+  environment   String @default("all") // all, development, staging, production
+  version       String @default("1.0")
+
+  // Audit trail
+  createdBy     String? @map("created_by")
+  updatedBy     String? @map("updated_by")
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("system_configuration")
+}

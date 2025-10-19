@@ -1,5 +1,9 @@
 "use client";
 
+import {
+	SkeletonDosageCalculator,
+	SkeletonDosageResult,
+} from "@/components/loading/SkeletonCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calculator, Clock, Target } from "lucide-react";
 import React, { useState } from "react";
-import { SkeletonDosageCalculator, SkeletonDosageResult } from "@/components/loading/SkeletonCard";
 
 export interface DosageCalculatorProps {
 	supplement?: any;

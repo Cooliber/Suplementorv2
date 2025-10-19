@@ -1,0 +1,99 @@
+version: 2
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Warsaw"
+    open-pull-requests-limit: 10
+    assignees:
+      - "suplementor-maintainers"
+    reviewers:
+      - "suplementor-maintainers"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated"
+    ignore:
+      # Ignore major version updates for certain packages
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+    groups:
+      # Group React ecosystem updates
+      react-ecosystem:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      # Group testing dependencies
+      testing:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "playwright"
+          - "@playwright/*"
+      # Group TypeScript and linting
+      typescript-linting:
+        patterns:
+          - "typescript"
+          - "eslint"
+          - "@typescript-eslint/*"
+          - "prettier"
+      # Group UI and styling
+      ui-styling:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/*"
+          - "lucide-react"
+          - "clsx"
+          - "tailwind-merge"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "09:00"
+      timezone: "Europe/Warsaw"
+    open-pull-requests-limit: 5
+    assignees:
+      - "suplementor-maintainers"
+    reviewers:
+      - "suplementor-maintainers"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "github-actions"
+      - "automated"
+
+  # Enable version updates for Docker (if using containers)
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "09:00"
+      timezone: "Europe/Warsaw"
+    open-pull-requests-limit: 3
+    assignees:
+      - "suplementor-maintainers"
+    reviewers:
+      - "suplementor-maintainers"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "docker"
+      - "automated"

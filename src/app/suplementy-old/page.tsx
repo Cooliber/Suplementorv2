@@ -8,7 +8,13 @@
 import { AnimatedPage, FadeIn, SlideIn } from "@/components/animations";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -26,42 +32,58 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
+	type SampleSupplement,
+	sampleSupplements,
+} from "@/data/sample-supplements";
+import type { EvidenceLevel, SupplementCategory } from "@/types/supplement";
+import {
 	BookOpen,
 	Filter,
+	Heart,
+	Info,
 	Search,
+	Share2,
+	ShoppingCart,
+	SlidersHorizontal,
 	Star,
 	TrendingUp,
 	Zap,
-	Info,
-	ShoppingCart,
-	Heart,
-	Share2,
-	SlidersHorizontal,
 } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { useState, useMemo } from "react";
-import { sampleSupplements, SampleSupplement } from "@/data/sample-supplements";
-import type { EvidenceLevel, SupplementCategory } from "@/types/supplement";
+import { useMemo, useState } from "react";
 
 export default function SuplementyPage() {
 	const [searchQuery, setSearchQuery] = useState("");
-	const [selectedCategory, setSelectedCategory] = useState<SupplementCategory | "all">("all");
-	const [selectedEvidenceLevel, setSelectedEvidenceLevel] = useState<EvidenceLevel | "all">("all");
-	const [sortBy, setSortBy] = useState<"name" | "rating" | "evidence" | "price">("rating");
+	const [selectedCategory, setSelectedCategory] = useState<
+		SupplementCategory | "all"
+	>("all");
+	const [selectedEvidenceLevel, setSelectedEvidenceLevel] = useState<
+		EvidenceLevel | "all"
+	>("all");
+	const [sortBy, setSortBy] = useState<
+		"name" | "rating" | "evidence" | "price"
+	>("rating");
 	const [showFilters, setShowFilters] = useState(false);
 
 	// Filter and sort supplements
 	const filteredAndSortedSupplements = useMemo(() => {
-		let filtered = sampleSupplements.filter((supplement) => {
+		const filtered = sampleSupplements.filter((supplement) => {
 			const matchesSearch =
 				searchQuery === "" ||
 				supplement.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				supplement.polishName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				supplement.description.toLowerCase().includes(searchQuery.toLowerCase());
+				supplement.polishName
+					.toLowerCase()
+					.includes(searchQuery.toLowerCase()) ||
+				supplement.description
+					.toLowerCase()
+					.includes(searchQuery.toLowerCase());
 
-			const matchesCategory = selectedCategory === "all" || supplement.category === selectedCategory;
-			const matchesEvidence = selectedEvidenceLevel === "all" || supplement.evidenceLevel === selectedEvidenceLevel;
+			const matchesCategory =
+				selectedCategory === "all" || supplement.category === selectedCategory;
+			const matchesEvidence =
+				selectedEvidenceLevel === "all" ||
+				supplement.evidenceLevel === selectedEvidenceLevel;
 
 			return matchesSearch && matchesCategory && matchesEvidence;
 		});
@@ -73,9 +95,18 @@ export default function SuplementyPage() {
 					return a.name.localeCompare(b.name);
 				case "rating":
 					return b.userRating - a.userRating;
-				case "evidence":
-					const evidenceOrder = { STRONG: 3, MODERATE: 2, WEAK: 1, INSUFFICIENT: 0, CONFLICTING: 0 };
-					return evidenceOrder[b.evidenceLevel] - evidenceOrder[a.evidenceLevel];
+				case "evidence": {
+					const evidenceOrder = {
+						STRONG: 3,
+						MODERATE: 2,
+						WEAK: 1,
+						INSUFFICIENT: 0,
+						CONFLICTING: 0,
+					};
+					return (
+						evidenceOrder[b.evidenceLevel] - evidenceOrder[a.evidenceLevel]
+					);
+				}
 				case "price":
 					return (a.price?.min || 0) - (b.price?.min || 0);
 				default:
@@ -87,12 +118,25 @@ export default function SuplementyPage() {
 	}, [searchQuery, selectedCategory, selectedEvidenceLevel, sortBy]);
 
 	const categories: SupplementCategory[] = [
-		"NOOTROPIC", "VITAMIN", "MINERAL", "AMINO_ACID", "HERB",
-		"ADAPTOGEN", "COENZYME", "FATTY_ACID", "PROBIOTIC", "ENZYME", "OTHER"
+		"NOOTROPIC",
+		"VITAMIN",
+		"MINERAL",
+		"AMINO_ACID",
+		"HERB",
+		"ADAPTOGEN",
+		"COENZYME",
+		"FATTY_ACID",
+		"PROBIOTIC",
+		"ENZYME",
+		"OTHER",
 	];
 
 	const evidenceLevels: EvidenceLevel[] = [
-		"STRONG", "MODERATE", "WEAK", "INSUFFICIENT", "CONFLICTING"
+		"STRONG",
+		"MODERATE",
+		"WEAK",
+		"INSUFFICIENT",
+		"CONFLICTING",
 	];
 
 	const categoryLabels: Record<SupplementCategory, string> = {
@@ -119,74 +163,90 @@ export default function SuplementyPage() {
 
 	const getEvidenceColor = (level: EvidenceLevel) => {
 		switch (level) {
-			case "STRONG": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-			case "MODERATE": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-			case "WEAK": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
-			case "INSUFFICIENT": return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
-			case "CONFLICTING": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+			case "STRONG":
+				return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+			case "MODERATE":
+				return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+			case "WEAK":
+				return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+			case "INSUFFICIENT":
+				return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+			case "CONFLICTING":
+				return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
 		}
 	};
 
 	const SupplementCard = ({ supplement }: { supplement: SampleSupplement }) => (
-		<Card className="group h-full transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
+		<Card className="group hover:-translate-y-1 h-full transition-all duration-200 hover:shadow-lg">
 			<CardHeader className="pb-3">
 				<div className="flex items-start justify-between">
 					<div className="flex-1">
-						<CardTitle className="text-lg leading-tight mb-1">
+						<CardTitle className="mb-1 text-lg leading-tight">
 							{supplement.polishName}
 						</CardTitle>
-						<CardDescription className="text-sm text-muted-foreground">
+						<CardDescription className="text-muted-foreground text-sm">
 							{supplement.name}
 						</CardDescription>
 					</div>
-					<Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
+					<Button
+						variant="ghost"
+						size="sm"
+						className="opacity-0 transition-opacity group-hover:opacity-100"
+					>
 						<Heart className="h-4 w-4" />
 					</Button>
 				</div>
 
-				<div className="flex items-center gap-2 mt-2">
+				<div className="mt-2 flex items-center gap-2">
 					<Badge variant="outline" className="text-xs">
 						{categoryLabels[supplement.category]}
 					</Badge>
-					<Badge className={`text-xs ${getEvidenceColor(supplement.evidenceLevel)}`}>
+					<Badge
+						className={`text-xs ${getEvidenceColor(supplement.evidenceLevel)}`}
+					>
 						{evidenceLabels[supplement.evidenceLevel]}
 					</Badge>
 				</div>
 			</CardHeader>
 
 			<CardContent className="pt-0">
-				<p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+				<p className="mb-3 line-clamp-2 text-muted-foreground text-sm">
 					{supplement.polishDescription}
 				</p>
 
-				<div className="flex items-center justify-between mb-3">
+				<div className="mb-3 flex items-center justify-between">
 					<div className="flex items-center gap-1">
 						<Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-						<span className="text-sm font-medium">{supplement.userRating}</span>
-						<span className="text-xs text-muted-foreground">/5</span>
+						<span className="font-medium text-sm">{supplement.userRating}</span>
+						<span className="text-muted-foreground text-xs">/5</span>
 					</div>
 					<div className="text-right">
-						<div className="text-sm font-semibold">
+						<div className="font-semibold text-sm">
 							{supplement.price?.min}-{supplement.price?.max} zł
 						</div>
-						<div className="text-xs text-muted-foreground">
+						<div className="text-muted-foreground text-xs">
 							{supplement.studyCount} badań
 						</div>
 					</div>
 				</div>
 
-				<div className="flex flex-wrap gap-1 mb-4">
-					{supplement.polishPrimaryBenefits.slice(0, 2).map((benefit, index) => (
-						<span key={index} className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full">
-							{benefit}
-						</span>
-					))}
+				<div className="mb-4 flex flex-wrap gap-1">
+					{supplement.polishPrimaryBenefits
+						.slice(0, 2)
+						.map((benefit, index) => (
+							<span
+								key={index}
+								className="rounded-full bg-blue-50 px-2 py-1 text-blue-700 text-xs"
+							>
+								{benefit}
+							</span>
+						))}
 				</div>
 
 				<div className="flex gap-2">
 					<Link href={`/suplementy/${supplement.id}`} className="flex-1">
 						<Button className="w-full" size="sm">
-							<Info className="h-3 w-3 mr-1" />
+							<Info className="mr-1 h-3 w-3" />
 							Szczegóły
 						</Button>
 					</Link>
@@ -248,9 +308,10 @@ export default function SuplementyPage() {
 						</h2>
 					</FadeIn>
 					<SlideIn direction="up" delay={0.2}>
-						<p className="text-gray-600 text-xl dark:text-gray-300 max-w-3xl">
-							Odkryj naszą kompleksową bazę suplementów opartą na badaniach naukowych.
-							Zobacz szczegółowe informacje, dowody naukowe i opinie użytkowników.
+						<p className="max-w-3xl text-gray-600 text-xl dark:text-gray-300">
+							Odkryj naszą kompleksową bazę suplementów opartą na badaniach
+							naukowych. Zobacz szczegółowe informacje, dowody naukowe i opinie
+							użytkowników.
 						</p>
 					</SlideIn>
 				</div>
@@ -258,14 +319,14 @@ export default function SuplementyPage() {
 				{/* Search and Filters */}
 				<Card className="mb-8">
 					<CardContent className="pt-6">
-						<div className="flex flex-col lg:flex-row gap-4">
+						<div className="flex flex-col gap-4 lg:flex-row">
 							{/* Search Input */}
 							<div className="flex-1">
 								<Label htmlFor="search" className="sr-only">
 									Wyszukaj suplementy
 								</Label>
 								<div className="relative">
-									<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+									<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
 									<Input
 										id="search"
 										placeholder="Szukaj suplementów..."
@@ -278,7 +339,10 @@ export default function SuplementyPage() {
 
 							{/* Category Filter */}
 							<div className="w-full lg:w-48">
-								<Select value={selectedCategory} onValueChange={(value: any) => setSelectedCategory(value)}>
+								<Select
+									value={selectedCategory}
+									onValueChange={(value: any) => setSelectedCategory(value)}
+								>
 									<SelectTrigger>
 										<SelectValue placeholder="Wszystkie kategorie" />
 									</SelectTrigger>
@@ -295,12 +359,19 @@ export default function SuplementyPage() {
 
 							{/* Evidence Level Filter */}
 							<div className="w-full lg:w-48">
-								<Select value={selectedEvidenceLevel} onValueChange={(value: any) => setSelectedEvidenceLevel(value)}>
+								<Select
+									value={selectedEvidenceLevel}
+									onValueChange={(value: any) =>
+										setSelectedEvidenceLevel(value)
+									}
+								>
 									<SelectTrigger>
 										<SelectValue placeholder="Wszystkie poziomy dowodów" />
 									</SelectTrigger>
 									<SelectContent>
-										<SelectItem value="all">Wszystkie poziomy dowodów</SelectItem>
+										<SelectItem value="all">
+											Wszystkie poziomy dowodów
+										</SelectItem>
 										{evidenceLevels.map((level) => (
 											<SelectItem key={level} value={level}>
 												{evidenceLabels[level]}
@@ -312,7 +383,10 @@ export default function SuplementyPage() {
 
 							{/* Sort By */}
 							<div className="w-full lg:w-48">
-								<Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+								<Select
+									value={sortBy}
+									onValueChange={(value: any) => setSortBy(value)}
+								>
 									<SelectTrigger>
 										<SelectValue placeholder="Sortuj według" />
 									</SelectTrigger>
@@ -338,29 +412,29 @@ export default function SuplementyPage() {
 
 						{/* Advanced Filters */}
 						{showFilters && (
-							<div className="mt-4 pt-4 border-t">
-								<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+							<div className="mt-4 border-t pt-4">
+								<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
 									<div>
-										<h4 className="font-medium mb-2">Zakres cenowy</h4>
-										<div className="text-sm text-muted-foreground">
+										<h4 className="mb-2 font-medium">Zakres cenowy</h4>
+										<div className="text-muted-foreground text-sm">
 											Wkrótce dostępne
 										</div>
 									</div>
 									<div>
-										<h4 className="font-medium mb-2">Ocena bezpieczeństwa</h4>
-										<div className="text-sm text-muted-foreground">
+										<h4 className="mb-2 font-medium">Ocena bezpieczeństwa</h4>
+										<div className="text-muted-foreground text-sm">
 											Wkrótce dostępne
 										</div>
 									</div>
 									<div>
-										<h4 className="font-medium mb-2">Liczba badań</h4>
-										<div className="text-sm text-muted-foreground">
+										<h4 className="mb-2 font-medium">Liczba badań</h4>
+										<div className="text-muted-foreground text-sm">
 											Wkrótce dostępne
 										</div>
 									</div>
 									<div>
-										<h4 className="font-medium mb-2">Dostępność</h4>
-										<div className="text-sm text-muted-foreground">
+										<h4 className="mb-2 font-medium">Dostępność</h4>
+										<div className="text-muted-foreground text-sm">
 											Wkrótce dostępne
 										</div>
 									</div>
@@ -371,12 +445,14 @@ export default function SuplementyPage() {
 				</Card>
 
 				{/* Results Info */}
-				<div className="flex items-center justify-between mb-6">
+				<div className="mb-6 flex items-center justify-between">
 					<div className="flex items-center gap-4">
 						<h3 className="font-semibold text-lg">
 							Znaleźliśmy {filteredAndSortedSupplements.length} suplementów
 						</h3>
-						{(searchQuery || selectedCategory !== "all" || selectedEvidenceLevel !== "all") && (
+						{(searchQuery ||
+							selectedCategory !== "all" ||
+							selectedEvidenceLevel !== "all") && (
 							<Button
 								variant="ghost"
 								size="sm"
@@ -403,10 +479,11 @@ export default function SuplementyPage() {
 				) : (
 					<Card className="p-12 text-center">
 						<CardContent>
-							<Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-							<h3 className="font-semibold text-lg mb-2">Brak suplementów</h3>
-							<p className="text-muted-foreground mb-4">
-								Nie znaleźliśmy suplementów pasujących do Twoich kryteriów wyszukiwania.
+							<Search className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+							<h3 className="mb-2 font-semibold text-lg">Brak suplementów</h3>
+							<p className="mb-4 text-muted-foreground">
+								Nie znaleźliśmy suplementów pasujących do Twoich kryteriów
+								wyszukiwania.
 							</p>
 							<Button
 								variant="outline"

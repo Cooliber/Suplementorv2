@@ -153,7 +153,10 @@ export function SkeletonReviewForm() {
 }
 
 // Table Skeletons
-export function SkeletonTable({ rows = 5, columns = 4 }: { rows?: number; columns?: number }) {
+export function SkeletonTable({
+	rows = 5,
+	columns = 4,
+}: { rows?: number; columns?: number }) {
 	return (
 		<div className="space-y-3">
 			{/* Header */}
@@ -212,9 +215,13 @@ export function SkeletonChart() {
 									<Skeleton
 										key={j}
 										className={`w-full ${
-											i === 0 ? 'h-32' :
-											i === 1 ? 'h-24' :
-											i === 2 ? 'h-16' : 'h-8'
+											i === 0
+												? "h-32"
+												: i === 1
+													? "h-24"
+													: i === 2
+														? "h-16"
+														: "h-8"
 										}`}
 									/>
 								))}
@@ -241,13 +248,13 @@ export function SkeletonPieChart() {
 							<Skeleton className="h-20 w-20 rounded-full" />
 						</div>
 					</div>
-					<div className="space-y-3 flex-1">
+					<div className="flex-1 space-y-3">
 						{Array.from({ length: 5 }).map((_, i) => (
 							<div key={i} className="flex items-center gap-3">
 								<Skeleton className="h-4 w-4 rounded-full" />
 								<div className="flex-1">
 									<Skeleton className="h-4 w-24" />
-									<Skeleton className="h-3 w-16 mt-1" />
+									<Skeleton className="mt-1 h-3 w-16" />
 								</div>
 							</div>
 						))}
@@ -354,7 +361,7 @@ export function SkeletonDosageResult() {
 				<Skeleton className="h-6 w-48" />
 			</CardHeader>
 			<CardContent className="space-y-4">
-				<div className="p-4 border rounded-lg space-y-3">
+				<div className="space-y-3 rounded-lg border p-4">
 					<Skeleton className="h-5 w-32" />
 					<div className="space-y-2">
 						<Skeleton className="h-4 w-full" />
@@ -385,7 +392,7 @@ export function SkeletonProgressiveLoader({ steps = 3 }: { steps?: number }) {
 					<Skeleton className="h-6 w-6 rounded-full" />
 					<div className="flex-1">
 						<Skeleton className="h-4 w-48" />
-						<Skeleton className="h-3 w-32 mt-1" />
+						<Skeleton className="mt-1 h-3 w-32" />
 					</div>
 					{i === 0 && <Skeleton className="h-4 w-16" />}
 				</div>
@@ -396,10 +403,10 @@ export function SkeletonProgressiveLoader({ steps = 3 }: { steps?: number }) {
 
 export function SkeletonLoadingOverlay() {
 	return (
-		<div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
+		<div className="absolute inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
 			<Card className="p-6">
 				<div className="flex items-center gap-3">
-					<Skeleton className="h-6 w-6 rounded-full animate-spin" />
+					<Skeleton className="h-6 w-6 animate-spin rounded-full" />
 					<Skeleton className="h-4 w-32" />
 				</div>
 			</Card>
@@ -414,9 +421,7 @@ export function SkeletonText({ lines = 3 }: { lines?: number }) {
 			{Array.from({ length: lines }).map((_, i) => (
 				<Skeleton
 					key={i}
-					className={`h-4 ${
-						i === lines - 1 ? 'w-3/4' : 'w-full'
-					}`}
+					className={`h-4 ${i === lines - 1 ? "w-3/4" : "w-full"}`}
 				/>
 			))}
 		</div>
@@ -444,7 +449,7 @@ export function SkeletonDashboard() {
 							<Skeleton className="h-4 w-24" />
 						</CardHeader>
 						<CardContent>
-							<Skeleton className="h-8 w-16 mb-2" />
+							<Skeleton className="mb-2 h-8 w-16" />
 							<Skeleton className="h-3 w-32" />
 						</CardContent>
 					</Card>
@@ -458,12 +463,11 @@ export function SkeletonDashboard() {
 	);
 }
 
-
 // Advanced Progressive Loading Component
 export function SkeletonProgressiveGrid({
 	itemsPerBatch = 6,
 	totalBatches = 3,
-	showBatchInfo = true
+	showBatchInfo = true,
 }: {
 	itemsPerBatch?: number;
 	totalBatches?: number;
@@ -484,7 +488,7 @@ export function SkeletonProgressiveGrid({
 						<Skeleton className="h-4 w-4 rounded-full" />
 						<Skeleton className="h-4 w-32" />
 						{batchIndex === 0 && (
-							<Skeleton className="h-6 w-16 rounded-full ml-auto" />
+							<Skeleton className="ml-auto h-6 w-16 rounded-full" />
 						)}
 					</div>
 
@@ -505,9 +509,15 @@ export function SkeletonInfiniteLoader() {
 		<div className="flex items-center justify-center py-8">
 			<div className="flex items-center gap-3">
 				<div className="flex gap-1">
-					<Skeleton className="h-2 w-2 rounded-full animate-bounce" />
-					<Skeleton className="h-2 w-2 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-					<Skeleton className="h-2 w-2 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+					<Skeleton className="h-2 w-2 animate-bounce rounded-full" />
+					<Skeleton
+						className="h-2 w-2 animate-bounce rounded-full"
+						style={{ animationDelay: "0.1s" }}
+					/>
+					<Skeleton
+						className="h-2 w-2 animate-bounce rounded-full"
+						style={{ animationDelay: "0.2s" }}
+					/>
 				</div>
 				<Skeleton className="h-4 w-24" />
 			</div>
@@ -519,7 +529,7 @@ export function SkeletonInfiniteLoader() {
 export function SkeletonDataLoadingState({
 	type = "table",
 	rows = 5,
-	showProgress = true
+	showProgress = true,
 }: {
 	type?: "table" | "cards" | "list";
 	rows?: number;

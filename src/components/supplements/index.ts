@@ -41,7 +41,10 @@ export { SupplementComparisonTable } from "./SupplementComparisonTable";
 export { ComparisonView } from "./ComparisonView";
 export { SupplementComparisonDashboard } from "./SupplementComparisonDashboard";
 export { TableCustomizationPanel } from "./TableCustomizationPanel";
-export { ResponsiveTableWrapper, ResponsiveTableControls } from "./ResponsiveTableWrapper";
+export {
+	ResponsiveTableWrapper,
+	ResponsiveTableControls,
+} from "./ResponsiveTableWrapper";
 export { AdvancedTableFilters } from "./AdvancedTableFilters";
 
 // Table Types and Hooks

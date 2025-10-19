@@ -3,8 +3,6 @@
  * Handles CRUD operations for brain regions with 3D visualization data
  */
 
-import { BrainRegion } from "@/lib/db/models";
-import connectToDatabase from "@/lib/db/mongodb";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -27,44 +25,100 @@ const GetBrainRegionsSchema = z.object({
 
 /**
  * GET /api/brain-regions
- * Retrieve brain regions with filtering and 3D visualization data
+ * Retrieve brain regions with filtering and 3D visualization data (using hardcoded data)
  */
 export async function GET(request: NextRequest) {
 	try {
-		await connectToDatabase();
-
 		const { searchParams } = new URL(request.url);
 		const params = Object.fromEntries(searchParams.entries());
 
 		// Validate query parameters
 		const validatedParams = GetBrainRegionsSchema.parse(params);
 
-		// Build MongoDB query
-		const query: any = { isActive: true };
+		// Mock brain regions data for hardcoded deployment
+		const mockBrainRegions = [
+			{
+				id: "prefrontal-cortex",
+				name: "Prefrontal Cortex",
+				polishName: "Kora przedczołowa",
+				category: "FRONTAL_LOBE",
+				hemisphere: "BILATERAL",
+				difficultyLevel: "INTERMEDIATE",
+				description: "Executive function and decision making center",
+				polishDescription:
+					"Ośrodek funkcji wykonawczych i podejmowania decyzji",
+				functions: ["Executive function", "Decision making", "Working memory"],
+				polishFunctions: [
+					"Funkcje wykonawcze",
+					"Podejmowanie decyzji",
+					"Pamięć robocza",
+				],
+				isActive: true,
+				lastUpdated: new Date(),
+				version: "1.0.0",
+			},
+			{
+				id: "hippocampus",
+				name: "Hippocampus",
+				polishName: "Hipokamp",
+				category: "LIMBIC_SYSTEM",
+				hemisphere: "BILATERAL",
+				difficultyLevel: "ADVANCED",
+				description: "Memory formation and spatial navigation",
+				polishDescription: "Tworzenie wspomnień i nawigacja przestrzenna",
+				functions: ["Memory formation", "Spatial navigation", "Learning"],
+				polishFunctions: [
+					"Tworzenie wspomnień",
+					"Nawigacja przestrzenna",
+					"Uczenie się",
+				],
+				isActive: true,
+				lastUpdated: new Date(),
+				version: "1.0.0",
+			},
+		];
+
+		// Apply filters
+		let brainRegions = [...mockBrainRegions];
 
 		// Category filter
 		if (validatedParams.category) {
-			query.category = validatedParams.category.toUpperCase();
+			brainRegions = brainRegions.filter(
+				(r) => r.category === validatedParams.category?.toUpperCase(),
+			);
 		}
 
 		// Hemisphere filter
 		if (validatedParams.hemisphere) {
-			query.hemisphere = validatedParams.hemisphere;
+			brainRegions = brainRegions.filter(
+				(r) => r.hemisphere === validatedParams.hemisphere,
+			);
 		}
 
 		// Difficulty level filter
 		if (validatedParams.difficultyLevel) {
-			query.difficultyLevel = validatedParams.difficultyLevel;
-		}
-
-		// Supplement effects filter
-		if (validatedParams.supplementId) {
-			query["supplementEffects.supplementId"] = validatedParams.supplementId;
+			brainRegions = brainRegions.filter(
+				(r) => r.difficultyLevel === validatedParams.difficultyLevel,
+			);
 		}
 
 		// Text search
 		if (validatedParams.search) {
-			query.$text = { $search: validatedParams.search };
+			const searchLower = validatedParams.search.toLowerCase();
+			brainRegions = brainRegions.filter((r) => {
+				const searchableText = [
+					r.name,
+					r.polishName,
+					r.description || "",
+					r.polishDescription || "",
+					...r.functions,
+					...r.polishFunctions,
+				]
+					.join(" ")
+					.toLowerCase();
+
+				return searchableText.includes(searchLower);
+			});
 		}
 
 		// Build sort object
@@ -73,30 +127,57 @@ export async function GET(request: NextRequest) {
 				? "polishName"
 				: validatedParams.sortBy;
 		const sortOrder = validatedParams.sortOrder === "desc" ? -1 : 1;
-		const sort: Record<string, 1 | -1> = { [sortField]: sortOrder };
+
+		brainRegions.sort((a, b) => {
+			let aValue: string | number = "";
+			let bValue: string | number = "";
+
+			switch (sortField) {
+				case "name":
+					aValue = a.name.toLowerCase();
+					bValue = b.name.toLowerCase();
+					break;
+				case "polishName":
+					aValue = a.polishName.toLowerCase();
+					bValue = b.polishName.toLowerCase();
+					break;
+				case "category":
+					aValue = a.category.toLowerCase();
+					bValue = b.category.toLowerCase();
+					break;
+				case "lastUpdated":
+					aValue = new Date(a.lastUpdated).getTime();
+					bValue = new Date(b.lastUpdated).getTime();
+					break;
+				default:
+					aValue = a.polishName.toLowerCase();
+					bValue = b.polishName.toLowerCase();
+			}
+
+			if (typeof aValue === "string" && typeof bValue === "string") {
+				return sortOrder * aValue.localeCompare(bValue);
+			}
+			return sortOrder * ((aValue as number) - (bValue as number));
+		});
 
 		// Build projection to exclude/include visualization data
-		let projection = {};
+		let result = brainRegions;
 		if (!validatedParams.includeVisualization) {
-			projection = {
-				visualizationProperties: 0,
-				modelFile: 0,
-				textureFiles: 0,
-			};
+			result = brainRegions.map((r) => ({
+				...r,
+				visualizationProperties: undefined,
+				modelFile: undefined,
+				textureFiles: undefined,
+			}));
 		}
 
 		// Calculate pagination
 		const skip = (validatedParams.page - 1) * validatedParams.limit;
-
-		// Execute query with pagination
-		const [brainRegions, totalCount] = await Promise.all([
-			BrainRegion.find(query, projection)
-				.sort(sort)
-				.skip(skip)
-				.limit(validatedParams.limit)
-				.lean(),
-			BrainRegion.countDocuments(query),
-		]);
+		const totalCount = brainRegions.length;
+		const paginatedBrainRegions = result.slice(
+			skip,
+			skip + validatedParams.limit,
+		);
 
 		// Calculate pagination metadata
 		const totalPages = Math.ceil(totalCount / validatedParams.limit);
@@ -105,7 +186,7 @@ export async function GET(request: NextRequest) {
 
 		return NextResponse.json({
 			success: true,
-			data: brainRegions,
+			data: paginatedBrainRegions,
 			pagination: {
 				currentPage: validatedParams.page,
 				totalPages,
@@ -149,42 +230,25 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/brain-regions
- * Create a new brain region
+ * Create a new brain region (using hardcoded data - no persistence)
  */
 export async function POST(request: NextRequest) {
 	try {
-		await connectToDatabase();
-
 		const body = await request.json();
 
-		// Check if brain region with this ID already exists
-		const existingRegion = await BrainRegion.findOne({ id: body.id });
-
-		if (existingRegion) {
-			return NextResponse.json(
-				{
-					success: false,
-					error: "Brain region with this ID already exists",
-				},
-				{ status: 409 },
-			);
-		}
-
-		// Create new brain region
-		const newBrainRegion = new BrainRegion({
+		// For hardcoded deployment, simulate creation
+		const mockBrainRegion = {
 			...body,
 			lastUpdated: new Date(),
 			version: "1.0.0",
 			isActive: true,
-		});
-
-		const savedBrainRegion = await newBrainRegion.save();
+		};
 
 		return NextResponse.json(
 			{
 				success: true,
-				data: savedBrainRegion,
-				message: "Brain region created successfully",
+				data: mockBrainRegion,
+				message: "Brain region creation request received (hardcoded data mode)",
 			},
 			{ status: 201 },
 		);

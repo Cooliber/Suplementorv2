@@ -11,7 +11,11 @@ export const melatoninProfile: SupplementWithRelations = {
 	polishName: "Melatonina",
 	scientificName: "N-acetyl-5-methoxytryptamine",
 	commonNames: ["Sleep hormone", "Circadian regulator", "Pinealgland hormone"],
-	polishCommonNames: ["Hormon snu", "Regulator rytmu dobowego", "Hormon szyszynki"],
+	polishCommonNames: [
+		"Hormon snu",
+		"Regulator rytmu dobowego",
+		"Hormon szyszynki",
+	],
 	category: "OTHER",
 	description:
 		"Melatonin is a hormone naturally produced by the pineal gland that regulates the sleep-wake cycle. As a supplement, it is used to treat sleep disorders, jet lag, and circadian rhythm disruptions. It also functions as an antioxidant and immune modulator.",
@@ -26,7 +30,11 @@ export const melatoninProfile: SupplementWithRelations = {
 			concentration: "1-10mg",
 			bioavailability: 15,
 			halfLife: "0.5-1 hour",
-			metabolicPathway: ["Hepatic metabolism", "6-hydroxylation", "Glucuronidation"],
+			metabolicPathway: [
+				"Hepatic metabolism",
+				"6-hydroxylation",
+				"Glucuronidation",
+			],
 			targetReceptors: ["MT1 receptors", "MT2 receptors", "Calmodulin binding"],
 		},
 		{
@@ -46,7 +54,8 @@ export const melatoninProfile: SupplementWithRelations = {
 			condition: "Insomnia and sleep disorders",
 			polishCondition: "Bezsenność i zaburzenia snu",
 			indication: "Treatment of primary insomnia and sleep onset difficulties",
-			polishIndication: "Leczenie bezsenności pierwotnej i trudności z zasypianiem",
+			polishIndication:
+				"Leczenie bezsenności pierwotnej i trudności z zasypianiem",
 			efficacy: "high",
 			effectivenessRating: 8,
 			evidenceLevel: "STRONG",
@@ -61,7 +70,8 @@ export const melatoninProfile: SupplementWithRelations = {
 			condition: "Jet lag and circadian rhythm disorders",
 			polishCondition: "Jet lag i zaburzenia rytmu dobowego",
 			indication: "Management of jet lag and shift work sleep disorder",
-			polishIndication: "Zarządzanie jet lag i zaburzeniami snu w pracy zmianowej",
+			polishIndication:
+				"Zarządzanie jet lag i zaburzeniami snu w pracy zmianowej",
 			efficacy: "high",
 			effectivenessRating: 8,
 			evidenceLevel: "STRONG",
@@ -91,7 +101,8 @@ export const melatoninProfile: SupplementWithRelations = {
 			condition: "Antioxidant and anti-inflammatory support",
 			polishCondition: "Wsparcie antyoksydacyjne i przeciwzapalne",
 			indication: "General antioxidant protection and immune modulation",
-			polishIndication: "Ogólna ochrona antyoksydacyjna i modulacja immunologiczna",
+			polishIndication:
+				"Ogólna ochrona antyoksydacyjna i modulacja immunologiczna",
 			efficacy: "moderate",
 			effectivenessRating: 5,
 			evidenceLevel: "WEAK",
@@ -177,8 +188,16 @@ export const melatoninProfile: SupplementWithRelations = {
 		},
 		timing: ["evening", "before_bed"],
 		withFood: false,
-		contraindications: ["Autoimmune diseases", "Depression", "Seizure disorders"],
-		polishContraindications: ["Choroby autoimmunologiczne", "Depresja", "Zaburzenia napadowe"],
+		contraindications: [
+			"Autoimmune diseases",
+			"Depression",
+			"Seizure disorders",
+		],
+		polishContraindications: [
+			"Choroby autoimmunologiczne",
+			"Depresja",
+			"Zaburzenia napadowe",
+		],
 		interactions: [
 			{
 				substance: "Benzodiazepines",
@@ -272,10 +291,13 @@ export const melatoninProfile: SupplementWithRelations = {
 			polishSubstance: "Alkohol",
 			type: "antagonistic",
 			severity: "moderate",
-			description: "Alcohol disrupts melatonin production and sleep architecture",
-			polishDescription: "Alkohol zakłóca produkcję melatoniny i architekturę snu",
+			description:
+				"Alcohol disrupts melatonin production and sleep architecture",
+			polishDescription:
+				"Alkohol zakłóca produkcję melatoniny i architekturę snu",
 			clinicalSignificance: "Reduced sleep quality and hormone disruption",
-			polishClinicalSignificance: "Zmniejszona jakość snu i zaburzenia hormonalne",
+			polishClinicalSignificance:
+				"Zmniejszona jakość snu i zaburzenia hormonalne",
 			mechanism: "Suppression of endogenous melatonin production",
 			polishMechanism: "Tłumienie endogennej produkcji melatoniny",
 			recommendation: "Avoid alcohol near bedtime",
@@ -289,8 +311,10 @@ export const melatoninProfile: SupplementWithRelations = {
 	researchStudies: [
 		{
 			id: "ferris-2013",
-			title: "Efficacy of melatonin for sleep disturbance in adults: a systematic review",
-			polishTitle: "Skuteczność melatoniny w zaburzeniach snu u dorosłych: przegląd systematyczny",
+			title:
+				"Efficacy of melatonin for sleep disturbance in adults: a systematic review",
+			polishTitle:
+				"Skuteczność melatoniny w zaburzeniach snu u dorosłych: przegląd systematyczny",
 			authors: ["Ferracioli-Oda E", "Qawasmi A", "Bloch MH"],
 			journal: "Sleep Medicine Reviews",
 			year: 2013,

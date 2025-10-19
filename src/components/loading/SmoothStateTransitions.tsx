@@ -5,12 +5,12 @@
  * Elegant state transitions with Japanese-inspired motion
  */
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { durations, easings, springs } from "@/lib/animations/config";
 import { useReducedMotion } from "@/lib/animations/hooks";
-import { easings, durations, springs } from "@/lib/animations/config";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
 
 interface ContentTransitionProps {
 	isLoading?: boolean;
@@ -160,11 +160,7 @@ export const MorphingContent: React.FC<MorphingContentProps> = ({
 	const shouldReduceMotion = useReducedMotion();
 
 	if (shouldReduceMotion) {
-		return (
-			<div className={className}>
-				{isLoading ? skeleton : children}
-			</div>
-		);
+		return <div className={className}>{isLoading ? skeleton : children}</div>;
 	}
 
 	return (
@@ -207,7 +203,9 @@ interface ProgressiveContentLoaderProps {
 	className?: string;
 }
 
-export const ProgressiveContentLoader: React.FC<ProgressiveContentLoaderProps> = ({
+export const ProgressiveContentLoader: React.FC<
+	ProgressiveContentLoaderProps
+> = ({
 	steps,
 	onComplete,
 	autoPlay = true,
@@ -222,7 +220,7 @@ export const ProgressiveContentLoader: React.FC<ProgressiveContentLoaderProps> =
 		if (!isPlaying || currentStep >= steps.length - 1) return;
 
 		const timer = setTimeout(() => {
-			setCurrentStep(prev => {
+			setCurrentStep((prev) => {
 				const next = prev + 1;
 				if (next >= steps.length - 1) {
 					setIsPlaying(false);
@@ -242,10 +240,12 @@ export const ProgressiveContentLoader: React.FC<ProgressiveContentLoaderProps> =
 			{showProgress && (
 				<div className="space-y-2">
 					<div className="flex justify-between text-sm">
-						<span>Krok {currentStep + 1} z {steps.length}</span>
+						<span>
+							Krok {currentStep + 1} z {steps.length}
+						</span>
 						<span>{Math.round(progress)}%</span>
 					</div>
-					<div className="h-2 bg-muted rounded-full overflow-hidden">
+					<div className="h-2 overflow-hidden rounded-full bg-muted">
 						<motion.div
 							className="h-full bg-primary"
 							initial={{ width: 0 }}
@@ -271,8 +271,8 @@ export const ProgressiveContentLoader: React.FC<ProgressiveContentLoaderProps> =
 			{!autoPlay && currentStep < steps.length - 1 && (
 				<div className="flex justify-center">
 					<button
-						onClick={() => setCurrentStep(prev => prev + 1)}
-						className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+						onClick={() => setCurrentStep((prev) => prev + 1)}
+						className="rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
 					>
 						Następny krok
 					</button>
@@ -309,24 +309,34 @@ export const SmartContentTransition: React.FC<SmartContentTransitionProps> = ({
 				{errorFallback || (
 					<Card>
 						<CardContent className="pt-6">
-							<div className="text-center space-y-4">
+							<div className="space-y-4 text-center">
 								<div className="text-red-500">
-									<svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+									<svg
+										className="mx-auto h-12 w-12"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											strokeWidth={2}
+											d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+										/>
 									</svg>
 								</div>
 								<div>
 									<p className="font-medium text-red-700 dark:text-red-400">
 										Wystąpił błąd podczas ładowania
 									</p>
-									<p className="text-sm text-muted-foreground mt-1">
+									<p className="mt-1 text-muted-foreground text-sm">
 										{error.message || "Nie udało się załadować zawartości"}
 									</p>
 								</div>
 								{retry && (
 									<button
 										onClick={retry}
-										className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+										className="rounded-md bg-red-500 px-4 py-2 text-white transition-colors hover:bg-red-600"
 									>
 										Spróbuj ponownie
 									</button>
@@ -387,7 +397,11 @@ export const ListTransition: React.FC<ListTransitionProps> = ({
 							ease: easings.calm,
 						}}
 					>
-						{renderSkeleton ? renderSkeleton(index) : <Skeleton className="h-16 w-full" />}
+						{renderSkeleton ? (
+							renderSkeleton(index)
+						) : (
+							<Skeleton className="h-16 w-full" />
+						)}
 					</motion.div>
 				))}
 			</div>
@@ -459,7 +473,11 @@ export const GridTransition: React.FC<GridTransitionProps> = ({
 							...springs.gentle,
 						}}
 					>
-						{renderSkeleton ? renderSkeleton(index) : <Skeleton className="aspect-square w-full" />}
+						{renderSkeleton ? (
+							renderSkeleton(index)
+						) : (
+							<Skeleton className="aspect-square w-full" />
+						)}
 					</motion.div>
 				))}
 			</div>
@@ -516,13 +534,13 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
 					animate={{ opacity: 1, y: 0 }}
 					exit={{ opacity: 0, y: -20 }}
 					transition={{ duration: durations.normal, ease: easings.calm }}
-					className={`flex flex-col items-center justify-center min-h-[400px] ${className}`}
+					className={`flex min-h-[400px] flex-col items-center justify-center ${className}`}
 				>
-					<div className="text-center space-y-4">
-						<Skeleton className="w-16 h-16 rounded-full mx-auto" />
+					<div className="space-y-4 text-center">
+						<Skeleton className="mx-auto h-16 w-16 rounded-full" />
 						<div className="space-y-2">
-							<Skeleton className="h-6 w-48 mx-auto" />
-							<Skeleton className="h-4 w-32 mx-auto" />
+							<Skeleton className="mx-auto h-6 w-48" />
+							<Skeleton className="mx-auto h-4 w-32" />
 						</div>
 					</div>
 				</motion.div>

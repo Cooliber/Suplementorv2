@@ -39,8 +39,16 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 			concentration: "500mg",
 			bioavailability: 40,
 			halfLife: "4-6 hours",
-			metabolicPathway: ["Intestinal absorption", "Bone mineralization", "Cellular signaling"],
-			targetReceptors: ["Calcium channels", "Calmodulin", "Vitamin D receptors"],
+			metabolicPathway: [
+				"Intestinal absorption",
+				"Bone mineralization",
+				"Cellular signaling",
+			],
+			targetReceptors: [
+				"Calcium channels",
+				"Calmodulin",
+				"Vitamin D receptors",
+			],
 		},
 		{
 			name: "Elemental calcium",
@@ -48,7 +56,11 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 			concentration: "105mg",
 			bioavailability: 45,
 			halfLife: "4-6 hours",
-			metabolicPathway: ["Active transport", "Passive diffusion", "Bone incorporation"],
+			metabolicPathway: [
+				"Active transport",
+				"Passive diffusion",
+				"Bone incorporation",
+			],
 			targetReceptors: ["Calcium-sensing receptors", "Ion channels"],
 		},
 	],
@@ -119,7 +131,8 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 			condition: "PMS symptom relief",
 			polishCondition: "Łagodzenie objawów PMS",
 			indication: "Premenstrual syndrome symptom management",
-			polishIndication: "Zarządzanie objawami zespołu napięcia przedmiesiączkowego",
+			polishIndication:
+				"Zarządzanie objawami zespołu napięcia przedmiesiączkowego",
 			efficacy: "moderate",
 			effectivenessRating: 6,
 			evidenceLevel: "MODERATE",
@@ -160,7 +173,11 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 			polishDescription:
 				"Jony wapnia są niezbędne do skurczu mięśni, transmisji impulsów nerwowych i uwalniania neurotransmiterów. Działają jako wewnątrzkomórkowe przekaźniki w licznych procesach fizjologicznych.",
 			evidenceLevel: "STRONG",
-			targetSystems: ["Muscular system", "Nervous system", "Neuromuscular junction"],
+			targetSystems: [
+				"Muscular system",
+				"Nervous system",
+				"Neuromuscular junction",
+			],
 			timeToEffect: "30-60 minutes",
 			duration: "Ongoing for physiological functions",
 		},
@@ -175,7 +192,11 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 			polishDescription:
 				"Wapń wspiera skurcz mięśni gładkich naczyń i funkcję mięśnia sercowego, przyczyniając się do regulacji ciśnienia krwi i zdrowia sercowo-naczyniowego.",
 			evidenceLevel: "MODERATE",
-			targetSystems: ["Cardiovascular system", "Vascular smooth muscle", "Cardiac muscle"],
+			targetSystems: [
+				"Cardiovascular system",
+				"Vascular smooth muscle",
+				"Cardiac muscle",
+			],
 			timeToEffect: "1-2 weeks",
 			duration: "Ongoing for cardiovascular support",
 		},
@@ -190,7 +211,11 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 			polishDescription:
 				"Wapń uczestniczy w wydzielaniu hormonów i szlakach sygnalizacji komórkowej, wspierając funkcję endokrynną i komunikację komórkową.",
 			evidenceLevel: "MODERATE",
-			targetSystems: ["Endocrine system", "Cell signaling", "Hormone secretion"],
+			targetSystems: [
+				"Endocrine system",
+				"Cell signaling",
+				"Hormone secretion",
+			],
 			timeToEffect: "1-2 weeks",
 			duration: "Ongoing for endocrine support",
 		},
@@ -225,10 +250,8 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 				severity: "beneficial",
 				description: "Vitamin D enhances calcium absorption",
 				clinicalSignificance: "Improved calcium bioavailability",
-				polishClinicalSignificance:
-					"Poprawiona biodostępność wapnia",
-				polishDescription:
-					"Witamina D wzmacnia wchłanianie wapnia",
+				polishClinicalSignificance: "Poprawiona biodostępność wapnia",
+				polishDescription: "Witamina D wzmacnia wchłanianie wapnia",
 				recommendation: "Take together for enhanced absorption",
 				polishRecommendation: "Przyjmuj razem dla lepszego wchłaniania",
 				evidenceLevel: "STRONG",
@@ -240,10 +263,8 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 				severity: "minor",
 				description: "May compete for absorption",
 				clinicalSignificance: "May reduce absorption of both minerals",
-				polishClinicalSignificance:
-					"Może zmniejszyć wchłanianie obu minerałów",
-				polishDescription:
-					"Może konkurować o wchłanianie",
+				polishClinicalSignificance: "Może zmniejszyć wchłanianie obu minerałów",
+				polishDescription: "Może konkurować o wchłanianie",
 				recommendation: "Take 2 hours apart",
 				polishRecommendation: "Przyjmuj 2 godziny odstępu",
 				evidenceLevel: "MODERATE",
@@ -255,12 +276,12 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 				severity: "moderate",
 				description: "Calcium may reduce antibiotic absorption",
 				clinicalSignificance: "May decrease antibiotic effectiveness",
-				polishClinicalSignificance:
-					"Może zmniejszyć skuteczność antybiotyku",
-				polishDescription:
-					"Wapń może zmniejszyć wchłanianie antybiotyku",
-				recommendation: "Take antibiotics 2 hours before or 4-6 hours after calcium",
-				polishRecommendation: "Przyjmuj antybiotyki 2 godziny przed lub 4-6 godzin po wapniu",
+				polishClinicalSignificance: "Może zmniejszyć skuteczność antybiotyku",
+				polishDescription: "Wapń może zmniejszyć wchłanianie antybiotyku",
+				recommendation:
+					"Take antibiotics 2 hours before or 4-6 hours after calcium",
+				polishRecommendation:
+					"Przyjmuj antybiotyki 2 godziny przed lub 4-6 godzin po wapniu",
 				evidenceLevel: "MODERATE",
 			},
 		],
@@ -277,7 +298,8 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 			dosageDependent: true,
 			timeToOnset: "1-4 hours",
 			management: "Take with food, reduce dose, or divide throughout day",
-			polishManagement: "Przyjmuj z jedzeniem, zmniejsz dawkę lub podziel w ciągu dnia",
+			polishManagement:
+				"Przyjmuj z jedzeniem, zmniejsz dawkę lub podziel w ciągu dnia",
 		},
 		{
 			effect: "Constipation",
@@ -288,7 +310,8 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 			dosageDependent: true,
 			timeToOnset: "1-3 days",
 			management: "Increase fiber intake, ensure adequate hydration",
-			polishManagement: "Zwiększ spożycie błonnika, zapewnij odpowiednie nawodnienie",
+			polishManagement:
+				"Zwiększ spożycie błonnika, zapewnij odpowiednie nawodnienie",
 		},
 		{
 			effect: "Kidney stones",
@@ -299,7 +322,8 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 			dosageDependent: true,
 			timeToOnset: "Months of high-dose use",
 			management: "Avoid excessive doses, ensure adequate hydration",
-			polishManagement: "Unikaj nadmiernych dawek, zapewnij odpowiednie nawodnienie",
+			polishManagement:
+				"Unikaj nadmiernych dawek, zapewnij odpowiednie nawodnienie",
 		},
 	],
 
@@ -310,10 +334,13 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 			polishSubstance: "Witamina D",
 			type: "synergistic",
 			severity: "beneficial",
-			description: "Essential partnership for calcium absorption and bone health",
-			polishDescription: "Niezbędne partnerstwo dla wchłaniania wapnia i zdrowia kości",
+			description:
+				"Essential partnership for calcium absorption and bone health",
+			polishDescription:
+				"Niezbędne partnerstwo dla wchłaniania wapnia i zdrowia kości",
 			clinicalSignificance: "Enhanced therapeutic effects for bone health",
-			polishClinicalSignificance: "Wzmocnione efekty terapeutyczne dla zdrowia kości",
+			polishClinicalSignificance:
+				"Wzmocnione efekty terapeutyczne dla zdrowia kości",
 			mechanism: "Vitamin D regulates calcium absorption in intestines",
 			polishMechanism: "Witamina D reguluje wchłanianie wapnia w jelitach",
 			recommendation: "Essential combination for optimal bone health",
@@ -325,18 +352,21 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 			substance: "Magnesium",
 			polishSubstance: "Magnez",
 			type: "synergistic",
-			clinicalSignificance: "Complementary roles in bone metabolism and muscle function",
-			polishClinicalSignificance: "Komplementarne role w metabolizmie kości i funkcji mięśni",
+			clinicalSignificance:
+				"Complementary roles in bone metabolism and muscle function",
+			polishClinicalSignificance:
+				"Komplementarne role w metabolizmie kości i funkcji mięśni",
 			severity: "beneficial",
-			mechanism: "Magnesium supports calcium utilization and prevents vascular calcification",
-			polishMechanism: "Magnez wspiera wykorzystanie wapnia i zapobiega wapnieniu naczyń",
+			mechanism:
+				"Magnesium supports calcium utilization and prevents vascular calcification",
+			polishMechanism:
+				"Magnez wspiera wykorzystanie wapnia i zapobiega wapnieniu naczyń",
 			description:
 				"Magnesium and calcium work together for optimal bone health and muscle function",
 			polishDescription:
 				"Magnez i wapń współpracują dla optymalnego zdrowia kości i funkcji mięśni",
 			recommendation: "Beneficial combination in appropriate ratios",
-			polishRecommendation:
-				"Korzystne połączenie w odpowiednich proporcjach",
+			polishRecommendation: "Korzystne połączenie w odpowiednich proporcjach",
 			evidenceLevel: "MODERATE",
 		},
 	],
@@ -346,8 +376,10 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 	researchStudies: [
 		{
 			id: "dawson-hughes-1990",
-			title: "A controlled trial of the effect of calcium supplementation on bone density in postmenopausal women",
-			polishTitle: "Kontrolowane badanie wpływu suplementacji wapnia na gęstość kości u kobiet po menopauzie",
+			title:
+				"A controlled trial of the effect of calcium supplementation on bone density in postmenopausal women",
+			polishTitle:
+				"Kontrolowane badanie wpływu suplementacji wapnia na gęstość kości u kobiet po menopauzie",
 			authors: ["Dawson-Hughes B", "Dallal GE", "Krall EA"],
 			journal: "New England Journal of Medicine",
 			year: 1990,
@@ -387,7 +419,8 @@ export const calciumCitrateProfile: SupplementWithRelations = {
 		{
 			id: "bolland-2010",
 			title: "Effect of calcium supplements on risk of myocardial infarction",
-			polishTitle: "Wpływ suplementów wapnia na ryzyko zawału mięśnia sercowego",
+			polishTitle:
+				"Wpływ suplementów wapnia na ryzyko zawału mięśnia sercowego",
 			authors: ["Bolland MJ", "Avenell A", "Baron JA"],
 			journal: "British Medical Journal",
 			year: 2010,

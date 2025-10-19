@@ -24,7 +24,7 @@ export const circadianTimingRouter = createTRPCRouter({
 	 * Get all circadian timing entries
 	 * Returns all 6 time periods with body statistics and supplement recommendations
 	 */
-	/*getAll: publicProcedure.query(async ({ ctx }) => {
+/*getAll: publicProcedure.query(async ({ ctx }) => {
 		const timePeriods = await ctx.db.circadianSupplementTiming
 			.find({})
 			.sort({ timeOfDay: 1 });
@@ -36,7 +36,7 @@ export const circadianTimingRouter = createTRPCRouter({
 	 * Get circadian timing data for a specific time of day
 	 * @param timeOfDay - One of: EARLY_MORNING, LATE_MORNING, AFTERNOON, EVENING, NIGHT, DEEP_NIGHT
 	 */
-	/*getByTimeOfDay: publicProcedure
+/*getByTimeOfDay: publicProcedure
 		.input(
 			z.object({
 				timeOfDay: TimeOfDayEnum,
@@ -59,7 +59,7 @@ export const circadianTimingRouter = createTRPCRouter({
 	 * Get time periods when a specific supplement is recommended
 	 * @param supplementId - The supplement ID to search for
 	 */
-	/*getRecommendationsForSupplement: publicProcedure
+/*getRecommendationsForSupplement: publicProcedure
 		.input(
 			z.object({
 				supplementId: z.string().min(1),
@@ -79,7 +79,7 @@ export const circadianTimingRouter = createTRPCRouter({
 	 * Get current time period based on current hour
 	 * Automatically determines which time period the user is in
 	 */
-	/*getCurrentTimePeriod: publicProcedure.query(async ({ ctx }) => {
+/*getCurrentTimePeriod: publicProcedure.query(async ({ ctx }) => {
 		const currentHour = new Date().getHours();
 
 		let timeOfDay: z.infer<typeof TimeOfDayEnum>;
@@ -108,7 +108,7 @@ export const circadianTimingRouter = createTRPCRouter({
 	 * Get supplements to avoid at a specific time
 	 * @param timeOfDay - The time of day to check
 	 */
-	/*getSupplementsToAvoid: publicProcedure
+/*getSupplementsToAvoid: publicProcedure
 		.input(
 			z.object({
 				timeOfDay: TimeOfDayEnum,
@@ -139,7 +139,7 @@ export const circadianTimingRouter = createTRPCRouter({
 	 * Get body statistics for all time periods
 	 * Useful for visualizing circadian rhythm patterns
 	 */
-	/*getBodyStatisticsTimeline: publicProcedure.query(async ({ ctx }) => {
+/*getBodyStatisticsTimeline: publicProcedure.query(async ({ ctx }) => {
 		const timePeriods = await ctx.db.circadianSupplementTiming
 			.find({})
 			.select("timeOfDay polishTimeOfDay timeRange bodyStatistics")
@@ -162,4 +162,3 @@ export const circadianTimingRouter = createTRPCRouter({
 
 // Temporarily disabled export due to TypeScript issues
 // export { circadianTimingRouter };
-

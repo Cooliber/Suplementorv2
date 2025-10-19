@@ -5,9 +5,9 @@
 
 import Review from "@/lib/db/models/Review";
 import connectToDatabase from "@/lib/db/mongodb";
+import { ModerateReviewSchema, validateModerateReview } from "@/types/review";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { ModerateReviewSchema, validateModerateReview } from "@/types/review";
 
 // Request validation schemas
 const GetReviewSchema = z.object({

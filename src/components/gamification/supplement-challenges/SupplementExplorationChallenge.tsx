@@ -3,30 +3,34 @@
  * Evidence-based learning challenges for supplement discovery
  */
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-	Brain,
-	Target,
-	Award,
-	Clock,
-	CheckCircle,
-	XCircle,
-	Lightbulb,
-	BookOpen,
-	Star,
-} from "lucide-react";
 import { useSupplementGamificationStore } from "@/lib/stores/supplement-gamification-store";
-import type { SupplementCategory, EvidenceLevel } from "@/types/supplement";
+import type { EvidenceLevel, SupplementCategory } from "@/types/supplement";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+	Award,
+	BookOpen,
+	Brain,
+	CheckCircle,
+	Clock,
+	Lightbulb,
+	Star,
+	Target,
+	XCircle,
+} from "lucide-react";
+import React, { useState, useEffect } from "react";
 
 interface ChallengeQuestion {
 	id: string;
-	type: "multiple-choice" | "identification" | "evidence-rating" | "interaction-check";
+	type:
+		| "multiple-choice"
+		| "identification"
+		| "evidence-rating"
+		| "interaction-check";
 	question: string;
 	options?: string[];
 	correctAnswer: string;
@@ -53,10 +57,12 @@ const SAMPLE_QUESTIONS: ChallengeQuestion[] = [
 	{
 		id: "vitamin-c-identification",
 		type: "identification",
-		question: "Which vitamin is essential for collagen synthesis and immune function?",
+		question:
+			"Which vitamin is essential for collagen synthesis and immune function?",
 		options: ["Vitamin A", "Vitamin C", "Vitamin D", "Vitamin E"],
 		correctAnswer: "Vitamin C",
-		explanation: "Vitamin C is crucial for collagen synthesis, wound healing, and immune function. It acts as a cofactor in hydroxylation reactions.",
+		explanation:
+			"Vitamin C is crucial for collagen synthesis, wound healing, and immune function. It acts as a cofactor in hydroxylation reactions.",
 		evidenceLevel: "STRONG",
 		category: "VITAMIN",
 		xpReward: 25,
@@ -64,10 +70,12 @@ const SAMPLE_QUESTIONS: ChallengeQuestion[] = [
 	{
 		id: "magnesium-evidence",
 		type: "evidence-rating",
-		question: "What is the primary evidence level for magnesium's role in muscle function?",
+		question:
+			"What is the primary evidence level for magnesium's role in muscle function?",
 		options: ["Strong", "Moderate", "Weak", "Insufficient"],
 		correctAnswer: "Strong",
-		explanation: "Magnesium plays a critical role in muscle contraction and relaxation. Clinical studies consistently show its importance in preventing cramps and supporting muscle function.",
+		explanation:
+			"Magnesium plays a critical role in muscle contraction and relaxation. Clinical studies consistently show its importance in preventing cramps and supporting muscle function.",
 		evidenceLevel: "STRONG",
 		category: "MINERAL",
 		xpReward: 30,
@@ -75,10 +83,12 @@ const SAMPLE_QUESTIONS: ChallengeQuestion[] = [
 	{
 		id: "ashwagandha-interaction",
 		type: "interaction-check",
-		question: "Which supplement should be used cautiously with ashwagandha due to potential interactions?",
+		question:
+			"Which supplement should be used cautiously with ashwagandha due to potential interactions?",
 		options: ["Vitamin C", "Thyroid medications", "Probiotics", "Fish oil"],
 		correctAnswer: "Thyroid medications",
-		explanation: "Ashwagandha may increase thyroid hormone levels and should be used cautiously with thyroid medications to avoid hyperthyroidism.",
+		explanation:
+			"Ashwagandha may increase thyroid hormone levels and should be used cautiously with thyroid medications to avoid hyperthyroidism.",
 		evidenceLevel: "MODERATE",
 		category: "ADAPTOGEN",
 		xpReward: 35,
@@ -86,15 +96,17 @@ const SAMPLE_QUESTIONS: ChallengeQuestion[] = [
 	{
 		id: "omega-3-benefits",
 		type: "multiple-choice",
-		question: "What is the primary mechanism of omega-3 fatty acids in cardiovascular health?",
+		question:
+			"What is the primary mechanism of omega-3 fatty acids in cardiovascular health?",
 		options: [
 			"Direct cholesterol reduction",
 			"Anti-inflammatory effects",
 			"Antioxidant activity",
-			"Blood thinning"
+			"Blood thinning",
 		],
 		correctAnswer: "Anti-inflammatory effects",
-		explanation: "Omega-3 fatty acids reduce inflammation, which is a key factor in cardiovascular disease prevention, supported by numerous clinical trials.",
+		explanation:
+			"Omega-3 fatty acids reduce inflammation, which is a key factor in cardiovascular disease prevention, supported by numerous clinical trials.",
 		evidenceLevel: "STRONG",
 		category: "FATTY_ACID",
 		xpReward: 25,
@@ -107,7 +119,8 @@ export function SupplementExplorationChallenge({
 	onComplete,
 	autoStart = false,
 }: SupplementExplorationChallengeProps) {
-	const [currentQuestion, setCurrentQuestion] = useState<ChallengeQuestion | null>(null);
+	const [currentQuestion, setCurrentQuestion] =
+		useState<ChallengeQuestion | null>(null);
 	const [selectedAnswer, setSelectedAnswer] = useState<string>("");
 	const [showResult, setShowResult] = useState(false);
 	const [isComplete, setIsComplete] = useState(false);
@@ -116,10 +129,11 @@ export function SupplementExplorationChallenge({
 	const [timeLeft, setTimeLeft] = useState(30);
 	const [isActive, setIsActive] = useState(autoStart);
 
-	const { addXP, recordCategoryExploration, updateKnowledgeScore } = useSupplementGamificationStore();
+	const { addXP, recordCategoryExploration, updateKnowledgeScore } =
+		useSupplementGamificationStore();
 
 	// Filter questions based on category and difficulty
-	const availableQuestions = SAMPLE_QUESTIONS.filter(q => {
+	const availableQuestions = SAMPLE_QUESTIONS.filter((q) => {
 		if (category && q.category !== category) return false;
 		// Add difficulty filtering logic here if needed
 		return true;
@@ -136,7 +150,8 @@ export function SupplementExplorationChallenge({
 		if (timeLeft > 0 && isActive && !showResult) {
 			const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
 			return () => clearTimeout(timer);
-		} else if (timeLeft === 0 && !showResult) {
+		}
+		if (timeLeft === 0 && !showResult) {
 			handleTimeUp();
 		}
 		return undefined;
@@ -196,15 +211,15 @@ export function SupplementExplorationChallenge({
 
 	if (!isActive) {
 		return (
-			<Card className="w-full max-w-2xl mx-auto">
+			<Card className="mx-auto w-full max-w-2xl">
 				<CardHeader className="text-center">
-					<CardTitle className="flex items-center gap-2 justify-center">
+					<CardTitle className="flex items-center justify-center gap-2">
 						<Brain className="h-6 w-6 text-primary" />
 						Supplement Exploration Challenge
 					</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-4">
-					<div className="text-center space-y-2">
+					<div className="space-y-2 text-center">
 						<p className="text-muted-foreground">
 							Test your supplement knowledge with evidence-based questions
 						</p>
@@ -213,7 +228,7 @@ export function SupplementExplorationChallenge({
 								{category.replace("_", " ")} Focus
 							</Badge>
 						)}
-						<Badge variant="outline" className="capitalize ml-2">
+						<Badge variant="outline" className="ml-2 capitalize">
 							{difficulty}
 						</Badge>
 					</div>
@@ -231,31 +246,27 @@ export function SupplementExplorationChallenge({
 	if (isComplete) {
 		const finalScore = Math.round((score / availableQuestions.length) * 100);
 		return (
-			<Card className="w-full max-w-2xl mx-auto">
+			<Card className="mx-auto w-full max-w-2xl">
 				<CardHeader className="text-center">
-					<CardTitle className="flex items-center gap-2 justify-center">
+					<CardTitle className="flex items-center justify-center gap-2">
 						<Award className="h-6 w-6 text-yellow-500" />
 						Challenge Complete!
 					</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-4">
-					<div className="text-center space-y-2">
-						<div className="text-3xl font-bold text-primary">
-							{finalScore}%
-						</div>
+					<div className="space-y-2 text-center">
+						<div className="font-bold text-3xl text-primary">{finalScore}%</div>
 						<p className="text-muted-foreground">
 							{score} out of {availableQuestions.length} correct
 						</p>
 						{finalScore >= 90 && (
 							<Badge className="bg-green-100 text-green-800">
-								<Star className="h-3 w-3 mr-1" />
+								<Star className="mr-1 h-3 w-3" />
 								Excellent!
 							</Badge>
 						)}
 						{finalScore >= 70 && finalScore < 90 && (
-							<Badge className="bg-blue-100 text-blue-800">
-								Good Job!
-							</Badge>
+							<Badge className="bg-blue-100 text-blue-800">Good Job!</Badge>
 						)}
 						{finalScore < 70 && (
 							<Badge className="bg-orange-100 text-orange-800">
@@ -267,9 +278,7 @@ export function SupplementExplorationChallenge({
 						<Button onClick={handleStart} variant="outline">
 							Try Again
 						</Button>
-						<Button onClick={() => setIsActive(false)}>
-							Back to Menu
-						</Button>
+						<Button onClick={() => setIsActive(false)}>Back to Menu</Button>
 					</div>
 				</CardContent>
 			</Card>
@@ -278,8 +287,8 @@ export function SupplementExplorationChallenge({
 
 	if (!currentQuestion) {
 		return (
-			<Card className="w-full max-w-2xl mx-auto">
-				<CardContent className="text-center py-8">
+			<Card className="mx-auto w-full max-w-2xl">
+				<CardContent className="py-8 text-center">
 					<p>No questions available for this challenge.</p>
 				</CardContent>
 			</Card>
@@ -287,7 +296,7 @@ export function SupplementExplorationChallenge({
 	}
 
 	return (
-		<Card className="w-full max-w-2xl mx-auto">
+		<Card className="mx-auto w-full max-w-2xl">
 			<CardHeader>
 				<div className="flex items-center justify-between">
 					<CardTitle className="flex items-center gap-2">
@@ -296,7 +305,9 @@ export function SupplementExplorationChallenge({
 					</CardTitle>
 					<div className="flex items-center gap-2">
 						<Clock className="h-4 w-4 text-muted-foreground" />
-						<span className={`font-mono ${timeLeft <= 10 ? "text-red-500" : ""}`}>
+						<span
+							className={`font-mono ${timeLeft <= 10 ? "text-red-500" : ""}`}
+						>
 							{timeLeft}s
 						</span>
 					</div>
@@ -314,15 +325,18 @@ export function SupplementExplorationChallenge({
 						</Badge>
 						<Badge
 							variant={
-								currentQuestion.evidenceLevel === "STRONG" ? "default" :
-								currentQuestion.evidenceLevel === "MODERATE" ? "secondary" : "outline"
+								currentQuestion.evidenceLevel === "STRONG"
+									? "default"
+									: currentQuestion.evidenceLevel === "MODERATE"
+										? "secondary"
+										: "outline"
 							}
 						>
 							{currentQuestion.evidenceLevel} Evidence
 						</Badge>
 					</div>
 
-					<h3 className="text-xl font-semibold leading-relaxed">
+					<h3 className="font-semibold text-xl leading-relaxed">
 						{currentQuestion.question}
 					</h3>
 
@@ -336,13 +350,13 @@ export function SupplementExplorationChallenge({
 											? option === currentQuestion.correctAnswer
 												? "default"
 												: selectedAnswer === option
-												? "destructive"
-												: "outline"
+													? "destructive"
+													: "outline"
 											: selectedAnswer === option
-											? "default"
-											: "outline"
+												? "default"
+												: "outline"
 									}
-									className="justify-start h-auto p-4 text-left"
+									className="h-auto justify-start p-4 text-left"
 									onClick={() => !showResult && handleAnswerSelect(option)}
 									disabled={showResult}
 								>
@@ -350,9 +364,11 @@ export function SupplementExplorationChallenge({
 										{showResult && option === currentQuestion.correctAnswer && (
 											<CheckCircle className="h-5 w-5 text-green-600" />
 										)}
-										{showResult && selectedAnswer === option && option !== currentQuestion.correctAnswer && (
-											<XCircle className="h-5 w-5 text-red-600" />
-										)}
+										{showResult &&
+											selectedAnswer === option &&
+											option !== currentQuestion.correctAnswer && (
+												<XCircle className="h-5 w-5 text-red-600" />
+											)}
 										<span>{option}</span>
 									</div>
 								</Button>
@@ -368,12 +384,12 @@ export function SupplementExplorationChallenge({
 								exit={{ opacity: 0, y: -20 }}
 								className="space-y-4"
 							>
-								<div className="p-4 bg-muted rounded-lg">
+								<div className="rounded-lg bg-muted p-4">
 									<div className="flex items-start gap-2">
-										<Lightbulb className="h-5 w-5 text-yellow-500 mt-0.5 flex-shrink-0" />
+										<Lightbulb className="mt-0.5 h-5 w-5 flex-shrink-0 text-yellow-500" />
 										<div>
-											<p className="font-medium mb-1">Explanation</p>
-											<p className="text-sm text-muted-foreground">
+											<p className="mb-1 font-medium">Explanation</p>
+											<p className="text-muted-foreground text-sm">
 												{currentQuestion.explanation}
 											</p>
 										</div>
@@ -383,12 +399,16 @@ export function SupplementExplorationChallenge({
 								{selectedAnswer === currentQuestion.correctAnswer && (
 									<div className="flex items-center gap-2 text-green-600">
 										<CheckCircle className="h-5 w-5" />
-										<span className="font-medium">Correct! +{currentQuestion.xpReward} XP</span>
+										<span className="font-medium">
+											Correct! +{currentQuestion.xpReward} XP
+										</span>
 									</div>
 								)}
 
 								<Button onClick={handleNextQuestion} className="w-full">
-									{questionIndex < availableQuestions.length - 1 ? "Next Question" : "Complete Challenge"}
+									{questionIndex < availableQuestions.length - 1
+										? "Next Question"
+										: "Complete Challenge"}
 								</Button>
 							</motion.div>
 						)}

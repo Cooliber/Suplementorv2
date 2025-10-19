@@ -1,0 +1,264 @@
+name: Security and Compliance Scanning
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run comprehensive security scans daily
+    - cron: '0 3 * * *'
+
+env:
+  NODE_VERSION: '20'
+  BUN_VERSION: '1.1.38'
+
+jobs:
+  # Medical Data Compliance Check
+  medical-compliance:
+    name: Medical Data Compliance
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check for hardcoded medical data
+        run: |
+          echo "🔍 Scanning for hardcoded medical data..."
+          # Check for potential medical data patterns
+          if grep -r -i "patient.*data\|medical.*record\|diagnosis.*data" src/ --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx"; then
+            echo "⚠️ Found potential hardcoded medical data references"
+            exit 1
+          fi
+
+      - name: Check for proper data sanitization
+        run: |
+          echo "🔍 Checking data sanitization patterns..."
+          # Ensure medical data is properly sanitized
+          if ! grep -r "sanitize\|escape\|encode" src/ --include="*.ts" --include="*.tsx"; then
+            echo "⚠️ No data sanitization patterns found"
+          fi
+
+      - name: Validate GDPR compliance patterns
+        run: |
+          echo "🔍 Checking GDPR compliance..."
+          # Check for consent management
+          if ! grep -r "consent\|gdpr\|privacy" src/ --include="*.ts" --include="*.tsx"; then
+            echo "⚠️ No GDPR/consent patterns found"
+          fi
+
+  # Security Vulnerability Scanning
+  vulnerability-scan:
+    name: Vulnerability Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --json > snyk-report.json
+        continue-on-error: true
+
+      - name: Run OWASP ZAP baseline scan
+        uses: zaproxy/action-baseline@v0.8.0
+        with:
+          target: 'http://localhost:3000'
+          rules_file_name: 'owasp-zap-rules'
+        continue-on-error: true
+
+      - name: Upload security reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-scan-reports
+          path: |
+            snyk-report.json
+            owasp-zap-report.html
+          retention-days: 30
+
+  # HIPAA Compliance Check
+  hipaa-compliance:
+    name: HIPAA Compliance Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for HIPAA compliance patterns
+        run: |
+          echo "🔍 Checking HIPAA compliance..."
+
+          # Check for proper data encryption
+          if ! grep -r "encrypt\|crypto\|bcrypt\|argon" src/ --include="*.ts" --include="*.tsx"; then
+            echo "⚠️ No encryption patterns found"
+          fi
+
+          # Check for audit logging
+          if ! grep -r "audit.*log\|log.*audit" src/ --include="*.ts" --include="*.tsx"; then
+            echo "⚠️ No audit logging patterns found"
+          fi
+
+          # Check for access controls
+          if ! grep -r "auth\|permission\|role\|access.*control" src/ --include="*.ts" --include="*.tsx"; then
+            echo "⚠️ No access control patterns found"
+          fi
+
+  # Dependency Security Audit
+  dependency-audit:
+    name: Dependency Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run comprehensive security audit
+        run: |
+          echo "🔍 Running comprehensive security audit..."
+
+          # Check for vulnerabilities in dependencies
+          npm audit --audit-level=high --json > npm-audit-report.json || true
+
+          # Check for license compliance
+          npx license-checker --production --json > license-report.json || true
+
+          # Check for unmaintained packages
+          npx check-outdated --json > outdated-report.json || true
+
+      - name: Upload audit reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dependency-audit-reports
+          path: |
+            npm-audit-report.json
+            license-report.json
+            outdated-report.json
+          retention-days: 30
+
+  # Container Security Scan (if using Docker)
+  container-security:
+    name: Container Security Scan
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, '[docker]') || github.event_name == 'schedule'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t suplementor:test .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'suplementor:test'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload container scan results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: container-security-report
+          path: trivy-results.sarif
+          retention-days: 30
+
+  # Security Summary Report
+  security-summary:
+    name: Security Summary Report
+    runs-on: ubuntu-latest
+    needs: [medical-compliance, vulnerability-scan, hipaa-compliance, dependency-audit, container-security]
+    if: always()
+
+    steps:
+      - name: Generate security summary
+        run: |
+          echo "## 🔒 Security Scan Summary" > security-summary.md
+          echo "" >> security-summary.md
+          echo "### Medical Compliance: ${{ needs.medical-compliance.result }}" >> security-summary.md
+          echo "### Vulnerability Scan: ${{ needs.vulnerability-scan.result }}" >> security-summary.md
+          echo "### HIPAA Compliance: ${{ needs.hipaa-compliance.result }}" >> security-summary.md
+          echo "### Dependency Audit: ${{ needs.dependency-audit.result }}" >> security-summary.md
+          if [ "${{ needs.container-security.result }}" != "skipped" ]; then
+            echo "### Container Security: ${{ needs.container-security.result }}" >> security-summary.md
+          fi
+          echo "" >> security-summary.md
+          echo "**Scan Date:** $(date)" >> security-summary.md
+          echo "**Repository:** ${{ github.repository }}" >> security-summary.md
+          echo "**Branch:** ${{ github.ref }}" >> security-summary.md
+
+      - name: Upload security summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-summary-report
+          path: security-summary.md
+          retention-days: 90
+
+      - name: Comment PR with security summary
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('security-summary.md', 'utf8');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🔒 Security Scan Results\n\n${summary}`
+            })

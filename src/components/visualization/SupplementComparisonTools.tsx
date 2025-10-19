@@ -28,14 +28,14 @@ import type React from "react";
 import { useMemo, useState } from "react";
 import {
 	Bar,
-	BarChart as RechartsBarChart,
 	CartesianGrid,
 	Cell,
 	PolarAngleAxis,
 	PolarGrid,
 	PolarRadiusAxis,
-	Radar as RechartsRadar,
 	RadarChart,
+	BarChart as RechartsBarChart,
+	Radar as RechartsRadar,
 	ResponsiveContainer,
 	Tooltip,
 	XAxis,
@@ -76,13 +76,15 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 	className = "",
 }) => {
 	const [selectedSupplements, setSelectedSupplements] = useState<string[]>([]);
-	const [comparisonMode, setComparisonMode] = useState<"radar" | "matrix" | "scores">("radar");
+	const [comparisonMode, setComparisonMode] = useState<
+		"radar" | "matrix" | "scores"
+	>("radar");
 	const [showFeatures, setShowFeatures] = useState<string[]>([
 		"effectiveness",
 		"safety",
 		"evidence",
 		"cost",
-		"convenience"
+		"convenience",
 	]);
 
 	// Color schemes
@@ -151,10 +153,11 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 
 	// Handle supplement selection
 	const toggleSupplement = (supplementId: string) => {
-		setSelectedSupplements(prev => {
+		setSelectedSupplements((prev) => {
 			if (prev.includes(supplementId)) {
-				return prev.filter(id => id !== supplementId);
-			} else if (prev.length < maxCompare) {
+				return prev.filter((id) => id !== supplementId);
+			}
+			if (prev.length < maxCompare) {
 				return [...prev, supplementId];
 			}
 			return prev;
@@ -163,7 +166,9 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 
 	// Get selected supplement data
 	const selectedData = useMemo(() => {
-		return data.filter(item => selectedSupplements.includes(item.supplementId));
+		return data.filter((item) =>
+			selectedSupplements.includes(item.supplementId),
+		);
 	}, [data, selectedSupplements]);
 
 	// Prepare radar chart data
@@ -171,13 +176,15 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 		if (selectedData.length === 0) return [];
 
 		const featureNames = selectedData[0]
-		? [...new Set(selectedData[0].features.map(f => f.polishName))]
-		: [];
+			? [...new Set(selectedData[0].features.map((f) => f.polishName))]
+			: [];
 
-		return featureNames.map(featureName => {
+		return featureNames.map((featureName) => {
 			const dataPoint: any = { feature: featureName };
-			selectedData.forEach(supplement => {
-				const feature = supplement.features.find(f => f.polishName === featureName);
+			selectedData.forEach((supplement) => {
+				const feature = supplement.features.find(
+					(f) => f.polishName === featureName,
+				);
 				dataPoint[supplement.polishName] = feature?.value || 0;
 			});
 			return dataPoint;
@@ -186,7 +193,7 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 
 	// Prepare matrix data
 	const matrixData = useMemo(() => {
-		return selectedData.map(supplement => ({
+		return selectedData.map((supplement) => ({
 			name: supplement.polishName,
 			overallScore: supplement.overallScore,
 			pricePerMonth: supplement.pricePerMonth,
@@ -218,10 +225,10 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 
 	// Feature toggle handler
 	const toggleFeature = (feature: string) => {
-		setShowFeatures(prev =>
+		setShowFeatures((prev) =>
 			prev.includes(feature)
-				? prev.filter(f => f !== feature)
-				: [...prev, feature]
+				? prev.filter((f) => f !== feature)
+				: [...prev, feature],
 		);
 	};
 
@@ -245,7 +252,9 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 				{/* Supplement Selection */}
 				<Card className="mb-6">
 					<CardHeader className="pb-4">
-						<CardTitle className="text-base">Wybierz suplementy do porównania</CardTitle>
+						<CardTitle className="text-base">
+							Wybierz suplementy do porównania
+						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -253,23 +262,28 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 								<div
 									key={supplement.supplementId}
 									className={cn(
-										"flex items-center space-x-3 rounded-lg border p-3 cursor-pointer transition-colors",
+										"flex cursor-pointer items-center space-x-3 rounded-lg border p-3 transition-colors",
 										selectedSupplements.includes(supplement.supplementId)
 											? "border-blue-500 bg-blue-50"
-											: "border-gray-200 hover:border-gray-300"
+											: "border-gray-200 hover:border-gray-300",
 									)}
 									onClick={() => toggleSupplement(supplement.supplementId)}
 								>
 									<Checkbox
-										checked={selectedSupplements.includes(supplement.supplementId)}
-				
+										checked={selectedSupplements.includes(
+											supplement.supplementId,
+										)}
 									/>
 									<div className="flex-1">
-										<h4 className="font-medium text-sm">{supplement.polishName}</h4>
-										<div className="flex items-center gap-2 mt-1">
+										<h4 className="font-medium text-sm">
+											{supplement.polishName}
+										</h4>
+										<div className="mt-1 flex items-center gap-2">
 											<Badge
 												style={{
-													backgroundColor: getCategoryColor(supplement.category),
+													backgroundColor: getCategoryColor(
+														supplement.category,
+													),
 												}}
 												className="text-white text-xs"
 											>
@@ -277,7 +291,9 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 											</Badge>
 											<div className="flex items-center gap-1">
 												<Star className="h-3 w-3 text-yellow-500" />
-												<span className="text-xs">{supplement.userRating.toFixed(1)}</span>
+												<span className="text-xs">
+													{supplement.userRating.toFixed(1)}
+												</span>
 											</div>
 										</div>
 									</div>
@@ -301,7 +317,11 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 				</Card>
 
 				{selectedData.length > 0 && (
-					<Tabs value={comparisonMode} onValueChange={(value: any) => setComparisonMode(value)} className="w-full">
+					<Tabs
+						value={comparisonMode}
+						onValueChange={(value: any) => setComparisonMode(value)}
+						className="w-full"
+					>
 						<TabsList className="grid w-full grid-cols-3">
 							<TabsTrigger value="radar" className="text-xs">
 								<Radar className="mr-1 h-3 w-3" />
@@ -320,14 +340,22 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 						<TabsContent value="radar" className="mt-6">
 							<Card>
 								<CardHeader>
-									<CardTitle className="text-base">Porównanie radarowe</CardTitle>
+									<CardTitle className="text-base">
+										Porównanie radarowe
+									</CardTitle>
 								</CardHeader>
 								<CardContent>
 									<ResponsiveContainer width="100%" height={400}>
 										<RadarChart data={radarData}>
 											<PolarGrid />
-											<PolarAngleAxis dataKey="feature" tick={{ fontSize: 12 }} />
-											<PolarRadiusAxis domain={[0, 10]} tick={{ fontSize: 10 }} />
+											<PolarAngleAxis
+												dataKey="feature"
+												tick={{ fontSize: 12 }}
+											/>
+											<PolarRadiusAxis
+												domain={[0, 10]}
+												tick={{ fontSize: 10 }}
+											/>
 											{selectedData.map((supplement, index) => (
 												<RechartsRadar
 													key={supplement.supplementId}
@@ -346,10 +374,17 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 									{/* Legend */}
 									<div className="mt-4 flex flex-wrap gap-4">
 										{selectedData.map((supplement) => (
-											<div key={supplement.supplementId} className="flex items-center gap-2 text-xs">
+											<div
+												key={supplement.supplementId}
+												className="flex items-center gap-2 text-xs"
+											>
 												<div
 													className="h-3 w-3 rounded"
-													style={{ backgroundColor: getCategoryColor(supplement.category) }}
+													style={{
+														backgroundColor: getCategoryColor(
+															supplement.category,
+														),
+													}}
 												/>
 												<span>{supplement.polishName}</span>
 											</div>
@@ -362,7 +397,9 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 						<TabsContent value="matrix" className="mt-6">
 							<Card>
 								<CardHeader>
-									<CardTitle className="text-base">Macierz porównania</CardTitle>
+									<CardTitle className="text-base">
+										Macierz porównania
+									</CardTitle>
 								</CardHeader>
 								<CardContent>
 									<div className="space-y-6">
@@ -373,10 +410,17 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 												{matrixData.map((supplement) => (
 													<div key={supplement.name} className="space-y-2">
 														<div className="flex items-center justify-between">
-															<span className="font-medium text-sm">{supplement.name}</span>
-															<span className="font-bold text-sm">{supplement.overallScore.toFixed(1)}/10</span>
+															<span className="font-medium text-sm">
+																{supplement.name}
+															</span>
+															<span className="font-bold text-sm">
+																{supplement.overallScore.toFixed(1)}/10
+															</span>
 														</div>
-														<Progress value={supplement.overallScore * 10} className="h-2" />
+														<Progress
+															value={supplement.overallScore * 10}
+															className="h-2"
+														/>
 													</div>
 												))}
 											</div>
@@ -384,12 +428,21 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 
 										{/* Price Comparison */}
 										<div>
-											<h4 className="mb-3 font-medium text-sm">Koszt miesięczny (€)</h4>
+											<h4 className="mb-3 font-medium text-sm">
+												Koszt miesięczny (€)
+											</h4>
 											<div className="space-y-3">
 												{matrixData.map((supplement) => (
-													<div key={supplement.name} className="flex items-center justify-between">
-														<span className="font-medium text-sm">{supplement.name}</span>
-														<span className="font-bold text-sm">{supplement.pricePerMonth}€</span>
+													<div
+														key={supplement.name}
+														className="flex items-center justify-between"
+													>
+														<span className="font-medium text-sm">
+															{supplement.name}
+														</span>
+														<span className="font-bold text-sm">
+															{supplement.pricePerMonth}€
+														</span>
 													</div>
 												))}
 											</div>
@@ -397,13 +450,24 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 
 										{/* Risk Comparison */}
 										<div>
-											<h4 className="mb-3 font-medium text-sm">Ryzyko skutków ubocznych</h4>
+											<h4 className="mb-3 font-medium text-sm">
+												Ryzyko skutków ubocznych
+											</h4>
 											<div className="space-y-3">
 												{matrixData.map((supplement) => (
-													<div key={supplement.name} className="flex items-center justify-between">
-														<span className="font-medium text-sm">{supplement.name}</span>
+													<div
+														key={supplement.name}
+														className="flex items-center justify-between"
+													>
+														<span className="font-medium text-sm">
+															{supplement.name}
+														</span>
 														<Badge
-															style={{ backgroundColor: getRiskColor(supplement.sideEffectRisk) }}
+															style={{
+																backgroundColor: getRiskColor(
+																	supplement.sideEffectRisk,
+																),
+															}}
 															className="text-white"
 														>
 															{getRiskText(supplement.sideEffectRisk)}
@@ -425,17 +489,25 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 											<CardTitle className="flex items-center gap-2 text-base">
 												<div
 													className="h-3 w-3 rounded"
-													style={{ backgroundColor: getCategoryColor(supplement.category) }}
+													style={{
+														backgroundColor: getCategoryColor(
+															supplement.category,
+														),
+													}}
 												/>
 												{supplement.polishName}
 											</CardTitle>
 											<div className="flex items-center gap-2">
 												<div className="flex items-center gap-1">
 													<Star className="h-3 w-3 text-yellow-500" />
-													<span className="text-sm">{supplement.userRating.toFixed(1)}</span>
+													<span className="text-sm">
+														{supplement.userRating.toFixed(1)}
+													</span>
 												</div>
 												<span className="text-gray-600 text-sm">•</span>
-												<span className="text-gray-600 text-sm">{supplement.totalReviews} recenzji</span>
+												<span className="text-gray-600 text-sm">
+													{supplement.totalReviews} recenzji
+												</span>
 											</div>
 										</CardHeader>
 										<CardContent>
@@ -443,22 +515,37 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 												{supplement.features.map((feature, index) => (
 													<div key={index} className="space-y-2">
 														<div className="flex items-center justify-between">
-															<span className="font-medium text-sm">{feature.polishName}</span>
-															<span className="font-bold text-sm">{feature.value}/10</span>
+															<span className="font-medium text-sm">
+																{feature.polishName}
+															</span>
+															<span className="font-bold text-sm">
+																{feature.value}/10
+															</span>
 														</div>
-														<Progress value={feature.value * 10} className="h-2" />
+														<Progress
+															value={feature.value * 10}
+															className="h-2"
+														/>
 													</div>
 												))}
 
 												<div className="border-t pt-4">
 													<div className="grid grid-cols-2 gap-4">
 														<div>
-															<p className="text-gray-600 text-sm">Koszt miesięczny</p>
-															<p className="font-bold text-sm">{supplement.pricePerMonth}€</p>
+															<p className="text-gray-600 text-sm">
+																Koszt miesięczny
+															</p>
+															<p className="font-bold text-sm">
+																{supplement.pricePerMonth}€
+															</p>
 														</div>
 														<div>
-															<p className="text-gray-600 text-sm">Siła dowodów</p>
-															<p className="font-bold text-sm">{supplement.evidenceStrength}/10</p>
+															<p className="text-gray-600 text-sm">
+																Siła dowodów
+															</p>
+															<p className="font-bold text-sm">
+																{supplement.evidenceStrength}/10
+															</p>
 														</div>
 													</div>
 												</div>
@@ -479,7 +566,8 @@ const SupplementComparisonTools: React.FC<SupplementComparisonToolsProps> = ({
 								Wybierz suplementy do porównania
 							</h3>
 							<p className="text-center text-gray-600 text-sm">
-								Zaznacz maksymalnie {maxCompare} suplementy powyżej, aby zobaczyć porównanie.
+								Zaznacz maksymalnie {maxCompare} suplementy powyżej, aby
+								zobaczyć porównanie.
 							</p>
 						</CardContent>
 					</Card>

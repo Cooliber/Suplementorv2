@@ -60,9 +60,9 @@ export const recommendationsRouter = createTRPCRouter({
 	getRecommendations: publicProcedure
 		.input(GetRecommendationsInputSchema)
 		.query(async ({ ctx, input }) => {
-
 			// Fetch all active supplements
-			const supplements = await ctx.db.comprehensiveSupplement.find({ isActive: true })
+			const supplements = await ctx.db.comprehensiveSupplement
+				.find({ isActive: true })
 				.select(
 					"id name polishName category evidenceLevel clinicalApplications dosageGuidelines tags",
 				)
@@ -89,9 +89,9 @@ export const recommendationsRouter = createTRPCRouter({
 	buildStack: publicProcedure
 		.input(BuildStackInputSchema)
 		.query(async ({ ctx, input }) => {
-
 			// Fetch all active supplements
-			const supplements = await ctx.db.comprehensiveSupplement.find({ isActive: true })
+			const supplements = await ctx.db.comprehensiveSupplement
+				.find({ isActive: true })
 				.select(
 					"id name polishName category evidenceLevel clinicalApplications dosageGuidelines tags economicData",
 				)
@@ -117,7 +117,9 @@ export const recommendationsRouter = createTRPCRouter({
 				if (addedIds.has(rec.supplementId)) continue;
 
 				// Check budget if specified
-				const supplement = supplements.find((s: any) => s.id === rec.supplementId);
+				const supplement = supplements.find(
+					(s: any) => s.id === rec.supplementId,
+				);
 				if (input.budgetLimit && supplement?.economicData) {
 					const monthlyCost =
 						supplement.economicData.monthlySupplyCost?.average || 0;
@@ -305,11 +307,11 @@ export const recommendationsRouter = createTRPCRouter({
 			}),
 		)
 		.query(async ({ ctx, input }) => {
-
-			const supplements = await ctx.db.comprehensiveSupplement.find({
-				id: { $in: input.supplementIds },
-				isActive: true,
-			})
+			const supplements = await ctx.db.comprehensiveSupplement
+				.find({
+					id: { $in: input.supplementIds },
+					isActive: true,
+				})
 				.select(
 					"id name polishName category evidenceLevel clinicalApplications mechanisms dosageGuidelines sideEffects economicData",
 				)

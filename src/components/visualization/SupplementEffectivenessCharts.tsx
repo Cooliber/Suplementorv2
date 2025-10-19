@@ -24,10 +24,10 @@ import {
 	Area,
 	AreaChart,
 	Bar,
-	BarChart as RechartsBarChart,
 	CartesianGrid,
 	Cell,
 	Line,
+	BarChart as RechartsBarChart,
 	LineChart as RechartsLineChart,
 	ResponsiveContainer,
 	Tooltip,
@@ -60,7 +60,9 @@ interface SupplementEffectivenessChartsProps {
 	className?: string;
 }
 
-const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps> = ({
+const SupplementEffectivenessCharts: React.FC<
+	SupplementEffectivenessChartsProps
+> = ({
 	data,
 	comparisonMode = false,
 	selectedSupplements = [],
@@ -68,7 +70,9 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 	className = "",
 }) => {
 	const [chartType, setChartType] = useState<"bar" | "line" | "area">("bar");
-	const [viewMode, setViewMode] = useState<"overall" | "byCondition" | "byCategory">("overall");
+	const [viewMode, setViewMode] = useState<
+		"overall" | "byCondition" | "byCategory"
+	>("overall");
 	const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
 	// Color schemes
@@ -127,7 +131,7 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 	// Filter data by category
 	const filteredData = useMemo(() => {
 		if (selectedCategory === "all") return data;
-		return data.filter(item => item.category === selectedCategory);
+		return data.filter((item) => item.category === selectedCategory);
 	}, [data, selectedCategory]);
 
 	// Prepare overall effectiveness data
@@ -136,7 +140,10 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 			.sort((a, b) => b.overallEffectiveness - a.overallEffectiveness)
 			.slice(0, 15)
 			.map((item) => ({
-				name: item.polishName.length > 12 ? `${item.polishName.substring(0, 12)}...` : item.polishName,
+				name:
+					item.polishName.length > 12
+						? `${item.polishName.substring(0, 12)}...`
+						: item.polishName,
 				fullName: item.polishName,
 				effectiveness: item.overallEffectiveness,
 				category: item.category,
@@ -148,41 +155,59 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 
 	// Prepare category comparison data
 	const categoryData = useMemo(() => {
-		const categories = [...new Set(data.map(item => item.category))];
-		return categories.map(category => {
-			const categoryItems = data.filter(item => item.category === category);
-			const avgEffectiveness = categoryItems.reduce((sum, item) => sum + item.overallEffectiveness, 0) / categoryItems.length;
-			const avgConfidence = categoryItems.reduce((sum, item) => sum + item.confidence, 0) / categoryItems.length;
+		const categories = [...new Set(data.map((item) => item.category))];
+		return categories
+			.map((category) => {
+				const categoryItems = data.filter((item) => item.category === category);
+				const avgEffectiveness =
+					categoryItems.reduce(
+						(sum, item) => sum + item.overallEffectiveness,
+						0,
+					) / categoryItems.length;
+				const avgConfidence =
+					categoryItems.reduce((sum, item) => sum + item.confidence, 0) /
+					categoryItems.length;
 
-			return {
-				category: getCategoryText(category),
-				effectiveness: Number(avgEffectiveness.toFixed(1)),
-				confidence: Number(avgConfidence.toFixed(1)),
-				count: categoryItems.length,
-				color: getCategoryColor(category),
-			};
-		}).sort((a, b) => b.effectiveness - a.effectiveness);
+				return {
+					category: getCategoryText(category),
+					effectiveness: Number(avgEffectiveness.toFixed(1)),
+					confidence: Number(avgConfidence.toFixed(1)),
+					count: categoryItems.length,
+					color: getCategoryColor(category),
+				};
+			})
+			.sort((a, b) => b.effectiveness - a.effectiveness);
 	}, [data]);
 
 	// Prepare condition-based data
 	const conditionData = useMemo(() => {
-		const conditions = [...new Set(data.flatMap(item => item.conditions.map(c => c.polishCondition)))];
-		return conditions.slice(0, 10).map(condition => {
-			const relevantData = data.filter(item =>
-				item.conditions.some(c => c.polishCondition === condition)
-			);
+		const conditions = [
+			...new Set(
+				data.flatMap((item) => item.conditions.map((c) => c.polishCondition)),
+			),
+		];
+		return conditions
+			.slice(0, 10)
+			.map((condition) => {
+				const relevantData = data.filter((item) =>
+					item.conditions.some((c) => c.polishCondition === condition),
+				);
 
-			const avgEffectiveness = relevantData.reduce((sum, item) => {
-				const conditionEffect = item.conditions.find(c => c.polishCondition === condition);
-				return sum + (conditionEffect?.effectiveness || 0);
-			}, 0) / relevantData.length;
+				const avgEffectiveness =
+					relevantData.reduce((sum, item) => {
+						const conditionEffect = item.conditions.find(
+							(c) => c.polishCondition === condition,
+						);
+						return sum + (conditionEffect?.effectiveness || 0);
+					}, 0) / relevantData.length;
 
-			return {
-				condition,
-				effectiveness: Number(avgEffectiveness.toFixed(1)),
-				supplementCount: relevantData.length,
-			};
-		}).sort((a, b) => b.effectiveness - a.effectiveness);
+				return {
+					condition,
+					effectiveness: Number(avgEffectiveness.toFixed(1)),
+					supplementCount: relevantData.length,
+				};
+			})
+			.sort((a, b) => b.effectiveness - a.effectiveness);
 	}, [data]);
 
 	// Custom tooltip
@@ -194,16 +219,20 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 					<p className="mb-2 font-medium text-sm">{data.fullName || label}</p>
 					<div className="space-y-1">
 						<p className="text-xs">
-							<span className="text-blue-600">Skuteczność:</span> {data.effectiveness}/10
+							<span className="text-blue-600">Skuteczność:</span>{" "}
+							{data.effectiveness}/10
 						</p>
 						{data.confidence && (
 							<p className="text-xs">
-								<span className="text-green-600">Pewność:</span> {data.confidence}%
+								<span className="text-green-600">Pewność:</span>{" "}
+								{data.confidence}%
 							</p>
 						)}
 						{data.evidenceLevel && (
 							<Badge
-								style={{ backgroundColor: getEvidenceColor(data.evidenceLevel) }}
+								style={{
+									backgroundColor: getEvidenceColor(data.evidenceLevel),
+								}}
 								className="text-white text-xs"
 							>
 								{getEvidenceText(data.evidenceLevel)}
@@ -216,7 +245,7 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 		return null;
 	};
 
-	const categories = [...new Set(data.map(item => item.category))];
+	const categories = [...new Set(data.map((item) => item.category))];
 
 	return (
 		<Card className={cn("w-full", className)}>
@@ -227,7 +256,10 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 						Analiza skuteczności suplementów
 					</CardTitle>
 					<div className="flex items-center gap-2">
-						<Select value={chartType} onValueChange={(value: any) => setChartType(value)}>
+						<Select
+							value={chartType}
+							onValueChange={(value: any) => setChartType(value)}
+						>
 							<SelectTrigger className="w-32">
 								<SelectValue />
 							</SelectTrigger>
@@ -238,13 +270,16 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 							</SelectContent>
 						</Select>
 
-						<Select value={selectedCategory} onValueChange={setSelectedCategory}>
+						<Select
+							value={selectedCategory}
+							onValueChange={setSelectedCategory}
+						>
 							<SelectTrigger className="w-40">
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="all">Wszystkie kategorie</SelectItem>
-								{categories.map(category => (
+								{categories.map((category) => (
 									<SelectItem key={category} value={category}>
 										{getCategoryText(category)}
 									</SelectItem>
@@ -256,7 +291,11 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 			</CardHeader>
 
 			<CardContent>
-				<Tabs value={viewMode} onValueChange={(value: any) => setViewMode(value)} className="w-full">
+				<Tabs
+					value={viewMode}
+					onValueChange={(value: any) => setViewMode(value)}
+					className="w-full"
+				>
 					<TabsList className="grid w-full grid-cols-3">
 						<TabsTrigger value="overall" className="text-xs">
 							<BarChart className="mr-1 h-3 w-3" />
@@ -299,9 +338,7 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 												))}
 											</Bar>
 										</RechartsBarChart>
-									) :
-
-									chartType === "line" ? (
+									) : chartType === "line" ? (
 										<RechartsLineChart data={overallData}>
 											<CartesianGrid strokeDasharray="3 3" />
 											<XAxis dataKey="name" tick={{ fontSize: 12 }} />
@@ -315,9 +352,7 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 												dot={{ fill: "#3B82F6", strokeWidth: 2, r: 6 }}
 											/>
 										</RechartsLineChart>
-									) :
-
-									(
+									) : (
 										<AreaChart data={overallData}>
 											<CartesianGrid strokeDasharray="3 3" />
 											<XAxis dataKey="name" tick={{ fontSize: 12 }} />
@@ -337,7 +372,10 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 								{/* Legend */}
 								<div className="mt-4 flex flex-wrap gap-4">
 									{overallData.slice(0, 5).map((item, index) => (
-										<div key={index} className="flex items-center gap-2 text-xs">
+										<div
+											key={index}
+											className="flex items-center gap-2 text-xs"
+										>
 											<div
 												className="h-3 w-3 rounded"
 												style={{ backgroundColor: item.color }}
@@ -386,12 +424,16 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 													className="h-3 w-3 rounded"
 													style={{ backgroundColor: category.color }}
 												/>
-												<span className="font-medium text-sm">{category.category}</span>
+												<span className="font-medium text-sm">
+													{category.category}
+												</span>
 											</div>
 											<div className="space-y-1">
 												<div className="flex justify-between text-xs">
 													<span>Skuteczność:</span>
-													<span className="font-medium">{category.effectiveness}/10</span>
+													<span className="font-medium">
+														{category.effectiveness}/10
+													</span>
 												</div>
 												<div className="flex justify-between text-xs">
 													<span>Suplementy:</span>
@@ -438,8 +480,13 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 								{/* Top Conditions */}
 								<div className="mt-4 space-y-2">
 									{conditionData.slice(0, 5).map((condition, index) => (
-										<div key={index} className="flex items-center justify-between rounded-lg border p-2">
-											<span className="font-medium text-sm">{condition.condition}</span>
+										<div
+											key={index}
+											className="flex items-center justify-between rounded-lg border p-2"
+										>
+											<span className="font-medium text-sm">
+												{condition.condition}
+											</span>
 											<div className="flex items-center gap-2">
 												<span className="text-gray-600 text-xs">
 													{condition.supplementCount} suplementów
@@ -448,10 +495,14 @@ const SupplementEffectivenessCharts: React.FC<SupplementEffectivenessChartsProps
 													<div className="h-2 w-16 rounded-full bg-gray-200">
 														<div
 															className="h-full rounded-full bg-green-500"
-															style={{ width: `${(condition.effectiveness / 10) * 100}%` }}
+															style={{
+																width: `${(condition.effectiveness / 10) * 100}%`,
+															}}
 														/>
 													</div>
-													<span className="font-medium text-sm">{condition.effectiveness}</span>
+													<span className="font-medium text-sm">
+														{condition.effectiveness}
+													</span>
 												</div>
 											</div>
 										</div>

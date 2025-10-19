@@ -1,8 +1,22 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, FlaskConical, Activity, Zap, Brain, GraduationCap, ArrowRight } from "lucide-react";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import {
+	Activity,
+	ArrowRight,
+	BookOpen,
+	Brain,
+	FlaskConical,
+	GraduationCap,
+	Zap,
+} from "lucide-react";
 import Link from "next/link";
 
 interface ContentCategory {
@@ -39,7 +53,8 @@ const CONTENT_STRUCTURE: ContentCategory[] = [
 				polishName: "Centrum Edukacyjne",
 				url: "/edukacja",
 				description: "Central hub for all educational resources",
-				polishDescription: "Centralne miejsce dla wszystkich zasobów edukacyjnych",
+				polishDescription:
+					"Centralne miejsce dla wszystkich zasobów edukacyjnych",
 			},
 		],
 	},
@@ -126,8 +141,10 @@ const CONTENT_STRUCTURE: ContentCategory[] = [
 				name: "Endocannabinoid System",
 				polishName: "Układ Endokannabinoidowy",
 				url: "/system-endokannabinoidowy",
-				description: "Comprehensive information about the endocannabinoid system",
-				polishDescription: "Kompleksowe informacje o układzie endokannabinoidowym",
+				description:
+					"Comprehensive information about the endocannabinoid system",
+				polishDescription:
+					"Kompleksowe informacje o układzie endokannabinoidowym",
 			},
 		],
 	},
@@ -153,30 +170,33 @@ export function EducationalContentMap() {
 							<div key={category.id} className="space-y-3">
 								{/* Category Header */}
 								<div className="flex items-center gap-3">
-									<div className={`p-2 rounded-lg ${category.bgColor}`}>
+									<div className={`rounded-lg p-2 ${category.bgColor}`}>
 										<Icon className={`h-5 w-5 ${category.color}`} />
 									</div>
 									<div>
-										<h3 className="font-semibold text-lg">{category.polishName}</h3>
+										<h3 className="font-semibold text-lg">
+											{category.polishName}
+										</h3>
 										<Badge variant="secondary" className="text-xs">
-											{category.pages.length} {category.pages.length === 1 ? "strona" : "strony"}
+											{category.pages.length}{" "}
+											{category.pages.length === 1 ? "strona" : "strony"}
 										</Badge>
 									</div>
 								</div>
 
 								{/* Pages Grid */}
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-12">
+								<div className="ml-12 grid grid-cols-1 gap-3 md:grid-cols-2">
 									{category.pages.map((page) => (
 										<Link key={page.id} href={page.url}>
-											<Card className="h-full hover:shadow-md transition-shadow cursor-pointer border-2 hover:border-primary">
+											<Card className="h-full cursor-pointer border-2 transition-shadow hover:border-primary hover:shadow-md">
 												<CardHeader className="pb-3">
-													<CardTitle className="text-base flex items-center justify-between">
+													<CardTitle className="flex items-center justify-between text-base">
 														<span>{page.polishName}</span>
 														<ArrowRight className="h-4 w-4 text-muted-foreground" />
 													</CardTitle>
 												</CardHeader>
 												<CardContent>
-													<p className="text-sm text-muted-foreground">
+													<p className="text-muted-foreground text-sm">
 														{page.polishDescription}
 													</p>
 												</CardContent>
@@ -190,47 +210,61 @@ export function EducationalContentMap() {
 				</div>
 
 				{/* Summary */}
-				<div className="mt-8 pt-6 border-t">
-					<div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+				<div className="mt-8 border-t pt-6">
+					<div className="grid grid-cols-2 gap-4 text-center md:grid-cols-4">
 						<div>
-							<div className="text-2xl font-bold text-primary">
+							<div className="font-bold text-2xl text-primary">
 								{CONTENT_STRUCTURE.length}
 							</div>
-							<div className="text-xs text-muted-foreground">Kategorie</div>
+							<div className="text-muted-foreground text-xs">Kategorie</div>
 						</div>
 						<div>
-							<div className="text-2xl font-bold text-primary">
-								{CONTENT_STRUCTURE.reduce((sum, cat) => sum + cat.pages.length, 0)}
+							<div className="font-bold text-2xl text-primary">
+								{CONTENT_STRUCTURE.reduce(
+									(sum, cat) => sum + cat.pages.length,
+									0,
+								)}
 							</div>
-							<div className="text-xs text-muted-foreground">Strony</div>
+							<div className="text-muted-foreground text-xs">Strony</div>
 						</div>
 						<div>
-							<div className="text-2xl font-bold text-primary">100+</div>
-							<div className="text-xs text-muted-foreground">Artykuły</div>
+							<div className="font-bold text-2xl text-primary">100+</div>
+							<div className="text-muted-foreground text-xs">Artykuły</div>
 						</div>
 						<div>
-							<div className="text-2xl font-bold text-primary">50+</div>
-							<div className="text-xs text-muted-foreground">Badania</div>
+							<div className="font-bold text-2xl text-primary">50+</div>
+							<div className="text-muted-foreground text-xs">Badania</div>
 						</div>
 					</div>
 				</div>
 
 				{/* Learning Path Suggestion */}
-				<div className="mt-6 p-4 bg-muted rounded-lg">
-					<h4 className="font-semibold mb-2 flex items-center gap-2">
+				<div className="mt-6 rounded-lg bg-muted p-4">
+					<h4 className="mb-2 flex items-center gap-2 font-semibold">
 						<GraduationCap className="h-4 w-4" />
 						Sugerowana Ścieżka Nauki
 					</h4>
-					<ol className="text-sm space-y-1 list-decimal list-inside text-muted-foreground">
-						<li>Zacznij od <strong>Centrum Edukacyjnego</strong> aby poznać podstawy</li>
-						<li>Przejdź do <strong>Mechanizmów Działania</strong> aby zrozumieć jak działają suplementy</li>
-						<li>Poznaj <strong>Neuroprzekaźniki</strong> i ich rolę w mózgu</li>
-						<li>Zbadaj <strong>Obszary Mózgu</strong> i ich funkcje</li>
-						<li>Przejrzyj <strong>Badania Naukowe</strong> aby zobaczyć dowody</li>
+					<ol className="list-inside list-decimal space-y-1 text-muted-foreground text-sm">
+						<li>
+							Zacznij od <strong>Centrum Edukacyjnego</strong> aby poznać
+							podstawy
+						</li>
+						<li>
+							Przejdź do <strong>Mechanizmów Działania</strong> aby zrozumieć
+							jak działają suplementy
+						</li>
+						<li>
+							Poznaj <strong>Neuroprzekaźniki</strong> i ich rolę w mózgu
+						</li>
+						<li>
+							Zbadaj <strong>Obszary Mózgu</strong> i ich funkcje
+						</li>
+						<li>
+							Przejrzyj <strong>Badania Naukowe</strong> aby zobaczyć dowody
+						</li>
 					</ol>
 				</div>
 			</CardContent>
 		</Card>
 	);
 }
-

@@ -1,63 +1,10 @@
+"use client";
+
 /**
  * Enhanced Knowledge Base Page with Atomic Content Structure
  * Integrates latest 2025 scientific research with atomic knowledge organization
  */
 
-"use client";
-
-import { Metadata } from "next";
-import { Interactive3DBrainModel } from "@/components/brain";
-
-// Enhanced metadata for knowledge page
-export const metadata: Metadata = {
-	title: "Baza Wiedzy o Suplementach - Graf Wiedzy i Edukacja",
-	description: "Interaktywna baza wiedzy o suplementach z grafem zależności, ścieżkami nauki i analizą badań naukowych. Edukacja oparta na faktach z Polski.",
-	keywords: [
-		"wiedza o suplementach",
-		"graf wiedzy",
-		"edukacja o nootropikach",
-		"badania naukowe suplementów",
-		"ścieżki nauki",
-		"analiza badań",
-		"suplementacja",
-		"funkcje poznawcze",
-		"neurobiologia",
-		"polska edukacja"
-	],
-	openGraph: {
-		title: "Baza Wiedzy o Suplementach - Interaktywna Edukacja",
-		description: "Poznaj kompleksową wiedzę o suplementach poprzez interaktywny graf zależności i ścieżki nauki oparte na badaniach naukowych.",
-		type: "website",
-		locale: "pl_PL",
-		images: [
-			{
-				url: "/og-knowledge.png",
-				width: 1200,
-				height: 630,
-				alt: "Baza wiedzy o suplementach - graf zależności",
-			},
-		],
-	},
-	twitter: {
-		card: "summary_large_image",
-		title: "Baza Wiedzy o Suplementach",
-		description: "Interaktywna edukacja o suplementach z grafem wiedzy i analizą badań naukowych.",
-		images: ["/twitter-knowledge.png"],
-	},
-	robots: {
-		index: true,
-		follow: true,
-		googleBot: {
-			index: true,
-			follow: true,
-			"max-video-preview": -1,
-			"max-image-preview": "large",
-			"max-snippet": -1,
-		},
-	},
-};
-
-import { Interactive3DBrainModel } from "@/components/brain";
 import {
 	EducationalOverlay,
 	LearningPath,
@@ -65,7 +12,6 @@ import {
 	ProgressTracker,
 } from "@/components/education";
 import AtomicKnowledgePanel from "@/components/education/AtomicKnowledgePanel";
-import { enhancedKnowledgeAtoms } from "@/data/atoms/knowledge-base";
 import {
 	ConnectionVisualization,
 	GraphControls,
@@ -84,10 +30,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { enhancedKnowledgeAtoms } from "@/data/atoms/knowledge-base";
 import { useGraphData } from "@/hooks/useGraphData";
 import { useKnowledgeGraphStore } from "@/lib/stores/knowledge-graph-store";
 import {
 	Activity,
+	Atom,
 	Award,
 	BookOpen,
 	Brain,
@@ -110,8 +58,8 @@ import {
 	User,
 	Zap,
 } from "lucide-react";
+import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { Atom } from "lucide-react";
 
 // Enhanced educational content with latest 2025 research
 const mockLearningPaths = [
@@ -197,6 +145,25 @@ const mockHabits = [
 ] as any[];
 
 const mockCompletions: any[] = [];
+
+// Mock 3D Brain component - replace with actual implementation when available
+const Interactive3DBrainModel = ({
+	onRegionSelect,
+	onConnectionSelect,
+}: {
+	onRegionSelect?: (region: any) => void;
+	onConnectionSelect?: (connection: any) => void;
+}) => {
+	return (
+		<div className="flex h-full items-center justify-center rounded-lg border-2 border-gray-300 border-dashed">
+			<div className="text-center">
+				<Brain className="mx-auto h-12 w-12 text-gray-400" />
+				<p className="mt-2 text-gray-500">Interaktywny model 3D mózgu</p>
+				<p className="text-gray-400 text-sm">W przygotowaniu</p>
+			</div>
+		</div>
+	);
+};
 
 const KnowledgeGraphPage = () => {
 	const [activeTab, setActiveTab] = useState("graph");
@@ -419,7 +386,7 @@ const KnowledgeGraphPage = () => {
 					</TabsList>
 
 					{/* Quick Navigation Pills for Better UX */}
-					<div className="flex flex-wrap gap-2 mb-4 justify-center sm:justify-start">
+					<div className="mb-4 flex flex-wrap justify-center gap-2 sm:justify-start">
 						<Link href="/wiedza/graf-wiedzy">
 							<Button variant="outline" size="sm" className="gap-2">
 								<GraduationCap className="h-4 w-4" />

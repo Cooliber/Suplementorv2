@@ -41,8 +41,10 @@ export const lTyrosineProfile: SupplementWithRelations = {
 		{
 			condition: "Cognitive performance under stress",
 			polishCondition: "Wydajność poznawcza pod stresem",
-			indication: "Improved working memory and executive function during stress",
-			polishIndication: "Poprawiona pamięć robocza i funkcja wykonawcza podczas stresu",
+			indication:
+				"Improved working memory and executive function during stress",
+			polishIndication:
+				"Poprawiona pamięć robocza i funkcja wykonawcza podczas stresu",
 			efficacy: "high",
 			effectivenessRating: 8,
 			evidenceLevel: "STRONG",
@@ -133,7 +135,11 @@ export const lTyrosineProfile: SupplementWithRelations = {
 			polishDescription:
 				"L-Tyrozyna służy jako prekursor syntezy hormonów tarczycy T3 i T4, wspierając funkcję metaboliczną i regulację energii w warunkach stresu.",
 			evidenceLevel: "STRONG",
-			targetSystems: ["Thyroid function", "Metabolic regulation", "Energy metabolism"],
+			targetSystems: [
+				"Thyroid function",
+				"Metabolic regulation",
+				"Energy metabolism",
+			],
 			timeToEffect: "2-4 hours",
 			duration: "6-8 hours",
 		},
@@ -148,7 +154,11 @@ export const lTyrosineProfile: SupplementWithRelations = {
 			polishDescription:
 				"Suplementacja L-tyrozyny zwiększa dostępność katecholamin w korze przedczołowej, poprawiając pamięć roboczą, funkcję wykonawczą i wydajność poznawczą w warunkach stresowych.",
 			evidenceLevel: "STRONG",
-			targetSystems: ["Prefrontal cortex", "Working memory", "Executive function"],
+			targetSystems: [
+				"Prefrontal cortex",
+				"Working memory",
+				"Executive function",
+			],
 			timeToEffect: "45-90 minutes",
 			duration: "4-6 hours",
 		},
@@ -232,7 +242,8 @@ export const lTyrosineProfile: SupplementWithRelations = {
 			dosageDependent: true,
 			timeToOnset: "4-6 hours",
 			management: "Take earlier in day, reduce evening dose",
-			polishManagement: "Przyjmuj wcześniej w ciągu dnia, zmniejsz dawkę wieczorną",
+			polishManagement:
+				"Przyjmuj wcześniej w ciągu dnia, zmniejsz dawkę wieczorną",
 		},
 	],
 
@@ -265,7 +276,8 @@ export const lTyrosineProfile: SupplementWithRelations = {
 			mechanism: "Cofactor support for tyrosine hydroxylase",
 			polishMechanism: "Wsparcie kofaktorów dla hydroksylazy tyrozyny",
 			recommendation: "Beneficial for optimal neurotransmitter synthesis",
-			polishRecommendation: "Korzystne dla optymalnej syntezy neuroprzekaźników",
+			polishRecommendation:
+				"Korzystne dla optymalnej syntezy neuroprzekaźników",
 			evidenceLevel: "MODERATE",
 		},
 		{
@@ -290,16 +302,26 @@ export const lTyrosineProfile: SupplementWithRelations = {
 	researchStudies: [
 		{
 			id: "deijen-1999",
-			title: "Tyrosine improves cognitive performance and reduces blood pressure in cadets",
-			polishTitle: "Tyrozyna poprawia wydajność poznawczą i obniża ciśnienie krwi u kadetów",
-			authors: ["Deijen JB", "Wientjes CJ", "Vullinghs HF", "Cloin PA", "Langefeld JJ"],
+			title:
+				"Tyrosine improves cognitive performance and reduces blood pressure in cadets",
+			polishTitle:
+				"Tyrozyna poprawia wydajność poznawczą i obniża ciśnienie krwi u kadetów",
+			authors: [
+				"Deijen JB",
+				"Wientjes CJ",
+				"Vullinghs HF",
+				"Cloin PA",
+				"Langefeld JJ",
+			],
 			journal: "Brain Research Bulletin",
 			year: 1999,
 			studyType: "RANDOMIZED_CONTROLLED_TRIAL",
 			primaryOutcome: "Cognitive performance under stress",
 			polishPrimaryOutcome: "Wydajność poznawcza pod stresem",
-			findings: "L-Tyrosine significantly improved cognitive performance during stress",
-			polishFindings: "L-Tyrozyna znacząco poprawiła wydajność poznawczą podczas stresu",
+			findings:
+				"L-Tyrosine significantly improved cognitive performance during stress",
+			polishFindings:
+				"L-Tyrozyna znacząco poprawiła wydajność poznawczą podczas stresu",
 			evidenceLevel: "STRONG",
 			lastUpdated: "2024-01-15T00:00:00Z",
 			pubmedId: "10372549",
@@ -312,15 +334,18 @@ export const lTyrosineProfile: SupplementWithRelations = {
 		{
 			id: "thomas-1999",
 			title: "Tyrosine improves working memory in a multitasking environment",
-			polishTitle: "Tyrozyna poprawia pamięć roboczą w środowisku wielozadaniowym",
+			polishTitle:
+				"Tyrozyna poprawia pamięć roboczą w środowisku wielozadaniowym",
 			authors: ["Thomas JR", "Lockwood PA", "Singh A", "Deuster PA"],
 			journal: "Pharmacology Biochemistry and Behavior",
 			year: 1999,
 			studyType: "RANDOMIZED_CONTROLLED_TRIAL",
 			primaryOutcome: "Working memory performance",
 			polishPrimaryOutcome: "Wydajność pamięci roboczej",
-			findings: "L-Tyrosine enhanced working memory during stressful multitasking",
-			polishFindings: "L-Tyrozyna wzmocniła pamięć roboczą podczas stresującego wielozadaniowości",
+			findings:
+				"L-Tyrosine enhanced working memory during stressful multitasking",
+			polishFindings:
+				"L-Tyrozyna wzmocniła pamięć roboczą podczas stresującego wielozadaniowości",
 			evidenceLevel: "STRONG",
 			lastUpdated: "2024-01-15T00:00:00Z",
 			pubmedId: "10515309",
@@ -332,16 +357,27 @@ export const lTyrosineProfile: SupplementWithRelations = {
 		},
 		{
 			id: "neri-1995",
-			title: "The effects of tyrosine on cognitive performance during extended wakefulness",
-			polishTitle: "Efekty tyrozyny na wydajność poznawczą podczas przedłużonej bezsenności",
-			authors: ["Neri DF", "Wiegmann D", "Stanny RR", "Shappell SA", "McCardie A", "McKay DL"],
+			title:
+				"The effects of tyrosine on cognitive performance during extended wakefulness",
+			polishTitle:
+				"Efekty tyrozyny na wydajność poznawczą podczas przedłużonej bezsenności",
+			authors: [
+				"Neri DF",
+				"Wiegmann D",
+				"Stanny RR",
+				"Shappell SA",
+				"McCardie A",
+				"McKay DL",
+			],
 			journal: "Aviation, Space, and Environmental Medicine",
 			year: 1995,
 			studyType: "RANDOMIZED_CONTROLLED_TRIAL",
 			primaryOutcome: "Cognitive performance during sleep deprivation",
 			polishPrimaryOutcome: "Wydajność poznawcza podczas deprywacji snu",
-			findings: "L-Tyrosine prevented cognitive decline during extended wakefulness",
-			polishFindings: "L-Tyrozyna zapobiegła spadkowi poznawczemu podczas przedłużonej bezsenności",
+			findings:
+				"L-Tyrosine prevented cognitive decline during extended wakefulness",
+			polishFindings:
+				"L-Tyrozyna zapobiegła spadkowi poznawczemu podczas przedłużonej bezsenności",
 			evidenceLevel: "MODERATE",
 			lastUpdated: "2024-01-15T00:00:00Z",
 			pubmedId: "8579614",

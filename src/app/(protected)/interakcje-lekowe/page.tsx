@@ -297,13 +297,20 @@ const DrugInteractionsPage = () => {
 							<div className="space-y-3">
 								{filteredSubstances.map((substance) => (
 									<div
-										key={substance.id}
-										className={`flex cursor-pointer items-center justify-between rounded-lg border p-3 transition-colors ${
-											selectedSubstances.includes(substance.id)
-												? "border-blue-200 bg-blue-50"
-												: "hover:bg-gray-50"
-										}`}
-										onClick={() => handleSubstanceToggle(substance.id)}
+									key={substance.id}
+									tabIndex={0}
+									className={`flex cursor-pointer items-center justify-between rounded-lg border p-3 transition-colors ${
+									selectedSubstances.includes(substance.id)
+									? "border-blue-200 bg-blue-50"
+									  : "hover:bg-gray-50"
+									}`}
+									 onClick={() => handleSubstanceToggle(substance.id)}
+										onKeyDown={(e) => {
+											if (e.key === 'Enter' || e.key === ' ') {
+													e.preventDefault();
+													handleSubstanceToggle(substance.id);
+											}
+										}}
 									>
 										<div>
 											<h3 className="font-medium">{substance.polishName}</h3>

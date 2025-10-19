@@ -5,12 +5,17 @@
  * Enhanced loading states with sophisticated motion design
  */
 
-import React from "react";
-import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+	durations,
+	easings,
+	springs,
+	staggerConfig,
+} from "@/lib/animations/config";
 import { useReducedMotion } from "@/lib/animations/hooks";
-import { easings, durations, springs, staggerConfig } from "@/lib/animations/config";
+import { motion } from "framer-motion";
+import type React from "react";
 
 interface StaggeredSkeletonProps {
 	children: React.ReactNode;
@@ -88,7 +93,7 @@ export const SkeletonWave: React.FC<SkeletonWaveProps> = ({
 			{Array.from({ length: count }).map((_, i) => (
 				<motion.div
 					key={i}
-					className="w-1 bg-muted-foreground/20 rounded-sm"
+					className="w-1 rounded-sm bg-muted-foreground/20"
 					animate={{
 						height: ["10px", `${Math.random() * 20 + 10}px`, "10px"],
 					}}
@@ -162,7 +167,7 @@ export const ShimmerSkeleton: React.FC<ShimmerSkeletonProps> = ({
 
 	return (
 		<motion.div
-			className={`bg-gradient-to-r from-muted via-muted-foreground/20 to-muted bg-[length:200%_100%] ${className}`}
+			className={`bg-[length:200%_100%] bg-gradient-to-r from-muted via-muted-foreground/20 to-muted ${className}`}
 			style={{ width, height }}
 			animate={{
 				backgroundPosition: ["200% 0", "-200% 0"],
@@ -205,7 +210,7 @@ export const StaggeredGrid: React.FC<StaggeredGridProps> = ({
 				}}
 			>
 				{Array.from({ length: items }).map((_, i) => (
-					<Skeleton key={i} className="w-full h-full" />
+					<Skeleton key={i} className="h-full w-full" />
 				))}
 			</div>
 		);
@@ -222,7 +227,7 @@ export const StaggeredGrid: React.FC<StaggeredGridProps> = ({
 			{Array.from({ length: items }).map((_, i) => (
 				<motion.div
 					key={i}
-					className="w-full h-full"
+					className="h-full w-full"
 					initial={{ opacity: 0, scale: 0.8 }}
 					animate={{ opacity: 1, scale: 1 }}
 					transition={{
@@ -230,7 +235,7 @@ export const StaggeredGrid: React.FC<StaggeredGridProps> = ({
 						...springs.gentle,
 					}}
 				>
-					<Skeleton className="w-full h-full" />
+					<Skeleton className="h-full w-full" />
 				</motion.div>
 			))}
 		</div>
@@ -256,9 +261,7 @@ export const AnimatedSkeletonCard: React.FC<AnimatedSkeletonCardProps> = ({
 		return (
 			<Card className={className}>
 				<CardHeader>
-					{showAvatar && (
-						<Skeleton className="w-12 h-12 rounded-full mb-4" />
-					)}
+					{showAvatar && <Skeleton className="mb-4 h-12 w-12 rounded-full" />}
 					<Skeleton className="h-6 w-3/4" />
 					<Skeleton className="h-4 w-full" />
 				</CardHeader>
@@ -274,7 +277,7 @@ export const AnimatedSkeletonCard: React.FC<AnimatedSkeletonCardProps> = ({
 						)}
 					</div>
 					{showActions && (
-						<div className="flex gap-2 mt-4">
+						<div className="mt-4 flex gap-2">
 							<Skeleton className="h-8 w-16" />
 							<Skeleton className="h-8 w-16" />
 						</div>
@@ -293,13 +296,17 @@ export const AnimatedSkeletonCard: React.FC<AnimatedSkeletonCardProps> = ({
 						animate={{ scale: 1 }}
 						transition={{ ...springs.gentle }}
 					>
-						<Skeleton className="w-12 h-12 rounded-full mb-4" />
+						<Skeleton className="mb-4 h-12 w-12 rounded-full" />
 					</motion.div>
 				)}
 				<motion.div
 					initial={{ opacity: 0, y: 10 }}
 					animate={{ opacity: 1, y: 0 }}
-					transition={{ delay: 0.1, duration: durations.normal, ease: easings.calm }}
+					transition={{
+						delay: 0.1,
+						duration: durations.normal,
+						ease: easings.calm,
+					}}
 				>
 					<Skeleton className="h-6 w-3/4" />
 					<Skeleton className="h-4 w-full" />
@@ -309,7 +316,11 @@ export const AnimatedSkeletonCard: React.FC<AnimatedSkeletonCardProps> = ({
 				<motion.div
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
-					transition={{ delay: 0.2, duration: durations.normal, ease: easings.calm }}
+					transition={{
+						delay: 0.2,
+						duration: durations.normal,
+						ease: easings.calm,
+					}}
 				>
 					<div className="space-y-2">
 						<Skeleton className="h-4 w-full" />
@@ -323,10 +334,14 @@ export const AnimatedSkeletonCard: React.FC<AnimatedSkeletonCardProps> = ({
 					</div>
 					{showActions && (
 						<motion.div
-							className="flex gap-2 mt-4"
+							className="mt-4 flex gap-2"
 							initial={{ opacity: 0, y: 10 }}
 							animate={{ opacity: 1, y: 0 }}
-							transition={{ delay: 0.3, duration: durations.normal, ease: easings.calm }}
+							transition={{
+								delay: 0.3,
+								duration: durations.normal,
+								ease: easings.calm,
+							}}
 						>
 							<Skeleton className="h-8 w-16" />
 							<Skeleton className="h-8 w-16" />
@@ -345,12 +360,9 @@ interface SkeletonListWithStaggerProps {
 	className?: string;
 }
 
-export const SkeletonListWithStagger: React.FC<SkeletonListWithStaggerProps> = ({
-	items = 5,
-	showAvatar = true,
-	showSubtitle = true,
-	className = "",
-}) => {
+export const SkeletonListWithStagger: React.FC<
+	SkeletonListWithStaggerProps
+> = ({ items = 5, showAvatar = true, showSubtitle = true, className = "" }) => {
 	const shouldReduceMotion = useReducedMotion();
 
 	if (shouldReduceMotion) {
@@ -358,7 +370,7 @@ export const SkeletonListWithStagger: React.FC<SkeletonListWithStaggerProps> = (
 			<div className={`space-y-4 ${className}`}>
 				{Array.from({ length: items }).map((_, i) => (
 					<div key={i} className="flex items-center gap-4">
-						{showAvatar && <Skeleton className="w-12 h-12 rounded-full" />}
+						{showAvatar && <Skeleton className="h-12 w-12 rounded-full" />}
 						<div className="flex-1 space-y-2">
 							<Skeleton className="h-5 w-3/4" />
 							{showSubtitle && <Skeleton className="h-4 w-1/2" />}
@@ -392,7 +404,7 @@ export const SkeletonListWithStagger: React.FC<SkeletonListWithStaggerProps> = (
 								...springs.gentle,
 							}}
 						>
-							<Skeleton className="w-12 h-12 rounded-full" />
+							<Skeleton className="h-12 w-12 rounded-full" />
 						</motion.div>
 					)}
 					<div className="flex-1 space-y-2">
@@ -412,12 +424,9 @@ interface SkeletonTableWithAnimationProps {
 	className?: string;
 }
 
-export const SkeletonTableWithAnimation: React.FC<SkeletonTableWithAnimationProps> = ({
-	rows = 5,
-	columns = 4,
-	showHeader = true,
-	className = "",
-}) => {
+export const SkeletonTableWithAnimation: React.FC<
+	SkeletonTableWithAnimationProps
+> = ({ rows = 5, columns = 4, showHeader = true, className = "" }) => {
 	const shouldReduceMotion = useReducedMotion();
 
 	if (shouldReduceMotion) {
@@ -492,7 +501,7 @@ export const BreathingSkeleton: React.FC<BreathingSkeletonProps> = ({
 		return (
 			<div className={`flex gap-2 ${className}`}>
 				{Array.from({ length: count }).map((_, i) => (
-					<Skeleton key={i} className="w-2 h-8" />
+					<Skeleton key={i} className="h-8 w-2" />
 				))}
 			</div>
 		);
@@ -503,7 +512,7 @@ export const BreathingSkeleton: React.FC<BreathingSkeletonProps> = ({
 			{Array.from({ length: count }).map((_, i) => (
 				<motion.div
 					key={i}
-					className="w-2 bg-muted rounded-sm"
+					className="w-2 rounded-sm bg-muted"
 					animate={{
 						height: ["20px", "40px", "20px"],
 						opacity: [0.3, 1, 0.3],
@@ -536,9 +545,9 @@ export const SkeletonChartAnimation: React.FC<SkeletonChartAnimationProps> = ({
 	if (type === "pie") {
 		return (
 			<div className={`relative ${className}`}>
-				<Skeleton className="w-32 h-32 rounded-full mx-auto" />
+				<Skeleton className="mx-auto h-32 w-32 rounded-full" />
 				<div className="absolute inset-0 flex items-center justify-center">
-					<Skeleton className="w-16 h-16 rounded-full" />
+					<Skeleton className="h-16 w-16 rounded-full" />
 				</div>
 			</div>
 		);
@@ -553,7 +562,7 @@ export const SkeletonChartAnimation: React.FC<SkeletonChartAnimationProps> = ({
 					))}
 				</div>
 				<div className="relative h-32">
-					<Skeleton className="w-full h-full" />
+					<Skeleton className="h-full w-full" />
 				</div>
 			</div>
 		);
@@ -562,7 +571,7 @@ export const SkeletonChartAnimation: React.FC<SkeletonChartAnimationProps> = ({
 	// Bar chart
 	if (shouldReduceMotion) {
 		return (
-			<div className={`flex items-end gap-2 h-32 ${className}`}>
+			<div className={`flex h-32 items-end gap-2 ${className}`}>
 				{Array.from({ length: bars }).map((_, i) => (
 					<Skeleton
 						key={i}
@@ -577,11 +586,11 @@ export const SkeletonChartAnimation: React.FC<SkeletonChartAnimationProps> = ({
 	}
 
 	return (
-		<div className={`flex items-end gap-2 h-32 ${className}`}>
+		<div className={`flex h-32 items-end gap-2 ${className}`}>
 			{Array.from({ length: bars }).map((_, i) => (
 				<motion.div
 					key={i}
-					className="w-full bg-muted rounded-sm"
+					className="w-full rounded-sm bg-muted"
 					initial={{ height: 0 }}
 					animate={{
 						height: `${Math.random() * 60 + 20}%`,

@@ -221,10 +221,8 @@ export const magnesiumGlycinateProfile: SupplementWithRelations = {
 				severity: "minor",
 				description: "May compete for absorption",
 				clinicalSignificance: "May reduce absorption of both minerals",
-				polishClinicalSignificance:
-					"Może zmniejszyć wchłanianie obu minerałów",
-				polishDescription:
-					"Może konkurować o wchłanianie",
+				polishClinicalSignificance: "Może zmniejszyć wchłanianie obu minerałów",
+				polishDescription: "Może konkurować o wchłanianie",
 				recommendation: "Take at different times or 2 hours apart",
 				polishRecommendation: "Przyjmuj w różnych porach lub 2 godziny odstępu",
 				evidenceLevel: "MODERATE",
@@ -236,12 +234,12 @@ export const magnesiumGlycinateProfile: SupplementWithRelations = {
 				severity: "moderate",
 				description: "Magnesium may reduce antibiotic absorption",
 				clinicalSignificance: "May decrease antibiotic effectiveness",
-				polishClinicalSignificance:
-					"Może zmniejszyć skuteczność antybiotyku",
-				polishDescription:
-					"Magnez może zmniejszyć wchłanianie antybiotyku",
-				recommendation: "Take antibiotics 2 hours before or 4-6 hours after magnesium",
-				polishRecommendation: "Przyjmuj antybiotyki 2 godziny przed lub 4-6 godzin po magnezie",
+				polishClinicalSignificance: "Może zmniejszyć skuteczność antybiotyku",
+				polishDescription: "Magnez może zmniejszyć wchłanianie antybiotyku",
+				recommendation:
+					"Take antibiotics 2 hours before or 4-6 hours after magnesium",
+				polishRecommendation:
+					"Przyjmuj antybiotyki 2 godziny przed lub 4-6 godzin po magnezie",
 				evidenceLevel: "MODERATE",
 			},
 		],
@@ -292,14 +290,14 @@ export const magnesiumGlycinateProfile: SupplementWithRelations = {
 			type: "synergistic",
 			severity: "beneficial",
 			description: "Complementary roles in bone health and calcium metabolism",
-			polishDescription: "Komplementarne role w zdrowiu kości i metabolizmie wapnia",
+			polishDescription:
+				"Komplementarne role w zdrowiu kości i metabolizmie wapnia",
 			clinicalSignificance: "Enhanced bone mineralization and health",
 			polishClinicalSignificance: "Wzmocniona mineralizacja i zdrowie kości",
 			mechanism: "Vitamin D enhances magnesium absorption",
 			polishMechanism: "Witamina D wzmacnia wchłanianie magnezu",
 			recommendation: "Beneficial combination for bone and muscle health",
-			polishRecommendation:
-				"Korzystne połączenie dla zdrowia kości i mięśni",
+			polishRecommendation: "Korzystne połączenie dla zdrowia kości i mięśni",
 			evidenceLevel: "MODERATE",
 		},
 		{
@@ -307,7 +305,8 @@ export const magnesiumGlycinateProfile: SupplementWithRelations = {
 			polishSubstance: "Glicyna",
 			type: "synergistic",
 			clinicalSignificance: "Enhanced bioavailability and neurological effects",
-			polishClinicalSignificance: "Wzmocniona biodostępność i efekty neurologiczne",
+			polishClinicalSignificance:
+				"Wzmocniona biodostępność i efekty neurologiczne",
 			severity: "beneficial",
 			mechanism: "Improved absorption and NMDA receptor modulation",
 			polishMechanism: "Poprawione wchłanianie i modulacja receptorów NMDA",
@@ -316,8 +315,7 @@ export const magnesiumGlycinateProfile: SupplementWithRelations = {
 			polishDescription:
 				"Komponent glicynowy wzmacnia wchłanianie magnezu i zapewnia dodatkowe korzyści neurologiczne",
 			recommendation: "Inherent synergy in glycinate form",
-			polishRecommendation:
-				"Wrodzona synergia w formie glicynianu",
+			polishRecommendation: "Wrodzona synergia w formie glicynianu",
 			evidenceLevel: "MODERATE",
 		},
 	],

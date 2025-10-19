@@ -1,11 +1,23 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Info, Shield, Calculator, Clock } from "lucide-react";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Calculator, Clock, Info, Shield } from "lucide-react";
 
 interface CalculationOptionsStepProps {
 	options: {
@@ -34,7 +46,11 @@ const CALCULATION_TYPES = [
 	},
 ];
 
-export function CalculationOptionsStep({ options, onOptionsChange, isPolish }: CalculationOptionsStepProps) {
+export function CalculationOptionsStep({
+	options,
+	onOptionsChange,
+	isPolish,
+}: CalculationOptionsStepProps) {
 	const updateOption = (key: string, value: any) => {
 		onOptionsChange({ ...options, [key]: value });
 	};
@@ -69,7 +85,7 @@ export function CalculationOptionsStep({ options, onOptionsChange, isPolish }: C
 										<div className="font-medium">
 											{isPolish ? type.label : type.englishLabel}
 										</div>
-										<div className="text-sm text-muted-foreground">
+										<div className="text-muted-foreground text-sm">
 											{isPolish ? type.description : type.englishDescription}
 										</div>
 									</div>
@@ -78,17 +94,29 @@ export function CalculationOptionsStep({ options, onOptionsChange, isPolish }: C
 						</SelectContent>
 					</Select>
 
-					<div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+					<div className="flex items-center justify-between rounded-lg bg-muted/50 p-3">
 						<div className="space-y-1">
 							<div className="font-medium">
 								{isPolish ? "Obecnie wybrany:" : "Currently selected:"}
 							</div>
-							<div className="text-sm text-muted-foreground">
-								{CALCULATION_TYPES.find(t => t.value === options.calculationType)?.description}
+							<div className="text-muted-foreground text-sm">
+								{
+									CALCULATION_TYPES.find(
+										(t) => t.value === options.calculationType,
+									)?.description
+								}
 							</div>
 						</div>
-						<Badge variant={options.calculationType === "stack" ? "default" : "secondary"}>
-							{CALCULATION_TYPES.find(t => t.value === options.calculationType)?.label}
+						<Badge
+							variant={
+								options.calculationType === "stack" ? "default" : "secondary"
+							}
+						>
+							{
+								CALCULATION_TYPES.find(
+									(t) => t.value === options.calculationType,
+								)?.label
+							}
 						</Badge>
 					</div>
 				</CardContent>
@@ -114,7 +142,7 @@ export function CalculationOptionsStep({ options, onOptionsChange, isPolish }: C
 							<Label className="text-base">
 								{isPolish ? "Analiza interakcji" : "Interaction Analysis"}
 							</Label>
-							<p className="text-sm text-muted-foreground">
+							<p className="text-muted-foreground text-sm">
 								{isPolish
 									? "Sprawdź interakcje między suplementami i lekami"
 									: "Check interactions between supplements and medications"}
@@ -122,7 +150,9 @@ export function CalculationOptionsStep({ options, onOptionsChange, isPolish }: C
 						</div>
 						<Switch
 							checked={options.includeInteractions}
-							onCheckedChange={(checked) => updateOption("includeInteractions", checked)}
+							onCheckedChange={(checked) =>
+								updateOption("includeInteractions", checked)
+							}
 						/>
 					</div>
 
@@ -130,9 +160,11 @@ export function CalculationOptionsStep({ options, onOptionsChange, isPolish }: C
 					<div className="flex items-center justify-between">
 						<div className="space-y-1">
 							<Label className="text-base">
-								{isPolish ? "Sprawdzenie przeciwwskazań" : "Contraindication Check"}
+								{isPolish
+									? "Sprawdzenie przeciwwskazań"
+									: "Contraindication Check"}
 							</Label>
-							<p className="text-sm text-muted-foreground">
+							<p className="text-muted-foreground text-sm">
 								{isPolish
 									? "Sprawdź przeciwwskazania dla Twojego profilu zdrowotnego"
 									: "Check contraindications for your health profile"}
@@ -140,22 +172,24 @@ export function CalculationOptionsStep({ options, onOptionsChange, isPolish }: C
 						</div>
 						<Switch
 							checked={options.includeContraindications}
-							onCheckedChange={(checked) => updateOption("includeContraindications", checked)}
+							onCheckedChange={(checked) =>
+								updateOption("includeContraindications", checked)
+							}
 						/>
 					</div>
 				</CardContent>
 			</Card>
 
 			{/* Information Cards */}
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<Card>
 					<CardHeader className="pb-3">
-						<CardTitle className="text-lg flex items-center gap-2">
+						<CardTitle className="flex items-center gap-2 text-lg">
 							<Info className="h-5 w-5 text-blue-600" />
 							{isPolish ? "Jak to działa?" : "How it works?"}
 						</CardTitle>
 					</CardHeader>
-					<CardContent className="text-sm text-muted-foreground space-y-2">
+					<CardContent className="space-y-2 text-muted-foreground text-sm">
 						<p>
 							{isPolish
 								? "• Analizujemy Twój profil zdrowotny i wiek"
@@ -181,12 +215,12 @@ export function CalculationOptionsStep({ options, onOptionsChange, isPolish }: C
 
 				<Card>
 					<CardHeader className="pb-3">
-						<CardTitle className="text-lg flex items-center gap-2">
+						<CardTitle className="flex items-center gap-2 text-lg">
 							<Clock className="h-5 w-5 text-green-600" />
 							{isPolish ? "Czas trwania" : "Duration"}
 						</CardTitle>
 					</CardHeader>
-					<CardContent className="text-sm text-muted-foreground space-y-2">
+					<CardContent className="space-y-2 text-muted-foreground text-sm">
 						<p>
 							{isPolish
 								? "• Obliczenia zajmują zazwyczaj 10-30 sekund"
@@ -215,12 +249,12 @@ export function CalculationOptionsStep({ options, onOptionsChange, isPolish }: C
 			<Card className="border-amber-200 bg-amber-50">
 				<CardContent className="pt-6">
 					<div className="flex items-start gap-3">
-						<Shield className="h-5 w-5 text-amber-600 mt-0.5" />
+						<Shield className="mt-0.5 h-5 w-5 text-amber-600" />
 						<div className="space-y-2">
 							<h4 className="font-medium text-amber-800">
 								{isPolish ? "Ważna informacja" : "Important Notice"}
 							</h4>
-							<p className="text-sm text-amber-700">
+							<p className="text-amber-700 text-sm">
 								{isPolish
 									? "Ten kalkulator nie zastępuje profesjonalnej porady medycznej. Zawsze konsultuj się z lekarzem lub farmaceutą przed rozpoczęciem suplementacji, szczególnie jeśli masz problemy zdrowotne lub przyjmujesz leki."
 									: "This calculator does not replace professional medical advice. Always consult with a doctor or pharmacist before starting supplementation, especially if you have health conditions or are taking medications."}

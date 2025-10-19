@@ -2,7 +2,21 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import {
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+} from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -25,33 +39,26 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
-} from "@/components/ui/command";
+import type { ComprehensiveSupplementProfile } from "@/data/comprehensive-supplements/types";
+import { useAdvancedSearch } from "@/hooks/useAdvancedSearch";
+import { useNLPSearch, useVoiceSearch } from "@/hooks/useVoiceSearch";
+import { hybridSupplementsService } from "@/lib/services/hybrid-supplements-service";
 import type { EvidenceLevel, SupplementCategory } from "@/types/supplement";
 import {
+	Bookmark,
+	Clock,
 	Filter,
+	History,
+	Mic,
+	MicOff,
 	Search,
 	SlidersHorizontal,
 	Sparkles,
 	Star,
 	TrendingUp,
 	X,
-	Mic,
-	MicOff,
-	History,
-	Bookmark,
-	Clock,
 } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
-import { useAdvancedSearch } from "@/hooks/useAdvancedSearch";
-import { useVoiceSearch, useNLPSearch } from "@/hooks/useVoiceSearch";
-import { sampleSupplements } from "@/data/sample-supplements";
+import { useEffect, useRef, useState } from "react";
 
 interface SearchFilters {
 	query: string;
@@ -61,8 +68,24 @@ interface SearchFilters {
 	priceRange: [number, number];
 	hasStudies: boolean;
 	hasReviews: boolean;
-	sortBy: "relevance" | "name" | "evidence" | "safety" | "rating" | "price";
+	sortBy:
+		| "relevance"
+		| "name"
+		| "evidence"
+		| "safety"
+		| "rating"
+		| "price"
+		| "effectiveness"
+		| "cost";
 	sortOrder: "asc" | "desc";
+	// New comprehensive data filters
+	pregnancySafe?: boolean;
+	breastfeedingSafe?: boolean;
+	pediatricApproved?: boolean;
+	maxCostPerMonth?: number;
+	minEffectiveness?: number;
+	mechanisms?: string[];
+	conditions?: string[];
 }
 
 interface AdvancedSearchWithAutocompleteProps {
@@ -83,16 +106,36 @@ export function AdvancedSearchWithAutocomplete({
 	totalResults,
 }: AdvancedSearchWithAutocompleteProps) {
 	const [searchQuery, setSearchQuery] = useState("");
-	const [selectedCategories, setSelectedCategories] = useState<SupplementCategory[]>([]);
-	const [selectedEvidenceLevels, setSelectedEvidenceLevels] = useState<EvidenceLevel[]>([]);
+	const [selectedCategories, setSelectedCategories] = useState<
+		SupplementCategory[]
+	>([]);
+	const [selectedEvidenceLevels, setSelectedEvidenceLevels] = useState<
+		EvidenceLevel[]
+	>([]);
 	const [safetyRange, setSafetyRange] = useState<[number, number]>([0, 10]);
 	const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
 	const [hasStudies, setHasStudies] = useState(false);
 	const [hasReviews, setHasReviews] = useState(false);
-	const [sortBy, setSortBy] = useState<"relevance" | "name" | "evidence" | "safety" | "rating" | "price">("relevance");
+	const [sortBy, setSortBy] = useState<
+		| "relevance"
+		| "name"
+		| "evidence"
+		| "safety"
+		| "rating"
+		| "price"
+		| "effectiveness"
+		| "cost"
+	>("relevance");
 	const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 	const [showAdvanced, setShowAdvanced] = useState(false);
 	const [showSuggestions, setShowSuggestions] = useState(false);
+
+	// New comprehensive data filters
+	const [pregnancySafe, setPregnancySafe] = useState(false);
+	const [breastfeedingSafe, setBreastfeedingSafe] = useState(false);
+	const [pediatricApproved, setPediatricApproved] = useState(false);
+	const [maxCostPerMonth, setMaxCostPerMonth] = useState<number>(500);
+	const [minEffectiveness, setMinEffectiveness] = useState<number>(5);
 
 	const searchInputRef = useRef<HTMLInputElement>(null);
 	const suggestionsRef = useRef<HTMLDivElement>(null);
@@ -108,7 +151,7 @@ export function AdvancedSearchWithAutocomplete({
 		deleteSavedSearch,
 		clearHistory,
 		highlightText,
-	} = useAdvancedSearch(sampleSupplements);
+	} = useAdvancedSearch([]); // Use empty array as default
 
 	const {
 		isListening,
@@ -123,7 +166,11 @@ export function AdvancedSearchWithAutocomplete({
 		interimResults: true,
 	});
 
-	const { analyzeQuery, generateSuggestions: generateNLPSuggestions, enhanceQuery } = useNLPSearch();
+	const {
+		analyzeQuery,
+		generateSuggestions: generateNLPSuggestions,
+		enhanceQuery,
+	} = useNLPSearch();
 
 	const categories: SupplementCategory[] = [
 		"NOOTROPIC",
@@ -170,7 +217,7 @@ export function AdvancedSearchWithAutocomplete({
 	};
 
 	// Handle search execution
-	const handleSearch = () => {
+	const handleSearch = async () => {
 		const filters: SearchFilters = {
 			query: searchQuery,
 			categories: selectedCategories,
@@ -181,11 +228,43 @@ export function AdvancedSearchWithAutocomplete({
 			hasReviews,
 			sortBy,
 			sortOrder,
+			pregnancySafe: pregnancySafe,
+			breastfeedingSafe: breastfeedingSafe,
+			pediatricApproved: pediatricApproved,
+			maxCostPerMonth: maxCostPerMonth,
+			minEffectiveness: minEffectiveness,
 		};
 
-		addToHistory(searchQuery, searchResults.length);
-		onSearch(filters);
-		setShowSuggestions(false);
+		try {
+			// Use hybrid service for search
+			const results = await hybridSupplementsService.getAllSupplements(
+				{
+					category: selectedCategories,
+					evidenceLevel: selectedEvidenceLevels,
+					searchTerm: searchQuery,
+					safetyProfile: {
+						pregnancySafe: pregnancySafe,
+						breastfeedingSafe: breastfeedingSafe,
+						pediatricApproved: pediatricApproved,
+					},
+					maxCostPerMonth: maxCostPerMonth,
+					minEffectiveness: minEffectiveness,
+				},
+				{
+					sortBy: sortBy === "relevance" ? "polishName" : sortBy,
+					sortOrder: sortOrder,
+					limit: 50,
+				},
+			);
+
+			addToHistory(searchQuery, results.pagination.total);
+			onSearch(filters);
+			setShowSuggestions(false);
+		} catch (error) {
+			console.error("Search failed:", error);
+			// Fallback to simple search
+			onSearch(filters);
+		}
 	};
 
 	// Handle keyboard navigation
@@ -212,7 +291,7 @@ export function AdvancedSearchWithAutocomplete({
 	// Enhanced voice search with NLP
 	const toggleVoiceSearch = async () => {
 		if (!isVoiceSupported) {
-			alert('Twoja przeglądarka nie obsługuje rozpoznawania mowy.');
+			alert("Twoja przeglądarka nie obsługuje rozpoznawania mowy.");
 			return;
 		}
 
@@ -223,7 +302,7 @@ export function AdvancedSearchWithAutocomplete({
 				await startListening();
 			}
 		} catch (error) {
-			console.error('Voice search error:', error);
+			console.error("Voice search error:", error);
 		}
 	};
 
@@ -241,7 +320,7 @@ export function AdvancedSearchWithAutocomplete({
 				setSearchQuery(enhancedQuery);
 
 				// Show NLP analysis results
-				console.log('NLP Analysis:', analysis);
+				console.log("NLP Analysis:", analysis);
 			}
 		}
 	}, [transcript, analyzeQuery, enhanceQuery]);
@@ -259,28 +338,29 @@ export function AdvancedSearchWithAutocomplete({
 			}
 		};
 
-		document.addEventListener('mousedown', handleClickOutside);
-		return () => document.removeEventListener('mousedown', handleClickOutside);
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => document.removeEventListener("mousedown", handleClickOutside);
 	}, []);
 
 	// Show suggestions when typing
 	useEffect(() => {
-		setShowSuggestions(searchQuery.length > 1 && (searchResults.length > 0 || searchSuggestions.length > 0));
+		setShowSuggestions(
+			searchQuery.length > 1 &&
+				(searchResults.length > 0 || searchSuggestions.length > 0),
+		);
 	}, [searchQuery, searchResults, searchSuggestions]);
 
 	const toggleCategory = (category: SupplementCategory) => {
-		setSelectedCategories(prev =>
+		setSelectedCategories((prev) =>
 			prev.includes(category)
-				? prev.filter(c => c !== category)
-				: [...prev, category]
+				? prev.filter((c) => c !== category)
+				: [...prev, category],
 		);
 	};
 
 	const toggleEvidenceLevel = (level: EvidenceLevel) => {
-		setSelectedEvidenceLevels(prev =>
-			prev.includes(level)
-				? prev.filter(l => l !== level)
-				: [...prev, level]
+		setSelectedEvidenceLevels((prev) =>
+			prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level],
 		);
 	};
 
@@ -294,6 +374,11 @@ export function AdvancedSearchWithAutocomplete({
 		setHasReviews(false);
 		setSortBy("relevance");
 		setSortOrder("desc");
+		setPregnancySafe(false);
+		setBreastfeedingSafe(false);
+		setPediatricApproved(false);
+		setMaxCostPerMonth(500);
+		setMinEffectiveness(5);
 		setShowSuggestions(false);
 	};
 
@@ -307,7 +392,12 @@ export function AdvancedSearchWithAutocomplete({
 		priceRange[1] < 500 ||
 		hasStudies ||
 		hasReviews ||
-		sortBy !== "relevance";
+		sortBy !== "relevance" ||
+		pregnancySafe ||
+		breastfeedingSafe ||
+		pediatricApproved ||
+		maxCostPerMonth < 500 ||
+		minEffectiveness > 5;
 
 	return (
 		<TooltipProvider>
@@ -320,13 +410,14 @@ export function AdvancedSearchWithAutocomplete({
 							Zaawansowane wyszukiwanie z autouzupełnianiem
 						</CardTitle>
 						<CardDescription>
-							Inteligentne wyszukiwanie suplementów z podpowiedziami i tolerancją błędów
+							Inteligentne wyszukiwanie suplementów z podpowiedziami i
+							tolerancją błędów
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
 						<div className="flex gap-2">
 							<div className="relative flex-1">
-								<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+								<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
 								<Input
 									ref={searchInputRef}
 									placeholder="Szukaj suplementów, korzyści, składników..."
@@ -334,11 +425,11 @@ export function AdvancedSearchWithAutocomplete({
 									onChange={(e) => setSearchQuery(e.target.value)}
 									onKeyPress={handleKeyPress}
 									onFocus={() => setShowSuggestions(searchQuery.length > 1)}
-									className="pl-10 pr-20"
+									className="pr-20 pl-10"
 								/>
 
 								{/* Search controls */}
-								<div className="absolute right-1 top-1/2 flex -translate-y-1/2 gap-1">
+								<div className="-translate-y-1/2 absolute top-1/2 right-1 flex gap-1">
 									{searchQuery && (
 										<Button
 											variant="ghost"
@@ -360,7 +451,7 @@ export function AdvancedSearchWithAutocomplete({
 												disabled={!isVoiceSupported}
 											>
 												{isListening ? (
-													<Mic className="h-3 w-3 text-red-500 animate-pulse" />
+													<Mic className="h-3 w-3 animate-pulse text-red-500" />
 												) : (
 													<MicOff className="h-3 w-3" />
 												)}
@@ -368,28 +459,32 @@ export function AdvancedSearchWithAutocomplete({
 										</TooltipTrigger>
 										<TooltipContent>
 											{isVoiceSupported
-												? (isListening ? "Kliknij aby zatrzymać" : "Kliknij aby mówić")
-												: "Rozpoznawanie mowy nie jest obsługiwane"
-											}
+												? isListening
+													? "Kliknij aby zatrzymać"
+													: "Kliknij aby mówić"
+												: "Rozpoznawanie mowy nie jest obsługiwane"}
 										</TooltipContent>
 									</Tooltip>
 								</div>
 
 								{/* Voice search indicator */}
 								{isListening && (
-									<div className="absolute -bottom-8 left-0 right-0 text-center">
-										<div className="inline-flex items-center gap-2 bg-red-50 text-red-700 px-3 py-1 rounded-full text-sm border border-red-200">
-											<div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-											Słucham... {transcript && <span className="font-medium">"{transcript}"</span>}
+									<div className="-bottom-8 absolute right-0 left-0 text-center">
+										<div className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-red-700 text-sm">
+											<div className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
+											Słucham...{" "}
+											{transcript && (
+												<span className="font-medium">"{transcript}"</span>
+											)}
 										</div>
 									</div>
 								)}
 
 								{/* Voice error indicator */}
 								{voiceError && (
-									<div className="absolute -bottom-8 left-0 right-0 text-center">
-										<div className="inline-flex items-center gap-2 bg-red-50 text-red-700 px-3 py-1 rounded-full text-sm border border-red-200">
-											<X className="w-3 h-3" />
+									<div className="-bottom-8 absolute right-0 left-0 text-center">
+										<div className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-red-700 text-sm">
+											<X className="h-3 w-3" />
 											{voiceError}
 										</div>
 									</div>
@@ -399,7 +494,7 @@ export function AdvancedSearchWithAutocomplete({
 								{showSuggestions && (
 									<div
 										ref={suggestionsRef}
-										className="absolute top-full left-0 right-0 z-50 mt-1 bg-background border rounded-md shadow-lg max-h-96 overflow-auto"
+										className="absolute top-full right-0 left-0 z-50 mt-1 max-h-96 overflow-auto rounded-md border bg-background shadow-lg"
 									>
 										<Command>
 											<CommandList>
@@ -415,13 +510,18 @@ export function AdvancedSearchWithAutocomplete({
 																<div className="flex-1">
 																	<div className="font-medium">
 																		{result.highlights.name ? (
-																			<span dangerouslySetInnerHTML={{ __html: result.highlights.name }} />
+																			<span
+																				dangerouslySetInnerHTML={{
+																					__html: result.highlights.name,
+																				}}
+																			/>
 																		) : (
 																			result.name
 																		)}
 																	</div>
-																	<div className="text-sm text-muted-foreground">
-																		{result.category} • Ocena: {result.userRating}/5
+																	<div className="text-muted-foreground text-sm">
+																		{result.category} • Ocena:{" "}
+																		{result.userRating}/5
 																	</div>
 																</div>
 																<Badge variant="outline" className="text-xs">
@@ -435,15 +535,19 @@ export function AdvancedSearchWithAutocomplete({
 												{/* Search suggestions */}
 												{searchSuggestions.length > 0 && (
 													<CommandGroup heading="Sugestie">
-														{searchSuggestions.slice(0, 3).map((suggestion, index) => (
-															<CommandItem
-																key={index}
-																onSelect={() => handleSuggestionSelect(suggestion.text)}
-															>
-																<Sparkles className="h-4 w-4 mr-2 text-primary" />
-																{suggestion.text}
-															</CommandItem>
-														))}
+														{searchSuggestions
+															.slice(0, 3)
+															.map((suggestion, index) => (
+																<CommandItem
+																	key={index}
+																	onSelect={() =>
+																		handleSuggestionSelect(suggestion.text)
+																	}
+																>
+																	<Sparkles className="mr-2 h-4 w-4 text-primary" />
+																	{suggestion.text}
+																</CommandItem>
+															))}
 													</CommandGroup>
 												)}
 
@@ -453,18 +557,23 @@ export function AdvancedSearchWithAutocomplete({
 														{searchHistory.slice(0, 3).map((item, index) => (
 															<CommandItem
 																key={index}
-																onSelect={() => handleSuggestionSelect(item.query)}
+																onSelect={() =>
+																	handleSuggestionSelect(item.query)
+																}
 															>
-																<History className="h-4 w-4 mr-2" />
+																<History className="mr-2 h-4 w-4" />
 																{item.query}
 															</CommandItem>
 														))}
 													</CommandGroup>
 												)}
 
-												{searchResults.length === 0 && searchSuggestions.length === 0 && (
-													<CommandEmpty>Brak wyników dla "{searchQuery}"</CommandEmpty>
-												)}
+												{searchResults.length === 0 &&
+													searchSuggestions.length === 0 && (
+														<CommandEmpty>
+															Brak wyników dla "{searchQuery}"
+														</CommandEmpty>
+													)}
 											</CommandList>
 										</Command>
 									</div>
@@ -488,7 +597,10 @@ export function AdvancedSearchWithAutocomplete({
 											<h4 className="mb-3 font-medium">Kategorie</h4>
 											<div className="grid grid-cols-2 gap-2">
 												{categories.map((category) => (
-													<div key={category} className="flex items-center space-x-2">
+													<div
+														key={category}
+														className="flex items-center space-x-2"
+													>
 														<input
 															type="checkbox"
 															id={`category-${category}`}
@@ -497,7 +609,10 @@ export function AdvancedSearchWithAutocomplete({
 															className="rounded"
 															aria-label={`Kategoria: ${categoryLabels[category]}`}
 														/>
-														<Label htmlFor={`category-${category}`} className="cursor-pointer text-sm">
+														<Label
+															htmlFor={`category-${category}`}
+															className="cursor-pointer text-sm"
+														>
 															{categoryLabels[category]}
 														</Label>
 													</div>
@@ -510,7 +625,10 @@ export function AdvancedSearchWithAutocomplete({
 											<h4 className="mb-3 font-medium">Poziom dowodów</h4>
 											<div className="space-y-2">
 												{evidenceLevels.map((level) => (
-													<div key={level} className="flex items-center space-x-2">
+													<div
+														key={level}
+														className="flex items-center space-x-2"
+													>
 														<input
 															type="checkbox"
 															id={`evidence-${level}`}
@@ -519,7 +637,10 @@ export function AdvancedSearchWithAutocomplete({
 															className="rounded"
 															aria-label={`Poziom dowodów: ${evidenceLabels[level]}`}
 														/>
-														<Label htmlFor={`evidence-${level}`} className="cursor-pointer text-sm">
+														<Label
+															htmlFor={`evidence-${level}`}
+															className="cursor-pointer text-sm"
+														>
 															{evidenceLabels[level]}
 														</Label>
 													</div>
@@ -533,15 +654,68 @@ export function AdvancedSearchWithAutocomplete({
 											<div className="px-2">
 												<Slider
 													value={safetyRange}
-													onValueChange={(value) => setSafetyRange(value as [number, number])}
+													onValueChange={(value) =>
+														setSafetyRange(value as [number, number])
+													}
 													max={10}
 													min={0}
 													step={1}
 													className="w-full"
 												/>
-												<div className="flex justify-between text-xs text-muted-foreground mt-1">
+												<div className="mt-1 flex justify-between text-muted-foreground text-xs">
 													<span>{safetyRange[0]}</span>
 													<span>{safetyRange[1]}</span>
+												</div>
+											</div>
+										</div>
+
+										{/* Safety Filters */}
+										<div className="space-y-3 border-t pt-4">
+											<h4 className="font-medium text-sm">
+												Filtry bezpieczeństwa
+											</h4>
+
+											<div className="grid grid-cols-1 gap-3">
+												<div className="flex items-center justify-between">
+													<Label
+														htmlFor="pregnancySafe"
+														className="cursor-pointer text-sm"
+													>
+														Bezpieczne w ciąży
+													</Label>
+													<Switch
+														id="pregnancySafe"
+														checked={pregnancySafe}
+														onCheckedChange={setPregnancySafe}
+													/>
+												</div>
+
+												<div className="flex items-center justify-between">
+													<Label
+														htmlFor="breastfeedingSafe"
+														className="cursor-pointer text-sm"
+													>
+														Bezpieczne podczas karmienia
+													</Label>
+													<Switch
+														id="breastfeedingSafe"
+														checked={breastfeedingSafe}
+														onCheckedChange={setBreastfeedingSafe}
+													/>
+												</div>
+
+												<div className="flex items-center justify-between">
+													<Label
+														htmlFor="pediatricApproved"
+														className="cursor-pointer text-sm"
+													>
+														Zatwierdzone dla dzieci
+													</Label>
+													<Switch
+														id="pediatricApproved"
+														checked={pediatricApproved}
+														onCheckedChange={setPediatricApproved}
+													/>
 												</div>
 											</div>
 										</div>
@@ -549,7 +723,10 @@ export function AdvancedSearchWithAutocomplete({
 										{/* Additional Filters */}
 										<div className="space-y-3 border-t pt-4">
 											<div className="flex items-center justify-between">
-												<Label htmlFor="hasStudies" className="cursor-pointer text-sm">
+												<Label
+													htmlFor="hasStudies"
+													className="cursor-pointer text-sm"
+												>
 													Tylko suplementy z badaniami
 												</Label>
 												<Switch
@@ -560,7 +737,10 @@ export function AdvancedSearchWithAutocomplete({
 											</div>
 
 											<div className="flex items-center justify-between">
-												<Label htmlFor="hasReviews" className="cursor-pointer text-sm">
+												<Label
+													htmlFor="hasReviews"
+													className="cursor-pointer text-sm"
+												>
 													Tylko suplementy z opiniami
 												</Label>
 												<Switch
@@ -633,29 +813,36 @@ export function AdvancedSearchWithAutocomplete({
 
 						{/* Results Info */}
 						{totalResults !== undefined && (
-							<div className="flex items-center justify-between text-sm text-muted-foreground">
+							<div className="flex items-center justify-between text-muted-foreground text-sm">
 								<span>
 									Znaleziono {totalResults} suplementów
-									{searchQuery && (
-										<span> dla zapytania "{searchQuery}"</span>
-									)}
+									{searchQuery && <span> dla zapytania "{searchQuery}"</span>}
 								</span>
 
-								<Select value={`${sortBy}-${sortOrder}`} onValueChange={(value) => {
-									const [sort, order] = value.split('-');
-									setSortBy(sort as any);
-									setSortOrder(order as any);
-								}}>
+								<Select
+									value={`${sortBy}-${sortOrder}`}
+									onValueChange={(value) => {
+										const [sort, order] = value.split("-");
+										setSortBy(sort as any);
+										setSortOrder(order as any);
+									}}
+								>
 									<SelectTrigger className="w-48">
 										<SelectValue />
 									</SelectTrigger>
 									<SelectContent>
-										<SelectItem value="relevance-desc">Trafność (malejąco)</SelectItem>
+										<SelectItem value="relevance-desc">
+											Trafność (malejąco)
+										</SelectItem>
 										<SelectItem value="name-asc">Nazwa (A-Z)</SelectItem>
 										<SelectItem value="name-desc">Nazwa (Z-A)</SelectItem>
-										<SelectItem value="evidence-desc">Poziom dowodów</SelectItem>
+										<SelectItem value="evidence-desc">
+											Poziom dowodów
+										</SelectItem>
 										<SelectItem value="safety-desc">Bezpieczeństwo</SelectItem>
-										<SelectItem value="rating-desc">Ocena użytkowników</SelectItem>
+										<SelectItem value="rating-desc">
+											Ocena użytkowników
+										</SelectItem>
 										<SelectItem value="price-asc">Cena (rosnąco)</SelectItem>
 										<SelectItem value="price-desc">Cena (malejąco)</SelectItem>
 									</SelectContent>
@@ -666,90 +853,98 @@ export function AdvancedSearchWithAutocomplete({
 				</Card>
 
 				{/* Search History and Popular Queries */}
-				{!searchQuery && (searchHistory.length > 0 || popularQueries.length > 0) && (
-					<div className="grid gap-6 lg:grid-cols-2">
-						{/* Search History */}
-						{searchHistory.length > 0 && (
-							<Card>
-								<CardHeader>
-									<CardTitle className="flex items-center gap-2">
-										<History className="h-5 w-5 text-blue-600" />
-										Ostatnie wyszukiwania
-									</CardTitle>
-									<CardDescription>
-										Twoja historia wyszukiwania z podpowiedziami
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<div className="space-y-2">
-										{searchHistory.slice(0, 6).map((item, index) => (
-											<div key={index} className="flex items-center justify-between">
-												<Button
-													variant="ghost"
-													size="sm"
-													className="justify-start h-auto p-2"
-													onClick={() => handleSuggestionSelect(item.query)}
+				{!searchQuery &&
+					(searchHistory.length > 0 || popularQueries.length > 0) && (
+						<div className="grid gap-6 lg:grid-cols-2">
+							{/* Search History */}
+							{searchHistory.length > 0 && (
+								<Card>
+									<CardHeader>
+										<CardTitle className="flex items-center gap-2">
+											<History className="h-5 w-5 text-blue-600" />
+											Ostatnie wyszukiwania
+										</CardTitle>
+										<CardDescription>
+											Twoja historia wyszukiwania z podpowiedziami
+										</CardDescription>
+									</CardHeader>
+									<CardContent>
+										<div className="space-y-2">
+											{searchHistory.slice(0, 6).map((item, index) => (
+												<div
+													key={index}
+													className="flex items-center justify-between"
 												>
-													<div className="text-left">
-														<div className="font-medium">{item.query}</div>
-														<div className="text-xs text-muted-foreground">
-															{item.resultCount ? `${item.resultCount} wyników` : 'Brak wyników'}
+													<Button
+														variant="ghost"
+														size="sm"
+														className="h-auto justify-start p-2"
+														onClick={() => handleSuggestionSelect(item.query)}
+													>
+														<div className="text-left">
+															<div className="font-medium">{item.query}</div>
+															<div className="text-muted-foreground text-xs">
+																{item.resultCount
+																	? `${item.resultCount} wyników`
+																	: "Brak wyników"}
+															</div>
 														</div>
-													</div>
-												</Button>
-												<Button
-													variant="ghost"
-													size="sm"
-													className="h-6 w-6 p-0 opacity-50 hover:opacity-100"
-													onClick={() => {/* Remove from history */}}
-												>
-													<X className="h-3 w-3" />
-												</Button>
-											</div>
-										))}
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={clearHistory}
-											className="w-full text-muted-foreground"
-										>
-											Wyczyść historię
-										</Button>
-									</div>
-								</CardContent>
-							</Card>
-						)}
-
-						{/* Popular Queries */}
-						{popularQueries.length > 0 && (
-							<Card>
-								<CardHeader>
-									<CardTitle className="flex items-center gap-2">
-										<TrendingUp className="h-5 w-5 text-green-600" />
-										Popularne wyszukiwania
-									</CardTitle>
-									<CardDescription>
-										To czego szukają inni użytkownicy
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<div className="flex flex-wrap gap-2">
-										{popularQueries.slice(0, 8).map((query, index) => (
+													</Button>
+													<Button
+														variant="ghost"
+														size="sm"
+														className="h-6 w-6 p-0 opacity-50 hover:opacity-100"
+														onClick={() => {
+															/* Remove from history */
+														}}
+													>
+														<X className="h-3 w-3" />
+													</Button>
+												</div>
+											))}
 											<Button
-												key={index}
 												variant="ghost"
 												size="sm"
-												onClick={() => handleSuggestionSelect(query)}
+												onClick={clearHistory}
+												className="w-full text-muted-foreground"
 											>
-												{query}
+												Wyczyść historię
 											</Button>
-										))}
-									</div>
-								</CardContent>
-							</Card>
-						)}
-					</div>
-				)}
+										</div>
+									</CardContent>
+								</Card>
+							)}
+
+							{/* Popular Queries */}
+							{popularQueries.length > 0 && (
+								<Card>
+									<CardHeader>
+										<CardTitle className="flex items-center gap-2">
+											<TrendingUp className="h-5 w-5 text-green-600" />
+											Popularne wyszukiwania
+										</CardTitle>
+										<CardDescription>
+											To czego szukają inni użytkownicy
+										</CardDescription>
+									</CardHeader>
+									<CardContent>
+										<div className="flex flex-wrap gap-2">
+											{popularQueries.slice(0, 8).map((query, index) => (
+												<Button
+													key={index}
+													variant="ghost"
+													size="sm"
+													onClick={() => handleSuggestionSelect(query)}
+												>
+													{query}
+												</Button>
+											))}
+										</div>
+									</CardContent>
+								</Card>
+							)}
+						</div>
+					)}
 
 				{/* Advanced Filters Toggle */}
 				<Card>
@@ -759,7 +954,7 @@ export function AdvancedSearchWithAutocomplete({
 							onClick={() => setShowAdvanced(!showAdvanced)}
 							className="w-full"
 						>
-							<Filter className="h-4 w-4 mr-2" />
+							<Filter className="mr-2 h-4 w-4" />
 							{showAdvanced ? "Ukryj" : "Pokaż"} filtry zaawansowane
 						</Button>
 
@@ -767,17 +962,21 @@ export function AdvancedSearchWithAutocomplete({
 							<div className="mt-4 space-y-4 border-t pt-4">
 								<div className="grid gap-4 md:grid-cols-2">
 									<div>
-										<Label className="text-sm font-medium">Zakres cenowy (PLN)</Label>
-										<div className="px-2 mt-2">
+										<Label className="font-medium text-sm">
+											Zakres cenowy (PLN)
+										</Label>
+										<div className="mt-2 px-2">
 											<Slider
 												value={priceRange}
-												onValueChange={(value) => setPriceRange(value as [number, number])}
+												onValueChange={(value) =>
+													setPriceRange(value as [number, number])
+												}
 												max={500}
 												min={0}
 												step={10}
 												className="w-full"
 											/>
-											<div className="flex justify-between text-xs text-muted-foreground mt-1">
+											<div className="mt-1 flex justify-between text-muted-foreground text-xs">
 												<span>{priceRange[0]} zł</span>
 												<span>{priceRange[1]} zł</span>
 											</div>
@@ -785,8 +984,55 @@ export function AdvancedSearchWithAutocomplete({
 									</div>
 
 									<div>
-										<Label className="text-sm font-medium">Sortowanie</Label>
-										<Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+										<Label className="font-medium text-sm">
+											Maksymalny koszt miesięczny (€)
+										</Label>
+										<div className="mt-2 px-2">
+											<Slider
+												value={[maxCostPerMonth]}
+												onValueChange={(value) =>
+													setMaxCostPerMonth(value[0] || 10)
+												}
+												max={500}
+												min={10}
+												step={5}
+												className="w-full"
+											/>
+											<div className="mt-1 flex justify-between text-muted-foreground text-xs">
+												<span>10€</span>
+												<span>{maxCostPerMonth}€</span>
+											</div>
+										</div>
+									</div>
+
+									<div>
+										<Label className="font-medium text-sm">
+											Minimalna skuteczność
+										</Label>
+										<div className="mt-2 px-2">
+											<Slider
+												value={[minEffectiveness]}
+												onValueChange={(value) =>
+													setMinEffectiveness(value[0] || 1)
+												}
+												max={10}
+												min={1}
+												step={1}
+												className="w-full"
+											/>
+											<div className="mt-1 flex justify-between text-muted-foreground text-xs">
+												<span>1</span>
+												<span>{minEffectiveness}/10</span>
+											</div>
+										</div>
+									</div>
+
+									<div>
+										<Label className="font-medium text-sm">Sortowanie</Label>
+										<Select
+											value={sortBy}
+											onValueChange={(value: any) => setSortBy(value)}
+										>
 											<SelectTrigger className="mt-2">
 												<SelectValue />
 											</SelectTrigger>
@@ -795,8 +1041,14 @@ export function AdvancedSearchWithAutocomplete({
 												<SelectItem value="name">Nazwa</SelectItem>
 												<SelectItem value="evidence">Poziom dowodów</SelectItem>
 												<SelectItem value="safety">Bezpieczeństwo</SelectItem>
-												<SelectItem value="rating">Ocena użytkowników</SelectItem>
+												<SelectItem value="rating">
+													Ocena użytkowników
+												</SelectItem>
 												<SelectItem value="price">Cena</SelectItem>
+												<SelectItem value="effectiveness">
+													Skuteczność
+												</SelectItem>
+												<SelectItem value="cost">Koszt miesięczny</SelectItem>
 											</SelectContent>
 										</Select>
 									</div>

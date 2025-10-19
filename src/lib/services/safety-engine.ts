@@ -3,14 +3,14 @@
  * Comprehensive contraindication and interaction analysis system
  */
 
-import {
-	type UserProfile,
-	type SupplementInput,
-	type SafetyAlert,
-	type InteractionAnalysis,
-	type DosageCalculationInput,
+import type {
+	DosageCalculationInput,
+	InteractionAnalysis,
+	SafetyAlert,
+	SupplementInput,
+	UserProfile,
 } from "@/types/dosage-calculator";
-import { type SupplementWithRelations } from "@/types/supplement";
+import type { SupplementWithRelations } from "@/types/supplement";
 
 export class SafetyEngine {
 	/**
@@ -18,7 +18,7 @@ export class SafetyEngine {
 	 */
 	async analyzeSafety(
 		input: DosageCalculationInput,
-		supplementData: Map<string, SupplementWithRelations>
+		supplementData: Map<string, SupplementWithRelations>,
 	): Promise<{
 		safetyAlerts: SafetyAlert[];
 		interactionAnalysis: InteractionAnalysis[];
@@ -30,30 +30,29 @@ export class SafetyEngine {
 
 		// Get supplement data for all inputs
 		const supplementsList = supplements
-			.map(suppInput => supplementData.get(suppInput.supplementId))
+			.map((suppInput) => supplementData.get(suppInput.supplementId))
 			.filter(Boolean) as SupplementWithRelations[];
 
 		// Analyze contraindications
 		const contraindicationAlerts = await this.analyzeContraindications(
 			userProfile,
-			supplementsList
+			supplementsList,
 		);
 
 		// Analyze interactions between supplements
-		const interactionAnalysis = await this.analyzeSupplementInteractions(
-			supplementsList
-		);
+		const interactionAnalysis =
+			await this.analyzeSupplementInteractions(supplementsList);
 
 		// Analyze medication interactions
 		const medicationAlerts = await this.analyzeMedicationInteractions(
 			userProfile,
-			supplementsList
+			supplementsList,
 		);
 
 		// Analyze allergy risks
 		const allergyAlerts = await this.analyzeAllergyRisks(
 			userProfile,
-			supplementsList
+			supplementsList,
 		);
 
 		// Combine all safety alerts
@@ -66,13 +65,13 @@ export class SafetyEngine {
 		// Generate warnings
 		const { warnings, polishWarnings } = this.generateWarnings(
 			allSafetyAlerts,
-			interactionAnalysis
+			interactionAnalysis,
 		);
 
 		// Calculate overall risk
 		const overallRisk = this.calculateOverallRisk(
 			allSafetyAlerts,
-			interactionAnalysis
+			interactionAnalysis,
 		);
 
 		return {
@@ -89,7 +88,7 @@ export class SafetyEngine {
 	 */
 	private async analyzeContraindications(
 		userProfile: UserProfile,
-		supplements: SupplementWithRelations[]
+		supplements: SupplementWithRelations[],
 	): Promise<SafetyAlert[]> {
 		const alerts: SafetyAlert[] = [];
 
@@ -98,11 +97,12 @@ export class SafetyEngine {
 
 			// Check pregnancy contraindications
 			if (userProfile.pregnant) {
-				const pregnancyContraindications = dosageGuidelines.contraindications.filter(
-					contraindication =>
-						contraindication.toLowerCase().includes("pregnancy") ||
-						contraindication.toLowerCase().includes("ciąża")
-				);
+				const pregnancyContraindications =
+					dosageGuidelines.contraindications.filter(
+						(contraindication) =>
+							contraindication.toLowerCase().includes("pregnancy") ||
+							contraindication.toLowerCase().includes("ciąża"),
+					);
 
 				for (const contraindication of pregnancyContraindications) {
 					alerts.push({
@@ -111,8 +111,10 @@ export class SafetyEngine {
 						message: `Contraindicated during pregnancy: ${supplement.name}`,
 						polishMessage: `Przeciwwskazane w czasie ciąży: ${supplement.polishName}`,
 						supplements: [supplement.id],
-						recommendation: "Avoid use during pregnancy or consult healthcare provider",
-						polishRecommendation: "Unikaj stosowania w czasie ciąży lub skonsultuj się z lekarzem",
+						recommendation:
+							"Avoid use during pregnancy or consult healthcare provider",
+						polishRecommendation:
+							"Unikaj stosowania w czasie ciąży lub skonsultuj się z lekarzem",
 						evidenceLevel: "STRONG",
 					});
 				}
@@ -120,11 +122,12 @@ export class SafetyEngine {
 
 			// Check breastfeeding contraindications
 			if (userProfile.breastfeeding) {
-				const breastfeedingContraindications = dosageGuidelines.contraindications.filter(
-					contraindication =>
-						contraindication.toLowerCase().includes("breastfeeding") ||
-						contraindication.toLowerCase().includes("karmienie piersią")
-				);
+				const breastfeedingContraindications =
+					dosageGuidelines.contraindications.filter(
+						(contraindication) =>
+							contraindication.toLowerCase().includes("breastfeeding") ||
+							contraindication.toLowerCase().includes("karmienie piersią"),
+					);
 
 				for (const contraindication of breastfeedingContraindications) {
 					alerts.push({
@@ -133,8 +136,10 @@ export class SafetyEngine {
 						message: `Use with caution while breastfeeding: ${supplement.name}`,
 						polishMessage: `Stosuj ostrożnie podczas karmienia piersią: ${supplement.polishName}`,
 						supplements: [supplement.id],
-						recommendation: "Monitor infant for adverse effects or consult healthcare provider",
-						polishRecommendation: "Obserwuj dziecko pod kątem działań niepożądanych lub skonsultuj się z lekarzem",
+						recommendation:
+							"Monitor infant for adverse effects or consult healthcare provider",
+						polishRecommendation:
+							"Obserwuj dziecko pod kątem działań niepożądanych lub skonsultuj się z lekarzem",
 						evidenceLevel: "MODERATE",
 					});
 				}
@@ -142,15 +147,19 @@ export class SafetyEngine {
 
 			// Check age-related contraindications
 			const ageContraindications = dosageGuidelines.contraindications.filter(
-				contraindication => {
+				(contraindication) => {
 					const contraindicationLower = contraindication.toLowerCase();
 					return (
-						(userProfile.age < 18 && contraindicationLower.includes("children")) ||
-						(userProfile.age < 18 && contraindicationLower.includes("dzieci")) ||
-						(userProfile.age > 65 && contraindicationLower.includes("elderly")) ||
-						(userProfile.age > 65 && contraindicationLower.includes("osoby starsze"))
+						(userProfile.age < 18 &&
+							contraindicationLower.includes("children")) ||
+						(userProfile.age < 18 &&
+							contraindicationLower.includes("dzieci")) ||
+						(userProfile.age > 65 &&
+							contraindicationLower.includes("elderly")) ||
+						(userProfile.age > 65 &&
+							contraindicationLower.includes("osoby starsze"))
 					);
-				}
+				},
 			);
 
 			for (const contraindication of ageContraindications) {
@@ -168,10 +177,10 @@ export class SafetyEngine {
 
 			// Check health condition contraindications
 			for (const condition of userProfile.healthConditions) {
-				const conditionContraindications = dosageGuidelines.contraindications.filter(
-					contraindication =>
-						contraindication.toLowerCase().includes(condition.toLowerCase())
-				);
+				const conditionContraindications =
+					dosageGuidelines.contraindications.filter((contraindication) =>
+						contraindication.toLowerCase().includes(condition.toLowerCase()),
+					);
 
 				for (const contraindication of conditionContraindications) {
 					alerts.push({
@@ -181,7 +190,8 @@ export class SafetyEngine {
 						polishMessage: `Przeciwwskazane przy Twoim stanie zdrowia: ${supplement.polishName}`,
 						supplements: [supplement.id],
 						recommendation: "Avoid use or consult healthcare provider",
-						polishRecommendation: "Unikaj stosowania lub skonsultuj się z lekarzem",
+						polishRecommendation:
+							"Unikaj stosowania lub skonsultuj się z lekarzem",
 						evidenceLevel: "STRONG",
 					});
 				}
@@ -195,7 +205,7 @@ export class SafetyEngine {
 	 * Analyze interactions between supplements
 	 */
 	private async analyzeSupplementInteractions(
-		supplements: SupplementWithRelations[]
+		supplements: SupplementWithRelations[],
 	): Promise<InteractionAnalysis[]> {
 		const interactions: InteractionAnalysis[] = [];
 
@@ -207,13 +217,13 @@ export class SafetyEngine {
 
 				// Check interactions from supplement1's data
 				const relevantInteractions = supplement1.interactions.filter(
-					interaction =>
+					(interaction) =>
 						interaction.substance
 							?.toLowerCase()
 							.includes(supplement2.name.toLowerCase()) ||
 						interaction.polishSubstance
 							?.toLowerCase()
-							.includes(supplement2.polishName.toLowerCase())
+							.includes(supplement2.polishName.toLowerCase()),
 				);
 
 				for (const interaction of relevantInteractions) {
@@ -223,24 +233,28 @@ export class SafetyEngine {
 						interactionType: interaction.type,
 						severity: interaction.severity,
 						mechanism: interaction.mechanism || "Unknown mechanism",
-						polishMechanism: interaction.polishMechanism || "Nieznany mechanizm",
+						polishMechanism:
+							interaction.polishMechanism || "Nieznany mechanizm",
 						clinicalSignificance: interaction.clinicalSignificance,
 						polishClinicalSignificance: interaction.polishClinicalSignificance,
-						dosageAdjustment: this.getDosageAdjustmentForInteraction(interaction),
-						timingAdjustment: this.getTimingAdjustmentForInteraction(interaction),
-						polishTimingAdjustment: this.getPolishTimingAdjustmentForInteraction(interaction),
+						dosageAdjustment:
+							this.getDosageAdjustmentForInteraction(interaction),
+						timingAdjustment:
+							this.getTimingAdjustmentForInteraction(interaction),
+						polishTimingAdjustment:
+							this.getPolishTimingAdjustmentForInteraction(interaction),
 					});
 				}
 
 				// Check interactions from supplement2's data (reverse lookup)
 				const reverseInteractions = supplement2.interactions.filter(
-					interaction =>
+					(interaction) =>
 						interaction.substance
 							?.toLowerCase()
 							.includes(supplement1.name.toLowerCase()) ||
 						interaction.polishSubstance
 							?.toLowerCase()
-							.includes(supplement1.polishName.toLowerCase())
+							.includes(supplement1.polishName.toLowerCase()),
 				);
 
 				for (const interaction of reverseInteractions) {
@@ -250,12 +264,16 @@ export class SafetyEngine {
 						interactionType: interaction.type,
 						severity: interaction.severity,
 						mechanism: interaction.mechanism || "Unknown mechanism",
-						polishMechanism: interaction.polishMechanism || "Nieznany mechanizm",
+						polishMechanism:
+							interaction.polishMechanism || "Nieznany mechanizm",
 						clinicalSignificance: interaction.clinicalSignificance,
 						polishClinicalSignificance: interaction.polishClinicalSignificance,
-						dosageAdjustment: this.getDosageAdjustmentForInteraction(interaction),
-						timingAdjustment: this.getTimingAdjustmentForInteraction(interaction),
-						polishTimingAdjustment: this.getPolishTimingAdjustmentForInteraction(interaction),
+						dosageAdjustment:
+							this.getDosageAdjustmentForInteraction(interaction),
+						timingAdjustment:
+							this.getTimingAdjustmentForInteraction(interaction),
+						polishTimingAdjustment:
+							this.getPolishTimingAdjustmentForInteraction(interaction),
 					});
 				}
 			}
@@ -269,7 +287,7 @@ export class SafetyEngine {
 	 */
 	private async analyzeMedicationInteractions(
 		userProfile: UserProfile,
-		supplements: SupplementWithRelations[]
+		supplements: SupplementWithRelations[],
 	): Promise<SafetyAlert[]> {
 		const alerts: SafetyAlert[] = [];
 
@@ -281,22 +299,35 @@ export class SafetyEngine {
 			for (const medication of userProfile.currentMedications) {
 				// Check for known medication interactions
 				const medicationInteractions = supplement.interactions.filter(
-					interaction =>
-						interaction.substance?.toLowerCase().includes(medication.toLowerCase()) ||
-						interaction.polishSubstance?.toLowerCase().includes(medication.toLowerCase())
+					(interaction) =>
+						interaction.substance
+							?.toLowerCase()
+							.includes(medication.toLowerCase()) ||
+						interaction.polishSubstance
+							?.toLowerCase()
+							.includes(medication.toLowerCase()),
 				);
 
 				for (const interaction of medicationInteractions) {
 					alerts.push({
 						type: "interaction",
-						severity: interaction.severity === "severe" ? "high" :
-								 interaction.severity === "moderate" ? "medium" : "low",
+						severity:
+							interaction.severity === "severe"
+								? "high"
+								: interaction.severity === "moderate"
+									? "medium"
+									: "low",
 						message: `Potential interaction with medication ${medication}: ${supplement.name}`,
 						polishMessage: `Potencjalna interakcja z lekiem ${medication}: ${supplement.polishName}`,
 						supplements: [supplement.id],
-						recommendation: interaction.recommendation || "Consult healthcare provider before use",
-						polishRecommendation: interaction.polishRecommendation || "Skonsultuj się z lekarzem przed użyciem",
-						evidenceLevel: this.mapEvidenceLevel(interaction.evidenceLevel) || "MODERATE",
+						recommendation:
+							interaction.recommendation ||
+							"Consult healthcare provider before use",
+						polishRecommendation:
+							interaction.polishRecommendation ||
+							"Skonsultuj się z lekarzem przed użyciem",
+						evidenceLevel:
+							this.mapEvidenceLevel(interaction.evidenceLevel) || "MODERATE",
 					});
 				}
 			}
@@ -310,7 +341,7 @@ export class SafetyEngine {
 	 */
 	private async analyzeAllergyRisks(
 		userProfile: UserProfile,
-		supplements: SupplementWithRelations[]
+		supplements: SupplementWithRelations[],
 	): Promise<SafetyAlert[]> {
 		const alerts: SafetyAlert[] = [];
 
@@ -326,7 +357,9 @@ export class SafetyEngine {
 				...supplement.commonNames,
 				supplement.polishName,
 				...supplement.polishCommonNames,
-			].join(" ").toLowerCase();
+			]
+				.join(" ")
+				.toLowerCase();
 
 			for (const allergy of userProfile.allergies) {
 				if (supplementText.includes(allergy.toLowerCase())) {
@@ -337,7 +370,8 @@ export class SafetyEngine {
 						polishMessage: `Ryzyko reakcji alergicznej: ${supplement.polishName}`,
 						supplements: [supplement.id],
 						recommendation: "Avoid use due to allergy risk",
-						polishRecommendation: "Unikaj stosowania ze względu na ryzyko alergii",
+						polishRecommendation:
+							"Unikaj stosowania ze względu na ryzyko alergii",
 						evidenceLevel: "STRONG",
 					});
 				}
@@ -345,10 +379,9 @@ export class SafetyEngine {
 
 			// Check active compounds against allergies
 			for (const compound of supplement.activeCompounds) {
-				const compoundText = [
-					compound.name,
-					compound.polishName,
-				].join(" ").toLowerCase();
+				const compoundText = [compound.name, compound.polishName]
+					.join(" ")
+					.toLowerCase();
 
 				for (const allergy of userProfile.allergies) {
 					if (compoundText.includes(allergy.toLowerCase())) {
@@ -359,7 +392,8 @@ export class SafetyEngine {
 							polishMessage: `Ryzyko reakcji alergicznej na związek czynny: ${compound.polishName || compound.name}`,
 							supplements: [supplement.id],
 							recommendation: "Avoid use due to allergy risk",
-							polishRecommendation: "Unikaj stosowania ze względu na ryzyko alergii",
+							polishRecommendation:
+								"Unikaj stosowania ze względu na ryzyko alergii",
 							evidenceLevel: "STRONG",
 						});
 					}
@@ -373,10 +407,13 @@ export class SafetyEngine {
 	/**
 	 * Get dosage adjustment recommendation for interaction
 	 */
-	private getDosageAdjustmentForInteraction(interaction: any): number | undefined {
+	private getDosageAdjustmentForInteraction(
+		interaction: any,
+	): number | undefined {
 		if (interaction.type === "antagonistic") {
 			return 1.2; // Increase dose to compensate
-		} else if (interaction.type === "synergistic") {
+		}
+		if (interaction.type === "synergistic") {
 			return 0.8; // Decrease dose due to synergy
 		}
 		return undefined;
@@ -385,10 +422,13 @@ export class SafetyEngine {
 	/**
 	 * Get timing adjustment recommendation for interaction
 	 */
-	private getTimingAdjustmentForInteraction(interaction: any): string | undefined {
+	private getTimingAdjustmentForInteraction(
+		interaction: any,
+	): string | undefined {
 		if (interaction.type === "competitive") {
 			return "Take supplements at least 2 hours apart";
-		} else if (interaction.type === "synergistic") {
+		}
+		if (interaction.type === "synergistic") {
 			return "Take together for enhanced effect";
 		}
 		return undefined;
@@ -397,10 +437,13 @@ export class SafetyEngine {
 	/**
 	 * Get Polish timing adjustment recommendation
 	 */
-	private getPolishTimingAdjustmentForInteraction(interaction: any): string | undefined {
+	private getPolishTimingAdjustmentForInteraction(
+		interaction: any,
+	): string | undefined {
 		if (interaction.type === "competitive") {
 			return "Przyjmuj suplementy w odstępie co najmniej 2 godzin";
-		} else if (interaction.type === "synergistic") {
+		}
+		if (interaction.type === "synergistic") {
 			return "Przyjmuj razem dla zwiększonego efektu";
 		}
 		return undefined;
@@ -411,30 +454,48 @@ export class SafetyEngine {
 	 */
 	private generateWarnings(
 		safetyAlerts: SafetyAlert[],
-		interactionAnalysis: InteractionAnalysis[]
+		interactionAnalysis: InteractionAnalysis[],
 	): { warnings: string[]; polishWarnings: string[] } {
 		const warnings: string[] = [];
 		const polishWarnings: string[] = [];
 
 		// High severity alerts
-		const highSeverityAlerts = safetyAlerts.filter(alert => alert.severity === "high");
+		const highSeverityAlerts = safetyAlerts.filter(
+			(alert) => alert.severity === "high",
+		);
 		if (highSeverityAlerts.length > 0) {
-			warnings.push(`${highSeverityAlerts.length} high-risk safety concern(s) identified`);
-			polishWarnings.push(`${highSeverityAlerts.length} wysokiego ryzyka obaw dotyczących bezpieczeństwa`);
+			warnings.push(
+				`${highSeverityAlerts.length} high-risk safety concern(s) identified`,
+			);
+			polishWarnings.push(
+				`${highSeverityAlerts.length} wysokiego ryzyka obaw dotyczących bezpieczeństwa`,
+			);
 		}
 
 		// Critical severity alerts
-		const criticalAlerts = safetyAlerts.filter(alert => alert.severity === "critical");
+		const criticalAlerts = safetyAlerts.filter(
+			(alert) => alert.severity === "critical",
+		);
 		if (criticalAlerts.length > 0) {
-			warnings.push(`${criticalAlerts.length} critical safety concern(s) - immediate attention required`);
-			polishWarnings.push(`${criticalAlerts.length} krytycznych obaw dotyczących bezpieczeństwa - wymagana natychmiastowa uwaga`);
+			warnings.push(
+				`${criticalAlerts.length} critical safety concern(s) - immediate attention required`,
+			);
+			polishWarnings.push(
+				`${criticalAlerts.length} krytycznych obaw dotyczących bezpieczeństwa - wymagana natychmiastowa uwaga`,
+			);
 		}
 
 		// Interaction warnings
-		const severeInteractions = interactionAnalysis.filter(interaction => interaction.severity === "severe");
+		const severeInteractions = interactionAnalysis.filter(
+			(interaction) => interaction.severity === "severe",
+		);
 		if (severeInteractions.length > 0) {
-			warnings.push(`${severeInteractions.length} severe supplement interaction(s) detected`);
-			polishWarnings.push(`${severeInteractions.length} ciężkich interakcji między suplementami wykrytych`);
+			warnings.push(
+				`${severeInteractions.length} severe supplement interaction(s) detected`,
+			);
+			polishWarnings.push(
+				`${severeInteractions.length} ciężkich interakcji między suplementami wykrytych`,
+			);
 		}
 
 		return { warnings, polishWarnings };
@@ -445,19 +506,23 @@ export class SafetyEngine {
 	 */
 	private calculateOverallRisk(
 		safetyAlerts: SafetyAlert[],
-		interactionAnalysis: InteractionAnalysis[]
+		interactionAnalysis: InteractionAnalysis[],
 	): "low" | "medium" | "high" {
-		const hasCritical = safetyAlerts.some(alert => alert.severity === "critical");
-		const hasHigh = safetyAlerts.some(alert => alert.severity === "high");
-		const hasSevereInteractions = interactionAnalysis.some(interaction => interaction.severity === "severe");
+		const hasCritical = safetyAlerts.some(
+			(alert) => alert.severity === "critical",
+		);
+		const hasHigh = safetyAlerts.some((alert) => alert.severity === "high");
+		const hasSevereInteractions = interactionAnalysis.some(
+			(interaction) => interaction.severity === "severe",
+		);
 
 		if (hasCritical || (hasHigh && hasSevereInteractions)) {
 			return "high";
-		} else if (hasHigh || hasSevereInteractions || safetyAlerts.length > 2) {
-			return "medium";
-		} else {
-			return "low";
 		}
+		if (hasHigh || hasSevereInteractions || safetyAlerts.length > 2) {
+			return "medium";
+		}
+		return "low";
 	}
 
 	/**
@@ -465,7 +530,7 @@ export class SafetyEngine {
 	 */
 	getSupplementSafetyProfile(
 		supplement: SupplementWithRelations,
-		userProfile: UserProfile
+		userProfile: UserProfile,
 	): {
 		isSafe: boolean;
 		riskLevel: "low" | "medium" | "high";
@@ -481,9 +546,12 @@ export class SafetyEngine {
 
 		// Check contraindications
 		if (userProfile.pregnant) {
-			const pregnancyContraindications = supplement.dosageGuidelines.contraindications.filter(
-				c => c.toLowerCase().includes("pregnancy") || c.toLowerCase().includes("ciąża")
-			);
+			const pregnancyContraindications =
+				supplement.dosageGuidelines.contraindications.filter(
+					(c) =>
+						c.toLowerCase().includes("pregnancy") ||
+						c.toLowerCase().includes("ciąża"),
+				);
 			if (pregnancyContraindications.length > 0) {
 				concerns.push("Contraindicated during pregnancy");
 				polishConcerns.push("Przeciwwskazane w czasie ciąży");
@@ -502,7 +570,7 @@ export class SafetyEngine {
 
 		// Check side effects
 		const severeSideEffects = supplement.sideEffects.filter(
-			effect => effect.severity === "severe"
+			(effect) => effect.severity === "severe",
 		);
 		if (severeSideEffects.length > 0) {
 			concerns.push("May cause severe side effects");
@@ -513,7 +581,8 @@ export class SafetyEngine {
 
 		// Determine overall safety
 		const isSafe = concerns.length === 0;
-		const riskLevel = concerns.length > 2 ? "high" : concerns.length > 0 ? "medium" : "low";
+		const riskLevel =
+			concerns.length > 2 ? "high" : concerns.length > 0 ? "medium" : "low";
 
 		return {
 			isSafe,
@@ -526,9 +595,11 @@ export class SafetyEngine {
 	}
 
 	/**
-		* Map evidence level from supplement type to safety alert type
-		*/
-	private mapEvidenceLevel(evidenceLevel?: string): "STRONG" | "MODERATE" | "WEAK" | undefined {
+	 * Map evidence level from supplement type to safety alert type
+	 */
+	private mapEvidenceLevel(
+		evidenceLevel?: string,
+	): "STRONG" | "MODERATE" | "WEAK" | undefined {
 		if (!evidenceLevel) return "MODERATE";
 
 		switch (evidenceLevel) {
@@ -536,8 +607,6 @@ export class SafetyEngine {
 			case "MODERATE":
 			case "WEAK":
 				return evidenceLevel;
-			case "INSUFFICIENT":
-			case "CONFLICTING":
 			default:
 				return "WEAK";
 		}

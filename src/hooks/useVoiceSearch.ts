@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // Extend Window interface for Speech Recognition API
 declare global {
@@ -33,7 +33,9 @@ interface UseVoiceSearchReturn {
 	results: VoiceSearchResult[];
 }
 
-export function useVoiceSearch(options: VoiceSearchOptions = {}): UseVoiceSearchReturn {
+export function useVoiceSearch(
+	options: VoiceSearchOptions = {},
+): UseVoiceSearchReturn {
 	const [isListening, setIsListening] = useState(false);
 	const [transcript, setTranscript] = useState("");
 	const [error, setError] = useState<string | null>(null);
@@ -50,16 +52,16 @@ export function useVoiceSearch(options: VoiceSearchOptions = {}): UseVoiceSearch
 	} = options;
 
 	// Check if browser supports speech recognition
-	const isSupported = typeof window !== "undefined" && (
-		'webkitSpeechRecognition' in window ||
-		'SpeechRecognition' in window
-	);
+	const isSupported =
+		typeof window !== "undefined" &&
+		("webkitSpeechRecognition" in window || "SpeechRecognition" in window);
 
 	// Get speech recognition constructor
 	const getRecognition = useCallback(() => {
 		if (typeof window === "undefined") return null;
 
-		const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+		const SpeechRecognition =
+			window.webkitSpeechRecognition || window.SpeechRecognition;
 		if (!SpeechRecognition) return null;
 
 		const recognition = new SpeechRecognition();
@@ -99,28 +101,31 @@ export function useVoiceSearch(options: VoiceSearchOptions = {}): UseVoiceSearch
 		setResults(newResults);
 
 		if (finalTranscript) {
-			setTranscript(prev => prev + finalTranscript);
+			setTranscript((prev) => prev + finalTranscript);
 		}
 	}, []);
 
 	// Handle speech recognition errors
-	const handleError = useCallback((event: any) => {
-		setError(`Błąd rozpoznawania mowy: ${event.error}`);
-		setIsListening(false);
+	const handleError = useCallback(
+		(event: any) => {
+			setError(`Błąd rozpoznawania mowy: ${event.error}`);
+			setIsListening(false);
 
-		// Auto-retry for certain errors
-		if (event.error === 'no-speech' || event.error === 'audio-capture') {
-			setTimeout(() => {
-				if (recognitionRef.current && !isListening) {
-					try {
-						recognitionRef.current.start();
-					} catch (e) {
-						console.warn("Failed to restart recognition:", e);
+			// Auto-retry for certain errors
+			if (event.error === "no-speech" || event.error === "audio-capture") {
+				setTimeout(() => {
+					if (recognitionRef.current && !isListening) {
+						try {
+							recognitionRef.current.start();
+						} catch (e) {
+							console.warn("Failed to restart recognition:", e);
+						}
 					}
-				}
-			}, 1000);
-		}
-	}, [isListening]);
+				}, 1000);
+			}
+		},
+		[isListening],
+	);
 
 	// Handle recognition end
 	const handleEnd = useCallback(() => {
@@ -241,64 +246,140 @@ export function useNLPSearch() {
 		};
 
 		// Extract keywords (simple word tokenization)
-		const words = text.split(/\s+/).filter(word => word.length > 2);
+		const words = text.split(/\s+/).filter((word) => word.length > 2);
 		analysis.keywords = words;
 
 		// Identify supplement names
 		const supplementKeywords = [
-			"witamina", "vitamin", "mineral", "aminokwas", "amino acid", "zioło", "herb",
-			"nootropik", "nootropic", "adaptogen", "koenzym", "coenzyme", "probiotyk", "probiotic",
-			"enzym", "enzyme", "kwasy tłuszczowe", "fatty acid", "omega", "b-complex"
+			"witamina",
+			"vitamin",
+			"mineral",
+			"aminokwas",
+			"amino acid",
+			"zioło",
+			"herb",
+			"nootropik",
+			"nootropic",
+			"adaptogen",
+			"koenzym",
+			"coenzyme",
+			"probiotyk",
+			"probiotic",
+			"enzym",
+			"enzyme",
+			"kwasy tłuszczowe",
+			"fatty acid",
+			"omega",
+			"b-complex",
 		];
 
-		words.forEach(word => {
-			if (supplementKeywords.some(keyword => word.includes(keyword))) {
+		words.forEach((word) => {
+			if (supplementKeywords.some((keyword) => word.includes(keyword))) {
 				analysis.entities.supplements.push(word);
 			}
 		});
 
 		// Identify benefits
 		const benefitKeywords = [
-			"pamięć", "memory", "koncentracja", "focus", "energia", "energy", "sen", "sleep",
-			"stres", "stress", "nastrój", "mood", "odporność", "immune", "trawienie", "digestion",
-			"stawy", "joints", "skóra", "skin", "włosy", "hair", "oczy", "eyes"
+			"pamięć",
+			"memory",
+			"koncentracja",
+			"focus",
+			"energia",
+			"energy",
+			"sen",
+			"sleep",
+			"stres",
+			"stress",
+			"nastrój",
+			"mood",
+			"odporność",
+			"immune",
+			"trawienie",
+			"digestion",
+			"stawy",
+			"joints",
+			"skóra",
+			"skin",
+			"włosy",
+			"hair",
+			"oczy",
+			"eyes",
 		];
 
-		words.forEach(word => {
-			if (benefitKeywords.some(keyword => word.includes(keyword))) {
+		words.forEach((word) => {
+			if (benefitKeywords.some((keyword) => word.includes(keyword))) {
 				analysis.entities.benefits.push(word);
 			}
 		});
 
 		// Identify conditions
 		const conditionKeywords = [
-			"bezsenność", "insomnia", "depresja", "depression", "lęk", "anxiety", "ból", "pain",
-			"przeziębienie", "cold", "alergia", "allergy", "cukrzyca", "diabetes", "nadciśnienie", "hypertension"
+			"bezsenność",
+			"insomnia",
+			"depresja",
+			"depression",
+			"lęk",
+			"anxiety",
+			"ból",
+			"pain",
+			"przeziębienie",
+			"cold",
+			"alergia",
+			"allergy",
+			"cukrzyca",
+			"diabetes",
+			"nadciśnienie",
+			"hypertension",
 		];
 
-		words.forEach(word => {
-			if (conditionKeywords.some(keyword => word.includes(keyword))) {
+		words.forEach((word) => {
+			if (conditionKeywords.some((keyword) => word.includes(keyword))) {
 				analysis.entities.conditions.push(word);
 			}
 		});
 
 		// Identify active compounds
 		const compoundKeywords = [
-			"kofeina", "caffeine", "teanina", "theanine", "kurkumina", "curcumin", "kwercetyna", "quercetin",
-			"resweratrol", "resveratrol", "koenzym q10", "coenzyme q10", "magnez", "magnesium", "cynk", "zinc"
+			"kofeina",
+			"caffeine",
+			"teanina",
+			"theanine",
+			"kurkumina",
+			"curcumin",
+			"kwercetyna",
+			"quercetin",
+			"resweratrol",
+			"resveratrol",
+			"koenzym q10",
+			"coenzyme q10",
+			"magnez",
+			"magnesium",
+			"cynk",
+			"zinc",
 		];
 
-		words.forEach(word => {
-			if (compoundKeywords.some(keyword => word.includes(keyword))) {
+		words.forEach((word) => {
+			if (compoundKeywords.some((keyword) => word.includes(keyword))) {
 				analysis.entities.compounds.push(word);
 			}
 		});
 
 		// Determine intent
-		if (text.includes("kupić") || text.includes("kup") || text.includes("cena") || text.includes("price")) {
+		if (
+			text.includes("kupić") ||
+			text.includes("kup") ||
+			text.includes("cena") ||
+			text.includes("price")
+		) {
 			analysis.intents.push("purchase");
 			analysis.queryType = "transactional";
-		} else if (text.includes("gdzie") || text.includes("jak") || text.includes("where") || text.includes("how")) {
+		} else if (
+			text.includes("gdzie") ||
+			text.includes("jak") ||
+			text.includes("where") ||
+			text.includes("how")
+		) {
 			analysis.intents.push("location");
 			analysis.queryType = "navigational";
 		} else {
@@ -307,11 +388,28 @@ export function useNLPSearch() {
 		}
 
 		// Determine sentiment
-		const positiveWords = ["dobry", "lepszy", "świetny", "pomaga", "działa", "polecam"];
-		const negativeWords = ["zły", "gorszy", "nie działa", "skutki uboczne", "problem"];
+		const positiveWords = [
+			"dobry",
+			"lepszy",
+			"świetny",
+			"pomaga",
+			"działa",
+			"polecam",
+		];
+		const negativeWords = [
+			"zły",
+			"gorszy",
+			"nie działa",
+			"skutki uboczne",
+			"problem",
+		];
 
-		const positiveCount = words.filter(word => positiveWords.some(pw => word.includes(pw))).length;
-		const negativeCount = words.filter(word => negativeWords.some(nw => word.includes(nw))).length;
+		const positiveCount = words.filter((word) =>
+			positiveWords.some((pw) => word.includes(pw)),
+		).length;
+		const negativeCount = words.filter((word) =>
+			negativeWords.some((nw) => word.includes(nw)),
+		).length;
 
 		if (positiveCount > negativeCount) {
 			analysis.sentiment = "positive";
@@ -320,9 +418,18 @@ export function useNLPSearch() {
 		}
 
 		// Determine urgency
-		if (text.includes("pilnie") || text.includes("szybko") || text.includes("teraz") || text.includes("urgent")) {
+		if (
+			text.includes("pilnie") ||
+			text.includes("szybko") ||
+			text.includes("teraz") ||
+			text.includes("urgent")
+		) {
 			analysis.urgency = "high";
-		} else if (text.includes("wkrótce") || text.includes("planuje") || text.includes("soon")) {
+		} else if (
+			text.includes("wkrótce") ||
+			text.includes("planuje") ||
+			text.includes("soon")
+		) {
 			analysis.urgency = "medium";
 		}
 
@@ -334,24 +441,24 @@ export function useNLPSearch() {
 		const suggestions: string[] = [];
 
 		// Suggest based on identified supplements
-		analysis.entities.supplements.forEach(supplement => {
+		analysis.entities.supplements.forEach((supplement) => {
 			suggestions.push(supplement);
 		});
 
 		// Suggest based on benefits
-		analysis.entities.benefits.forEach(benefit => {
+		analysis.entities.benefits.forEach((benefit) => {
 			suggestions.push(`suplementy na ${benefit}`);
 			suggestions.push(`${benefit} suplementy`);
 		});
 
 		// Suggest based on conditions
-		analysis.entities.conditions.forEach(condition => {
+		analysis.entities.conditions.forEach((condition) => {
 			suggestions.push(`suplementy na ${condition}`);
 			suggestions.push(`${condition} naturalne leczenie`);
 		});
 
 		// Suggest based on compounds
-		analysis.entities.compounds.forEach(compound => {
+		analysis.entities.compounds.forEach((compound) => {
 			suggestions.push(`suplementy z ${compound}`);
 			suggestions.push(`${compound} dawkowanie`);
 		});
@@ -361,26 +468,32 @@ export function useNLPSearch() {
 	}, []);
 
 	// Enhanced search query based on NLP analysis
-	const enhanceQuery = useCallback((originalQuery: string, analysis: NLPAnalysis): string => {
-		let enhanced = originalQuery;
+	const enhanceQuery = useCallback(
+		(originalQuery: string, analysis: NLPAnalysis): string => {
+			let enhanced = originalQuery;
 
-		// Add benefit-related terms
-		if (analysis.entities.benefits.length > 0) {
-			enhanced += ` ${analysis.entities.benefits.join(" ")}`;
-		}
+			// Add benefit-related terms
+			if (analysis.entities.benefits.length > 0) {
+				enhanced += ` ${analysis.entities.benefits.join(" ")}`;
+			}
 
-		// Add compound-related terms
-		if (analysis.entities.compounds.length > 0) {
-			enhanced += ` ${analysis.entities.compounds.join(" ")}`;
-		}
+			// Add compound-related terms
+			if (analysis.entities.compounds.length > 0) {
+				enhanced += ` ${analysis.entities.compounds.join(" ")}`;
+			}
 
-		// Add category hints based on intent
-		if (analysis.intents.includes("purchase") && !enhanced.includes("kupić")) {
-			enhanced += " kupić cena";
-		}
+			// Add category hints based on intent
+			if (
+				analysis.intents.includes("purchase") &&
+				!enhanced.includes("kupić")
+			) {
+				enhanced += " kupić cena";
+			}
 
-		return enhanced.trim();
-	}, []);
+			return enhanced.trim();
+		},
+		[],
+	);
 
 	return {
 		analyzeQuery,

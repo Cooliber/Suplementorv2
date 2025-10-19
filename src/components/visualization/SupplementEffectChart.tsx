@@ -1,5 +1,6 @@
 "use client";
 
+import { SkeletonChart } from "@/components/loading/SkeletonCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,7 +15,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { Star } from "lucide-react";
-import { SkeletonChart } from "@/components/loading/SkeletonCard";
 import {
 	Activity,
 	Brain,

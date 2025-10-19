@@ -5,11 +5,27 @@ export interface SampleSupplement {
 	id: string;
 	name: string;
 	polishName: string;
-	category: "NOOTROPIC" | "VITAMIN" | "MINERAL" | "AMINO_ACID" | "HERB" | "ADAPTOGEN" | "COENZYME" | "FATTY_ACID" | "PROBIOTIC" | "ENZYME" | "OTHER";
+	category:
+		| "NOOTROPIC"
+		| "VITAMIN"
+		| "MINERAL"
+		| "AMINO_ACID"
+		| "HERB"
+		| "ADAPTOGEN"
+		| "COENZYME"
+		| "FATTY_ACID"
+		| "PROBIOTIC"
+		| "ENZYME"
+		| "OTHER";
 	polishCategory: string;
 	description: string;
 	polishDescription: string;
-	evidenceLevel: "STRONG" | "MODERATE" | "WEAK" | "INSUFFICIENT" | "CONFLICTING";
+	evidenceLevel:
+		| "STRONG"
+		| "MODERATE"
+		| "WEAK"
+		| "INSUFFICIENT"
+		| "CONFLICTING";
 	safetyRating: number;
 	userRating: number;
 	primaryBenefits: string[];
@@ -46,15 +62,27 @@ export const sampleSupplements: SampleSupplement[] = [
 		polishName: "Alfa-GPC",
 		category: "NOOTROPIC",
 		polishCategory: "Nootropik",
-		description: "Premium choline source supporting memory and cognitive function",
-		polishDescription: "Wysokiej jakości źródło choliny wspierające pamięć i funkcje poznawcze",
+		description:
+			"Premium choline source supporting memory and cognitive function",
+		polishDescription:
+			"Wysokiej jakości źródło choliny wspierające pamięć i funkcje poznawcze",
 		evidenceLevel: "STRONG",
 		safetyRating: 9.2,
 		userRating: 4.6,
-		primaryBenefits: ["Memory Enhancement", "Focus Improvement", "Neuroplasticity Support"],
-		polishPrimaryBenefits: ["Wzmocnienie pamięci", "Poprawa koncentracji", "Wsparcie neuroplastyczności"],
-		mechanismOfAction: "Provides choline for acetylcholine synthesis, supports cell membrane integrity",
-		polishMechanismOfAction: "Dostarcza cholinę do syntezy acetylocholiny, wspiera integralność błon komórkowych",
+		primaryBenefits: [
+			"Memory Enhancement",
+			"Focus Improvement",
+			"Neuroplasticity Support",
+		],
+		polishPrimaryBenefits: [
+			"Wzmocnienie pamięci",
+			"Poprawa koncentracji",
+			"Wsparcie neuroplastyczności",
+		],
+		mechanismOfAction:
+			"Provides choline for acetylcholine synthesis, supports cell membrane integrity",
+		polishMechanismOfAction:
+			"Dostarcza cholinę do syntezy acetylocholiny, wspiera integralność błon komórkowych",
 		studyCount: 127,
 		activeCompounds: ["Alpha-GPC", "Choline"],
 		sideEffects: ["Mild headache", "Nausea"],
@@ -75,14 +103,21 @@ export const sampleSupplements: SampleSupplement[] = [
 		category: "AMINO_ACID",
 		polishCategory: "Aminokwas",
 		description: "Calming amino acid promoting relaxed focus without sedation",
-		polishDescription: "Uspokajający aminokwas promujący spokojną koncentrację bez sedacji",
+		polishDescription:
+			"Uspokajający aminokwas promujący spokojną koncentrację bez sedacji",
 		evidenceLevel: "MODERATE",
 		safetyRating: 9.8,
 		userRating: 4.4,
 		primaryBenefits: ["Calm Focus", "Stress Reduction", "Sleep Quality"],
-		polishPrimaryBenefits: ["Spokojna koncentracja", "Redukcja stresu", "Poprawa jakości snu"],
-		mechanismOfAction: "Increases GABA and serotonin levels, promotes alpha brain waves",
-		polishMechanismOfAction: "Zwiększa poziom GABA i serotoniny, promuje fale alfa w mózgu",
+		polishPrimaryBenefits: [
+			"Spokojna koncentracja",
+			"Redukcja stresu",
+			"Poprawa jakości snu",
+		],
+		mechanismOfAction:
+			"Increases GABA and serotonin levels, promotes alpha brain waves",
+		polishMechanismOfAction:
+			"Zwiększa poziom GABA i serotoniny, promuje fale alfa w mózgu",
 		studyCount: 89,
 		activeCompounds: ["L-Theanine"],
 		sideEffects: ["Mild drowsiness"],
@@ -102,14 +137,20 @@ export const sampleSupplements: SampleSupplement[] = [
 		category: "ADAPTOGEN",
 		polishCategory: "Adaptogen",
 		description: "Powerful adaptogenic herb for stress management and vitality",
-		polishDescription: "Potężne zioło adaptogenne do zarządzania stresem i witalności",
+		polishDescription:
+			"Potężne zioło adaptogenne do zarządzania stresem i witalności",
 		evidenceLevel: "STRONG",
 		safetyRating: 8.9,
 		userRating: 4.7,
 		primaryBenefits: ["Stress Adaptation", "Sleep Improvement", "Energy Boost"],
-		polishPrimaryBenefits: ["Adaptacja do stresu", "Poprawa snu", "Zwiększenie energii"],
+		polishPrimaryBenefits: [
+			"Adaptacja do stresu",
+			"Poprawa snu",
+			"Zwiększenie energii",
+		],
 		mechanismOfAction: "Modulates cortisol levels, supports adrenal function",
-		polishMechanismOfAction: "Moduluje poziom kortyzolu, wspiera funkcję nadnerczy",
+		polishMechanismOfAction:
+			"Moduluje poziom kortyzolu, wspiera funkcję nadnerczy",
 		studyCount: 156,
 		activeCompounds: ["Withanolides", "Withaferin A"],
 		sideEffects: ["Mild digestive upset", "Drowsiness"],
@@ -129,15 +170,27 @@ export const sampleSupplements: SampleSupplement[] = [
 		polishName: "Bacopa Monnieri",
 		category: "HERB",
 		polishCategory: "Zioło",
-		description: "Traditional herb for memory enhancement and cognitive support",
-		polishDescription: "Tradycyjne zioło do wzmacniania pamięci i wsparcia funkcji poznawczych",
+		description:
+			"Traditional herb for memory enhancement and cognitive support",
+		polishDescription:
+			"Tradycyjne zioło do wzmacniania pamięci i wsparcia funkcji poznawczych",
 		evidenceLevel: "MODERATE",
 		safetyRating: 8.5,
 		userRating: 4.2,
-		primaryBenefits: ["Memory Enhancement", "Anxiety Reduction", "Cognitive Protection"],
-		polishPrimaryBenefits: ["Wzmacnianie pamięci", "Redukcja lęku", "Ochrona poznawcza"],
-		mechanismOfAction: "Enhances synaptic communication, reduces oxidative stress",
-		polishMechanismOfAction: "Wzmacnia komunikację synaptyczną, redukuje stres oksydacyjny",
+		primaryBenefits: [
+			"Memory Enhancement",
+			"Anxiety Reduction",
+			"Cognitive Protection",
+		],
+		polishPrimaryBenefits: [
+			"Wzmacnianie pamięci",
+			"Redukcja lęku",
+			"Ochrona poznawcza",
+		],
+		mechanismOfAction:
+			"Enhances synaptic communication, reduces oxidative stress",
+		polishMechanismOfAction:
+			"Wzmacnia komunikację synaptyczną, redukuje stres oksydacyjny",
 		studyCount: 94,
 		activeCompounds: ["Bacosides", "Saponins"],
 		sideEffects: ["Dry mouth", "Fatigue", "Digestive issues"],
@@ -156,15 +209,27 @@ export const sampleSupplements: SampleSupplement[] = [
 		polishName: "Monohydrat Kreatyny",
 		category: "AMINO_ACID",
 		polishCategory: "Aminokwas",
-		description: "Well-researched compound for energy production and brain health",
-		polishDescription: "Dobrze przebadany związek do produkcji energii i zdrowia mózgu",
+		description:
+			"Well-researched compound for energy production and brain health",
+		polishDescription:
+			"Dobrze przebadany związek do produkcji energii i zdrowia mózgu",
 		evidenceLevel: "STRONG",
 		safetyRating: 9.5,
 		userRating: 4.8,
-		primaryBenefits: ["Energy Production", "Brain Health", "Physical Performance"],
-		polishPrimaryBenefits: ["Produkcja energii", "Zdrowie mózgu", "Wydajność fizyczna"],
-		mechanismOfAction: "Increases ATP production, supports cellular energy metabolism",
-		polishMechanismOfAction: "Zwiększa produkcję ATP, wspiera metabolizm energetyczny komórek",
+		primaryBenefits: [
+			"Energy Production",
+			"Brain Health",
+			"Physical Performance",
+		],
+		polishPrimaryBenefits: [
+			"Produkcja energii",
+			"Zdrowie mózgu",
+			"Wydajność fizyczna",
+		],
+		mechanismOfAction:
+			"Increases ATP production, supports cellular energy metabolism",
+		polishMechanismOfAction:
+			"Zwiększa produkcję ATP, wspiera metabolizm energetyczny komórek",
 		studyCount: 234,
 		activeCompounds: ["Creatine"],
 		sideEffects: ["Water retention", "Muscle cramps"],
@@ -183,15 +248,27 @@ export const sampleSupplements: SampleSupplement[] = [
 		polishName: "Rhodiola Rosea",
 		category: "ADAPTOGEN",
 		polishCategory: "Adaptogen",
-		description: "Adaptogenic herb for stress resistance and mental performance",
-		polishDescription: "Zioło adaptogenne do odporności na stres i wydajności umysłowej",
+		description:
+			"Adaptogenic herb for stress resistance and mental performance",
+		polishDescription:
+			"Zioło adaptogenne do odporności na stres i wydajności umysłowej",
 		evidenceLevel: "MODERATE",
 		safetyRating: 8.7,
 		userRating: 4.3,
-		primaryBenefits: ["Stress Resistance", "Mental Performance", "Fatigue Reduction"],
-		polishPrimaryBenefits: ["Odporność na stres", "Wydajność umysłowa", "Redukcja zmęczenia"],
-		mechanismOfAction: "Modulates stress hormones, enhances neurotransmitter activity",
-		polishMechanismOfAction: "Moduluje hormony stresu, wzmacnia aktywność neuroprzekaźników",
+		primaryBenefits: [
+			"Stress Resistance",
+			"Mental Performance",
+			"Fatigue Reduction",
+		],
+		polishPrimaryBenefits: [
+			"Odporność na stres",
+			"Wydajność umysłowa",
+			"Redukcja zmęczenia",
+		],
+		mechanismOfAction:
+			"Modulates stress hormones, enhances neurotransmitter activity",
+		polishMechanismOfAction:
+			"Moduluje hormony stresu, wzmacnia aktywność neuroprzekaźników",
 		studyCount: 78,
 		activeCompounds: ["Rosavins", "Salidroside"],
 		sideEffects: ["Insomnia", "Irritability"],
@@ -212,14 +289,21 @@ export const sampleSupplements: SampleSupplement[] = [
 		category: "MINERAL",
 		polishCategory: "Minerał",
 		description: "Essential mineral for nerve function and muscle relaxation",
-		polishDescription: "Niezbędny minerał do funkcji nerwowych i relaksacji mięśni",
+		polishDescription:
+			"Niezbędny minerał do funkcji nerwowych i relaksacji mięśni",
 		evidenceLevel: "STRONG",
 		safetyRating: 9.3,
 		userRating: 4.5,
 		primaryBenefits: ["Nerve Function", "Muscle Relaxation", "Sleep Support"],
-		polishPrimaryBenefits: ["Funkcje nerwowe", "Relaksacja mięśni", "Wsparcie snu"],
-		mechanismOfAction: "Cofactor in enzymatic reactions, supports neurotransmitter function",
-		polishMechanismOfAction: "Kofaktor w reakcjach enzymatycznych, wspiera funkcję neuroprzekaźników",
+		polishPrimaryBenefits: [
+			"Funkcje nerwowe",
+			"Relaksacja mięśni",
+			"Wsparcie snu",
+		],
+		mechanismOfAction:
+			"Cofactor in enzymatic reactions, supports neurotransmitter function",
+		polishMechanismOfAction:
+			"Kofaktor w reakcjach enzymatycznych, wspiera funkcję neuroprzekaźników",
 		studyCount: 312,
 		activeCompounds: ["Magnesium"],
 		sideEffects: ["Diarrhea", "Nausea"],
@@ -239,14 +323,21 @@ export const sampleSupplements: SampleSupplement[] = [
 		category: "VITAMIN",
 		polishCategory: "Witamina",
 		description: "Essential vitamin for bone health and immune function",
-		polishDescription: "Niezbędna witamina do zdrowia kości i funkcji odpornościowych",
+		polishDescription:
+			"Niezbędna witamina do zdrowia kości i funkcji odpornościowych",
 		evidenceLevel: "STRONG",
 		safetyRating: 9.1,
 		userRating: 4.6,
 		primaryBenefits: ["Bone Health", "Immune Support", "Mood Regulation"],
-		polishPrimaryBenefits: ["Zdrowie kości", "Wsparcie odporności", "Regulacja nastroju"],
-		mechanismOfAction: "Regulates calcium absorption, modulates immune response",
-		polishMechanismOfAction: "Reguluje wchłanianie wapnia, moduluje odpowiedź odpornościową",
+		polishPrimaryBenefits: [
+			"Zdrowie kości",
+			"Wsparcie odporności",
+			"Regulacja nastroju",
+		],
+		mechanismOfAction:
+			"Regulates calcium absorption, modulates immune response",
+		polishMechanismOfAction:
+			"Reguluje wchłanianie wapnia, moduluje odpowiedź odpornościową",
 		studyCount: 445,
 		activeCompounds: ["Cholecalciferol"],
 		sideEffects: ["Hypercalcemia"],
@@ -267,14 +358,16 @@ export const sampleSupplements: SampleSupplement[] = [
 		category: "FATTY_ACID",
 		polishCategory: "Kwasy tłuszczowe",
 		description: "Essential fatty acids for brain and cardiovascular health",
-		polishDescription: "Niezbędne kwasy tłuszczowe dla zdrowia mózgu i układu sercowo-naczyniowego",
+		polishDescription:
+			"Niezbędne kwasy tłuszczowe dla zdrowia mózgu i układu sercowo-naczyniowego",
 		evidenceLevel: "STRONG",
 		safetyRating: 9.4,
 		userRating: 4.7,
 		primaryBenefits: ["Brain Health", "Heart Health", "Anti-inflammatory"],
 		polishPrimaryBenefits: ["Zdrowie mózgu", "Zdrowie serca", "Przeciwzapalne"],
 		mechanismOfAction: "Incorporates into cell membranes, reduces inflammation",
-		polishMechanismOfAction: "Wbudowuje się w błony komórkowe, redukuje stan zapalny",
+		polishMechanismOfAction:
+			"Wbudowuje się w błony komórkowe, redukuje stan zapalny",
 		studyCount: 567,
 		activeCompounds: ["EPA", "DHA"],
 		sideEffects: ["Fishy aftertaste", "Blood thinning"],
@@ -294,15 +387,23 @@ export const sampleSupplements: SampleSupplement[] = [
 		polishName: "Witaminy z Grupy B",
 		category: "VITAMIN",
 		polishCategory: "Witaminy",
-		description: "Complete spectrum of B vitamins for energy and nervous system",
-		polishDescription: "Pełne spektrum witamin z grupy B dla energii i układu nerwowego",
+		description:
+			"Complete spectrum of B vitamins for energy and nervous system",
+		polishDescription:
+			"Pełne spektrum witamin z grupy B dla energii i układu nerwowego",
 		evidenceLevel: "STRONG",
 		safetyRating: 9.6,
 		userRating: 4.4,
 		primaryBenefits: ["Energy Metabolism", "Nervous System", "Red Blood Cells"],
-		polishPrimaryBenefits: ["Metabolizm energetyczny", "Układ nerwowy", "Czerwone krwinki"],
-		mechanismOfAction: "Cofactors in energy production and neurotransmitter synthesis",
-		polishMechanismOfAction: "Kofaktory w produkcji energii i syntezie neuroprzekaźników",
+		polishPrimaryBenefits: [
+			"Metabolizm energetyczny",
+			"Układ nerwowy",
+			"Czerwone krwinki",
+		],
+		mechanismOfAction:
+			"Cofactors in energy production and neurotransmitter synthesis",
+		polishMechanismOfAction:
+			"Kofaktory w produkcji energii i syntezie neuroprzekaźników",
 		studyCount: 289,
 		activeCompounds: ["B1", "B2", "B3", "B5", "B6", "B7", "B9", "B12"],
 		sideEffects: ["Bright yellow urine"],
@@ -320,7 +421,9 @@ export const sampleSupplements: SampleSupplement[] = [
 		id: `supplement-${i + 11}`,
 		name: `Sample Supplement ${i + 11}`,
 		polishName: `Przykładowy Suplement ${i + 11}`,
-		category: ["NOOTROPIC", "VITAMIN", "MINERAL", "AMINO_ACID", "HERB"][i % 5] as any,
+		category: ["NOOTROPIC", "VITAMIN", "MINERAL", "AMINO_ACID", "HERB"][
+			i % 5
+		] as any,
 		polishCategory: "Suplement",
 		description: `Sample supplement ${i + 11} for demonstration purposes`,
 		polishDescription: `Przykładowy suplement ${i + 11} do celów demonstracyjnych`,
@@ -335,34 +438,44 @@ export const sampleSupplements: SampleSupplement[] = [
 		price: {
 			min: Math.floor(Math.random() * 50) + 20,
 			max: Math.floor(Math.random() * 100) + 50,
-			currency: "PLN"
+			currency: "PLN",
 		},
 		tags: ["sample", "demonstration"],
 	})),
 ];
 
 export const getSupplementsByCategory = (category: string) => {
-	return sampleSupplements.filter(supplement => supplement.category === category);
+	return sampleSupplements.filter(
+		(supplement) => supplement.category === category,
+	);
 };
 
 export const getSupplementsByEvidenceLevel = (level: string) => {
-	return sampleSupplements.filter(supplement => supplement.evidenceLevel === level);
+	return sampleSupplements.filter(
+		(supplement) => supplement.evidenceLevel === level,
+	);
 };
 
 export const searchSupplements = (query: string) => {
 	const lowercaseQuery = query.toLowerCase();
-	return sampleSupplements.filter(supplement =>
-		supplement.name.toLowerCase().includes(lowercaseQuery) ||
-		supplement.polishName.toLowerCase().includes(lowercaseQuery) ||
-		supplement.description.toLowerCase().includes(lowercaseQuery) ||
-		supplement.polishDescription.toLowerCase().includes(lowercaseQuery) ||
-		supplement.tags?.some(tag => tag.toLowerCase().includes(lowercaseQuery))
+	return sampleSupplements.filter(
+		(supplement) =>
+			supplement.name.toLowerCase().includes(lowercaseQuery) ||
+			supplement.polishName.toLowerCase().includes(lowercaseQuery) ||
+			supplement.description.toLowerCase().includes(lowercaseQuery) ||
+			supplement.polishDescription.toLowerCase().includes(lowercaseQuery) ||
+			supplement.tags?.some((tag) =>
+				tag.toLowerCase().includes(lowercaseQuery),
+			),
 	);
 };
 
 export const getFeaturedSupplements = () => {
 	return sampleSupplements
-		.filter(supplement => supplement.evidenceLevel === "STRONG" && supplement.userRating > 4.5)
+		.filter(
+			(supplement) =>
+				supplement.evidenceLevel === "STRONG" && supplement.userRating > 4.5,
+		)
 		.slice(0, 6);
 };
 

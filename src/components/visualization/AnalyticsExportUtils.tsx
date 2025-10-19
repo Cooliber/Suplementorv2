@@ -37,15 +37,20 @@ const AnalyticsExportUtils: React.FC<AnalyticsExportUtilsProps> = ({
 		const headers = Object.keys(firstItem);
 		const csvHeaders = headers.join(",");
 
-		const csvRows = data.map(item =>
-			headers.map(header => {
-				const value = item[header];
-				// Handle values that might contain commas or quotes
-				if (typeof value === "string" && (value.includes(",") || value.includes('"'))) {
-					return `"${value.replace(/"/g, '""')}"`;
-				}
-				return value;
-			}).join(",")
+		const csvRows = data.map((item) =>
+			headers
+				.map((header) => {
+					const value = item[header];
+					// Handle values that might contain commas or quotes
+					if (
+						typeof value === "string" &&
+						(value.includes(",") || value.includes('"'))
+					) {
+						return `"${value.replace(/"/g, '""')}"`;
+					}
+					return value;
+				})
+				.join(","),
 		);
 
 		return [csvHeaders, ...csvRows].join("\n");
@@ -78,7 +83,9 @@ const AnalyticsExportUtils: React.FC<AnalyticsExportUtilsProps> = ({
 	// Handle JSON export
 	const handleJSONExport = () => {
 		const jsonContent = convertToJSON(data);
-		const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
+		const blob = new Blob([jsonContent], {
+			type: "application/json;charset=utf-8;",
+		});
 		const link = document.createElement("a");
 
 		if (link.download !== undefined) {
@@ -115,19 +122,27 @@ const AnalyticsExportUtils: React.FC<AnalyticsExportUtilsProps> = ({
 					</head>
 					<body>
 						<h1>${title}</h1>
-						<p class="export-date">Wygenerowano: ${new Date().toLocaleDateString('pl-PL')}</p>
+						<p class="export-date">Wygenerowano: ${new Date().toLocaleDateString("pl-PL")}</p>
 						<table>
 							<thead>
 								<tr>
-									${Object.keys(data[0] || {}).map(key => `<th>${key}</th>`).join("")}
+									${Object.keys(data[0] || {})
+										.map((key) => `<th>${key}</th>`)
+										.join("")}
 								</tr>
 							</thead>
 							<tbody>
-								${data.map(item => `
+								${data
+									.map(
+										(item) => `
 									<tr>
-										${Object.values(item).map(value => `<td>${value}</td>`).join("")}
+										${Object.values(item)
+											.map((value) => `<td>${value}</td>`)
+											.join("")}
 									</tr>
-								`).join("")}
+								`,
+									)
+									.join("")}
 							</tbody>
 						</table>
 					</body>

@@ -1,280 +1,477 @@
 #!/usr/bin/env tsx
-
 /**
- * Migration Runner Script
- * Runs all database migrations for the Polish supplement education platform
+ * Database Migration Management Script
+ * Handles Prisma migrations with medical compliance validation
  */
 
-import path from "node:path";
-import { config } from "dotenv";
-
-// Load environment variables
-config({ path: path.resolve(process.cwd(), ".env.local") });
-
-import { runSupplementMigration } from "../src/lib/db/migrations/001-migrate-supplements";
-import { runBrainRegionMigration } from "../src/lib/db/migrations/002-migrate-brain-regions";
-import connectToDatabase, {
-	checkDBHealth,
-	getDBStats,
-} from "../src/lib/db/mongodb";
-
-interface MigrationStep {
-	name: string;
-	description: string;
-	run: () => Promise<void>;
-	required: boolean;
-}
-
-const migrations: MigrationStep[] = [
-	{
-		name: "supplements",
-		description:
-			"Migrate comprehensive supplements database with Polish translations",
-		run: runSupplementMigration,
-		required: true,
-	},
-	{
-		name: "brain-regions",
-		description:
-			"Migrate brain regions for 3D visualization with Polish content",
-		run: runBrainRegionMigration,
-		required: true,
-	},
-];
+import { execSync } from "child_process";
+import { existsSync, writeFileSync, readFileSync } from "fs";
+import { join } from "path";
+import { PrismaClient } from "../src/generated/prisma-client";
 
 /**
- * Run all migrations in sequence
+ * Colors for console output
  */
-async function runAllMigrations(): Promise<void> {
-	console.log(
-		"🚀 Starting Polish Supplement Education Platform migrations...\n",
-	);
+const colors = {
+  reset: "\x1b[0m",
+  bright: "\x1b[1m",
+  red: "\x1b[31m",
+  green: "\x1b[32m",
+  yellow: "\x1b[33m",
+  blue: "\x1b[34m",
+  magenta: "\x1b[35m",
+  cyan: "\x1b[36m",
+};
 
-	try {
-		// Check database connection
-		console.log("🔍 Checking database connection...");
-		const healthCheck = await checkDBHealth();
-
-		if (healthCheck.status !== "healthy") {
-			throw new Error("Database connection is not healthy");
-		}
-
-		console.log("✅ Database connection is healthy");
-		console.log(`   Connected to: ${healthCheck.details.name}`);
-		console.log(`   Collections: ${healthCheck.details.collections}\n`);
-
-		// Run migrations
-		let successCount = 0;
-		let failureCount = 0;
-
-		for (const migration of migrations) {
-			try {
-				console.log(`📦 Running migration: ${migration.name}`);
-				console.log(`   Description: ${migration.description}`);
-
-				const startTime = Date.now();
-				await migration.run();
-				const duration = Date.now() - startTime;
-
-				console.log(
-					`✅ Migration '${migration.name}' completed successfully in ${duration}ms\n`,
-				);
-				successCount++;
-			} catch (error) {
-				console.error(`❌ Migration '${migration.name}' failed:`, error);
-
-				if (migration.required) {
-					console.error(
-						"🛑 Required migration failed. Stopping migration process.",
-					);
-					throw error;
-				}
-				console.warn(
-					"⚠️ Optional migration failed. Continuing with next migration.\n",
-				);
-				failureCount++;
-			}
-		}
-
-		// Final database statistics
-		console.log("📊 Getting final database statistics...");
-		const finalStats = await getDBStats();
-
-		console.log("\n🎉 All migrations completed successfully!");
-		console.log("\n📈 Final Database Statistics:");
-		console.log(`   Supplements: ${finalStats.supplements}`);
-		console.log(`   Brain Regions: ${finalStats.brainRegions}`);
-		console.log(`   Neurotransmitters: ${finalStats.neurotransmitters}`);
-		console.log(`   Research Studies: ${finalStats.researchStudies}`);
-		console.log(`   Users: ${finalStats.users}`);
-		console.log(`   Tracking Logs: ${finalStats.trackingLogs}`);
-
-		console.log("\n✨ Summary:");
-		console.log(`   Successful migrations: ${successCount}`);
-		console.log(`   Failed migrations: ${failureCount}`);
-		console.log(`   Total migrations: ${migrations.length}`);
-
-		if (failureCount === 0) {
-			console.log("\n🎊 All migrations completed without errors!");
-			console.log(
-				"🚀 Your Polish supplement education platform database is ready!",
-			);
-		} else {
-			console.log(
-				`\n⚠️ ${failureCount} migrations failed, but the platform should still be functional.`,
-			);
-		}
-	} catch (error) {
-		console.error("\n💥 Migration process failed:", error);
-		process.exit(1);
-	}
+/**
+ * Log with colors
+ */
+function log(message: string, color: keyof typeof colors = "reset") {
+  console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
 /**
- * Run specific migration by name
+ * Execute shell command
  */
-async function runSpecificMigration(migrationName: string): Promise<void> {
-	const migration = migrations.find((m) => m.name === migrationName);
-
-	if (!migration) {
-		console.error(`❌ Migration '${migrationName}' not found.`);
-		console.log("\n📋 Available migrations:");
-		migrations.forEach((m) => {
-			console.log(`   - ${m.name}: ${m.description}`);
-		});
-		process.exit(1);
-	}
-
-	try {
-		console.log(`🚀 Running specific migration: ${migration.name}`);
-		console.log(`   Description: ${migration.description}\n`);
-
-		const startTime = Date.now();
-		await migration.run();
-		const duration = Date.now() - startTime;
-
-		console.log(
-			`\n✅ Migration '${migration.name}' completed successfully in ${duration}ms`,
-		);
-	} catch (error) {
-		console.error(`\n❌ Migration '${migration.name}' failed:`, error);
-		process.exit(1);
-	}
+function exec(command: string, errorMessage?: string): boolean {
+  try {
+    log(`Executing: ${command}`, "cyan");
+    execSync(command, { stdio: "inherit" });
+    return true;
+  } catch (error) {
+    if (errorMessage) {
+      log(errorMessage, "red");
+    } else {
+      log(`Command failed: ${command}`, "red");
+    }
+    return false;
+  }
 }
 
 /**
- * Show migration status
+ * Migration operation types
  */
-async function showMigrationStatus(): Promise<void> {
-	try {
-		console.log("📊 Checking migration status...\n");
+type MigrationOperation = "status" | "deploy" | "dev" | "reset" | "seed";
 
-		// Check database connection
-		const healthCheck = await checkDBHealth();
-		console.log(`🔍 Database Status: ${healthCheck.status}`);
+/**
+ * Database migration manager
+ */
+class MigrationManager {
+  private prisma: PrismaClient;
+  private environment: string;
 
-		if (healthCheck.status === "healthy") {
-			console.log(`   Host: ${healthCheck.details.host}`);
-			console.log(`   Database: ${healthCheck.details.name}`);
-			console.log(`   Collections: ${healthCheck.details.collections}`);
-		}
+  constructor() {
+    this.environment = process.env.NODE_ENV || "development";
+    this.prisma = new PrismaClient({
+      log: this.environment === "development" ? ["query", "error", "warn"] : ["error"],
+    });
+  }
 
-		// Get database statistics
-		const stats = await getDBStats();
+  /**
+   * Check migration status
+   */
+  async checkStatus(): Promise<void> {
+    log("\n📊 Checking migration status...", "yellow");
 
-		console.log("\n📈 Current Database Statistics:");
-		console.log(`   Supplements: ${stats.supplements}`);
-		console.log(`   Brain Regions: ${stats.brainRegions}`);
-		console.log(`   Neurotransmitters: ${stats.neurotransmitters}`);
-		console.log(`   Research Studies: ${stats.researchStudies}`);
-		console.log(`   Users: ${stats.users}`);
-		console.log(`   Tracking Logs: ${stats.trackingLogs}`);
+    try {
+      // Check database connection
+      await this.prisma.$connect();
+      log("✅ Database connection established", "green");
 
-		console.log("\n📋 Available Migrations:");
-		migrations.forEach((migration, index) => {
-			const status = migration.required ? "🔴 Required" : "🟡 Optional";
-			console.log(`   ${index + 1}. ${migration.name} - ${status}`);
-			console.log(`      ${migration.description}`);
-		});
-	} catch (error) {
-		console.error("❌ Failed to check migration status:", error);
-		process.exit(1);
-	}
+      // Get migration history
+      const migrations = await this.prisma.$queryRaw`
+        SELECT name, started_at, finished_at, migration_state
+        FROM _prisma_migrations
+        ORDER BY started_at DESC
+        LIMIT 10
+      `;
+
+      if (Array.isArray(migrations) && migrations.length > 0) {
+        log("📋 Recent migrations:", "cyan");
+        migrations.forEach((migration: any) => {
+          const status = migration.finished_at ? "✅" : "⏳";
+          log(`  ${status} ${migration.name} (${migration.migration_state})`, "cyan");
+        });
+      } else {
+        log("📋 No migrations found", "yellow");
+      }
+
+      // Check database schema health
+      await this.checkSchemaHealth();
+
+    } catch (error) {
+      log(`❌ Migration status check failed: ${error}`, "red");
+      throw error;
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
+  /**
+   * Check database schema health
+   */
+  private async checkSchemaHealth(): Promise<void> {
+    try {
+      // Test basic queries on key tables
+      const userCount = await this.prisma.user.count();
+      const supplementCount = await this.prisma.supplement.count();
+      const brainRegionCount = await this.prisma.brainRegion.count();
+
+      log("🏥 Database schema health:", "green");
+      log(`  Users: ${userCount}`, "cyan");
+      log(`  Supplements: ${supplementCount}`, "cyan");
+      log(`  Brain Regions: ${brainRegionCount}`, "cyan");
+
+      // Check for data integrity issues
+      await this.checkDataIntegrity();
+
+    } catch (error) {
+      log(`⚠️  Schema health check warning: ${error}`, "yellow");
+    }
+  }
+
+  /**
+   * Check data integrity
+   */
+  private async checkDataIntegrity(): Promise<void> {
+    try {
+      // Check for orphaned records
+      const orphanedTracking = await this.prisma.supplementTracking.count({
+        where: {
+          user: null,
+        },
+      });
+
+      if (orphanedTracking > 0) {
+        log(`⚠️  Found ${orphanedTracking} orphaned supplement tracking records`, "yellow");
+      }
+
+      // Check for missing consent records for medical data
+      const medicalDataWithoutConsent = await this.prisma.healthMetrics.count({
+        where: {
+          user: {
+            gdprConsentGiven: false,
+          },
+        },
+      });
+
+      if (medicalDataWithoutConsent > 0) {
+        log(`⚠️  Found ${medicalDataWithoutConsent} health metrics without GDPR consent`, "yellow");
+      }
+
+    } catch (error) {
+      log(`⚠️  Data integrity check warning: ${error}`, "yellow");
+    }
+  }
+
+  /**
+   * Deploy migrations to production
+   */
+  async deployMigrations(): Promise<void> {
+    log("\n🚀 Deploying migrations to production...", "yellow");
+
+    // Pre-deployment validation
+    await this.validatePreDeployment();
+
+    try {
+      // Generate Prisma client
+      if (!exec("npx prisma generate", "Failed to generate Prisma client")) {
+        throw new Error("Prisma client generation failed");
+      }
+
+      // Deploy migrations
+      if (!exec("npx prisma migrate deploy", "Migration deployment failed")) {
+        throw new Error("Migration deployment failed");
+      }
+
+      // Verify deployment
+      await this.verifyDeployment();
+
+      log("✅ Migrations deployed successfully!", "green");
+
+    } catch (error) {
+      log(`❌ Migration deployment failed: ${error}`, "red");
+      throw error;
+    }
+  }
+
+  /**
+   * Validate pre-deployment state
+   */
+  private async validatePreDeployment(): Promise<void> {
+    log("🔍 Validating pre-deployment state...", "yellow");
+
+    // Check if we're in production
+    if (this.environment !== "production") {
+      log("⚠️  Not in production environment, skipping strict validation", "yellow");
+      return;
+    }
+
+    // Check for required environment variables
+    const requiredEnvVars = [
+      "DATABASE_URL",
+      "MEDICAL_DATA_PROTECTION",
+      "GDPR_COMPLIANCE_MODE",
+    ];
+
+    for (const envVar of requiredEnvVars) {
+      if (!process.env[envVar]) {
+        throw new Error(`Missing required environment variable: ${envVar}`);
+      }
+    }
+
+    // Validate medical compliance
+    if (process.env.MEDICAL_DATA_PROTECTION !== "enabled") {
+      throw new Error("Medical data protection must be enabled for deployment");
+    }
+
+    if (process.env.GDPR_COMPLIANCE_MODE !== "strict") {
+      throw new Error("GDPR compliance mode must be 'strict' for production deployment");
+    }
+
+    log("✅ Pre-deployment validation passed", "green");
+  }
+
+  /**
+   * Verify deployment success
+   */
+  private async verifyDeployment(): Promise<void> {
+    log("🔍 Verifying deployment...", "yellow");
+
+    try {
+      // Test database connectivity
+      await this.prisma.$connect();
+
+      // Test critical table access
+      const tables = [
+        "User",
+        "SupplementTracking",
+        "HealthMetrics",
+        "ConsentRecord",
+        "AuditLog",
+      ];
+
+      for (const table of tables) {
+        try {
+          const count = await (this.prisma as any)[table.toLowerCase()]?.count();
+          log(`  ✅ ${table}: ${count || 0} records`, "green");
+        } catch (error) {
+          log(`  ❌ ${table}: Access failed`, "red");
+          throw error;
+        }
+      }
+
+      log("✅ Deployment verification completed", "green");
+
+    } catch (error) {
+      log(`❌ Deployment verification failed: ${error}`, "red");
+      throw error;
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
+  /**
+   * Reset database (development only)
+   */
+  async resetDatabase(): Promise<void> {
+    if (this.environment === "production") {
+      throw new Error("Cannot reset database in production environment");
+    }
+
+    log("\n🔄 Resetting development database...", "yellow");
+
+    try {
+      // Drop all tables and recreate
+      if (!exec("npx prisma migrate reset --force", "Database reset failed")) {
+        throw new Error("Database reset failed");
+      }
+
+      // Generate Prisma client
+      if (!exec("npx prisma generate", "Prisma client generation failed")) {
+        throw new Error("Prisma client generation failed");
+      }
+
+      // Run migrations
+      if (!exec("npx prisma migrate dev", "Migration execution failed")) {
+        throw new Error("Migration execution failed");
+      }
+
+      log("✅ Database reset completed successfully!", "green");
+
+    } catch (error) {
+      log(`❌ Database reset failed: ${error}`, "red");
+      throw error;
+    }
+  }
+
+  /**
+   * Seed database with sample data
+   */
+  async seedDatabase(): Promise<void> {
+    log("\n🌱 Seeding database with sample data...", "yellow");
+
+    try {
+      // Run the seed script
+      if (!exec("npm run db:seed", "Database seeding failed")) {
+        throw new Error("Database seeding failed");
+      }
+
+      log("✅ Database seeded successfully!", "green");
+
+    } catch (error) {
+      log(`❌ Database seeding failed: ${error}`, "red");
+      throw error;
+    }
+  }
+
+  /**
+   * Create new migration
+   */
+  async createMigration(name: string): Promise<void> {
+    log(`\n📝 Creating new migration: ${name}`, "yellow");
+
+    try {
+      const command = `npx prisma migrate dev --name ${name}`;
+      if (!exec(command, "Migration creation failed")) {
+        throw new Error("Migration creation failed");
+      }
+
+      log("✅ Migration created successfully!", "green");
+
+    } catch (error) {
+      log(`❌ Migration creation failed: ${error}`, "red");
+      throw error;
+    }
+  }
+
+  /**
+   * Validate medical compliance in database
+   */
+  async validateMedicalCompliance(): Promise<void> {
+    log("\n🏥 Validating medical compliance...", "yellow");
+
+    try {
+      await this.prisma.$connect();
+
+      // Check GDPR consent records
+      const usersWithoutConsent = await this.prisma.user.count({
+        where: {
+          gdprConsentGiven: false,
+        },
+      });
+
+      if (usersWithoutConsent > 0) {
+        log(`⚠️  ${usersWithoutConsent} users without GDPR consent`, "yellow");
+      }
+
+      // Check for medical data without proper classification
+      const unclassifiedMedicalData = await this.prisma.healthMetrics.count({
+        where: {
+          dataClassification: {
+            not: "medical",
+          },
+        },
+      });
+
+      if (unclassifiedMedicalData > 0) {
+        log(`⚠️  ${unclassifiedMedicalData} health metrics not properly classified`, "yellow");
+      }
+
+      // Check audit log coverage
+      const recentActivity = await this.prisma.userActivity.count({
+        where: {
+          timestamp: {
+            gte: new Date(Date.now() - 24 * 60 * 60 * 1000), // Last 24 hours
+          },
+        },
+      });
+
+      if (recentActivity === 0) {
+        log("⚠️  No recent user activity logged", "yellow");
+      }
+
+      log("✅ Medical compliance validation completed", "green");
+
+    } catch (error) {
+      log(`❌ Medical compliance validation failed: ${error}`, "red");
+      throw error;
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
 }
 
 /**
- * Main function - parse command line arguments and run appropriate action
+ * Main execution function
  */
 async function main(): Promise<void> {
-	const args = process.argv.slice(2);
-	const command = args[0];
+  const args = process.argv.slice(2);
+  const operation = args[0] as MigrationOperation;
+  const migrationName = args[1];
 
-	switch (command) {
-		case "run":
-			if (args[1]) {
-				await runSpecificMigration(args[1]);
-			} else {
-				await runAllMigrations();
-			}
-			break;
+  const migrationManager = new MigrationManager();
 
-		case "status":
-			await showMigrationStatus();
-			break;
+  log("🗄️  Suplementor Database Migration Manager", "bright");
+  log(`Environment: ${migrationManager["environment"]}`, "blue");
+  log("==========================================", "bright");
 
-		case "help":
-		case "--help":
-		case "-h":
-			console.log(
-				"🔧 Polish Supplement Education Platform - Migration Runner\n",
-			);
-			console.log("Usage:");
-			console.log("  npm run migrate              # Run all migrations");
-			console.log("  npm run migrate run          # Run all migrations");
-			console.log("  npm run migrate run <name>   # Run specific migration");
-			console.log("  npm run migrate status       # Show migration status");
-			console.log("  npm run migrate help         # Show this help\n");
-			console.log("Available migrations:");
-			migrations.forEach((m) => {
-				console.log(`  - ${m.name}: ${m.description}`);
-			});
-			break;
+  try {
+    switch (operation) {
+      case "status":
+        await migrationManager.checkStatus();
+        break;
 
-		default:
-			if (command) {
-				console.error(`❌ Unknown command: ${command}\n`);
-			}
-			console.log(
-				"🔧 Polish Supplement Education Platform - Migration Runner\n",
-			);
-			console.log("Usage: npm run migrate [command] [options]\n");
-			console.log("Commands:");
-			console.log(
-				"  run [migration]  Run all migrations or specific migration",
-			);
-			console.log("  status          Show current migration status");
-			console.log("  help            Show this help message\n");
-			console.log("Examples:");
-			console.log("  npm run migrate");
-			console.log("  npm run migrate run supplements");
-			console.log("  npm run migrate status");
-			break;
-	}
+      case "deploy":
+        await migrationManager.deployMigrations();
+        break;
+
+      case "dev":
+        if (!migrationName) {
+          log("❌ Migration name required for dev migrations", "red");
+          log("Usage: tsx scripts/run-migrations.ts dev <migration-name>", "yellow");
+          process.exit(1);
+        }
+        await migrationManager.createMigration(migrationName);
+        break;
+
+      case "reset":
+        await migrationManager.resetDatabase();
+        break;
+
+      case "seed":
+        await migrationManager.seedDatabase();
+        break;
+
+      default:
+        log("Usage:", "cyan");
+        log("  tsx scripts/run-migrations.ts status", "cyan");
+        log("  tsx scripts/run-migrations.ts deploy", "cyan");
+        log("  tsx scripts/run-migrations.ts dev <migration-name>", "cyan");
+        log("  tsx scripts/run-migrations.ts reset", "cyan");
+        log("  tsx scripts/run-migrations.ts seed", "cyan");
+        log("", "cyan");
+        log("Examples:", "cyan");
+        log("  tsx scripts/run-migrations.ts dev add-user-profiles", "cyan");
+        log("  tsx scripts/run-migrations.ts deploy", "cyan");
+        log("  tsx scripts/run-migrations.ts status", "cyan");
+        break;
+    }
+
+    // Always validate medical compliance in production
+    if (migrationManager["environment"] === "production") {
+      await migrationManager.validateMedicalCompliance();
+    }
+
+  } catch (error) {
+    log(`\n❌ Migration operation failed: ${error instanceof Error ? error.message : "Unknown error"}`, "red");
+    process.exit(1);
+  }
 }
 
-// Handle uncaught errors
-process.on("unhandledRejection", (reason, promise) => {
-	console.error("💥 Unhandled Rejection at:", promise, "reason:", reason);
-	process.exit(1);
-});
+// Run if called directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch(console.error);
+}
 
-process.on("uncaughtException", (error) => {
-	console.error("💥 Uncaught Exception:", error);
-	process.exit(1);
-});
-
-// Run the main function
-main().catch((error) => {
-	console.error("💥 Migration runner failed:", error);
-	process.exit(1);
-});
+export { MigrationManager };

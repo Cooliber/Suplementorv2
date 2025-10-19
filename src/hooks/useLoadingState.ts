@@ -5,7 +5,7 @@
  * Centralized loading state management for React components
  */
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface LoadingState {
 	isLoading: boolean;
@@ -22,12 +22,7 @@ interface UseLoadingOptions {
 }
 
 export function useLoadingState<T = any>(options: UseLoadingOptions = {}) {
-	const {
-		initialLoading = false,
-		onSuccess,
-		onError,
-		timeout,
-	} = options;
+	const { initialLoading = false, onSuccess, onError, timeout } = options;
 
 	const [state, setState] = useState<LoadingState>({
 		isLoading: initialLoading,
@@ -41,7 +36,7 @@ export function useLoadingState<T = any>(options: UseLoadingOptions = {}) {
 	useEffect(() => {
 		if (timeout && state.isLoading) {
 			timeoutRef.current = setTimeout(() => {
-				setState(prev => ({
+				setState((prev) => ({
 					...prev,
 					isLoading: false,
 					error: new Error("Operation timed out"),
@@ -67,30 +62,36 @@ export function useLoadingState<T = any>(options: UseLoadingOptions = {}) {
 	}, []);
 
 	const updateProgress = useCallback((progress: number) => {
-		setState(prev => ({
+		setState((prev) => ({
 			...prev,
 			progress: Math.min(Math.max(progress, 0), 100),
 		}));
 	}, []);
 
-	const setError = useCallback((error: Error) => {
-		setState(prev => ({
-			...prev,
-			isLoading: false,
-			error,
-		}));
-		onError?.(error);
-	}, [onError]);
+	const setError = useCallback(
+		(error: Error) => {
+			setState((prev) => ({
+				...prev,
+				isLoading: false,
+				error,
+			}));
+			onError?.(error);
+		},
+		[onError],
+	);
 
-	const setSuccess = useCallback((data: T) => {
-		setState({
-			isLoading: false,
-			progress: 100,
-			error: null,
-			data,
-		});
-		onSuccess?.(data);
-	}, [onSuccess]);
+	const setSuccess = useCallback(
+		(data: T) => {
+			setState({
+				isLoading: false,
+				progress: 100,
+				error: null,
+				data,
+			});
+			onSuccess?.(data);
+		},
+		[onSuccess],
+	);
 
 	const reset = useCallback(() => {
 		setState({
@@ -117,79 +118,85 @@ interface UseAsyncOperationOptions<T> {
 	timeout?: number;
 }
 
-export function useAsyncOperation<T = any>(options: UseAsyncOperationOptions<T> = {}) {
+export function useAsyncOperation<T = any>(
+	options: UseAsyncOperationOptions<T> = {},
+) {
 	const { onSuccess, onError, timeout } = options;
 	const [operationState, setOperationState] = useState<{
 		isRunning: boolean;
 		currentOperation?: string;
 		operations: Map<string, { progress: number; status: string }>;
-	}>(
-		{
-			isRunning: false,
-			operations: new Map(),
-		}
-	);
+	}>({
+		isRunning: false,
+		operations: new Map(),
+	});
 
-	const executeAsync = useCallback(async <TResult = T>(
-		operation: () => Promise<TResult>,
-		operationName?: string,
-		progressCallback?: (progress: number) => void,
-	): Promise<TResult | null> => {
-		const opId = operationName || `operation_${Date.now()}`;
+	const executeAsync = useCallback(
+		async <TResult = T>(
+			operation: () => Promise<TResult>,
+			operationName?: string,
+			progressCallback?: (progress: number) => void,
+		): Promise<TResult | null> => {
+			const opId = operationName || `operation_${Date.now()}`;
 
-		setOperationState(prev => ({
-			isRunning: true,
-			currentOperation: opId,
-			operations: new Map(prev.operations.set(opId, { progress: 0, status: "running" })),
-		}));
+			setOperationState((prev) => ({
+				isRunning: true,
+				currentOperation: opId,
+				operations: new Map(
+					prev.operations.set(opId, { progress: 0, status: "running" }),
+				),
+			}));
 
-		try {
-			const result = await operation();
+			try {
+				const result = await operation();
 
-			setOperationState(prev => {
-				const newOps = new Map(prev.operations);
-				newOps.set(opId, { progress: 100, status: "completed" });
-				return {
-					...prev,
-					operations: newOps,
-				};
-			});
-
-			onSuccess?.(result as T);
-			return result;
-		} catch (error) {
-			const err = error instanceof Error ? error : new Error(String(error));
-
-			setOperationState(prev => {
-				const newOps = new Map(prev.operations);
-				newOps.set(opId, { progress: 0, status: "error" });
-				return {
-					...prev,
-					operations: newOps,
-				};
-			});
-
-			onError?.(err);
-			return null;
-		} finally {
-			// Clean up completed operations after a delay
-			setTimeout(() => {
-				setOperationState(prev => {
+				setOperationState((prev) => {
 					const newOps = new Map(prev.operations);
-					newOps.delete(opId);
+					newOps.set(opId, { progress: 100, status: "completed" });
 					return {
 						...prev,
-						isRunning: newOps.size > 0,
-						currentOperation: newOps.size > 0 ? prev.currentOperation : undefined,
 						operations: newOps,
 					};
 				});
-			}, 3000);
-		}
-	}, [onSuccess, onError]);
+
+				onSuccess?.(result as T);
+				return result;
+			} catch (error) {
+				const err = error instanceof Error ? error : new Error(String(error));
+
+				setOperationState((prev) => {
+					const newOps = new Map(prev.operations);
+					newOps.set(opId, { progress: 0, status: "error" });
+					return {
+						...prev,
+						operations: newOps,
+					};
+				});
+
+				onError?.(err);
+				return null;
+			} finally {
+				// Clean up completed operations after a delay
+				setTimeout(() => {
+					setOperationState((prev) => {
+						const newOps = new Map(prev.operations);
+						newOps.delete(opId);
+						return {
+							...prev,
+							isRunning: newOps.size > 0,
+							currentOperation:
+								newOps.size > 0 ? prev.currentOperation : undefined,
+							operations: newOps,
+						};
+					});
+				}, 3000);
+			}
+		},
+		[onSuccess, onError],
+	);
 
 	const cancelOperation = useCallback((operationId: string) => {
-		setOperationState(prev => {
+		setOperationState((prev) => {
 			const newOps = new Map(prev.operations);
 			newOps.set(operationId, { progress: 0, status: "cancelled" });
 			return {
@@ -213,7 +220,10 @@ interface UseProgressiveLoaderOptions {
 	onComplete?: () => void;
 }
 
-export function useProgressiveLoader(steps: number, options: UseProgressiveLoaderOptions = {}) {
+export function useProgressiveLoader(
+	steps: number,
+	options: UseProgressiveLoaderOptions = {},
+) {
 	const {
 		autoAdvance = false,
 		stepDuration = 1000,
@@ -228,7 +238,7 @@ export function useProgressiveLoader(steps: number, options: UseProgressiveLoade
 		if (!isPlaying || currentStep >= steps) return;
 
 		const timer = setTimeout(() => {
-			setCurrentStep(prev => {
+			setCurrentStep((prev) => {
 				const next = prev + 1;
 				onStepChange?.(next, steps);
 
@@ -246,7 +256,7 @@ export function useProgressiveLoader(steps: number, options: UseProgressiveLoade
 	}, [currentStep, isPlaying, steps, stepDuration, onStepChange, onComplete]);
 
 	const nextStep = useCallback(() => {
-		setCurrentStep(prev => {
+		setCurrentStep((prev) => {
 			const next = prev + 1;
 			onStepChange?.(next, steps);
 
@@ -260,14 +270,17 @@ export function useProgressiveLoader(steps: number, options: UseProgressiveLoade
 	}, [steps, onStepChange, onComplete]);
 
 	const prevStep = useCallback(() => {
-		setCurrentStep(prev => Math.max(prev - 1, 0));
+		setCurrentStep((prev) => Math.max(prev - 1, 0));
 	}, []);
 
-	const goToStep = useCallback((step: number) => {
-		const clampedStep = Math.min(Math.max(step, 0), steps);
-		setCurrentStep(clampedStep);
-		onStepChange?.(clampedStep, steps);
-	}, [steps, onStepChange]);
+	const goToStep = useCallback(
+		(step: number) => {
+			const clampedStep = Math.min(Math.max(step, 0), steps);
+			setCurrentStep(clampedStep);
+			onStepChange?.(clampedStep, steps);
+		},
+		[steps, onStepChange],
+	);
 
 	const play = useCallback(() => {
 		setIsPlaying(true);
@@ -339,7 +352,9 @@ export function useDebouncedLoading(options: UseDebouncedLoadingOptions = {}) {
 	}, [debounceMs]);
 
 	const stopLoading = useCallback(() => {
-		const elapsedTime = startTimeRef.current ? Date.now() - startTimeRef.current : 0;
+		const elapsedTime = startTimeRef.current
+			? Date.now() - startTimeRef.current
+			: 0;
 
 		// Clear debounce timeout
 		if (debounceTimeoutRef.current) {
@@ -372,86 +387,104 @@ interface UseBackgroundTaskOptions {
 	onProgress?: (progress: number) => void;
 }
 
-export function useBackgroundTask<T = any>(options: UseBackgroundTaskOptions = {}) {
+export function useBackgroundTask<T = any>(
+	options: UseBackgroundTaskOptions = {},
+) {
 	const { onComplete, onError, onProgress } = options;
-	const [tasks, setTasks] = useState<Map<string, {
-		status: "pending" | "running" | "completed" | "failed";
-		progress: number;
-		result?: T;
-		error?: Error;
-		startTime: Date;
-	}>>(new Map());
+	const [tasks, setTasks] = useState<
+		Map<
+			string,
+			{
+				status: "pending" | "running" | "completed" | "failed";
+				progress: number;
+				result?: T;
+				error?: Error;
+				startTime: Date;
+			}
+		>
+	>(new Map());
 
-	const addTask = useCallback((taskId: string, task: () => Promise<T>) => {
-		const startTime = new Date();
+	const addTask = useCallback(
+		(taskId: string, task: () => Promise<T>) => {
+			const startTime = new Date();
 
-		setTasks(prev => new Map(prev.set(taskId, {
-			status: "pending",
-			progress: 0,
-			startTime,
-		})));
+			setTasks(
+				(prev) =>
+					new Map(
+						prev.set(taskId, {
+							status: "pending",
+							progress: 0,
+							startTime,
+						}),
+					),
+			);
 
-		// Simulate task execution
-		setTimeout(async () => {
-			setTasks(prev => {
-				const newTasks = new Map(prev);
-				const taskData = newTasks.get(taskId);
-				if (taskData) {
-					newTasks.set(taskId, { ...taskData, status: "running" });
-				}
-				return newTasks;
-			});
+			// Simulate task execution
+			setTimeout(async () => {
+				setTasks((prev) => {
+					const newTasks = new Map(prev);
+					const taskData = newTasks.get(taskId);
+					if (taskData) {
+						newTasks.set(taskId, { ...taskData, status: "running" });
+					}
+					return newTasks;
+				});
 
-			try {
-				// Simulate progress updates
-				const progressInterval = setInterval(() => {
-					setTasks(prev => {
+				try {
+					// Simulate progress updates
+					const progressInterval = setInterval(() => {
+						setTasks((prev) => {
+							const newTasks = new Map(prev);
+							const taskData = newTasks.get(taskId);
+							if (taskData && taskData.status === "running") {
+								const newProgress = Math.min(
+									taskData.progress + Math.random() * 20,
+									90,
+								);
+								newTasks.set(taskId, { ...taskData, progress: newProgress });
+								onProgress?.(newProgress);
+							}
+							return newTasks;
+						});
+					}, 200);
+
+					const result = await task();
+
+					clearInterval(progressInterval);
+
+					setTasks((prev) => {
 						const newTasks = new Map(prev);
-						const taskData = newTasks.get(taskId);
-						if (taskData && taskData.status === "running") {
-							const newProgress = Math.min(taskData.progress + Math.random() * 20, 90);
-							newTasks.set(taskId, { ...taskData, progress: newProgress });
-							onProgress?.(newProgress);
-						}
+						newTasks.set(taskId, {
+							status: "completed",
+							progress: 100,
+							result,
+							startTime,
+						});
 						return newTasks;
 					});
-				}, 200);
 
-				const result = await task();
-
-				clearInterval(progressInterval);
-
-				setTasks(prev => {
-					const newTasks = new Map(prev);
-					newTasks.set(taskId, {
-						status: "completed",
-						progress: 100,
-						result,
-						startTime,
+					onComplete?.(result);
+				} catch (error) {
+					setTasks((prev) => {
+						const newTasks = new Map(prev);
+						newTasks.set(taskId, {
+							status: "failed",
+							progress: 0,
+							error: error instanceof Error ? error : new Error(String(error)),
+							startTime,
+						});
+						return newTasks;
 					});
-					return newTasks;
-				});
 
-				onComplete?.(result);
-			} catch (error) {
-				setTasks(prev => {
-					const newTasks = new Map(prev);
-					newTasks.set(taskId, {
-						status: "failed",
-						progress: 0,
-						error: error instanceof Error ? error : new Error(String(error)),
-						startTime,
-					});
-					return newTasks;
-				});
-
-				onError?.(error instanceof Error ? error : new Error(String(error)));
-			}
-		}, 100);
-	}, [onComplete, onError, onProgress]);
+					onError?.(error instanceof Error ? error : new Error(String(error)));
+				}
+			}, 100);
+		},
+		[onComplete, onError, onProgress],
+	);
 
 	const cancelTask = useCallback((taskId: string) => {
-		setTasks(prev => {
+		setTasks((prev) => {
 			const newTasks = new Map(prev);
 			const taskData = newTasks.get(taskId);
 			if (taskData && taskData.status === "running") {
@@ -462,7 +495,7 @@ export function useBackgroundTask<T = any>(options: UseBackgroundTaskOptions = {
 	}, []);
 
 	const removeTask = useCallback((taskId: string) => {
-		setTasks(prev => {
+		setTasks((prev) => {
 			const newTasks = new Map(prev);
 			newTasks.delete(taskId);
 			return newTasks;
@@ -480,11 +513,13 @@ export function useBackgroundTask<T = any>(options: UseBackgroundTaskOptions = {
 // Utility functions for common loading patterns
 export const loadingUtils = {
 	// Simulate network delay
-	delay: (ms: number) => new Promise(resolve => setTimeout(resolve, ms)),
+	delay: (ms: number) => new Promise((resolve) => setTimeout(resolve, ms)),
 
 	// Create a promise that resolves after a random delay (for testing)
 	randomDelay: (min = 500, max = 2000) =>
-		new Promise(resolve => setTimeout(resolve, Math.random() * (max - min) + min)),
+		new Promise((resolve) =>
+			setTimeout(resolve, Math.random() * (max - min) + min),
+		),
 
 	// Create progress simulation
 	simulateProgress: (
@@ -526,7 +561,7 @@ export const loadingUtils = {
 					throw lastError;
 				}
 
-				const delay = baseDelay * Math.pow(2, attempt - 1);
+				const delay = baseDelay * 2 ** (attempt - 1);
 				await loadingUtils.delay(delay);
 			}
 		}

@@ -4,18 +4,18 @@
  */
 
 import {
-	type UserProfile,
-	type SupplementInput,
+	ACTIVITY_LEVEL_ADJUSTMENTS,
+	AGE_ADJUSTMENTS,
+	type CalculationProgress,
+	type DosageAdjustment,
 	type DosageCalculationInput,
 	type DosageRecommendation,
-	type DosageAdjustment,
-	type PharmacokineticFactors,
-	type CalculationProgress,
 	PHARMACOKINETIC_CONSTANTS,
-	AGE_ADJUSTMENTS,
-	ACTIVITY_LEVEL_ADJUSTMENTS,
+	type PharmacokineticFactors,
+	type SupplementInput,
+	type UserProfile,
 } from "@/types/dosage-calculator";
-import { type SupplementWithRelations } from "@/types/supplement";
+import type { SupplementWithRelations } from "@/types/supplement";
 
 export class DosageCalculationEngine {
 	private progressCallback?: (progress: CalculationProgress) => void;
@@ -32,12 +32,17 @@ export class DosageCalculationEngine {
 		adjustments: DosageAdjustment[];
 		confidence: number;
 	}> {
-		this.updateProgress("Rozpoczęcie analizy farmakokinetycznej", "Starting pharmacokinetic analysis", 10);
+		this.updateProgress(
+			"Rozpoczęcie analizy farmakokinetycznej",
+			"Starting pharmacokinetic analysis",
+			10,
+		);
 
 		const { userProfile, supplements } = input;
 
 		// Calculate base pharmacokinetic factors for user
-		const userPharmacokinetics = this.calculateUserPharmacokinetics(userProfile);
+		const userPharmacokinetics =
+			this.calculateUserPharmacokinetics(userProfile);
 
 		this.updateProgress("Analiza suplementów", "Analyzing supplements", 30);
 
@@ -47,23 +52,27 @@ export class DosageCalculationEngine {
 
 		for (let i = 0; i < supplements.length; i++) {
 			const supplementInput = supplements[i]!;
-			const supplement = await this.getSupplementData(supplementInput.supplementId);
+			const supplement = await this.getSupplementData(
+				supplementInput.supplementId,
+			);
 
 			if (!supplement) {
-				throw new Error(`Supplement not found: ${supplementInput.supplementId}`);
+				throw new Error(
+					`Supplement not found: ${supplementInput.supplementId}`,
+				);
 			}
 
 			this.updateProgress(
 				`Obliczanie dawki dla ${supplement.name}`,
 				`Calculating dosage for ${supplement.name}`,
-				30 + (i / supplements.length) * 40
+				30 + (i / supplements.length) * 40,
 			);
 
 			const recommendation = await this.calculateSupplementDosage(
 				supplement,
 				supplementInput,
 				userProfile,
-				userPharmacokinetics
+				userPharmacokinetics,
 			);
 
 			recommendations.push(recommendation);
@@ -73,7 +82,10 @@ export class DosageCalculationEngine {
 		this.updateProgress("Finalizacja obliczeń", "Finalizing calculations", 90);
 
 		// Calculate overall confidence based on evidence levels and adjustments
-		const confidence = this.calculateOverallConfidence(recommendations, allAdjustments);
+		const confidence = this.calculateOverallConfidence(
+			recommendations,
+			allAdjustments,
+		);
 
 		this.updateProgress("Obliczenia zakończone", "Calculations completed", 100);
 
@@ -98,7 +110,10 @@ export class DosageCalculationEngine {
 		const bmi = weight / (heightM * heightM);
 
 		// Estimate creatinine clearance (Cockcroft-Gault formula)
-		const creatinineClearance = this.calculateCreatinineClearance(userProfile, weight);
+		const creatinineClearance = this.calculateCreatinineClearance(
+			userProfile,
+			weight,
+		);
 
 		// Estimate liver function based on age and other factors
 		const liverFunction = this.estimateLiverFunction(userProfile);
@@ -123,15 +138,20 @@ export class DosageCalculationEngine {
 	/**
 	 * Calculate creatinine clearance using Cockcroft-Gault formula
 	 */
-	private calculateCreatinineClearance(userProfile: UserProfile, weight: number): number {
+	private calculateCreatinineClearance(
+		userProfile: UserProfile,
+		weight: number,
+	): number {
 		const { age, gender } = userProfile;
 
 		// Cockcroft-Gault formula (assuming normal serum creatinine of 1.0 mg/dL)
-		const genderConstant = gender === "male"
-			? PHARMACOKINETIC_CONSTANTS.CREATININE_CLEARANCE_COCKCROFT.MALE_CONSTANT
-			: PHARMACOKINETIC_CONSTANTS.CREATININE_CLEARANCE_COCKCROFT.FEMALE_CONSTANT;
+		const genderConstant =
+			gender === "male"
+				? PHARMACOKINETIC_CONSTANTS.CREATININE_CLEARANCE_COCKCROFT.MALE_CONSTANT
+				: PHARMACOKINETIC_CONSTANTS.CREATININE_CLEARANCE_COCKCROFT
+						.FEMALE_CONSTANT;
 
-		return (140 - age) * weight * genderConstant / (72 * 1.0); // Assuming normal creatinine
+		return ((140 - age) * weight * genderConstant) / (72 * 1.0); // Assuming normal creatinine
 	}
 
 	/**
@@ -156,18 +176,24 @@ export class DosageCalculationEngine {
 		}
 
 		// Health condition impacts
-		if (healthConditions.some(condition =>
-			condition.toLowerCase().includes("liver") ||
-			condition.toLowerCase().includes("wątroba")
-		)) {
+		if (
+			healthConditions.some(
+				(condition) =>
+					condition.toLowerCase().includes("liver") ||
+					condition.toLowerCase().includes("wątroba"),
+			)
+		) {
 			capacity *= 0.6;
 			enzymeActivity *= 0.5;
 		}
 
-		if (healthConditions.some(condition =>
-			condition.toLowerCase().includes("cirrhosis") ||
-			condition.toLowerCase().includes("marskość")
-		)) {
+		if (
+			healthConditions.some(
+				(condition) =>
+					condition.toLowerCase().includes("cirrhosis") ||
+					condition.toLowerCase().includes("marskość"),
+			)
+		) {
 			capacity *= 0.3;
 			enzymeActivity *= 0.2;
 		}
@@ -178,14 +204,26 @@ export class DosageCalculationEngine {
 	/**
 	 * Get age-based adjustment factors
 	 */
-	private getAgeAdjustment(age: number): { multiplier: number; category: string } {
+	private getAgeAdjustment(age: number): {
+		multiplier: number;
+		category: string;
+	} {
 		if (age < 18) {
-			return { multiplier: AGE_ADJUSTMENTS.CHILDREN.multiplier, category: "children" };
-		} else if (age > 65) {
-			return { multiplier: AGE_ADJUSTMENTS.ELDERLY.multiplier, category: "elderly" };
-		} else {
-			return { multiplier: AGE_ADJUSTMENTS.ADULT.multiplier, category: "adult" };
+			return {
+				multiplier: AGE_ADJUSTMENTS.CHILDREN.multiplier,
+				category: "children",
+			};
 		}
+		if (age > 65) {
+			return {
+				multiplier: AGE_ADJUSTMENTS.ELDERLY.multiplier,
+				category: "elderly",
+			};
+		}
+		return {
+			multiplier: AGE_ADJUSTMENTS.ADULT.multiplier,
+			category: "adult",
+		};
 	}
 
 	/**
@@ -195,7 +233,7 @@ export class DosageCalculationEngine {
 		supplement: SupplementWithRelations,
 		supplementInput: SupplementInput,
 		userProfile: UserProfile,
-		userPharmacokinetics: any
+		userPharmacokinetics: any,
 	): Promise<DosageRecommendation> {
 		const { dosageGuidelines } = supplement;
 		const { desiredEffect, customDosage } = supplementInput;
@@ -211,14 +249,15 @@ export class DosageCalculationEngine {
 		}
 
 		// Apply pharmacokinetic factors
-		const pharmacokineticFactors = this.extractPharmacokineticFactors(supplement);
+		const pharmacokineticFactors =
+			this.extractPharmacokineticFactors(supplement);
 
 		// Calculate adjustments based on user profile
 		const adjustments = this.calculateDosageAdjustments(
 			supplement,
 			userProfile,
 			userPharmacokinetics,
-			pharmacokineticFactors
+			pharmacokineticFactors,
 		);
 
 		// Apply adjustments to base dosage
@@ -238,7 +277,7 @@ export class DosageCalculationEngine {
 		const confidence = this.calculateRecommendationConfidence(
 			supplement,
 			adjustments,
-			pharmacokineticFactors
+			pharmacokineticFactors,
 		);
 
 		return {
@@ -262,13 +301,16 @@ export class DosageCalculationEngine {
 	/**
 	 * Extract pharmacokinetic factors from supplement data
 	 */
-	private extractPharmacokineticFactors(supplement: SupplementWithRelations): PharmacokineticFactors {
+	private extractPharmacokineticFactors(
+		supplement: SupplementWithRelations,
+	): PharmacokineticFactors {
 		const activeCompounds = supplement.activeCompounds || [];
 
 		// Use the first active compound with pharmacokinetic data, or defaults
-		const primaryCompound = activeCompounds.find(compound =>
-			compound.bioavailability || compound.halfLife
-		) || activeCompounds[0];
+		const primaryCompound =
+			activeCompounds.find(
+				(compound) => compound.bioavailability || compound.halfLife,
+			) || activeCompounds[0];
 
 		return {
 			bioavailability: primaryCompound?.bioavailability || 50,
@@ -290,8 +332,8 @@ export class DosageCalculationEngine {
 		// Handle various formats like "6-8 hours", "4h", "12-24h"
 		const match = halfLifeString.match(/(\d+)(?:-(\d+))?\s*(h|hours?|godzin)/i);
 		if (match) {
-			const min = parseInt(match[1]!);
-			const max = match[2] ? parseInt(match[2]) : min;
+			const min = Number.parseInt(match[1]!);
+			const max = match[2] ? Number.parseInt(match[2]) : min;
 			return (min + max) / 2;
 		}
 
@@ -305,7 +347,7 @@ export class DosageCalculationEngine {
 		supplement: SupplementWithRelations,
 		userProfile: UserProfile,
 		userPharmacokinetics: any,
-		pharmacokineticFactors: PharmacokineticFactors
+		pharmacokineticFactors: PharmacokineticFactors,
 	): DosageAdjustment[] {
 		const adjustments: DosageAdjustment[] = [];
 
@@ -369,7 +411,8 @@ export class DosageCalculationEngine {
 
 		// Liver function adjustment
 		if (userPharmacokinetics.liverFunction.capacity < 0.8) {
-			const liverMultiplier = 0.5 + (userPharmacokinetics.liverFunction.capacity * 0.5);
+			const liverMultiplier =
+				0.5 + userPharmacokinetics.liverFunction.capacity * 0.5;
 			adjustments.push({
 				factor: "liver_function",
 				adjustment: liverMultiplier,
@@ -381,7 +424,8 @@ export class DosageCalculationEngine {
 
 		// Kidney function adjustment
 		if (userPharmacokinetics.creatinineClearance < 60) {
-			const kidneyMultiplier = userPharmacokinetics.creatinineClearance < 30 ? 0.5 : 0.75;
+			const kidneyMultiplier =
+				userPharmacokinetics.creatinineClearance < 30 ? 0.5 : 0.75;
 			adjustments.push({
 				factor: "kidney_function",
 				adjustment: kidneyMultiplier,
@@ -393,7 +437,10 @@ export class DosageCalculationEngine {
 
 		// Health condition adjustments
 		for (const condition of userProfile.healthConditions) {
-			const conditionAdjustment = this.getConditionAdjustment(condition, supplement);
+			const conditionAdjustment = this.getConditionAdjustment(
+				condition,
+				supplement,
+			);
 			if (conditionAdjustment) {
 				adjustments.push(conditionAdjustment);
 			}
@@ -405,13 +452,17 @@ export class DosageCalculationEngine {
 	/**
 	 * Get adjustment for specific health conditions
 	 */
-	private getConditionAdjustment(condition: string, supplement: SupplementWithRelations): DosageAdjustment | null {
+	private getConditionAdjustment(
+		condition: string,
+		supplement: SupplementWithRelations,
+	): DosageAdjustment | null {
 		const conditionLower = condition.toLowerCase();
 
 		// Check supplement contraindications
-		const hasContraindication = supplement.dosageGuidelines.contraindications.some(
-			contraindication => conditionLower.includes(contraindication.toLowerCase())
-		);
+		const hasContraindication =
+			supplement.dosageGuidelines.contraindications.some((contraindication) =>
+				conditionLower.includes(contraindication.toLowerCase()),
+			);
 
 		if (hasContraindication) {
 			return {
@@ -424,7 +475,10 @@ export class DosageCalculationEngine {
 		}
 
 		// Condition-specific adjustments
-		if (conditionLower.includes("diabetes") || conditionLower.includes("cukrzyca")) {
+		if (
+			conditionLower.includes("diabetes") ||
+			conditionLower.includes("cukrzyca")
+		) {
 			return {
 				factor: "health_condition",
 				adjustment: 0.9,
@@ -434,7 +488,10 @@ export class DosageCalculationEngine {
 			};
 		}
 
-		if (conditionLower.includes("hypertension") || conditionLower.includes("nadciśnienie")) {
+		if (
+			conditionLower.includes("hypertension") ||
+			conditionLower.includes("nadciśnienie")
+		) {
 			return {
 				factor: "health_condition",
 				adjustment: 0.85,
@@ -453,7 +510,7 @@ export class DosageCalculationEngine {
 	private calculateRecommendationConfidence(
 		supplement: SupplementWithRelations,
 		adjustments: DosageAdjustment[],
-		pharmacokineticFactors: PharmacokineticFactors
+		pharmacokineticFactors: PharmacokineticFactors,
 	): number {
 		let confidence = 0.5; // Base confidence
 
@@ -477,9 +534,15 @@ export class DosageCalculationEngine {
 		if (pharmacokineticFactors.halfLife > 0) confidence += 0.1;
 
 		// Adjustment confidence penalty
-		const strongAdjustments = adjustments.filter(adj => adj.evidenceLevel === "STRONG").length;
-		const moderateAdjustments = adjustments.filter(adj => adj.evidenceLevel === "MODERATE").length;
-		const weakAdjustments = adjustments.filter(adj => adj.evidenceLevel === "WEAK").length;
+		const strongAdjustments = adjustments.filter(
+			(adj) => adj.evidenceLevel === "STRONG",
+		).length;
+		const moderateAdjustments = adjustments.filter(
+			(adj) => adj.evidenceLevel === "MODERATE",
+		).length;
+		const weakAdjustments = adjustments.filter(
+			(adj) => adj.evidenceLevel === "WEAK",
+		).length;
 
 		confidence += strongAdjustments * 0.05;
 		confidence += moderateAdjustments * 0.03;
@@ -493,11 +556,13 @@ export class DosageCalculationEngine {
 	 */
 	private calculateOverallConfidence(
 		recommendations: DosageRecommendation[],
-		adjustments: DosageAdjustment[]
+		adjustments: DosageAdjustment[],
 	): number {
 		if (recommendations.length === 0) return 0;
 
-		const avgConfidence = recommendations.reduce((sum, rec) => sum + rec.confidence, 0) / recommendations.length;
+		const avgConfidence =
+			recommendations.reduce((sum, rec) => sum + rec.confidence, 0) /
+			recommendations.length;
 		const adjustmentPenalty = adjustments.length * 0.02;
 
 		return Math.max(0.1, Math.min(0.95, avgConfidence - adjustmentPenalty));
@@ -506,10 +571,13 @@ export class DosageCalculationEngine {
 	/**
 	 * Get recommended duration for supplement use
 	 */
-	private getRecommendedDuration(supplement: SupplementWithRelations, desiredEffect: string): string {
+	private getRecommendedDuration(
+		supplement: SupplementWithRelations,
+		desiredEffect: string,
+	): string {
 		// Look for duration information in clinical applications
-		const relevantApplication = supplement.clinicalApplications.find(app =>
-			app.efficacy !== "insufficient"
+		const relevantApplication = supplement.clinicalApplications.find(
+			(app) => app.efficacy !== "insufficient",
 		);
 
 		if (relevantApplication?.duration) {
@@ -532,7 +600,9 @@ export class DosageCalculationEngine {
 	/**
 	 * Get supplement data from database
 	 */
-	private async getSupplementData(supplementId: string): Promise<SupplementWithRelations | null> {
+	private async getSupplementData(
+		supplementId: string,
+	): Promise<SupplementWithRelations | null> {
 		// This would typically fetch from the database
 		// For now, return null to indicate the method needs implementation
 		// TODO: Implement database fetch
@@ -542,7 +612,11 @@ export class DosageCalculationEngine {
 	/**
 	 * Update calculation progress
 	 */
-	private updateProgress(polishMessage: string, englishMessage: string, progress: number) {
+	private updateProgress(
+		polishMessage: string,
+		englishMessage: string,
+		progress: number,
+	) {
 		if (this.progressCallback) {
 			this.progressCallback({
 				stage: englishMessage,

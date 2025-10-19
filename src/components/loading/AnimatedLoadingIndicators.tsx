@@ -5,10 +5,10 @@
  * Japanese-inspired loading animations with smooth, elegant motion
  */
 
+import { durations, easings, springs } from "@/lib/animations/config";
+import { useReducedMotion } from "@/lib/animations/hooks";
 import { motion } from "framer-motion";
 import { Loader2, RefreshCw } from "lucide-react";
-import { useReducedMotion } from "@/lib/animations/hooks";
-import { easings, durations, springs } from "@/lib/animations/config";
 import type React from "react";
 
 interface LoadingSpinnerProps {
@@ -119,7 +119,7 @@ export const ShimmerLoader: React.FC<{
 	if (shouldReduceMotion) {
 		return (
 			<div
-				className={`bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-[length:200%_100%] ${className}`}
+				className={`bg-[length:200%_100%] bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 ${className}`}
 				style={{ width, height }}
 			/>
 		);
@@ -127,7 +127,7 @@ export const ShimmerLoader: React.FC<{
 
 	return (
 		<motion.div
-			className={`bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-[length:200%_100%] ${className}`}
+			className={`bg-[length:200%_100%] bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 ${className}`}
 			style={{ width, height }}
 			animate={{
 				backgroundPosition: ["200% 0", "-200% 0"],
@@ -163,7 +163,9 @@ export const DotsLoader: React.FC<{
 
 	if (shouldReduceMotion) {
 		return (
-			<div className={`flex items-center gap-${spacingMap[spacing]} ${className}`}>
+			<div
+				className={`flex items-center gap-${spacingMap[spacing]} ${className}`}
+			>
 				{Array.from({ length: count }).map((_, i) => (
 					<div
 						key={i}
@@ -179,7 +181,9 @@ export const DotsLoader: React.FC<{
 	}
 
 	return (
-		<div className={`flex items-center gap-${spacingMap[spacing]} ${className}`}>
+		<div
+			className={`flex items-center gap-${spacingMap[spacing]} ${className}`}
+		>
 			{Array.from({ length: count }).map((_, i) => (
 				<motion.div
 					key={i}
@@ -226,7 +230,7 @@ export const RingLoader: React.FC<{
 	if (shouldReduceMotion) {
 		return (
 			<div
-				className={`rounded-full border-2 border-primary/20 border-t-primary animate-spin ${className}`}
+				className={`animate-spin rounded-full border-2 border-primary/20 border-t-primary ${className}`}
 				style={{
 					width: sizeMap[size],
 					height: sizeMap[size],
@@ -266,7 +270,7 @@ export const WaveLoader: React.FC<{
 				{Array.from({ length: bars }).map((_, i) => (
 					<div
 						key={i}
-						className="bg-primary rounded-sm"
+						className="rounded-sm bg-primary"
 						style={{
 							width: "3px",
 							height: `${Math.random() * 20 + 10}px`,
@@ -282,7 +286,7 @@ export const WaveLoader: React.FC<{
 			{Array.from({ length: bars }).map((_, i) => (
 				<motion.div
 					key={i}
-					className="bg-primary rounded-sm"
+					className="rounded-sm bg-primary"
 					style={{ width: "3px" }}
 					animate={{
 						height: ["10px", `${Math.random() * 20 + 10}px`, "10px"],

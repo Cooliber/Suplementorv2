@@ -1,25 +1,57 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+	AlertCircle,
+	Award,
+	CheckCircle,
+	Info,
+	Pill,
+	Plus,
+	ShoppingCart,
+	Star,
+	TrendingUp,
+	X,
+} from "lucide-react";
 import * as React from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Star, Plus, X, Award, ShoppingCart, Pill, TrendingUp, CheckCircle, AlertCircle, Info } from "lucide-react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+	EnhancedInput,
+	EnhancedTextarea,
+	ValidationSummary,
+} from "@/components/ui/enhanced-form";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { EnhancedInput, EnhancedTextarea, ValidationSummary } from "@/components/ui/enhanced-form";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { CreateReviewSchema, type CreateReview, type ReviewFormData } from "@/types/review";
+import {
+	type CreateReview,
+	CreateReviewSchema,
+	type ReviewFormData,
+} from "@/types/review";
 
 // Form schema that matches ReviewFormData interface
 const ReviewFormSchema = CreateReviewSchema.omit({
@@ -65,12 +97,14 @@ export function ReviewForm({
 		control,
 		formState: { errors, isSubmitting },
 	} = useForm<ReviewFormData>({
-		resolver: zodResolver(CreateReviewSchema.omit({
-			supplementId: true,
-			userId: true,
-			source: true,
-			language: true,
-		})) as any,
+		resolver: zodResolver(
+			CreateReviewSchema.omit({
+				supplementId: true,
+				userId: true,
+				source: true,
+				language: true,
+			}),
+		) as any,
 		defaultValues: {
 			rating: 5,
 			verifiedPurchase: false,
@@ -150,7 +184,7 @@ export function ReviewForm({
 		return (
 			<div className="space-y-4">
 				<div className="flex items-center gap-2">
-					<Label className="text-base font-semibold">Ocena ogólna *</Label>
+					<Label className="font-semibold text-base">Ocena ogólna *</Label>
 					<Badge variant="outline" className="text-xs">
 						Wymagane
 					</Badge>
@@ -163,15 +197,15 @@ export function ReviewForm({
 								key={i}
 								type="button"
 								onClick={() => setValue("rating", i + 1)}
-								className="group focus:outline-none focus:ring-2 focus:ring-primary rounded-lg p-1 transition-all hover:scale-110"
+								className="group rounded-lg p-1 transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary"
 								title={`${i + 1} gwiazdek`}
 							>
 								<Star
 									className={cn(
-										"w-10 h-10 transition-all duration-200",
+										"h-10 w-10 transition-all duration-200",
 										i < rating
 											? "fill-yellow-400 text-yellow-400 drop-shadow-sm"
-											: "text-gray-300 group-hover:text-yellow-200 group-hover:scale-105",
+											: "text-gray-300 group-hover:scale-105 group-hover:text-yellow-200",
 									)}
 								/>
 							</button>
@@ -179,13 +213,15 @@ export function ReviewForm({
 					</div>
 
 					<div className="flex items-center gap-3">
-						<div className="flex-1 bg-gray-200 rounded-full h-3">
+						<div className="h-3 flex-1 rounded-full bg-gray-200">
 							<div
-								className="bg-gradient-to-r from-yellow-400 to-yellow-500 h-3 rounded-full transition-all duration-300"
+								className="h-3 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-300"
 								style={{ width: `${(rating / 5) * 100}%` }}
 							/>
 						</div>
-						<span className="text-xl font-bold text-primary min-w-[3rem]">{rating}/5</span>
+						<span className="min-w-[3rem] font-bold text-primary text-xl">
+							{rating}/5
+						</span>
 					</div>
 				</div>
 
@@ -209,37 +245,38 @@ export function ReviewForm({
 				label: "Skuteczność",
 				value: watch("effectiveness"),
 				icon: Award,
-				description: "Jak bardzo suplement spełnia swoje zadanie?"
+				description: "Jak bardzo suplement spełnia swoje zadanie?",
 			},
 			{
 				name: "valueForMoney",
 				label: "Stosunek jakość/cena",
 				value: watch("valueForMoney"),
 				icon: ShoppingCart,
-				description: "Czy suplement jest wart swojej ceny?"
+				description: "Czy suplement jest wart swojej ceny?",
 			},
 			{
 				name: "easeOfUse",
 				label: "Łatwość stosowania",
 				value: watch("easeOfUse"),
 				icon: Pill,
-				description: "Jak łatwo jest stosować suplement?"
+				description: "Jak łatwo jest stosować suplement?",
 			},
 		];
 
 		return (
 			<div className="space-y-6">
 				<div className="flex items-center gap-2">
-					<Label className="text-base font-semibold">Oceny szczegółowe</Label>
+					<Label className="font-semibold text-base">Oceny szczegółowe</Label>
 					<Badge variant="secondary" className="text-xs">
 						Opcjonalne
 					</Badge>
 				</div>
 
-				<Alert className="bg-blue-50 border-blue-200">
+				<Alert className="border-blue-200 bg-blue-50">
 					<Info className="h-4 w-4 text-blue-600" />
 					<AlertDescription className="text-blue-800">
-						Szczegółowe oceny pomagają innym użytkownikom lepiej zrozumieć działanie suplementu.
+						Szczegółowe oceny pomagają innym użytkownikom lepiej zrozumieć
+						działanie suplementu.
 					</AlertDescription>
 				</Alert>
 
@@ -249,31 +286,42 @@ export function ReviewForm({
 						const currentValue = rating.value || 3;
 
 						return (
-							<div key={rating.name} className="space-y-3 p-4 border rounded-lg bg-gradient-to-r from-gray-50 to-white">
+							<div
+								key={rating.name}
+								className="space-y-3 rounded-lg border bg-gradient-to-r from-gray-50 to-white p-4"
+							>
 								<div className="flex items-center gap-3">
-									<div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-full">
-										<Icon className="w-5 h-5 text-primary" />
+									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+										<Icon className="h-5 w-5 text-primary" />
 									</div>
 									<div className="flex-1">
-										<Label className="text-sm font-medium">{rating.label}</Label>
-										<p className="text-xs text-muted-foreground mt-1">{rating.description}</p>
+										<Label className="font-medium text-sm">
+											{rating.label}
+										</Label>
+										<p className="mt-1 text-muted-foreground text-xs">
+											{rating.description}
+										</p>
 									</div>
 									<div className="text-right">
-										<span className="text-lg font-bold text-primary">{currentValue}</span>
-										<span className="text-sm text-muted-foreground">/5</span>
+										<span className="font-bold text-lg text-primary">
+											{currentValue}
+										</span>
+										<span className="text-muted-foreground text-sm">/5</span>
 									</div>
 								</div>
 
 								<div className="space-y-2">
 									<Slider
 										value={[currentValue]}
-										onValueChange={(value) => setValue(rating.name as any, value[0])}
+										onValueChange={(value) =>
+											setValue(rating.name as any, value[0])
+										}
 										max={5}
 										min={1}
 										step={1}
 										className="w-full"
 									/>
-									<div className="flex justify-between text-xs text-muted-foreground">
+									<div className="flex justify-between text-muted-foreground text-xs">
 										<span>Słaba</span>
 										<span>Doskonała</span>
 									</div>
@@ -287,14 +335,15 @@ export function ReviewForm({
 	};
 
 	return (
-		<Card className={cn("w-full max-w-4xl mx-auto shadow-lg", className)}>
-			<CardHeader className="bg-gradient-to-r from-primary/5 to-primary/10 border-b">
+		<Card className={cn("mx-auto w-full max-w-4xl shadow-lg", className)}>
+			<CardHeader className="border-b bg-gradient-to-r from-primary/5 to-primary/10">
 				<CardTitle className="flex items-center gap-2 text-xl">
-					<Award className="w-6 h-6 text-primary" />
+					<Award className="h-6 w-6 text-primary" />
 					Napisz opinię{supplementName && ` - ${supplementName}`}
 				</CardTitle>
-				<p className="text-sm text-muted-foreground mt-2">
-					Twoja opinia pomoże innym użytkownikom w wyborze odpowiedniego suplementu
+				<p className="mt-2 text-muted-foreground text-sm">
+					Twoja opinia pomoże innym użytkownikom w wyborze odpowiedniego
+					suplementu
 				</p>
 			</CardHeader>
 
@@ -302,15 +351,17 @@ export function ReviewForm({
 				<form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-8">
 					{/* Basic review info */}
 					<div className="space-y-6">
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 							<FormField
 								control={control}
 								name="title"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className="flex items-center gap-2 text-sm font-medium">
+										<FormLabel className="flex items-center gap-2 font-medium text-sm">
 											Tytuł opinii *
-											<Badge variant="outline" className="text-xs">Wymagane</Badge>
+											<Badge variant="outline" className="text-xs">
+												Wymagane
+											</Badge>
 										</FormLabel>
 										<FormControl>
 											<EnhancedInput
@@ -324,7 +375,9 @@ export function ReviewForm({
 							/>
 
 							<div className="space-y-2">
-								<Label htmlFor="polishTitle" className="text-sm font-medium">Tytuł w języku polskim</Label>
+								<Label htmlFor="polishTitle" className="font-medium text-sm">
+									Tytuł w języku polskim
+								</Label>
 								<Input
 									id="polishTitle"
 									{...register("polishTitle")}
@@ -338,15 +391,17 @@ export function ReviewForm({
 						{renderStarRating()}
 
 						{/* Review content */}
-						<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+						<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 							<FormField
 								control={control}
 								name="content"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className="flex items-center gap-2 text-sm font-medium">
+										<FormLabel className="flex items-center gap-2 font-medium text-sm">
 											Treść opinii *
-											<Badge variant="outline" className="text-xs">Wymagane</Badge>
+											<Badge variant="outline" className="text-xs">
+												Wymagane
+											</Badge>
 										</FormLabel>
 										<FormControl>
 											<EnhancedTextarea
@@ -367,7 +422,9 @@ export function ReviewForm({
 								name="polishContent"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className="text-sm font-medium">Treść w języku polskim</FormLabel>
+										<FormLabel className="font-medium text-sm">
+											Treść w języku polskim
+										</FormLabel>
 										<FormControl>
 											<EnhancedTextarea
 												placeholder="Opcjonalna treść w języku polskim dla lepszej dostępności"
@@ -388,17 +445,21 @@ export function ReviewForm({
 					{/* Enhanced Pros and Cons */}
 					<div className="space-y-6">
 						<div className="flex items-center gap-2">
-							<TrendingUp className="w-5 h-5 text-primary" />
-							<Label className="text-base font-semibold">Zalety i wady</Label>
+							<TrendingUp className="h-5 w-5 text-primary" />
+							<Label className="font-semibold text-base">Zalety i wady</Label>
 						</div>
 
-						<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+						<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
 							{/* Pros */}
 							<div className="space-y-4">
 								<div className="flex items-center gap-2">
-									<div className="w-2 h-2 bg-green-500 rounded-full" />
-									<Label className="text-sm font-medium text-green-700">Zalety</Label>
-									<Badge variant="secondary" className="text-xs">Max 5</Badge>
+									<div className="h-2 w-2 rounded-full bg-green-500" />
+									<Label className="font-medium text-green-700 text-sm">
+										Zalety
+									</Label>
+									<Badge variant="secondary" className="text-xs">
+										Max 5
+									</Badge>
 								</div>
 
 								<div className="flex gap-2">
@@ -406,7 +467,9 @@ export function ReviewForm({
 										value={newPro}
 										onChange={(e) => setNewPro(e.target.value)}
 										placeholder="Dodaj zaletę (np. poprawia koncentrację)"
-										onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addPro())}
+										onKeyPress={(e) =>
+											e.key === "Enter" && (e.preventDefault(), addPro())
+										}
 										className="flex-1"
 									/>
 									<Button
@@ -416,13 +479,17 @@ export function ReviewForm({
 										disabled={!newPro.trim() || pros.length >= 5}
 										className="px-3"
 									>
-										<Plus className="w-4 h-4" />
+										<Plus className="h-4 w-4" />
 									</Button>
 								</div>
 
-								<div className="flex flex-wrap gap-2 min-h-[2.5rem] p-3 border rounded-lg bg-green-50/50">
+								<div className="flex min-h-[2.5rem] flex-wrap gap-2 rounded-lg border bg-green-50/50 p-3">
 									{pros.map((pro, index) => (
-										<Badge key={index} variant="secondary" className="text-green-700 bg-green-100 hover:bg-green-200 transition-colors">
+										<Badge
+											key={index}
+											variant="secondary"
+											className="bg-green-100 text-green-700 transition-colors hover:bg-green-200"
+										>
 											{pro}
 											<Button
 												type="button"
@@ -431,12 +498,12 @@ export function ReviewForm({
 												onClick={() => removePro(index)}
 												className="ml-2 h-4 w-4 p-0 hover:bg-red-100"
 											>
-												<X className="w-3 h-3" />
+												<X className="h-3 w-3" />
 											</Button>
 										</Badge>
 									))}
 									{pros.length === 0 && (
-										<p className="text-sm text-green-600/70 w-full text-center py-2">
+										<p className="w-full py-2 text-center text-green-600/70 text-sm">
 											Dodaj zalety suplementu
 										</p>
 									)}
@@ -444,13 +511,18 @@ export function ReviewForm({
 
 								{/* Polish Pros */}
 								<div className="space-y-2">
-									<Label className="text-xs text-muted-foreground">Wersja polska (opcjonalna)</Label>
+									<Label className="text-muted-foreground text-xs">
+										Wersja polska (opcjonalna)
+									</Label>
 									<div className="flex gap-2">
 										<Input
 											value={newPolishPro}
 											onChange={(e) => setNewPolishPro(e.target.value)}
 											placeholder="Zaleta po polsku"
-											onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addPolishPro())}
+											onKeyPress={(e) =>
+												e.key === "Enter" &&
+												(e.preventDefault(), addPolishPro())
+											}
 											className="flex-1"
 										/>
 										<Button
@@ -460,12 +532,16 @@ export function ReviewForm({
 											disabled={!newPolishPro.trim() || polishPros.length >= 5}
 											className="px-3"
 										>
-											<Plus className="w-4 h-4" />
+											<Plus className="h-4 w-4" />
 										</Button>
 									</div>
-									<div className="flex flex-wrap gap-2 min-h-[2rem] p-2 border rounded border-dashed">
+									<div className="flex min-h-[2rem] flex-wrap gap-2 rounded border border-dashed p-2">
 										{polishPros.map((pro, index) => (
-											<Badge key={index} variant="outline" className="text-green-600">
+											<Badge
+												key={index}
+												variant="outline"
+												className="text-green-600"
+											>
 												{pro}
 												<Button
 													type="button"
@@ -474,7 +550,7 @@ export function ReviewForm({
 													onClick={() => removePolishPro(index)}
 													className="ml-2 h-4 w-4 p-0"
 												>
-													<X className="w-3 h-3" />
+													<X className="h-3 w-3" />
 												</Button>
 											</Badge>
 										))}
@@ -485,9 +561,13 @@ export function ReviewForm({
 							{/* Cons */}
 							<div className="space-y-4">
 								<div className="flex items-center gap-2">
-									<div className="w-2 h-2 bg-red-500 rounded-full" />
-									<Label className="text-sm font-medium text-red-700">Wady</Label>
-									<Badge variant="secondary" className="text-xs">Max 5</Badge>
+									<div className="h-2 w-2 rounded-full bg-red-500" />
+									<Label className="font-medium text-red-700 text-sm">
+										Wady
+									</Label>
+									<Badge variant="secondary" className="text-xs">
+										Max 5
+									</Badge>
 								</div>
 
 								<div className="flex gap-2">
@@ -495,7 +575,9 @@ export function ReviewForm({
 										value={newCon}
 										onChange={(e) => setNewCon(e.target.value)}
 										placeholder="Dodaj wadę (np. powoduje senność)"
-										onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addCon())}
+										onKeyPress={(e) =>
+											e.key === "Enter" && (e.preventDefault(), addCon())
+										}
 										className="flex-1"
 									/>
 									<Button
@@ -505,13 +587,17 @@ export function ReviewForm({
 										disabled={!newCon.trim() || cons.length >= 5}
 										className="px-3"
 									>
-										<Plus className="w-4 h-4" />
+										<Plus className="h-4 w-4" />
 									</Button>
 								</div>
 
-								<div className="flex flex-wrap gap-2 min-h-[2.5rem] p-3 border rounded-lg bg-red-50/50">
+								<div className="flex min-h-[2.5rem] flex-wrap gap-2 rounded-lg border bg-red-50/50 p-3">
 									{cons.map((con, index) => (
-										<Badge key={index} variant="secondary" className="text-red-700 bg-red-100 hover:bg-red-200 transition-colors">
+										<Badge
+											key={index}
+											variant="secondary"
+											className="bg-red-100 text-red-700 transition-colors hover:bg-red-200"
+										>
 											{con}
 											<Button
 												type="button"
@@ -520,12 +606,12 @@ export function ReviewForm({
 												onClick={() => removeCon(index)}
 												className="ml-2 h-4 w-4 p-0 hover:bg-red-100"
 											>
-												<X className="w-3 h-3" />
+												<X className="h-3 w-3" />
 											</Button>
 										</Badge>
 									))}
 									{cons.length === 0 && (
-										<p className="text-sm text-red-600/70 w-full text-center py-2">
+										<p className="w-full py-2 text-center text-red-600/70 text-sm">
 											Dodaj wady suplementu (jeśli występują)
 										</p>
 									)}
@@ -533,13 +619,18 @@ export function ReviewForm({
 
 								{/* Polish Cons */}
 								<div className="space-y-2">
-									<Label className="text-xs text-muted-foreground">Wersja polska (opcjonalna)</Label>
+									<Label className="text-muted-foreground text-xs">
+										Wersja polska (opcjonalna)
+									</Label>
 									<div className="flex gap-2">
 										<Input
 											value={newPolishCon}
 											onChange={(e) => setNewPolishCon(e.target.value)}
 											placeholder="Wada po polsku"
-											onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addPolishCon())}
+											onKeyPress={(e) =>
+												e.key === "Enter" &&
+												(e.preventDefault(), addPolishCon())
+											}
 											className="flex-1"
 										/>
 										<Button
@@ -549,12 +640,16 @@ export function ReviewForm({
 											disabled={!newPolishCon.trim() || polishCons.length >= 5}
 											className="px-3"
 										>
-											<Plus className="w-4 h-4" />
+											<Plus className="h-4 w-4" />
 										</Button>
 									</div>
-									<div className="flex flex-wrap gap-2 min-h-[2rem] p-2 border rounded border-dashed">
+									<div className="flex min-h-[2rem] flex-wrap gap-2 rounded border border-dashed p-2">
 										{polishCons.map((con, index) => (
-											<Badge key={index} variant="outline" className="text-red-600">
+											<Badge
+												key={index}
+												variant="outline"
+												className="text-red-600"
+											>
 												{con}
 												<Button
 													type="button"
@@ -563,7 +658,7 @@ export function ReviewForm({
 													onClick={() => removePolishCon(index)}
 													className="ml-2 h-4 w-4 p-0"
 												>
-													<X className="w-3 h-3" />
+													<X className="h-3 w-3" />
 												</Button>
 											</Badge>
 										))}
@@ -576,14 +671,20 @@ export function ReviewForm({
 					{/* Enhanced Usage Details */}
 					<div className="space-y-4">
 						<div className="flex items-center gap-2">
-							<Pill className="w-5 h-5 text-primary" />
-							<Label className="text-base font-semibold">Szczegóły stosowania</Label>
-							<Badge variant="secondary" className="text-xs">Opcjonalne</Badge>
+							<Pill className="h-5 w-5 text-primary" />
+							<Label className="font-semibold text-base">
+								Szczegóły stosowania
+							</Label>
+							<Badge variant="secondary" className="text-xs">
+								Opcjonalne
+							</Badge>
 						</div>
 
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 							<div className="space-y-2">
-								<Label htmlFor="dosage" className="text-sm font-medium">Dawka</Label>
+								<Label htmlFor="dosage" className="font-medium text-sm">
+									Dawka
+								</Label>
 								<Input
 									id="dosage"
 									{...register("dosage")}
@@ -593,7 +694,9 @@ export function ReviewForm({
 							</div>
 
 							<div className="space-y-2">
-								<Label htmlFor="duration" className="text-sm font-medium">Czas stosowania</Label>
+								<Label htmlFor="duration" className="font-medium text-sm">
+									Czas stosowania
+								</Label>
 								<Input
 									id="duration"
 									{...register("duration")}
@@ -603,8 +706,10 @@ export function ReviewForm({
 							</div>
 
 							<div className="space-y-2">
-								<Label className="text-sm font-medium">Częstotliwość</Label>
-								<Select onValueChange={(value) => setValue("frequency", value as any)}>
+								<Label className="font-medium text-sm">Częstotliwość</Label>
+								<Select
+									onValueChange={(value) => setValue("frequency", value as any)}
+								>
 									<SelectTrigger className="focus:border-primary">
 										<SelectValue placeholder="Wybierz" />
 									</SelectTrigger>
@@ -626,19 +731,25 @@ export function ReviewForm({
 					{/* Enhanced Verification */}
 					<div className="space-y-4">
 						<Separator />
-						<div className="flex items-start space-x-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
+						<div className="flex items-start space-x-3 rounded-lg border border-blue-200 bg-blue-50 p-4">
 							<Checkbox
 								id="verifiedPurchase"
 								checked={watch("verifiedPurchase")}
-								onCheckedChange={(checked) => setValue("verifiedPurchase", !!checked)}
+								onCheckedChange={(checked) =>
+									setValue("verifiedPurchase", !!checked)
+								}
 								className="mt-1"
 							/>
 							<div className="space-y-1">
-								<Label htmlFor="verifiedPurchase" className="text-sm font-medium text-blue-900">
+								<Label
+									htmlFor="verifiedPurchase"
+									className="font-medium text-blue-900 text-sm"
+								>
 									Potwierdzam zakup tego suplementu
 								</Label>
-								<p className="text-xs text-blue-700">
-									Zaznaczenie tej opcji zwiększa wiarygodność Twojej opinii i pomaga innym użytkownikom.
+								<p className="text-blue-700 text-xs">
+									Zaznaczenie tej opcji zwiększa wiarygodność Twojej opinii i
+									pomaga innym użytkownikom.
 								</p>
 							</div>
 						</div>
@@ -653,16 +764,16 @@ export function ReviewForm({
 						<Button
 							type="submit"
 							disabled={isSubmitting || isLoading}
-							className="flex-1 h-12 text-base font-semibold"
+							className="h-12 flex-1 font-semibold text-base"
 						>
 							{isSubmitting || isLoading ? (
 								<>
-									<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+									<div className="mr-2 h-4 w-4 animate-spin rounded-full border-white border-b-2" />
 									Wysyłanie opinii...
 								</>
 							) : (
 								<>
-									<CheckCircle className="w-5 h-5 mr-2" />
+									<CheckCircle className="mr-2 h-5 w-5" />
 									Opublikuj opinię
 								</>
 							)}

@@ -5,6 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { Geist, Inter } from "next/font/google";
 
+import { GDPRConsentBanner } from "@/components/analytics/GDPRConsentBanner";
 import { ErrorBoundary } from "@/components/error/ErrorBoundary";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -172,6 +173,7 @@ export default function RootLayout({
 				</ErrorBoundary>
 				<Analytics />
 				<SpeedInsights />
+				<GDPRConsentBanner />
 			</body>
 		</html>
 	);

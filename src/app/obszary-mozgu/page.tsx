@@ -1,10 +1,16 @@
-import type { Metadata } from "next";
-import { Brain, Zap, Activity, BookOpen, Sparkles } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BreadcrumbNavigation } from "@/components/navigation/BreadcrumbNavigation";
 import Interactive3DBrainModel from "@/components/brain/Interactive3DBrainModel";
+import { BreadcrumbNavigation } from "@/components/navigation/BreadcrumbNavigation";
+import { Badge } from "@/components/ui/badge";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Activity, BookOpen, Brain, Sparkles, Zap } from "lucide-react";
+import type { Metadata } from "next";
 
 // Import brain regions data directly to avoid build issues
 const brainRegions = [
@@ -170,23 +176,25 @@ const brainRegions = [
 
 export const metadata: Metadata = {
 	title: "Obszary Mózgu | Suplementor",
-	description: "Poznaj anatomię i funkcje różnych regionów mózgu oraz wpływ suplementów",
+	description:
+		"Poznaj anatomię i funkcje różnych regionów mózgu oraz wpływ suplementów",
 };
 
 export default function BrainRegionsPage() {
 	return (
-		<div className="container mx-auto px-4 py-8 space-y-8">
+		<div className="container mx-auto space-y-8 px-4 py-8">
 			{/* Breadcrumb Navigation */}
 			<BreadcrumbNavigation />
 
 			{/* Hero Section */}
-			<div className="text-center space-y-4">
+			<div className="space-y-4 text-center">
 				<div className="flex justify-center">
 					<Brain className="h-16 w-16 text-primary" />
 				</div>
-				<h1 className="text-4xl md:text-5xl font-bold">Obszary Mózgu</h1>
-				<p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-					Interaktywna wizualizacja anatomii mózgu i wpływu suplementów na poszczególne regiony
+				<h1 className="font-bold text-4xl md:text-5xl">Obszary Mózgu</h1>
+				<p className="mx-auto max-w-2xl text-muted-foreground text-xl">
+					Interaktywna wizualizacja anatomii mózgu i wpływu suplementów na
+					poszczególne regiony
 				</p>
 			</div>
 
@@ -209,29 +217,38 @@ export default function BrainRegionsPage() {
 			{/* Brain Regions Grid */}
 			<div className="space-y-6">
 				<div>
-					<h2 className="text-3xl font-bold mb-2">Regiony Mózgu</h2>
+					<h2 className="mb-2 font-bold text-3xl">Regiony Mózgu</h2>
 					<p className="text-muted-foreground">
-						Szczegółowe informacje o funkcjach i wpływie suplementów na poszczególne obszary
+						Szczegółowe informacje o funkcjach i wpływie suplementów na
+						poszczególne obszary
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 					{brainRegions.map((region) => (
-						<Card key={region.id} className="border-2 hover:shadow-lg transition-shadow">
+						<Card
+							key={region.id}
+							className="border-2 transition-shadow hover:shadow-lg"
+						>
 							<CardHeader>
-								<div className="flex items-center justify-between mb-2">
+								<div className="mb-2 flex items-center justify-between">
 									<CardTitle className="text-xl">{region.polishName}</CardTitle>
-									<div 
-										className="w-6 h-6 rounded-full border-2" 
-										style={{ backgroundColor: region.color, borderColor: region.color }}
+									<div
+										className="h-6 w-6 rounded-full border-2"
+										style={{
+											backgroundColor: region.color,
+											borderColor: region.color,
+										}}
 									/>
 								</div>
-								<CardDescription className="text-xs">{region.name}</CardDescription>
+								<CardDescription className="text-xs">
+									{region.name}
+								</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-4">
 								{/* Functions */}
 								<div>
-									<h4 className="font-semibold mb-2 text-sm text-muted-foreground flex items-center gap-2">
+									<h4 className="mb-2 flex items-center gap-2 font-semibold text-muted-foreground text-sm">
 										<Activity className="h-4 w-4" />
 										Główne Funkcje
 									</h4>
@@ -246,7 +263,7 @@ export default function BrainRegionsPage() {
 
 								{/* Neurotransmitters */}
 								<div>
-									<h4 className="font-semibold mb-2 text-sm text-muted-foreground flex items-center gap-2">
+									<h4 className="mb-2 flex items-center gap-2 font-semibold text-muted-foreground text-sm">
 										<Zap className="h-4 w-4" />
 										Neuroprzekaźniki
 									</h4>
@@ -260,44 +277,56 @@ export default function BrainRegionsPage() {
 								</div>
 
 								{/* Supplement Effects */}
-								{region.supplementEffects && region.supplementEffects.length > 0 && (
-									<div>
-										<h4 className="font-semibold mb-3 text-sm text-muted-foreground flex items-center gap-2">
-											<BookOpen className="h-4 w-4" />
-											Wpływ Suplementów
-										</h4>
-										<div className="space-y-2">
-											{region.supplementEffects.slice(0, 3).map((effect, idx) => (
-												<div key={idx} className="bg-muted p-3 rounded-lg">
-													<div className="flex items-center justify-between mb-1">
-														<span className="font-medium text-sm">
-															{effect.polishSupplementName}
-														</span>
-														<Badge 
-															variant={effect.effectType === "ENHANCES" ? "default" : "secondary"}
-															className="text-xs"
-														>
-															{effect.effectType === "ENHANCES" ? "Wzmacnia" : 
-															 effect.effectType === "PROTECTS" ? "Chroni" :
-															 effect.effectType === "MODULATES" ? "Moduluje" : "Wpływa"}
-														</Badge>
-													</div>
-													<p className="text-xs text-muted-foreground">
-														{effect.polishMechanism}
+								{region.supplementEffects &&
+									region.supplementEffects.length > 0 && (
+										<div>
+											<h4 className="mb-3 flex items-center gap-2 font-semibold text-muted-foreground text-sm">
+												<BookOpen className="h-4 w-4" />
+												Wpływ Suplementów
+											</h4>
+											<div className="space-y-2">
+												{region.supplementEffects
+													.slice(0, 3)
+													.map((effect, idx) => (
+														<div key={idx} className="rounded-lg bg-muted p-3">
+															<div className="mb-1 flex items-center justify-between">
+																<span className="font-medium text-sm">
+																	{effect.polishSupplementName}
+																</span>
+																<Badge
+																	variant={
+																		effect.effectType === "ENHANCES"
+																			? "default"
+																			: "secondary"
+																	}
+																	className="text-xs"
+																>
+																	{effect.effectType === "ENHANCES"
+																		? "Wzmacnia"
+																		: effect.effectType === "PROTECTS"
+																			? "Chroni"
+																			: effect.effectType === "MODULATES"
+																				? "Moduluje"
+																				: "Wpływa"}
+																</Badge>
+															</div>
+															<p className="text-muted-foreground text-xs">
+																{effect.polishMechanism}
+															</p>
+														</div>
+													))}
+												{region.supplementEffects.length > 3 && (
+													<p className="text-center text-muted-foreground text-xs">
+														+{region.supplementEffects.length - 3} więcej
+														suplementów
 													</p>
-												</div>
-											))}
-											{region.supplementEffects.length > 3 && (
-												<p className="text-xs text-muted-foreground text-center">
-													+{region.supplementEffects.length - 3} więcej suplementów
-												</p>
-											)}
+												)}
+											</div>
 										</div>
-									</div>
-								)}
+									)}
 
 								{/* Anatomical Info */}
-								<div className="pt-3 border-t">
+								<div className="border-t pt-3">
 									<div className="grid grid-cols-2 gap-2 text-xs">
 										<div>
 											<span className="text-muted-foreground">Objętość:</span>
@@ -312,7 +341,7 @@ export default function BrainRegionsPage() {
 											</span>
 										</div>
 									</div>
-									<p className="text-xs text-muted-foreground mt-2">
+									<p className="mt-2 text-muted-foreground text-xs">
 										{region.anatomicalInfo.polishClinicalRelevance}
 									</p>
 								</div>
@@ -334,46 +363,62 @@ export default function BrainRegionsPage() {
 					<Tabs defaultValue="beginner">
 						<TabsList className="grid w-full grid-cols-3">
 							<TabsTrigger value="beginner">Początkujący</TabsTrigger>
-							<TabsTrigger value="intermediate">Średniozaawansowany</TabsTrigger>
+							<TabsTrigger value="intermediate">
+								Średniozaawansowany
+							</TabsTrigger>
 							<TabsTrigger value="expert">Ekspert</TabsTrigger>
 						</TabsList>
 
-						<TabsContent value="beginner" className="space-y-4 mt-4">
-							<div className="bg-green-50 p-4 rounded-lg border border-green-200">
-								<h4 className="font-semibold mb-2 text-green-800">Podstawy Anatomii Mózgu</h4>
-								<p className="text-sm text-green-700 leading-relaxed">
-									Mózg składa się z różnych obszarów, z których każdy odpowiada za inne funkcje. 
-									Kora przedczołowa pomaga nam planować i podejmować decyzje, hipokamp jest ważny dla pamięci, 
-									a ciało migdałowate kontroluje emocje. Suplementy mogą wspierać te obszary, dostarczając 
-									składników odżywczych potrzebnych do ich prawidłowego funkcjonowania.
+						<TabsContent value="beginner" className="mt-4 space-y-4">
+							<div className="rounded-lg border border-green-200 bg-green-50 p-4">
+								<h4 className="mb-2 font-semibold text-green-800">
+									Podstawy Anatomii Mózgu
+								</h4>
+								<p className="text-green-700 text-sm leading-relaxed">
+									Mózg składa się z różnych obszarów, z których każdy odpowiada
+									za inne funkcje. Kora przedczołowa pomaga nam planować i
+									podejmować decyzje, hipokamp jest ważny dla pamięci, a ciało
+									migdałowate kontroluje emocje. Suplementy mogą wspierać te
+									obszary, dostarczając składników odżywczych potrzebnych do ich
+									prawidłowego funkcjonowania.
 								</p>
 							</div>
 						</TabsContent>
 
-						<TabsContent value="intermediate" className="space-y-4 mt-4">
-							<div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-								<h4 className="font-semibold mb-2 text-blue-800">Funkcjonalna Organizacja Mózgu</h4>
-								<p className="text-sm text-blue-700 leading-relaxed">
-									Mózg jest zorganizowany w hierarchiczne sieci funkcjonalne. Kora przedczołowa (PFC) 
-									integruje informacje z wielu źródeł dla funkcji wykonawczych. Hipokamp współpracuje 
-					z korą śródwęchową w konsolidacji pamięci. Ciało migdałowate moduluje odpowiedzi emocjonalne 
-									poprzez połączenia z korą i podwzgórzem. Suplementy wpływają na te sieci poprzez modulację 
-									neurotransmisji, neuroprotekcję i wsparcie metabolizmu energetycznego.
+						<TabsContent value="intermediate" className="mt-4 space-y-4">
+							<div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+								<h4 className="mb-2 font-semibold text-blue-800">
+									Funkcjonalna Organizacja Mózgu
+								</h4>
+								<p className="text-blue-700 text-sm leading-relaxed">
+									Mózg jest zorganizowany w hierarchiczne sieci funkcjonalne.
+									Kora przedczołowa (PFC) integruje informacje z wielu źródeł
+									dla funkcji wykonawczych. Hipokamp współpracuje z korą
+									śródwęchową w konsolidacji pamięci. Ciało migdałowate moduluje
+									odpowiedzi emocjonalne poprzez połączenia z korą i
+									podwzgórzem. Suplementy wpływają na te sieci poprzez modulację
+									neurotransmisji, neuroprotekcję i wsparcie metabolizmu
+									energetycznego.
 								</p>
 							</div>
 						</TabsContent>
 
-						<TabsContent value="expert" className="space-y-4 mt-4">
-							<div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-								<h4 className="font-semibold mb-2 text-purple-800">Neuroanatomia Molekularna</h4>
-								<p className="text-sm text-purple-700 leading-relaxed">
-									Funkcjonalna architektura mózgu opiera się na cytoarchitektonice korowej (warstwy I-VI), 
-									projekcjach glutaminergicznych i GABAergicznych oraz modulacji przez systemy monoaminergiczne. 
-									PFC wykazuje wysoką gęstość receptorów D1/D2 dopaminowych i 5-HT2A serotoninowych. 
-									Hipokamp charakteryzuje się plastycznością synaptyczną zależną od NMDA (LTP/LTD) 
-									i neurogenezy w zakręcie zębatym. Suplementy działają poprzez modulację kaskad sygnałowych 
-									(MAPK/ERK, PI3K/Akt), regulację ekspresji genów (CREB, BDNF) oraz wpływ na mitochondrialną 
-									bioenergetykę i homeostazę wapniową.
+						<TabsContent value="expert" className="mt-4 space-y-4">
+							<div className="rounded-lg border border-purple-200 bg-purple-50 p-4">
+								<h4 className="mb-2 font-semibold text-purple-800">
+									Neuroanatomia Molekularna
+								</h4>
+								<p className="text-purple-700 text-sm leading-relaxed">
+									Funkcjonalna architektura mózgu opiera się na
+									cytoarchitektonice korowej (warstwy I-VI), projekcjach
+									glutaminergicznych i GABAergicznych oraz modulacji przez
+									systemy monoaminergiczne. PFC wykazuje wysoką gęstość
+									receptorów D1/D2 dopaminowych i 5-HT2A serotoninowych.
+									Hipokamp charakteryzuje się plastycznością synaptyczną zależną
+									od NMDA (LTP/LTD) i neurogenezy w zakręcie zębatym. Suplementy
+									działają poprzez modulację kaskad sygnałowych (MAPK/ERK,
+									PI3K/Akt), regulację ekspresji genów (CREB, BDNF) oraz wpływ
+									na mitochondrialną bioenergetykę i homeostazę wapniową.
 								</p>
 							</div>
 						</TabsContent>
@@ -390,33 +435,34 @@ export default function BrainRegionsPage() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-						<div className="bg-muted p-4 rounded-lg">
-							<h4 className="font-semibold mb-2">Szlak Korowo-Limbiczny</h4>
-							<p className="text-sm text-muted-foreground">
-								Łączy korę przedczołową z ciałem migdałowatym i hipokampem, 
-								umożliwiając regulację emocji i konsolidację pamięci emocjonalnej.
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+						<div className="rounded-lg bg-muted p-4">
+							<h4 className="mb-2 font-semibold">Szlak Korowo-Limbiczny</h4>
+							<p className="text-muted-foreground text-sm">
+								Łączy korę przedczołową z ciałem migdałowatym i hipokampem,
+								umożliwiając regulację emocji i konsolidację pamięci
+								emocjonalnej.
 							</p>
 						</div>
-						<div className="bg-muted p-4 rounded-lg">
-							<h4 className="font-semibold mb-2">Szlak Mezolimbiczny</h4>
-							<p className="text-sm text-muted-foreground">
-								Dopaminergiczny szlak z obszaru brzusznego nakrywki do jądra półleżącego, 
-								kluczowy dla motywacji i nagrody.
+						<div className="rounded-lg bg-muted p-4">
+							<h4 className="mb-2 font-semibold">Szlak Mezolimbiczny</h4>
+							<p className="text-muted-foreground text-sm">
+								Dopaminergiczny szlak z obszaru brzusznego nakrywki do jądra
+								półleżącego, kluczowy dla motywacji i nagrody.
 							</p>
 						</div>
-						<div className="bg-muted p-4 rounded-lg">
-							<h4 className="font-semibold mb-2">Szlak Cholinergiczny</h4>
-							<p className="text-sm text-muted-foreground">
-								Z jądra podstawnego Meynerta do kory i hipokampu, 
-								istotny dla uwagi i procesów pamięciowych.
+						<div className="rounded-lg bg-muted p-4">
+							<h4 className="mb-2 font-semibold">Szlak Cholinergiczny</h4>
+							<p className="text-muted-foreground text-sm">
+								Z jądra podstawnego Meynerta do kory i hipokampu, istotny dla
+								uwagi i procesów pamięciowych.
 							</p>
 						</div>
-						<div className="bg-muted p-4 rounded-lg">
-							<h4 className="font-semibold mb-2">Szlak Korowo-Prążkowiowy</h4>
-							<p className="text-sm text-muted-foreground">
-								Łączy korę z jądrami podstawy, 
-								kontroluje ruchy dowolne i uczenie się proceduralne.
+						<div className="rounded-lg bg-muted p-4">
+							<h4 className="mb-2 font-semibold">Szlak Korowo-Prążkowiowy</h4>
+							<p className="text-muted-foreground text-sm">
+								Łączy korę z jądrami podstawy, kontroluje ruchy dowolne i
+								uczenie się proceduralne.
 							</p>
 						</div>
 					</div>
@@ -425,4 +471,3 @@ export default function BrainRegionsPage() {
 		</div>
 	);
 }
-

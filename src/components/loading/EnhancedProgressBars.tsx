@@ -5,11 +5,12 @@
  * Smooth animations and step-by-step progress visualization
  */
 
-import React, { useEffect } from "react";
-import { motion, useSpring, useTransform } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
+import { durations, easings, springs } from "@/lib/animations/config";
 import { useReducedMotion } from "@/lib/animations/hooks";
-import { easings, springs, durations } from "@/lib/animations/config";
+import { motion, useSpring, useTransform } from "framer-motion";
+import type React from "react";
+import { useEffect } from "react";
 
 interface EnhancedProgressBarProps {
 	value: number;
@@ -54,10 +55,10 @@ export const EnhancedProgressBar: React.FC<EnhancedProgressBarProps> = ({
 		return (
 			<div className={`space-y-2 ${className}`}>
 				{(showLabel || label) && (
-					<div className="flex justify-between items-center">
-						<span className="text-sm font-medium">{label}</span>
+					<div className="flex items-center justify-between">
+						<span className="font-medium text-sm">{label}</span>
 						{showPercentage && (
-							<span className="text-sm text-muted-foreground">
+							<span className="text-muted-foreground text-sm">
 								{Math.round(percentage)}%
 							</span>
 						)}
@@ -65,7 +66,7 @@ export const EnhancedProgressBar: React.FC<EnhancedProgressBarProps> = ({
 				)}
 				<Progress
 					value={percentage}
-					className={`${sizeMap[size]} [&>div]:${variantMap[variant]}`}
+					className={`${sizeMap[size]}[&>div]:${variantMap[variant]}`}
 				/>
 			</div>
 		);
@@ -83,11 +84,11 @@ export const EnhancedProgressBar: React.FC<EnhancedProgressBarProps> = ({
 	return (
 		<div className={`space-y-2 ${className}`}>
 			{(showLabel || label) && (
-				<div className="flex justify-between items-center">
-					<span className="text-sm font-medium">{label}</span>
+				<div className="flex items-center justify-between">
+					<span className="font-medium text-sm">{label}</span>
 					{showPercentage && (
 						<motion.span
-							className="text-sm text-muted-foreground"
+							className="text-muted-foreground text-sm"
 							key={Math.round(percentage)} // Re-animate when percentage changes
 							initial={{ opacity: 0, scale: 0.8 }}
 							animate={{ opacity: 1, scale: 1 }}
@@ -98,7 +99,9 @@ export const EnhancedProgressBar: React.FC<EnhancedProgressBarProps> = ({
 					)}
 				</div>
 			)}
-			<div className={`relative ${sizeMap[size]} bg-secondary rounded-full overflow-hidden`}>
+			<div
+				className={`relative ${sizeMap[size]} overflow-hidden rounded-full bg-secondary`}
+			>
 				<motion.div
 					className={`h-full ${variantMap[variant]} rounded-full`}
 					style={{ width }}
@@ -145,12 +148,12 @@ export const MultiStepProgress: React.FC<MultiStepProgressProps> = ({
 							{/* Step indicator */}
 							<div className="flex flex-col items-center">
 								<motion.div
-									className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+									className={`flex h-8 w-8 items-center justify-center rounded-full font-medium text-sm ${
 										isCompleted
 											? "bg-primary text-primary-foreground"
 											: isCurrent
-											? "bg-primary/10 text-primary border-2 border-primary"
-											: "bg-muted text-muted-foreground"
+												? "border-2 border-primary bg-primary/10 text-primary"
+												: "bg-muted text-muted-foreground"
 									}`}
 									initial={shouldReduceMotion ? {} : { scale: 0 }}
 									animate={{ scale: 1 }}
@@ -165,7 +168,7 @@ export const MultiStepProgress: React.FC<MultiStepProgressProps> = ({
 								{/* Connector line */}
 								{index < steps.length - 1 && (
 									<motion.div
-										className={`w-0.5 h-8 mt-2 ${
+										className={`mt-2 h-8 w-0.5 ${
 											isCompleted ? "bg-primary" : "bg-muted"
 										}`}
 										initial={{ height: 0 }}
@@ -190,11 +193,13 @@ export const MultiStepProgress: React.FC<MultiStepProgressProps> = ({
 										ease: easings.calm,
 									}}
 								>
-									<h3 className={`font-medium ${isCurrent ? "text-primary" : ""}`}>
+									<h3
+										className={`font-medium ${isCurrent ? "text-primary" : ""}`}
+									>
 										{step.label}
 									</h3>
 									{step.description && (
-										<p className="text-sm text-muted-foreground mt-1">
+										<p className="mt-1 text-muted-foreground text-sm">
 											{step.description}
 										</p>
 									)}
@@ -212,9 +217,9 @@ export const MultiStepProgress: React.FC<MultiStepProgressProps> = ({
 		<div className={`space-y-4 ${className}`}>
 			{/* Progress bar */}
 			<div className="relative">
-				<div className="h-2 bg-muted rounded-full overflow-hidden">
+				<div className="h-2 overflow-hidden rounded-full bg-muted">
 					<motion.div
-						className="h-full bg-primary rounded-full"
+						className="h-full rounded-full bg-primary"
 						initial={{ width: 0 }}
 						animate={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
 						transition={{
@@ -233,15 +238,15 @@ export const MultiStepProgress: React.FC<MultiStepProgressProps> = ({
 					const isPending = index > currentStep;
 
 					return (
-						<div key={index} className="flex flex-col items-center flex-1">
+						<div key={index} className="flex flex-1 flex-col items-center">
 							{/* Step circle */}
 							<motion.div
-								className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium mb-2 ${
+								className={`mb-2 flex h-8 w-8 items-center justify-center rounded-full font-medium text-sm ${
 									isCompleted
 										? "bg-primary text-primary-foreground"
 										: isCurrent
-										? "bg-primary/10 text-primary border-2 border-primary"
-										: "bg-muted text-muted-foreground"
+											? "border-2 border-primary bg-primary/10 text-primary"
+											: "bg-muted text-muted-foreground"
 								}`}
 								initial={shouldReduceMotion ? {} : { scale: 0, opacity: 0 }}
 								animate={{ scale: 1, opacity: 1 }}
@@ -256,7 +261,9 @@ export const MultiStepProgress: React.FC<MultiStepProgressProps> = ({
 							{/* Step label */}
 							<motion.div
 								className={`text-center text-sm ${
-									isCurrent ? "text-primary font-medium" : "text-muted-foreground"
+									isCurrent
+										? "font-medium text-primary"
+										: "text-muted-foreground"
 								}`}
 								initial={shouldReduceMotion ? {} : { opacity: 0, y: 10 }}
 								animate={{ opacity: 1, y: 0 }}
@@ -322,7 +329,9 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
 
 	if (shouldReduceMotion) {
 		return (
-			<div className={`relative inline-flex items-center justify-center ${className}`}>
+			<div
+				className={`relative inline-flex items-center justify-center ${className}`}
+			>
 				<div
 					className="rounded-full border-primary"
 					style={{
@@ -334,9 +343,13 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
 				{(showPercentage || showLabel || label) && (
 					<div className="absolute inset-0 flex flex-col items-center justify-center">
 						{showPercentage && (
-							<span className="text-sm font-medium">{Math.round(percentage)}%</span>
+							<span className="font-medium text-sm">
+								{Math.round(percentage)}%
+							</span>
 						)}
-						{label && <span className="text-xs text-muted-foreground">{label}</span>}
+						{label && (
+							<span className="text-muted-foreground text-xs">{label}</span>
+						)}
 					</div>
 				)}
 				{children && (
@@ -349,11 +362,13 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
 	}
 
 	return (
-		<div className={`relative inline-flex items-center justify-center ${className}`}>
+		<div
+			className={`relative inline-flex items-center justify-center ${className}`}
+		>
 			<motion.svg
 				width={sizeMap[size]}
 				height={sizeMap[size]}
-				className="transform -rotate-90"
+				className="-rotate-90 transform"
 				initial={{ opacity: 0, scale: 0.8 }}
 				animate={{ opacity: 1, scale: 1 }}
 				transition={{ duration: durations.normal, ease: easings.calm }}
@@ -394,7 +409,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
 				<div className="absolute inset-0 flex flex-col items-center justify-center">
 					{showPercentage && (
 						<motion.span
-							className="text-sm font-medium"
+							className="font-medium text-sm"
 							key={Math.round(percentage)}
 							initial={{ opacity: 0, scale: 0.8 }}
 							animate={{ opacity: 1, scale: 1 }}
@@ -404,7 +419,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
 						</motion.span>
 					)}
 					{label && (
-						<span className="text-xs text-muted-foreground">{label}</span>
+						<span className="text-muted-foreground text-xs">{label}</span>
 					)}
 					{children}
 				</div>
@@ -445,7 +460,7 @@ export const SegmentedProgress: React.FC<SegmentedProgressProps> = ({
 	if (shouldReduceMotion) {
 		return (
 			<div className={`space-y-2 ${className}`}>
-				<div className={`flex rounded-full overflow-hidden ${sizeMap[size]}`}>
+				<div className={`flex overflow-hidden rounded-full ${sizeMap[size]}`}>
 					{segments.map((segment, index) => {
 						const width = (segment.value / totalValue) * 100;
 						return (
@@ -454,14 +469,15 @@ export const SegmentedProgress: React.FC<SegmentedProgressProps> = ({
 								className="h-full"
 								style={{
 									width: `${width}%`,
-									backgroundColor: segment.color || `hsl(${index * 60}, 70%, 50%)`,
+									backgroundColor:
+										segment.color || `hsl(${index * 60}, 70%, 50%)`,
 								}}
 							/>
 						);
 					})}
 				</div>
 				{showLabels && (
-					<div className="flex justify-between text-xs text-muted-foreground">
+					<div className="flex justify-between text-muted-foreground text-xs">
 						{segments.map((segment, index) => (
 							<span key={index}>{segment.label}</span>
 						))}
@@ -473,7 +489,7 @@ export const SegmentedProgress: React.FC<SegmentedProgressProps> = ({
 
 	return (
 		<div className={`space-y-2 ${className}`}>
-			<div className={`flex rounded-full overflow-hidden ${sizeMap[size]}`}>
+			<div className={`flex overflow-hidden rounded-full ${sizeMap[size]}`}>
 				{segments.map((segment, index) => {
 					const width = (segment.value / totalValue) * 100;
 					return (
@@ -481,7 +497,8 @@ export const SegmentedProgress: React.FC<SegmentedProgressProps> = ({
 							key={index}
 							className="h-full"
 							style={{
-								backgroundColor: segment.color || `hsl(${index * 60}, 70%, 50%)`,
+								backgroundColor:
+									segment.color || `hsl(${index * 60}, 70%, 50%)`,
 							}}
 							initial={{ width: 0 }}
 							animate={{ width: `${width}%` }}
@@ -496,10 +513,14 @@ export const SegmentedProgress: React.FC<SegmentedProgressProps> = ({
 			</div>
 			{showLabels && (
 				<motion.div
-					className="flex justify-between text-xs text-muted-foreground"
+					className="flex justify-between text-muted-foreground text-xs"
 					initial={{ opacity: 0, y: 5 }}
 					animate={{ opacity: 1, y: 0 }}
-					transition={{ delay: 0.3, duration: durations.normal, ease: easings.calm }}
+					transition={{
+						delay: 0.3,
+						duration: durations.normal,
+						ease: easings.calm,
+					}}
 				>
 					{segments.map((segment, index) => (
 						<span key={index}>{segment.label}</span>

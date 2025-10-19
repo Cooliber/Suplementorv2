@@ -3,27 +3,27 @@
  * Comprehensive dashboard for tracking supplement learning progress
  */
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSupplementGamificationStore } from "@/lib/stores/supplement-gamification-store";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-	TrendingUp,
-	Calendar,
-	Brain,
-	Target,
-	Star,
-	Flame,
+	Activity,
 	Award,
 	BarChart3,
-	PieChart,
+	Brain,
+	Calendar,
+	Flame,
 	LineChart,
-	Activity,
+	PieChart,
+	Star,
+	Target,
+	TrendingUp,
 } from "lucide-react";
-import { useSupplementGamificationStore } from "@/lib/stores/supplement-gamification-store";
+import React, { useState, useEffect } from "react";
 
 interface ProgressData {
 	date: string;
@@ -56,41 +56,124 @@ export function ProgressVisualization() {
 		monthlyStats,
 	} = useSupplementGamificationStore();
 
-	const [timeRange, setTimeRange] = useState<"week" | "month" | "year">("month");
+	const [timeRange, setTimeRange] = useState<"week" | "month" | "year">(
+		"month",
+	);
 	const [animateValues, setAnimateValues] = useState(false);
 
 	// Sample data for demonstration
 	const sampleProgressData: ProgressData[] = [
-		{ date: "2024-01-01", xp: 0, supplementsLearned: 0, quizzesCompleted: 0, streak: 0 },
-		{ date: "2024-01-02", xp: 25, supplementsLearned: 1, quizzesCompleted: 0, streak: 1 },
-		{ date: "2024-01-03", xp: 75, supplementsLearned: 3, quizzesCompleted: 1, streak: 2 },
-		{ date: "2024-01-04", xp: 125, supplementsLearned: 5, quizzesCompleted: 2, streak: 3 },
-		{ date: "2024-01-05", xp: 200, supplementsLearned: 8, quizzesCompleted: 3, streak: 4 },
-		{ date: "2024-01-06", xp: 275, supplementsLearned: 11, quizzesCompleted: 4, streak: 5 },
-		{ date: "2024-01-07", xp: 375, supplementsLearned: 15, quizzesCompleted: 6, streak: 6 },
-		{ date: "2024-01-08", xp: 450, supplementsLearned: 18, quizzesCompleted: 7, streak: 7 },
+		{
+			date: "2024-01-01",
+			xp: 0,
+			supplementsLearned: 0,
+			quizzesCompleted: 0,
+			streak: 0,
+		},
+		{
+			date: "2024-01-02",
+			xp: 25,
+			supplementsLearned: 1,
+			quizzesCompleted: 0,
+			streak: 1,
+		},
+		{
+			date: "2024-01-03",
+			xp: 75,
+			supplementsLearned: 3,
+			quizzesCompleted: 1,
+			streak: 2,
+		},
+		{
+			date: "2024-01-04",
+			xp: 125,
+			supplementsLearned: 5,
+			quizzesCompleted: 2,
+			streak: 3,
+		},
+		{
+			date: "2024-01-05",
+			xp: 200,
+			supplementsLearned: 8,
+			quizzesCompleted: 3,
+			streak: 4,
+		},
+		{
+			date: "2024-01-06",
+			xp: 275,
+			supplementsLearned: 11,
+			quizzesCompleted: 4,
+			streak: 5,
+		},
+		{
+			date: "2024-01-07",
+			xp: 375,
+			supplementsLearned: 15,
+			quizzesCompleted: 6,
+			streak: 6,
+		},
+		{
+			date: "2024-01-08",
+			xp: 450,
+			supplementsLearned: 18,
+			quizzesCompleted: 7,
+			streak: 7,
+		},
 	];
 
 	const categoryProgress: CategoryProgress[] = [
-		{ category: "Vitamins", learned: 12, total: 15, percentage: 80, color: "bg-green-500" },
-		{ category: "Minerals", learned: 8, total: 12, percentage: 67, color: "bg-blue-500" },
-		{ category: "Adaptogens", learned: 5, total: 10, percentage: 50, color: "bg-purple-500" },
-		{ category: "Nootropics", learned: 3, total: 8, percentage: 38, color: "bg-orange-500" },
-		{ category: "Fatty Acids", learned: 2, total: 4, percentage: 50, color: "bg-yellow-500" },
+		{
+			category: "Vitamins",
+			learned: 12,
+			total: 15,
+			percentage: 80,
+			color: "bg-green-500",
+		},
+		{
+			category: "Minerals",
+			learned: 8,
+			total: 12,
+			percentage: 67,
+			color: "bg-blue-500",
+		},
+		{
+			category: "Adaptogens",
+			learned: 5,
+			total: 10,
+			percentage: 50,
+			color: "bg-purple-500",
+		},
+		{
+			category: "Nootropics",
+			learned: 3,
+			total: 8,
+			percentage: 38,
+			color: "bg-orange-500",
+		},
+		{
+			category: "Fatty Acids",
+			learned: 2,
+			total: 4,
+			percentage: 50,
+			color: "bg-yellow-500",
+		},
 	];
 
 	useEffect(() => {
 		setAnimateValues(true);
 	}, []);
 
-	const AnimatedNumber = ({ value, suffix = "" }: { value: number; suffix?: string }) => {
+	const AnimatedNumber = ({
+		value,
+		suffix = "",
+	}: { value: number; suffix?: string }) => {
 		const [displayValue, setDisplayValue] = useState(0);
 
 		useEffect(() => {
 			if (animateValues) {
 				const increment = value / 50;
 				const timer = setInterval(() => {
-					setDisplayValue(prev => {
+					setDisplayValue((prev) => {
 						if (prev >= value) {
 							clearInterval(timer);
 							return value;
@@ -103,14 +186,19 @@ export function ProgressVisualization() {
 			return undefined;
 		}, [value, animateValues]);
 
-		return <span className="font-bold text-2xl">{Math.round(displayValue)}{suffix}</span>;
+		return (
+			<span className="font-bold text-2xl">
+				{Math.round(displayValue)}
+				{suffix}
+			</span>
+		);
 	};
 
 	return (
-		<div className="w-full max-w-7xl mx-auto space-y-6">
+		<div className="mx-auto w-full max-w-7xl space-y-6">
 			{/* Header */}
-			<div className="text-center space-y-2">
-				<h2 className="text-3xl font-bold flex items-center justify-center gap-2">
+			<div className="space-y-2 text-center">
+				<h2 className="flex items-center justify-center gap-2 font-bold text-3xl">
 					<TrendingUp className="h-8 w-8 text-primary" />
 					Progress Dashboard
 				</h2>
@@ -120,22 +208,22 @@ export function ProgressVisualization() {
 			</div>
 
 			{/* Key Metrics Overview */}
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
 				<Card>
 					<CardContent className="p-6 text-center">
-						<Brain className="h-8 w-8 text-blue-500 mx-auto mb-2" />
+						<Brain className="mx-auto mb-2 h-8 w-8 text-blue-500" />
 						<AnimatedNumber value={currentXP} />
-						<div className="text-sm text-muted-foreground">Total XP</div>
+						<div className="text-muted-foreground text-sm">Total XP</div>
 						<Progress value={(currentXP % 1000) / 10} className="mt-2" />
 					</CardContent>
 				</Card>
 
 				<Card>
 					<CardContent className="p-6 text-center">
-						<Flame className="h-8 w-8 text-orange-500 mx-auto mb-2" />
+						<Flame className="mx-auto mb-2 h-8 w-8 text-orange-500" />
 						<AnimatedNumber value={currentStreak} />
-						<div className="text-sm text-muted-foreground">Current Streak</div>
-						<div className="text-xs text-muted-foreground mt-1">
+						<div className="text-muted-foreground text-sm">Current Streak</div>
+						<div className="mt-1 text-muted-foreground text-xs">
 							Best: {bestStreak} days
 						</div>
 					</CardContent>
@@ -143,19 +231,19 @@ export function ProgressVisualization() {
 
 				<Card>
 					<CardContent className="p-6 text-center">
-						<Target className="h-8 w-8 text-green-500 mx-auto mb-2" />
+						<Target className="mx-auto mb-2 h-8 w-8 text-green-500" />
 						<AnimatedNumber value={knowledgeScore} suffix="%" />
-						<div className="text-sm text-muted-foreground">Knowledge Score</div>
+						<div className="text-muted-foreground text-sm">Knowledge Score</div>
 						<Progress value={knowledgeScore} className="mt-2" />
 					</CardContent>
 				</Card>
 
 				<Card>
 					<CardContent className="p-6 text-center">
-						<Award className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
+						<Award className="mx-auto mb-2 h-8 w-8 text-yellow-500" />
 						<AnimatedNumber value={unlockedAchievements.length} />
-						<div className="text-sm text-muted-foreground">Achievements</div>
-						<div className="text-xs text-muted-foreground mt-1">
+						<div className="text-muted-foreground text-sm">Achievements</div>
+						<div className="mt-1 text-muted-foreground text-xs">
 							{achievements.length - unlockedAchievements.length} remaining
 						</div>
 					</CardContent>
@@ -184,7 +272,7 @@ export function ProgressVisualization() {
 				</TabsList>
 
 				<TabsContent value="overview" className="space-y-6">
-					<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+					<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 						{/* XP Progress Over Time */}
 						<Card>
 							<CardHeader>
@@ -194,25 +282,27 @@ export function ProgressVisualization() {
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<div className="h-64 flex items-end justify-between space-x-2">
+								<div className="flex h-64 items-end justify-between space-x-2">
 									{sampleProgressData.slice(-7).map((data, index) => (
 										<motion.div
 											key={data.date}
 											initial={{ height: 0 }}
 											animate={{ height: `${(data.xp / 500) * 100}%` }}
 											transition={{ delay: index * 0.1 }}
-											className="bg-primary rounded-t flex-1 min-w-[20px] relative group cursor-pointer"
+											className="group relative min-w-[20px] flex-1 cursor-pointer rounded-t bg-primary"
 										>
-											<div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black text-white text-xs px-2 py-1 rounded">
+											<div className="-top-8 -translate-x-1/2 absolute left-1/2 transform rounded bg-black px-2 py-1 text-white text-xs opacity-0 transition-opacity group-hover:opacity-100">
 												{data.xp} XP
 											</div>
 										</motion.div>
 									))}
 								</div>
-								<div className="flex justify-between mt-2 text-xs text-muted-foreground">
+								<div className="mt-2 flex justify-between text-muted-foreground text-xs">
 									{sampleProgressData.slice(-7).map((data) => (
 										<div key={data.date} className="text-center">
-											{new Date(data.date).toLocaleDateString('en', { weekday: 'short' })}
+											{new Date(data.date).toLocaleDateString("en", {
+												weekday: "short",
+											})}
 										</div>
 									))}
 								</div>
@@ -230,13 +320,13 @@ export function ProgressVisualization() {
 							<CardContent>
 								<div className="space-y-2">
 									<div className="flex items-center gap-2 text-sm">
-										<div className="w-3 h-3 bg-gray-100 rounded"></div>
+										<div className="h-3 w-3 rounded bg-gray-100" />
 										<span>No activity</span>
-										<div className="w-3 h-3 bg-blue-200 rounded"></div>
+										<div className="h-3 w-3 rounded bg-blue-200" />
 										<span>1-2 supplements</span>
-										<div className="w-3 h-3 bg-blue-400 rounded"></div>
+										<div className="h-3 w-3 rounded bg-blue-400" />
 										<span>3-5 supplements</span>
-										<div className="w-3 h-3 bg-blue-600 rounded"></div>
+										<div className="h-3 w-3 rounded bg-blue-600" />
 										<span>6+ supplements</span>
 									</div>
 									<div className="grid grid-cols-7 gap-1">
@@ -248,10 +338,14 @@ export function ProgressVisualization() {
 													initial={{ scale: 0 }}
 													animate={{ scale: 1 }}
 													transition={{ delay: i * 0.02 }}
-													className={`aspect-square rounded cursor-pointer hover:ring-2 hover:ring-primary transition-all ${
-														intensity < 0.3 ? 'bg-gray-100' :
-														intensity < 0.6 ? 'bg-blue-200' :
-														intensity < 0.8 ? 'bg-blue-400' : 'bg-blue-600'
+													className={`aspect-square cursor-pointer rounded transition-all hover:ring-2 hover:ring-primary ${
+														intensity < 0.3
+															? "bg-gray-100"
+															: intensity < 0.6
+																? "bg-blue-200"
+																: intensity < 0.8
+																	? "bg-blue-400"
+																	: "bg-blue-600"
 													}`}
 													title={`${Math.floor(intensity * 6)} supplements learned`}
 												/>
@@ -272,34 +366,68 @@ export function ProgressVisualization() {
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+							<div className="grid grid-cols-1 gap-6 md:grid-cols-3">
 								<div className="text-center">
-									<div className="text-3xl font-bold text-primary mb-1">
-										{weeklyProgress.reduce((sum, day) => sum + day.supplementsStudied, 0)}
+									<div className="mb-1 font-bold text-3xl text-primary">
+										{weeklyProgress.reduce(
+											(sum, day) => sum + day.supplementsStudied,
+											0,
+										)}
 									</div>
-									<div className="text-sm text-muted-foreground">Supplements Studied</div>
+									<div className="text-muted-foreground text-sm">
+										Supplements Studied
+									</div>
 									<Progress
-										value={Math.min((weeklyProgress.reduce((sum, day) => sum + day.supplementsStudied, 0) / 50) * 100, 100)}
+										value={Math.min(
+											(weeklyProgress.reduce(
+												(sum, day) => sum + day.supplementsStudied,
+												0,
+											) /
+												50) *
+												100,
+											100,
+										)}
 										className="mt-2"
 									/>
 								</div>
 								<div className="text-center">
-									<div className="text-3xl font-bold text-primary mb-1">
-										{weeklyProgress.reduce((sum, day) => sum + day.quizzesCompleted, 0)}
+									<div className="mb-1 font-bold text-3xl text-primary">
+										{weeklyProgress.reduce(
+											(sum, day) => sum + day.quizzesCompleted,
+											0,
+										)}
 									</div>
-									<div className="text-sm text-muted-foreground">Quizzes Completed</div>
+									<div className="text-muted-foreground text-sm">
+										Quizzes Completed
+									</div>
 									<Progress
-										value={Math.min((weeklyProgress.reduce((sum, day) => sum + day.quizzesCompleted, 0) / 20) * 100, 100)}
+										value={Math.min(
+											(weeklyProgress.reduce(
+												(sum, day) => sum + day.quizzesCompleted,
+												0,
+											) /
+												20) *
+												100,
+											100,
+										)}
 										className="mt-2"
 									/>
 								</div>
 								<div className="text-center">
-									<div className="text-3xl font-bold text-primary mb-1">
+									<div className="mb-1 font-bold text-3xl text-primary">
 										{weeklyProgress.reduce((sum, day) => sum + day.xpEarned, 0)}
 									</div>
-									<div className="text-sm text-muted-foreground">XP Earned</div>
+									<div className="text-muted-foreground text-sm">XP Earned</div>
 									<Progress
-										value={Math.min((weeklyProgress.reduce((sum, day) => sum + day.xpEarned, 0) / 1000) * 100, 100)}
+										value={Math.min(
+											(weeklyProgress.reduce(
+												(sum, day) => sum + day.xpEarned,
+												0,
+											) /
+												1000) *
+												100,
+											100,
+										)}
 										className="mt-2"
 									/>
 								</div>
@@ -309,7 +437,7 @@ export function ProgressVisualization() {
 				</TabsContent>
 
 				<TabsContent value="learning" className="space-y-6">
-					<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+					<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 						{/* Knowledge Growth */}
 						<Card>
 							<CardHeader>
@@ -321,7 +449,9 @@ export function ProgressVisualization() {
 							<CardContent>
 								<div className="space-y-4">
 									<div className="flex items-center justify-between">
-										<span className="text-sm font-medium">Overall Knowledge</span>
+										<span className="font-medium text-sm">
+											Overall Knowledge
+										</span>
 										<span className="font-bold">{knowledgeScore}%</span>
 									</div>
 									<Progress value={knowledgeScore} className="h-3" />
@@ -329,15 +459,21 @@ export function ProgressVisualization() {
 									<div className="space-y-3">
 										<div className="flex items-center justify-between">
 											<span className="text-sm">Quiz Accuracy</span>
-											<span className="font-medium">{Math.round(knowledgeScore * 0.9)}%</span>
+											<span className="font-medium">
+												{Math.round(knowledgeScore * 0.9)}%
+											</span>
 										</div>
 										<div className="flex items-center justify-between">
 											<span className="text-sm">Retention Rate</span>
-											<span className="font-medium">{Math.round(knowledgeScore * 0.85)}%</span>
+											<span className="font-medium">
+												{Math.round(knowledgeScore * 0.85)}%
+											</span>
 										</div>
 										<div className="flex items-center justify-between">
 											<span className="text-sm">Application Score</span>
-											<span className="font-medium">{Math.round(knowledgeScore * 0.8)}%</span>
+											<span className="font-medium">
+												{Math.round(knowledgeScore * 0.8)}%
+											</span>
 										</div>
 									</div>
 								</div>
@@ -355,19 +491,27 @@ export function ProgressVisualization() {
 							<CardContent>
 								<div className="space-y-4">
 									<div className="flex items-center justify-between">
-										<span className="text-sm font-medium">Adherence Score</span>
+										<span className="font-medium text-sm">Adherence Score</span>
 										<span className="font-bold">{adherenceScore}%</span>
 									</div>
 									<Progress value={adherenceScore} className="h-3" />
 
 									<div className="grid grid-cols-2 gap-4 text-center">
 										<div>
-											<div className="text-xl font-bold text-orange-500">{currentStreak}</div>
-											<div className="text-xs text-muted-foreground">Current Streak</div>
+											<div className="font-bold text-orange-500 text-xl">
+												{currentStreak}
+											</div>
+											<div className="text-muted-foreground text-xs">
+												Current Streak
+											</div>
 										</div>
 										<div>
-											<div className="text-xl font-bold text-blue-500">{bestStreak}</div>
-											<div className="text-xs text-muted-foreground">Best Streak</div>
+											<div className="font-bold text-blue-500 text-xl">
+												{bestStreak}
+											</div>
+											<div className="text-muted-foreground text-xs">
+												Best Streak
+											</div>
 										</div>
 									</div>
 
@@ -376,12 +520,12 @@ export function ProgressVisualization() {
 											<span>This Week</span>
 											<span>5/7 days</span>
 										</div>
-										<Progress value={(5/7) * 100} />
+										<Progress value={(5 / 7) * 100} />
 										<div className="flex justify-between text-sm">
 											<span>This Month</span>
 											<span>18/30 days</span>
 										</div>
-										<Progress value={(18/30) * 100} />
+										<Progress value={(18 / 30) * 100} />
 									</div>
 								</div>
 							</CardContent>
@@ -398,7 +542,7 @@ export function ProgressVisualization() {
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+							<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 								{/* Category Progress Bars */}
 								<div className="space-y-4">
 									{categoryProgress.map((category, index) => (
@@ -411,7 +555,7 @@ export function ProgressVisualization() {
 										>
 											<div className="flex items-center justify-between">
 												<span className="font-medium">{category.category}</span>
-												<span className="text-sm text-muted-foreground">
+												<span className="text-muted-foreground text-sm">
 													{category.learned}/{category.total}
 												</span>
 											</div>
@@ -428,13 +572,16 @@ export function ProgressVisualization() {
 
 								{/* Category Distribution Chart */}
 								<div className="relative">
-									<div className="h-48 flex items-center justify-center">
-										<div className="relative w-32 h-32">
+									<div className="flex h-48 items-center justify-center">
+										<div className="relative h-32 w-32">
 											{categoryProgress.map((category, index) => {
 												const angle = (category.percentage / 100) * 360;
 												const rotation = categoryProgress
 													.slice(0, index)
-													.reduce((sum, cat) => sum + (cat.percentage / 100) * 360, 0);
+													.reduce(
+														(sum, cat) => sum + (cat.percentage / 100) * 360,
+														0,
+													);
 
 												return (
 													<motion.div
@@ -443,14 +590,14 @@ export function ProgressVisualization() {
 														animate={{ rotate: rotation }}
 														className={`absolute inset-0 ${category.color} opacity-80`}
 														style={{
-															clipPath: `polygon(50% 50%, 50% 0%, ${50 + 50 * Math.cos(angle * Math.PI / 180)}% ${50 + 50 * Math.sin(angle * Math.PI / 180)}%)`,
+															clipPath: `polygon(50% 50%, 50% 0%, ${50 + 50 * Math.cos((angle * Math.PI) / 180)}% ${50 + 50 * Math.sin((angle * Math.PI) / 180)}%)`,
 														}}
 													/>
 												);
 											})}
 										</div>
 									</div>
-									<div className="text-center text-sm text-muted-foreground">
+									<div className="text-center text-muted-foreground text-sm">
 										Category Distribution
 									</div>
 								</div>
@@ -468,10 +615,14 @@ export function ProgressVisualization() {
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								{achievements.slice(0, 8).map((achievement, index) => {
-									const isUnlocked = unlockedAchievements.includes(achievement.id);
-									const progress = isUnlocked ? 100 : Math.min((totalSupplementsLearned / 20) * 100, 100);
+									const isUnlocked = unlockedAchievements.includes(
+										achievement.id,
+									);
+									const progress = isUnlocked
+										? 100
+										: Math.min((totalSupplementsLearned / 20) * 100, 100);
 
 									return (
 										<motion.div
@@ -479,24 +630,30 @@ export function ProgressVisualization() {
 											initial={{ opacity: 0, scale: 0.9 }}
 											animate={{ opacity: 1, scale: 1 }}
 											transition={{ delay: index * 0.05 }}
-											className={`p-4 border rounded-lg transition-all ${
-												isUnlocked ? "bg-green-50 border-green-200" : "bg-gray-50"
+											className={`rounded-lg border p-4 transition-all ${
+												isUnlocked
+													? "border-green-200 bg-green-50"
+													: "bg-gray-50"
 											}`}
 										>
 											<div className="flex items-start gap-3">
-												<div className={`p-2 rounded-full ${
-													isUnlocked ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"
-												}`}>
+												<div
+													className={`rounded-full p-2 ${
+														isUnlocked
+															? "bg-green-100 text-green-600"
+															: "bg-gray-100 text-gray-400"
+													}`}
+												>
 													{isUnlocked ? "🏆" : "🔒"}
 												</div>
 												<div className="flex-1">
 													<h4 className="font-medium">{achievement.name}</h4>
-													<p className="text-sm text-muted-foreground mb-2">
+													<p className="mb-2 text-muted-foreground text-sm">
 														{achievement.description}
 													</p>
 													<div className="flex items-center gap-2">
-														<Progress value={progress} className="flex-1 h-2" />
-														<span className="text-xs text-muted-foreground">
+														<Progress value={progress} className="h-2 flex-1" />
+														<span className="text-muted-foreground text-xs">
 															{achievement.xpReward} XP
 														</span>
 													</div>

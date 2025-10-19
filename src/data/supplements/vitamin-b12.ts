@@ -10,8 +10,20 @@ export const vitaminB12Profile: SupplementWithRelations = {
 	name: "Vitamin B12",
 	polishName: "Witamina B12",
 	scientificName: "Cobalamin",
-	commonNames: ["Cobalamin", "Cyanocobalamin", "Methylcobalamin", "Hydroxocobalamin", "Adenosylcobalamin"],
-	polishCommonNames: ["Kobalamina", "Cyjanokobalamina", "Metylokobalamina", "Hydroksokobalamina", "Adenozylokobalamina"],
+	commonNames: [
+		"Cobalamin",
+		"Cyanocobalamin",
+		"Methylcobalamin",
+		"Hydroxocobalamin",
+		"Adenosylcobalamin",
+	],
+	polishCommonNames: [
+		"Kobalamina",
+		"Cyjanokobalamina",
+		"Metylokobalamina",
+		"Hydroksokobalamina",
+		"Adenozylokobalamina",
+	],
 	category: "VITAMIN",
 	description:
 		"Vitamin B12 is an essential water-soluble vitamin that plays crucial roles in red blood cell formation, neurological function, and DNA synthesis. It exists in several forms, with methylcobalamin and adenosylcobalamin being the active coenzyme forms.",
@@ -26,7 +38,11 @@ export const vitaminB12Profile: SupplementWithRelations = {
 			concentration: "1000mcg",
 			bioavailability: 85,
 			halfLife: "6-12 hours",
-			metabolicPathway: ["Methylation cycle", "Homocysteine metabolism", "Neurotransmitter synthesis"],
+			metabolicPathway: [
+				"Methylation cycle",
+				"Homocysteine metabolism",
+				"Neurotransmitter synthesis",
+			],
 			targetReceptors: ["Methyltransferase enzymes", "Methionine synthase"],
 		},
 		{
@@ -54,8 +70,10 @@ export const vitaminB12Profile: SupplementWithRelations = {
 		{
 			condition: "Vitamin B12 deficiency",
 			polishCondition: "Niedobór witaminy B12",
-			indication: "Treatment and prevention of B12 deficiency, megaloblastic anemia",
-			polishIndication: "Leczenie i zapobieganie niedoborowi B12, anemia megaloblastyczna",
+			indication:
+				"Treatment and prevention of B12 deficiency, megaloblastic anemia",
+			polishIndication:
+				"Leczenie i zapobieganie niedoborowi B12, anemia megaloblastyczna",
 			efficacy: "high",
 			effectivenessRating: 9,
 			evidenceLevel: "STRONG",
@@ -69,8 +87,10 @@ export const vitaminB12Profile: SupplementWithRelations = {
 		{
 			condition: "Neurological function and cognitive health",
 			polishCondition: "Funkcja neurologiczna i zdrowie poznawcze",
-			indication: "Support for nerve function, cognitive performance, and neuroprotection",
-			polishIndication: "Wsparcie funkcji nerwów, wydajności poznawczej i neuroprotekcji",
+			indication:
+				"Support for nerve function, cognitive performance, and neuroprotection",
+			polishIndication:
+				"Wsparcie funkcji nerwów, wydajności poznawczej i neuroprotekcji",
 			efficacy: "moderate",
 			effectivenessRating: 7,
 			evidenceLevel: "MODERATE",
@@ -85,7 +105,8 @@ export const vitaminB12Profile: SupplementWithRelations = {
 			condition: "Cardiovascular health",
 			polishCondition: "Zdrowie układu sercowo-naczyniowego",
 			indication: "Homocysteine reduction and cardiovascular risk management",
-			polishIndication: "Redukcja homocysteiny i zarządzanie ryzykiem sercowo-naczyniowym",
+			polishIndication:
+				"Redukcja homocysteiny i zarządzanie ryzykiem sercowo-naczyniowym",
 			efficacy: "moderate",
 			effectivenessRating: 6,
 			evidenceLevel: "MODERATE",
@@ -99,8 +120,10 @@ export const vitaminB12Profile: SupplementWithRelations = {
 		{
 			condition: "Energy metabolism and fatigue",
 			polishCondition: "Metabolizm energetyczny i zmęczenie",
-			indication: "Support for energy production and reduction of fatigue symptoms",
-			polishIndication: "Wsparcie produkcji energii i redukcja objawów zmęczenia",
+			indication:
+				"Support for energy production and reduction of fatigue symptoms",
+			polishIndication:
+				"Wsparcie produkcji energii i redukcja objawów zmęczenia",
 			efficacy: "moderate",
 			effectivenessRating: 6,
 			evidenceLevel: "WEAK",
@@ -201,7 +224,8 @@ export const vitaminB12Profile: SupplementWithRelations = {
 				mechanism: "Inhibition of B12-dependent enzymes",
 				polishMechanism: "Hamowanie enzymów zależnych od B12",
 				recommendation: "Monitor B12 levels during antibiotic treatment",
-				polishRecommendation: "Monitoruj poziom B12 podczas leczenia antybiotykiem",
+				polishRecommendation:
+					"Monitoruj poziom B12 podczas leczenia antybiotykiem",
 				evidenceLevel: "MODERATE",
 			},
 			{
@@ -210,13 +234,16 @@ export const vitaminB12Profile: SupplementWithRelations = {
 				type: "antagonistic",
 				severity: "minor",
 				description: "Reduced B12 absorption with long-term use",
-				polishDescription: "Zmniejszone wchłanianie B12 przy długotrwałym stosowaniu",
+				polishDescription:
+					"Zmniejszone wchłanianie B12 przy długotrwałym stosowaniu",
 				clinicalSignificance: "May lead to deficiency with chronic use",
-				polishClinicalSignificance: "Może prowadzić do niedoboru przy chronicznym stosowaniu",
+				polishClinicalSignificance:
+					"Może prowadzić do niedoboru przy chronicznym stosowaniu",
 				mechanism: "Impaired gastric acid production",
 				polishMechanism: "Upośledzona produkcja kwasu żołądkowego",
 				recommendation: "Consider B12 supplementation with long-term PPI use",
-				polishRecommendation: "Rozważ suplementację B12 przy długotrwałym stosowaniu PPI",
+				polishRecommendation:
+					"Rozważ suplementację B12 przy długotrwałym stosowaniu PPI",
 				evidenceLevel: "WEAK",
 			},
 		],
@@ -255,10 +282,13 @@ export const vitaminB12Profile: SupplementWithRelations = {
 			polishSubstance: "Kwas foliowy",
 			type: "synergistic",
 			severity: "beneficial",
-			description: "Complementary action in methylation and blood cell formation",
-			polishDescription: "Komplementarne działanie w metylacji i tworzeniu krwinek",
+			description:
+				"Complementary action in methylation and blood cell formation",
+			polishDescription:
+				"Komplementarne działanie w metylacji i tworzeniu krwinek",
 			clinicalSignificance: "Enhanced therapeutic effects when combined",
-			polishClinicalSignificance: "Wzmocnione efekty terapeutyczne w połączeniu",
+			polishClinicalSignificance:
+				"Wzmocnione efekty terapeutyczne w połączeniu",
 			mechanism: "Cooperative methylation pathway support",
 			polishMechanism: "Współpracujące wsparcie ścieżki metylacji",
 			recommendation: "Often beneficial in B-complex formulations",
@@ -277,7 +307,8 @@ export const vitaminB12Profile: SupplementWithRelations = {
 			mechanism: "Complementary enzyme cofactor activity",
 			polishMechanism: "Komplementarna aktywność kofaktorów enzymów",
 			recommendation: "Beneficial in combination for neurological support",
-			polishRecommendation: "Korzystne w połączeniu dla wsparcia neurologicznego",
+			polishRecommendation:
+				"Korzystne w połączeniu dla wsparcia neurologicznego",
 			evidenceLevel: "MODERATE",
 		},
 	],
@@ -287,16 +318,20 @@ export const vitaminB12Profile: SupplementWithRelations = {
 	researchStudies: [
 		{
 			id: "smith-2020",
-			title: "Vitamin B12 supplementation for cognitive function: A systematic review",
-			polishTitle: "Suplementacja witaminą B12 dla funkcji poznawczych: przegląd systematyczny",
+			title:
+				"Vitamin B12 supplementation for cognitive function: A systematic review",
+			polishTitle:
+				"Suplementacja witaminą B12 dla funkcji poznawczych: przegląd systematyczny",
 			authors: ["Smith AD", "Refsum H"],
 			journal: "Nutrients",
 			year: 2020,
 			studyType: "SYSTEMATIC_REVIEW",
 			primaryOutcome: "Cognitive function improvement",
 			polishPrimaryOutcome: "Poprawa funkcji poznawczych",
-			findings: "B12 supplementation improves cognitive function in deficient individuals",
-			polishFindings: "Suplementacja B12 poprawia funkcję poznawczą u osób z niedoborem",
+			findings:
+				"B12 supplementation improves cognitive function in deficient individuals",
+			polishFindings:
+				"Suplementacja B12 poprawia funkcję poznawczą u osób z niedoborem",
 			evidenceLevel: "STRONG",
 			lastUpdated: "2024-01-15T00:00:00Z",
 			pubmedId: "32023984",
@@ -306,8 +341,10 @@ export const vitaminB12Profile: SupplementWithRelations = {
 		},
 		{
 			id: "stabler-2013",
-			title: "Vitamin B12 deficiency: A common cause of neuropsychiatric disorders",
-			polishTitle: "Niedobór witaminy B12: powszechna przyczyna zaburzeń neuropsychiatrycznych",
+			title:
+				"Vitamin B12 deficiency: A common cause of neuropsychiatric disorders",
+			polishTitle:
+				"Niedobór witaminy B12: powszechna przyczyna zaburzeń neuropsychiatrycznych",
 			authors: ["Stabler SP"],
 			journal: "New England Journal of Medicine",
 			year: 2013,
@@ -315,7 +352,8 @@ export const vitaminB12Profile: SupplementWithRelations = {
 			primaryOutcome: "Neurological manifestations of B12 deficiency",
 			polishPrimaryOutcome: "Objawy neurologiczne niedoboru B12",
 			findings: "B12 deficiency commonly presents with neurological symptoms",
-			polishFindings: "Niedobór B12 często objawia się objawami neurologicznymi",
+			polishFindings:
+				"Niedobór B12 często objawia się objawami neurologicznymi",
 			evidenceLevel: "STRONG",
 			lastUpdated: "2024-01-15T00:00:00Z",
 			pubmedId: "23301732",

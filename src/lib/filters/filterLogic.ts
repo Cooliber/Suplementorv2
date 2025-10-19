@@ -16,7 +16,7 @@ export interface FilterMatch {
 // Main filter function
 export function filterSupplements(
 	supplements: SupplementWithRelations[],
-	filters: FilterState
+	filters: FilterState,
 ): SupplementWithRelations[] {
 	if (!supplements.length) return [];
 
@@ -39,15 +39,15 @@ export function filterSupplements(
 // Text search with relevance scoring
 function applyTextSearch(
 	supplements: SupplementWithRelations[],
-	filters: FilterState
+	filters: FilterState,
 ): SupplementWithRelations[] {
 	if (!filters.query.trim()) return supplements;
 
 	const query = filters.query.toLowerCase().trim();
-	const terms = query.split(/\s+/).filter(term => term.length > 0);
+	const terms = query.split(/\s+/).filter((term) => term.length > 0);
 
 	return supplements
-		.map(supplement => {
+		.map((supplement) => {
 			const match = calculateTextMatch(supplement, terms);
 			return { supplement, match };
 		})
@@ -59,7 +59,7 @@ function applyTextSearch(
 // Calculate text match with relevance scoring
 function calculateTextMatch(
 	supplement: SupplementWithRelations,
-	terms: string[]
+	terms: string[],
 ): FilterMatch {
 	let score = 0;
 	const reasons: string[] = [];
@@ -68,13 +68,37 @@ function calculateTextMatch(
 	const fields = [
 		{ value: supplement.name, weight: 10, name: "nazwa" },
 		{ value: supplement.polishName, weight: 10, name: "nazwa polska" },
-		{ value: supplement.scientificName || "", weight: 8, name: "nazwa naukowa" },
+		{
+			value: supplement.scientificName || "",
+			weight: 8,
+			name: "nazwa naukowa",
+		},
 		{ value: supplement.description || "", weight: 3, name: "opis" },
-		{ value: supplement.polishDescription || "", weight: 3, name: "opis polski" },
-		{ value: supplement.commonNames.join(" "), weight: 5, name: "nazwy potoczne" },
-		{ value: supplement.polishCommonNames.join(" "), weight: 5, name: "nazwy polskie" },
-		{ value: supplement.activeCompounds.map(c => c.name).join(" "), weight: 6, name: "substancje czynne" },
-		{ value: supplement.clinicalApplications.map(c => c.condition).join(" "), weight: 4, name: "zastosowania" },
+		{
+			value: supplement.polishDescription || "",
+			weight: 3,
+			name: "opis polski",
+		},
+		{
+			value: supplement.commonNames.join(" "),
+			weight: 5,
+			name: "nazwy potoczne",
+		},
+		{
+			value: supplement.polishCommonNames.join(" "),
+			weight: 5,
+			name: "nazwy polskie",
+		},
+		{
+			value: supplement.activeCompounds.map((c) => c.name).join(" "),
+			weight: 6,
+			name: "substancje czynne",
+		},
+		{
+			value: supplement.clinicalApplications.map((c) => c.condition).join(" "),
+			weight: 4,
+			name: "zastosowania",
+		},
 		{ value: supplement.tags.join(" "), weight: 7, name: "tagi" },
 	];
 
@@ -115,33 +139,33 @@ function calculateTextMatch(
 // Category filters
 function applyCategoryFilters(
 	supplements: SupplementWithRelations[],
-	filters: FilterState
+	filters: FilterState,
 ): SupplementWithRelations[] {
 	if (filters.categories.length === 0) return supplements;
 
-	return supplements.filter(supplement =>
-		filters.categories.includes(supplement.category)
+	return supplements.filter((supplement) =>
+		filters.categories.includes(supplement.category),
 	);
 }
 
 // Evidence level filters
 function applyEvidenceFilters(
 	supplements: SupplementWithRelations[],
-	filters: FilterState
+	filters: FilterState,
 ): SupplementWithRelations[] {
 	if (filters.evidenceLevels.length === 0) return supplements;
 
-	return supplements.filter(supplement =>
-		filters.evidenceLevels.includes(supplement.evidenceLevel)
+	return supplements.filter((supplement) =>
+		filters.evidenceLevels.includes(supplement.evidenceLevel),
 	);
 }
 
 // Range filters
 function applyRangeFilters(
 	supplements: SupplementWithRelations[],
-	filters: FilterState
+	filters: FilterState,
 ): SupplementWithRelations[] {
-	let filtered = supplements;
+	const filtered = supplements;
 
 	// Note: Price, dosage, and rating filters would need to be implemented
 	// based on actual data structure. For now, we'll pass through.
@@ -153,66 +177,70 @@ function applyRangeFilters(
 // Multi-select filters
 function applyMultiSelectFilters(
 	supplements: SupplementWithRelations[],
-	filters: FilterState
+	filters: FilterState,
 ): SupplementWithRelations[] {
 	let filtered = supplements;
 
 	// Active compounds filter
 	if (filters.activeCompounds.length > 0) {
-		filtered = filtered.filter(supplement =>
-			filters.activeCompounds.some(compound =>
-				supplement.activeCompounds.some(ac =>
-					ac.name.toLowerCase().includes(compound.toLowerCase())
-				)
-			)
+		filtered = filtered.filter((supplement) =>
+			filters.activeCompounds.some((compound) =>
+				supplement.activeCompounds.some((ac) =>
+					ac.name.toLowerCase().includes(compound.toLowerCase()),
+				),
+			),
 		);
 	}
 
 	// Clinical conditions filter
 	if (filters.clinicalConditions.length > 0) {
-		filtered = filtered.filter(supplement =>
-			filters.clinicalConditions.some(condition =>
-				supplement.clinicalApplications.some(ca =>
-					ca.condition.toLowerCase().includes(condition.toLowerCase()) ||
-					ca.polishCondition.toLowerCase().includes(condition.toLowerCase())
-				)
-			)
+		filtered = filtered.filter((supplement) =>
+			filters.clinicalConditions.some((condition) =>
+				supplement.clinicalApplications.some(
+					(ca) =>
+						ca.condition.toLowerCase().includes(condition.toLowerCase()) ||
+						ca.polishCondition.toLowerCase().includes(condition.toLowerCase()),
+				),
+			),
 		);
 	}
 
 	// Mechanisms filter
 	if (filters.mechanisms.length > 0) {
-		filtered = filtered.filter(supplement =>
-			filters.mechanisms.some(mechanism =>
-				supplement.mechanisms.some(m =>
-					m.pathway.toLowerCase().includes(mechanism.toLowerCase()) ||
-					m.polishPathway.toLowerCase().includes(mechanism.toLowerCase()) ||
-					m.description.toLowerCase().includes(mechanism.toLowerCase())
-				)
-			)
+		filtered = filtered.filter((supplement) =>
+			filters.mechanisms.some((mechanism) =>
+				supplement.mechanisms.some(
+					(m) =>
+						m.pathway.toLowerCase().includes(mechanism.toLowerCase()) ||
+						m.polishPathway.toLowerCase().includes(mechanism.toLowerCase()) ||
+						m.description.toLowerCase().includes(mechanism.toLowerCase()),
+				),
+			),
 		);
 	}
 
 	// Side effects filter (inverse - exclude supplements with these side effects)
 	if (filters.sideEffects.length > 0) {
-		filtered = filtered.filter(supplement =>
-			!filters.sideEffects.some(sideEffect =>
-				supplement.sideEffects.some(se =>
-					se.effect.toLowerCase().includes(sideEffect.toLowerCase()) ||
-					se.polishEffect.toLowerCase().includes(sideEffect.toLowerCase())
-				)
-			)
+		filtered = filtered.filter(
+			(supplement) =>
+				!filters.sideEffects.some((sideEffect) =>
+					supplement.sideEffects.some(
+						(se) =>
+							se.effect.toLowerCase().includes(sideEffect.toLowerCase()) ||
+							se.polishEffect.toLowerCase().includes(sideEffect.toLowerCase()),
+					),
+				),
 		);
 	}
 
 	// Tags filter
 	if (filters.tags.length > 0) {
-		filtered = filtered.filter(supplement =>
-			filters.tags.some(tag =>
-				supplement.tags.some(supplementTag =>
-					supplementTag.toLowerCase().includes(tag.toLowerCase())
-				)
-			)
+		filtered = filtered.filter((supplement) =>
+			filters.tags.some((tag) =>
+				supplement.tags.some((supplementTag) =>
+					supplementTag.toLowerCase().includes(tag.toLowerCase()),
+				),
+			),
 		);
 	}
 
@@ -222,28 +250,28 @@ function applyMultiSelectFilters(
 // Boolean filters
 function applyBooleanFilters(
 	supplements: SupplementWithRelations[],
-	filters: FilterState
+	filters: FilterState,
 ): SupplementWithRelations[] {
 	let filtered = supplements;
 
 	// Has studies filter
 	if (filters.hasStudies) {
-		filtered = filtered.filter(supplement =>
-			supplement.researchStudies.length > 0
+		filtered = filtered.filter(
+			(supplement) => supplement.researchStudies.length > 0,
 		);
 	}
 
 	// Has reviews filter (would need review data)
 	if (filters.hasReviews) {
 		// This would need to be implemented based on actual review data
-		filtered = filtered.filter(supplement => true); // Placeholder
+		filtered = filtered.filter((supplement) => true); // Placeholder
 	}
 
 	// Only natural supplements
 	if (filters.onlyNatural) {
 		const naturalCategories = ["HERB", "ADAPTOGEN"];
-		filtered = filtered.filter(supplement =>
-			naturalCategories.includes(supplement.category)
+		filtered = filtered.filter((supplement) =>
+			naturalCategories.includes(supplement.category),
 		);
 	}
 
@@ -253,7 +281,7 @@ function applyBooleanFilters(
 // Sorting function
 function applySorting(
 	supplements: SupplementWithRelations[],
-	filters: FilterState
+	filters: FilterState,
 ): SupplementWithRelations[] {
 	if (filters.sortBy === "relevance") {
 		// Already sorted by relevance in text search
@@ -261,7 +289,8 @@ function applySorting(
 	}
 
 	return [...supplements].sort((a, b) => {
-		let aValue: any, bValue: any;
+		let aValue: any;
+		let bValue: any;
 
 		switch (filters.sortBy) {
 			case "name":
@@ -321,11 +350,11 @@ function applySorting(
 // Helper function to convert evidence level to numeric value
 function getEvidenceLevelValue(level: string): number {
 	const levels = {
-		"STRONG": 5,
-		"MODERATE": 4,
-		"WEAK": 3,
-		"INSUFFICIENT": 2,
-		"CONFLICTING": 1,
+		STRONG: 5,
+		MODERATE: 4,
+		WEAK: 3,
+		INSUFFICIENT: 2,
+		CONFLICTING: 1,
 	};
 	return levels[level as keyof typeof levels] || 0;
 }
@@ -344,10 +373,14 @@ export function analyzeFilters(filters: FilterState): {
 	if (filters.query) complexity += 3;
 	if (filters.categories.length > 0) complexity += 1;
 	if (filters.evidenceLevels.length > 0) complexity += 1;
-	if (filters.priceRange[0] !== 0 || filters.priceRange[1] !== 1000) complexity += 2;
-	if (filters.dosageRange[0] !== 0 || filters.dosageRange[1] !== 5000) complexity += 2;
-	if (filters.ratingRange[0] !== 0 || filters.ratingRange[1] !== 5) complexity += 2;
-	if (filters.safetyRating[0] !== 0 || filters.safetyRating[1] !== 10) complexity += 2;
+	if (filters.priceRange[0] !== 0 || filters.priceRange[1] !== 1000)
+		complexity += 2;
+	if (filters.dosageRange[0] !== 0 || filters.dosageRange[1] !== 5000)
+		complexity += 2;
+	if (filters.ratingRange[0] !== 0 || filters.ratingRange[1] !== 5)
+		complexity += 2;
+	if (filters.safetyRating[0] !== 0 || filters.safetyRating[1] !== 10)
+		complexity += 2;
 	if (filters.activeCompounds.length > 0) complexity += 2;
 	if (filters.clinicalConditions.length > 0) complexity += 2;
 	if (filters.mechanisms.length > 0) complexity += 2;
@@ -375,7 +408,9 @@ export function analyzeFilters(filters: FilterState): {
 		recommendations.push("Rozważ użycie mniej filtrów dla lepszej wydajności");
 	}
 	if (filters.query && filters.query.length < 3) {
-		recommendations.push("Użyj dłuższego zapytania wyszukiwania dla lepszych wyników");
+		recommendations.push(
+			"Użyj dłuższego zapytania wyszukiwania dla lepszych wyników",
+		);
 	}
 	if (filters.categories.length > 5) {
 		recommendations.push("Rozważ wybór mniejszej liczby kategorii");
@@ -397,27 +432,27 @@ export function extractFilterOptions(supplements: SupplementWithRelations[]) {
 	const sideEffects = new Set<string>();
 	const tags = new Set<string>();
 
-	supplements.forEach(supplement => {
-		supplement.activeCompounds.forEach(compound => {
+	supplements.forEach((supplement) => {
+		supplement.activeCompounds.forEach((compound) => {
 			compounds.add(compound.name);
 		});
 
-		supplement.clinicalApplications.forEach(app => {
+		supplement.clinicalApplications.forEach((app) => {
 			conditions.add(app.condition);
 			if (app.polishCondition) conditions.add(app.polishCondition);
 		});
 
-		supplement.mechanisms.forEach(mechanism => {
+		supplement.mechanisms.forEach((mechanism) => {
 			mechanisms.add(mechanism.pathway);
 			if (mechanism.polishPathway) mechanisms.add(mechanism.polishPathway);
 		});
 
-		supplement.sideEffects.forEach(effect => {
+		supplement.sideEffects.forEach((effect) => {
 			sideEffects.add(effect.effect);
 			if (effect.polishEffect) sideEffects.add(effect.polishEffect);
 		});
 
-		supplement.tags.forEach(tag => {
+		supplement.tags.forEach((tag) => {
 			tags.add(tag);
 		});
 	});

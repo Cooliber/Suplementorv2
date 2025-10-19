@@ -13,9 +13,9 @@ import type { EvidenceLevel, SupplementCategory } from "@/types/supplement";
 import { Grid, List, Search, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 
+import { SkeletonGrid } from "@/components/loading/SkeletonCard";
 import { CompactSupplementCard } from "./CompactSupplementCard";
 import { EnhancedSupplementCard } from "./EnhancedSupplementCard";
-import { SkeletonGrid } from "@/components/loading/SkeletonCard";
 
 interface Supplement {
 	id: string;
@@ -67,7 +67,8 @@ export function SupplementGrid({
 }: SupplementGridProps) {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedCategory, setSelectedCategory] = useState<string>("all");
-	const [selectedEvidenceLevel, setSelectedEvidenceLevel] = useState<string>("all");
+	const [selectedEvidenceLevel, setSelectedEvidenceLevel] =
+		useState<string>("all");
 	const [sortBy, setSortBy] = useState<string>("name");
 	const [viewMode, setViewMode] = useState<"grid" | "list">(defaultViewMode);
 
@@ -75,12 +76,19 @@ export function SupplementGrid({
 	const filteredSupplements = supplements
 		.filter((supplement) => {
 			const matchesSearch =
-				supplement.polishName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				supplement.polishName
+					.toLowerCase()
+					.includes(searchQuery.toLowerCase()) ||
 				supplement.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				supplement.polishDescription.toLowerCase().includes(searchQuery.toLowerCase());
+				supplement.polishDescription
+					.toLowerCase()
+					.includes(searchQuery.toLowerCase());
 
-			const matchesCategory = selectedCategory === "all" || supplement.category === selectedCategory;
-			const matchesEvidence = selectedEvidenceLevel === "all" || supplement.evidenceLevel === selectedEvidenceLevel;
+			const matchesCategory =
+				selectedCategory === "all" || supplement.category === selectedCategory;
+			const matchesEvidence =
+				selectedEvidenceLevel === "all" ||
+				supplement.evidenceLevel === selectedEvidenceLevel;
 
 			return matchesSearch && matchesCategory && matchesEvidence;
 		})
@@ -88,9 +96,18 @@ export function SupplementGrid({
 			switch (sortBy) {
 				case "name":
 					return a.polishName.localeCompare(b.polishName);
-				case "evidence":
-					const evidenceOrder = { STRONG: 4, MODERATE: 3, WEAK: 2, INSUFFICIENT: 1, CONFLICTING: 0 };
-					return evidenceOrder[b.evidenceLevel] - evidenceOrder[a.evidenceLevel];
+				case "evidence": {
+					const evidenceOrder = {
+						STRONG: 4,
+						MODERATE: 3,
+						WEAK: 2,
+						INSUFFICIENT: 1,
+						CONFLICTING: 0,
+					};
+					return (
+						evidenceOrder[b.evidenceLevel] - evidenceOrder[a.evidenceLevel]
+					);
+				}
 				case "safety":
 					return b.safetyRating - a.safetyRating;
 				case "rating":
@@ -163,7 +180,7 @@ export function SupplementGrid({
 					{/* Search Bar */}
 					{showSearch && (
 						<div className="relative">
-							<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+							<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
 							<Input
 								placeholder="Szukaj suplementów..."
 								value={searchQuery}
@@ -178,10 +195,13 @@ export function SupplementGrid({
 						<div className="flex flex-wrap items-center gap-4">
 							<div className="flex items-center gap-2">
 								<SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
-								<span className="text-sm font-medium">Filtry:</span>
+								<span className="font-medium text-sm">Filtry:</span>
 							</div>
 
-							<Select value={selectedCategory} onValueChange={setSelectedCategory}>
+							<Select
+								value={selectedCategory}
+								onValueChange={setSelectedCategory}
+							>
 								<SelectTrigger className="w-40">
 									<SelectValue placeholder="Kategoria" />
 								</SelectTrigger>
@@ -195,7 +215,10 @@ export function SupplementGrid({
 								</SelectContent>
 							</Select>
 
-							<Select value={selectedEvidenceLevel} onValueChange={setSelectedEvidenceLevel}>
+							<Select
+								value={selectedEvidenceLevel}
+								onValueChange={setSelectedEvidenceLevel}
+							>
 								<SelectTrigger className="w-40">
 									<SelectValue placeholder="Poziom dowodów" />
 								</SelectTrigger>
@@ -250,14 +273,14 @@ export function SupplementGrid({
 
 			{/* Results Info */}
 			<div className="flex items-center justify-between">
-				<p className="text-sm text-muted-foreground">
+				<p className="text-muted-foreground text-sm">
 					Znaleziono {filteredSupplements.length} suplementów
-					{searchQuery && (
-						<span> dla zapytania "{searchQuery}"</span>
-					)}
+					{searchQuery && <span> dla zapytania "{searchQuery}"</span>}
 				</p>
 
-				{(searchQuery || selectedCategory !== "all" || selectedEvidenceLevel !== "all") && (
+				{(searchQuery ||
+					selectedCategory !== "all" ||
+					selectedEvidenceLevel !== "all") && (
 					<Button
 						variant="ghost"
 						size="sm"
@@ -282,9 +305,10 @@ export function SupplementGrid({
 					}
 				>
 					{filteredSupplements.map((supplement) => {
-						const CardComponent = compactCards || viewMode === "list"
-							? CompactSupplementCard
-							: EnhancedSupplementCard;
+						const CardComponent =
+							compactCards || viewMode === "list"
+								? CompactSupplementCard
+								: EnhancedSupplementCard;
 
 						return (
 							<CardComponent
@@ -304,8 +328,8 @@ export function SupplementGrid({
 					<Search className="mb-4 h-12 w-12 text-muted-foreground opacity-50" />
 					<h3 className="mb-2 font-semibold text-lg">Brak suplementów</h3>
 					<p className="max-w-md text-muted-foreground">
-						Nie znaleziono suplementów spełniających wybrane kryteria.
-						Spróbuj zmienić filtry wyszukiwania.
+						Nie znaleziono suplementów spełniających wybrane kryteria. Spróbuj
+						zmienić filtry wyszukiwania.
 					</p>
 				</div>
 			)}

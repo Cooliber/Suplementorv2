@@ -3,28 +3,28 @@
  * Evidence-based quest system to encourage consistent learning
  */
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-	Target,
-	Calendar,
-	Clock,
-	Star,
-	CheckCircle,
-	Play,
-	RefreshCw,
-	Trophy,
-	BookOpen,
-	Users,
-	Brain,
-} from "lucide-react";
 import { useSupplementGamificationStore } from "@/lib/stores/supplement-gamification-store";
 import type { SupplementQuest } from "@/lib/stores/supplement-gamification-store";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+	BookOpen,
+	Brain,
+	Calendar,
+	CheckCircle,
+	Clock,
+	Play,
+	RefreshCw,
+	Star,
+	Target,
+	Trophy,
+	Users,
+} from "lucide-react";
+import React, { useState, useEffect } from "react";
 
 interface QuestCardProps {
 	quest: SupplementQuest;
@@ -35,14 +35,20 @@ interface QuestCardProps {
 function QuestCard({ quest, onStart, isActive }: QuestCardProps) {
 	const progress = quest.progress || 0;
 	const isCompleted = quest.completed;
-	const timeLeft = quest.timeLimit ? Math.max(0, quest.timeLimit - (Date.now() / (1000 * 60 * 60))) : null;
+	const timeLeft = quest.timeLimit
+		? Math.max(0, quest.timeLimit - Date.now() / (1000 * 60 * 60))
+		: null;
 
 	const getQuestIcon = (category: string) => {
 		switch (category) {
-			case "learning": return <BookOpen className="h-4 w-4" />;
-			case "social": return <Users className="h-4 w-4" />;
-			case "exploration": return <Brain className="h-4 w-4" />;
-			default: return <Target className="h-4 w-4" />;
+			case "learning":
+				return <BookOpen className="h-4 w-4" />;
+			case "social":
+				return <Users className="h-4 w-4" />;
+			case "exploration":
+				return <Brain className="h-4 w-4" />;
+			default:
+				return <Target className="h-4 w-4" />;
 		}
 	};
 
@@ -59,7 +65,9 @@ function QuestCard({ quest, onStart, isActive }: QuestCardProps) {
 			whileHover={{ scale: 1.02 }}
 			className="h-full"
 		>
-			<Card className={`h-full transition-all duration-200 ${isCompleted ? "ring-2 ring-green-200" : ""}`}>
+			<Card
+				className={`h-full transition-all duration-200 ${isCompleted ? "ring-2 ring-green-200" : ""}`}
+			>
 				<CardHeader className="pb-3">
 					<div className="flex items-start justify-between">
 						<div className="flex items-center gap-2">
@@ -67,17 +75,15 @@ function QuestCard({ quest, onStart, isActive }: QuestCardProps) {
 							<CardTitle className="text-lg">{quest.title}</CardTitle>
 						</div>
 						<div className="flex items-center gap-2">
-							<Badge className={getDifficultyColor(quest)}>
-								{quest.type}
-							</Badge>
-							{isCompleted && <CheckCircle className="h-5 w-5 text-green-600" />}
+							<Badge className={getDifficultyColor(quest)}>{quest.type}</Badge>
+							{isCompleted && (
+								<CheckCircle className="h-5 w-5 text-green-600" />
+							)}
 						</div>
 					</div>
 				</CardHeader>
 				<CardContent className="space-y-4">
-					<p className="text-sm text-muted-foreground">
-						{quest.description}
-					</p>
+					<p className="text-muted-foreground text-sm">{quest.description}</p>
 
 					<div className="space-y-2">
 						<div className="flex justify-between text-sm">
@@ -89,8 +95,16 @@ function QuestCard({ quest, onStart, isActive }: QuestCardProps) {
 
 					{quest.requirements.map((req, index) => (
 						<div key={index} className="flex items-center gap-2 text-sm">
-							<div className={`w-2 h-2 rounded-full ${req.current >= req.target ? "bg-green-500" : "bg-gray-300"}`} />
-							<span className={req.current >= req.target ? "line-through text-muted-foreground" : ""}>
+							<div
+								className={`h-2 w-2 rounded-full ${req.current >= req.target ? "bg-green-500" : "bg-gray-300"}`}
+							/>
+							<span
+								className={
+									req.current >= req.target
+										? "text-muted-foreground line-through"
+										: ""
+								}
+							>
 								{req.description} ({req.current}/{req.target})
 							</span>
 						</div>
@@ -103,7 +117,7 @@ function QuestCard({ quest, onStart, isActive }: QuestCardProps) {
 						</div>
 
 						{timeLeft !== null && (
-							<div className="flex items-center gap-1 text-sm text-muted-foreground">
+							<div className="flex items-center gap-1 text-muted-foreground text-sm">
 								<Clock className="h-3 w-3" />
 								{timeLeft > 0 ? `${Math.round(timeLeft)}h left` : "Expired"}
 							</div>
@@ -131,7 +145,7 @@ function QuestCard({ quest, onStart, isActive }: QuestCardProps) {
 					)}
 
 					{isCompleted && quest.completedAt && (
-						<div className="text-center text-sm text-green-600">
+						<div className="text-center text-green-600 text-sm">
 							Completed {new Date(quest.completedAt).toLocaleDateString()}
 						</div>
 					)}
@@ -152,11 +166,13 @@ export function QuestSystem() {
 	} = useSupplementGamificationStore();
 
 	const [activeTab, setActiveTab] = useState("active");
-	const [selectedQuest, setSelectedQuest] = useState<SupplementQuest | null>(null);
+	const [selectedQuest, setSelectedQuest] = useState<SupplementQuest | null>(
+		null,
+	);
 
-	const dailyQuests = activeQuests.filter(q => q.type === "daily");
-	const weeklyQuests = activeQuests.filter(q => q.type === "weekly");
-	const completedQuestObjects = activeQuests.filter(q => q.completed);
+	const dailyQuests = activeQuests.filter((q) => q.type === "daily");
+	const weeklyQuests = activeQuests.filter((q) => q.type === "weekly");
+	const completedQuestObjects = activeQuests.filter((q) => q.completed);
 
 	const handleStartQuest = (quest: SupplementQuest) => {
 		startQuest(quest);
@@ -168,24 +184,26 @@ export function QuestSystem() {
 			case "complete":
 				completeQuest(quest.id);
 				break;
-			case "progress":
+			case "progress": {
 				// Simulate progress update (in real app, this would come from user actions)
 				const currentProgress = quest.progress || 0;
 				updateQuestProgress(quest.id, Math.min(100, currentProgress + 25));
 				break;
+			}
 		}
 	};
 
 	return (
-		<div className="w-full max-w-6xl mx-auto space-y-6">
+		<div className="mx-auto w-full max-w-6xl space-y-6">
 			{/* Header */}
-			<div className="text-center space-y-2">
-				<h2 className="text-3xl font-bold flex items-center justify-center gap-2">
+			<div className="space-y-2 text-center">
+				<h2 className="flex items-center justify-center gap-2 font-bold text-3xl">
 					<Target className="h-8 w-8 text-primary" />
 					Quest System
 				</h2>
 				<p className="text-muted-foreground">
-					Complete evidence-based quests to accelerate your supplement learning journey
+					Complete evidence-based quests to accelerate your supplement learning
+					journey
 				</p>
 				<div className="flex items-center justify-center gap-2">
 					<Star className="h-5 w-5 text-yellow-500" />
@@ -194,29 +212,35 @@ export function QuestSystem() {
 			</div>
 
 			{/* Quest Stats */}
-			<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-4">
 				<Card>
 					<CardContent className="p-4 text-center">
-						<div className="text-2xl font-bold text-primary">{dailyQuests.length}</div>
-						<div className="text-sm text-muted-foreground">Daily Quests</div>
+						<div className="font-bold text-2xl text-primary">
+							{dailyQuests.length}
+						</div>
+						<div className="text-muted-foreground text-sm">Daily Quests</div>
 					</CardContent>
 				</Card>
 				<Card>
 					<CardContent className="p-4 text-center">
-						<div className="text-2xl font-bold text-primary">{weeklyQuests.length}</div>
-						<div className="text-sm text-muted-foreground">Weekly Quests</div>
+						<div className="font-bold text-2xl text-primary">
+							{weeklyQuests.length}
+						</div>
+						<div className="text-muted-foreground text-sm">Weekly Quests</div>
 					</CardContent>
 				</Card>
 				<Card>
 					<CardContent className="p-4 text-center">
-						<div className="text-2xl font-bold text-primary">{completedQuestObjects.length}</div>
-						<div className="text-sm text-muted-foreground">Completed</div>
+						<div className="font-bold text-2xl text-primary">
+							{completedQuestObjects.length}
+						</div>
+						<div className="text-muted-foreground text-sm">Completed</div>
 					</CardContent>
 				</Card>
 				<Card>
 					<CardContent className="p-4 text-center">
-						<div className="text-2xl font-bold text-primary">{questPoints}</div>
-						<div className="text-sm text-muted-foreground">Total XP</div>
+						<div className="font-bold text-2xl text-primary">{questPoints}</div>
+						<div className="text-muted-foreground text-sm">Total XP</div>
 					</CardContent>
 				</Card>
 			</div>
@@ -226,7 +250,7 @@ export function QuestSystem() {
 				<TabsList className="grid w-full grid-cols-3">
 					<TabsTrigger value="active" className="gap-2">
 						<Play className="h-4 w-4" />
-						Active ({activeQuests.filter(q => !q.completed).length})
+						Active ({activeQuests.filter((q) => !q.completed).length})
 					</TabsTrigger>
 					<TabsTrigger value="completed" className="gap-2">
 						<CheckCircle className="h-4 w-4" />
@@ -241,11 +265,11 @@ export function QuestSystem() {
 				<TabsContent value="active" className="space-y-6">
 					{dailyQuests.length > 0 && (
 						<div className="space-y-4">
-							<h3 className="text-xl font-semibold flex items-center gap-2">
+							<h3 className="flex items-center gap-2 font-semibold text-xl">
 								<Calendar className="h-5 w-5 text-blue-500" />
 								Daily Quests
 							</h3>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								{dailyQuests.map((quest) => (
 									<QuestCard
 										key={quest.id}
@@ -260,11 +284,11 @@ export function QuestSystem() {
 
 					{weeklyQuests.length > 0 && (
 						<div className="space-y-4">
-							<h3 className="text-xl font-semibold flex items-center gap-2">
+							<h3 className="flex items-center gap-2 font-semibold text-xl">
 								<Calendar className="h-5 w-5 text-purple-500" />
 								Weekly Quests
 							</h3>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								{weeklyQuests.map((quest) => (
 									<QuestCard
 										key={quest.id}
@@ -277,11 +301,11 @@ export function QuestSystem() {
 						</div>
 					)}
 
-					{activeQuests.filter(q => !q.completed).length === 0 && (
+					{activeQuests.filter((q) => !q.completed).length === 0 && (
 						<Card>
-							<CardContent className="text-center py-8">
-								<Target className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-								<h3 className="text-lg font-medium mb-2">No Active Quests</h3>
+							<CardContent className="py-8 text-center">
+								<Target className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+								<h3 className="mb-2 font-medium text-lg">No Active Quests</h3>
 								<p className="text-muted-foreground">
 									Complete your current quests to unlock new challenges!
 								</p>
@@ -292,16 +316,18 @@ export function QuestSystem() {
 
 				<TabsContent value="completed" className="space-y-6">
 					{completedQuestObjects.length > 0 ? (
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 							{completedQuestObjects.map((quest) => (
 								<QuestCard key={quest.id} quest={quest} />
 							))}
 						</div>
 					) : (
 						<Card>
-							<CardContent className="text-center py-8">
-								<CheckCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-								<h3 className="text-lg font-medium mb-2">No Completed Quests</h3>
+							<CardContent className="py-8 text-center">
+								<CheckCircle className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+								<h3 className="mb-2 font-medium text-lg">
+									No Completed Quests
+								</h3>
 								<p className="text-muted-foreground">
 									Complete your first quest to see it here!
 								</p>
@@ -311,7 +337,7 @@ export function QuestSystem() {
 				</TabsContent>
 
 				<TabsContent value="rewards" className="space-y-6">
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 						<Card>
 							<CardHeader>
 								<CardTitle className="flex items-center gap-2">
@@ -320,11 +346,13 @@ export function QuestSystem() {
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<p className="text-sm text-muted-foreground mb-4">
+								<p className="mb-4 text-muted-foreground text-sm">
 									Complete 50 quests to unlock this achievement
 								</p>
-								<Progress value={Math.min((completedQuests.length / 50) * 100, 100)} />
-								<p className="text-xs text-muted-foreground mt-2">
+								<Progress
+									value={Math.min((completedQuests.length / 50) * 100, 100)}
+								/>
+								<p className="mt-2 text-muted-foreground text-xs">
 									{completedQuests.length}/50 completed
 								</p>
 							</CardContent>
@@ -338,11 +366,11 @@ export function QuestSystem() {
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<p className="text-sm text-muted-foreground mb-4">
+								<p className="mb-4 text-muted-foreground text-sm">
 									Complete daily quests for 30 consecutive days
 								</p>
 								<Progress value={Math.min((questPoints / 1000) * 100, 100)} />
-								<p className="text-xs text-muted-foreground mt-2">
+								<p className="mt-2 text-muted-foreground text-xs">
 									{questPoints}/1000 XP from quests
 								</p>
 							</CardContent>
@@ -356,11 +384,11 @@ export function QuestSystem() {
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<p className="text-sm text-muted-foreground mb-4">
+								<p className="mb-4 text-muted-foreground text-sm">
 									Complete all quest types with perfect scores
 								</p>
 								<Progress value={Math.min((questPoints / 500) * 100, 100)} />
-								<p className="text-xs text-muted-foreground mt-2">
+								<p className="mt-2 text-muted-foreground text-xs">
 									{questPoints}/500 XP from perfect quests
 								</p>
 							</CardContent>
@@ -396,8 +424,9 @@ export function QuestSystem() {
 								Mark Complete
 							</Button>
 						</div>
-						<p className="text-sm text-muted-foreground">
-							Complete the quest requirements to earn {selectedQuest.xpReward} XP!
+						<p className="text-muted-foreground text-sm">
+							Complete the quest requirements to earn {selectedQuest.xpReward}{" "}
+							XP!
 						</p>
 					</CardContent>
 				</Card>

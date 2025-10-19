@@ -1,12 +1,31 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Brain, FlaskConical, Zap, Activity, ArrowRight } from "lucide-react";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import {
+	Activity,
+	ArrowRight,
+	BookOpen,
+	Brain,
+	FlaskConical,
+	Zap,
+} from "lucide-react";
 import Link from "next/link";
 
-export type ContentType = "educational" | "research" | "mechanism" | "neurotransmitter" | "brain-region" | "history";
+export type ContentType =
+	| "educational"
+	| "research"
+	| "mechanism"
+	| "neurotransmitter"
+	| "brain-region"
+	| "history";
 
 export interface RelatedContentItem {
 	id: string;
@@ -20,7 +39,12 @@ export interface RelatedContentItem {
 	polishTags?: string[];
 	metadata?: {
 		difficulty?: "beginner" | "intermediate" | "expert";
-		evidenceLevel?: "STRONG" | "MODERATE" | "WEAK" | "INSUFFICIENT" | "CONFLICTING";
+		evidenceLevel?:
+			| "STRONG"
+			| "MODERATE"
+			| "WEAK"
+			| "INSUFFICIENT"
+			| "CONFLICTING";
 		readTime?: string; // e.g., "5 min"
 		lastUpdated?: Date;
 	};
@@ -36,12 +60,15 @@ export interface RelatedContentProps {
 	className?: string;
 }
 
-const CONTENT_TYPE_CONFIG: Record<ContentType, {
-	icon: React.ComponentType<{ className?: string }>;
-	label: string;
-	color: string;
-	bgColor: string;
-}> = {
+const CONTENT_TYPE_CONFIG: Record<
+	ContentType,
+	{
+		icon: React.ComponentType<{ className?: string }>;
+		label: string;
+		color: string;
+		bgColor: string;
+	}
+> = {
 	educational: {
 		icon: BookOpen,
 		label: "Edukacja",
@@ -82,7 +109,10 @@ const CONTENT_TYPE_CONFIG: Record<ContentType, {
 
 const DIFFICULTY_LABELS = {
 	beginner: { label: "Początkujący", color: "bg-green-100 text-green-800" },
-	intermediate: { label: "Średniozaawansowany", color: "bg-blue-100 text-blue-800" },
+	intermediate: {
+		label: "Średniozaawansowany",
+		color: "bg-blue-100 text-blue-800",
+	},
 	expert: { label: "Ekspert", color: "bg-purple-100 text-purple-800" },
 };
 
@@ -90,7 +120,10 @@ const EVIDENCE_LABELS = {
 	STRONG: { label: "Silne", color: "bg-green-100 text-green-800" },
 	MODERATE: { label: "Umiarkowane", color: "bg-blue-100 text-blue-800" },
 	WEAK: { label: "Słabe", color: "bg-yellow-100 text-yellow-800" },
-	INSUFFICIENT: { label: "Niewystarczające", color: "bg-gray-100 text-gray-800" },
+	INSUFFICIENT: {
+		label: "Niewystarczające",
+		color: "bg-gray-100 text-gray-800",
+	},
 	CONFLICTING: { label: "Sprzeczne", color: "bg-orange-100 text-orange-800" },
 };
 
@@ -129,19 +162,19 @@ export function RelatedContent({
 				{description && <CardDescription>{description}</CardDescription>}
 			</CardHeader>
 			<CardContent className="space-y-4">
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					{displayItems.map((item) => {
 						const config = CONTENT_TYPE_CONFIG[item.type];
 						const Icon = config.icon;
 
 						return (
 							<Link key={item.id} href={item.url}>
-								<Card className="h-full hover:shadow-md transition-shadow cursor-pointer border-2 hover:border-primary">
+								<Card className="h-full cursor-pointer border-2 transition-shadow hover:border-primary hover:shadow-md">
 									<CardHeader className="pb-3">
 										<div className="flex items-start justify-between gap-2">
 											<div className="flex-1">
-												<div className="flex items-center gap-2 mb-2">
-													<div className={`p-1.5 rounded ${config.bgColor}`}>
+												<div className="mb-2 flex items-center gap-2">
+													<div className={`rounded p-1.5 ${config.bgColor}`}>
 														<Icon className={`h-4 w-4 ${config.color}`} />
 													</div>
 													<Badge variant="secondary" className="text-xs">
@@ -157,7 +190,7 @@ export function RelatedContent({
 									<CardContent className="space-y-3">
 										{/* Description */}
 										{item.polishDescription && (
-											<p className="text-sm text-muted-foreground line-clamp-2">
+											<p className="line-clamp-2 text-muted-foreground text-sm">
 												{item.polishDescription}
 											</p>
 										)}
@@ -165,16 +198,16 @@ export function RelatedContent({
 										{/* Metadata Badges */}
 										<div className="flex flex-wrap gap-2">
 											{item.metadata?.difficulty && (
-												<Badge 
-													variant="outline" 
+												<Badge
+													variant="outline"
 													className={`text-xs ${DIFFICULTY_LABELS[item.metadata.difficulty].color}`}
 												>
 													{DIFFICULTY_LABELS[item.metadata.difficulty].label}
 												</Badge>
 											)}
 											{item.metadata?.evidenceLevel && (
-												<Badge 
-													variant="outline" 
+												<Badge
+													variant="outline"
 													className={`text-xs ${EVIDENCE_LABELS[item.metadata.evidenceLevel].color}`}
 												>
 													{EVIDENCE_LABELS[item.metadata.evidenceLevel].label}
@@ -191,7 +224,11 @@ export function RelatedContent({
 										{item.polishTags && item.polishTags.length > 0 && (
 											<div className="flex flex-wrap gap-1">
 												{item.polishTags.slice(0, 3).map((tag, idx) => (
-													<Badge key={idx} variant="secondary" className="text-xs">
+													<Badge
+														key={idx}
+														variant="secondary"
+														className="text-xs"
+													>
 														{tag}
 													</Badge>
 												))}
@@ -204,7 +241,7 @@ export function RelatedContent({
 										)}
 
 										{/* Read More Link */}
-										<div className="flex items-center gap-1 text-xs text-primary font-medium pt-2">
+										<div className="flex items-center gap-1 pt-2 font-medium text-primary text-xs">
 											Czytaj więcej
 											<ArrowRight className="h-3 w-3" />
 										</div>
@@ -217,7 +254,7 @@ export function RelatedContent({
 
 				{/* View All Button */}
 				{(hasMore || showViewAll) && viewAllUrl && (
-					<div className="flex justify-center pt-4 border-t">
+					<div className="flex justify-center border-t pt-4">
 						<Link href={viewAllUrl}>
 							<Button variant="outline">
 								Zobacz wszystkie ({items.length})
@@ -244,7 +281,7 @@ export function createRelatedContentItem(
 	},
 	type: ContentType,
 	url: string,
-	metadata?: RelatedContentItem["metadata"]
+	metadata?: RelatedContentItem["metadata"],
 ): RelatedContentItem {
 	return {
 		id: data.id,
@@ -259,4 +296,3 @@ export function createRelatedContentItem(
 		metadata,
 	};
 }
-

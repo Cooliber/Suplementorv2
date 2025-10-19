@@ -10,10 +10,10 @@ import "dotenv/config";
 import { allSupplementProfiles } from "@/data/supplements";
 import type { SupplementWithRelations } from "@/types/supplement";
 import {
+	CircadianSupplementTiming,
 	ComprehensiveSupplement,
 	KnowledgeNode,
 	KnowledgeRelationship,
-	CircadianSupplementTiming,
 } from "./models";
 import connectToDatabase, { disconnectFromDatabase } from "./mongodb";
 import circadianTimingData from "./seeds/circadian-timing";
@@ -1137,9 +1137,7 @@ async function seedCircadianTiming() {
 			console.log(
 				`      Recommended: ${entry.recommendedSupplements.length} supplements`,
 			);
-			console.log(
-				`      Avoid: ${entry.avoidSupplements.length} supplements`,
-			);
+			console.log(`      Avoid: ${entry.avoidSupplements.length} supplements`);
 		}
 
 		console.log(
@@ -1209,5 +1207,10 @@ async function main() {
 // Always run when executed directly
 main().catch(console.error);
 
-export { seedSupplements, seedKnowledgeGraph, seedCircadianTiming, transformSupplementData };
+export {
+	seedSupplements,
+	seedKnowledgeGraph,
+	seedCircadianTiming,
+	transformSupplementData,
+};
 export default main;

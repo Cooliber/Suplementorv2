@@ -1,0 +1,103 @@
+name: "Suplementor CodeQL Configuration"
+
+disable-default-queries: false
+
+queries:
+  - uses: security-and-quality
+  - uses: security-experimental
+
+paths-ignore:
+  - node_modules
+  - .next
+  - build
+  - dist
+  - coverage
+  - test-results
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.spec.ts"
+  - "**/*.spec.tsx"
+  - "**/__tests__/**"
+  - "**/*.d.ts"
+
+paths:
+  - src
+  - pages
+  - app
+  - components
+  - lib
+  - utils
+
+rules:
+  - id: js/xss-through-dom
+    severity: error
+  - id: js/client-side-unvalidated-url-redirection
+    severity: error
+  - id: js/exposure-of-sensitive-data
+    severity: error
+  - id: js/hardcoded-credentials
+    severity: error
+  - id: js/insecure-randomness
+    severity: warning
+  - id: js/weak-cryptographic-key
+    severity: error
+  - id: js/unsafe-code-execution
+    severity: error
+  - id: js/sql-injection
+    severity: error
+  - id: js/nosql-injection
+    severity: error
+  - id: js/command-line-injection
+    severity: error
+  - id: js/path-injection
+    severity: error
+  - id: js/import-path-traversal
+    severity: error
+  - id: js/overly-large-range
+    severity: warning
+  - id: js/prototype-pollution
+    severity: error
+  - id: js/insecure-url-white-list
+    severity: warning
+  - id: js/unsafe-html-construction
+    severity: error
+  - id: js/unsafe-jquery-plugin
+    severity: error
+  - id: js/information-disclosure-through-error-message
+    severity: warning
+  - id: js/missing-token-validation
+    severity: error
+  - id: js/excessive-data-exposure
+    severity: warning
+  - id: js/missing-rate-limiting
+    severity: warning
+  - id: js/missing-input-validation
+    severity: warning
+  - id: js/potential-file-system-overflow
+    severity: warning
+  - id: js/regex-dos
+    severity: warning
+  - id: js/resource-exhaustion
+    severity: warning
+  - id: js/type-confusion
+    severity: error
+  - id: js/unvalidated-dynamic-method-call
+    severity: error
+  - id: js/unsafe-deserialization
+    severity: error
+  - id: js/zip-bomb
+    severity: error
+
+# Medical app specific rules
+  - id: js/medical-data-exposure
+    pattern: "(patient|medical|health|diagnosis|treatment).*(password|secret|key|token)"
+    message: "Potential exposure of medical data in code"
+    severity: error
+  - id: js/hipaa-violation
+    pattern: "(ssn|social.security|medical.record|patient.id).*(log|console|print)"
+    message: "Potential HIPAA violation - medical data in logs"
+    severity: error
+  - id: js/gdpr-violation
+    pattern: "(email|phone|address|ip).*(store|save|persist).*(no.consent|without.consent)"
+    message: "Potential GDPR violation - personal data stored without consent"
+    severity: error

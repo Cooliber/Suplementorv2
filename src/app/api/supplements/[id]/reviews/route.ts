@@ -10,7 +10,9 @@ import { z } from "zod";
 
 // Request validation schemas
 const GetSupplementReviewsSchema = z.object({
-	status: z.enum(["pending", "approved", "rejected", "flagged"]).default("approved"),
+	status: z
+		.enum(["pending", "approved", "rejected", "flagged"])
+		.default("approved"),
 	page: z.coerce.number().min(1).default(1),
 	limit: z.coerce.number().min(1).max(100).default(20),
 	sortBy: z.enum(["createdAt", "rating", "helpful"]).default("createdAt"),

@@ -8,7 +8,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -33,21 +37,21 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useFilters } from "@/hooks/useFilters";
-import type { SupplementCategory, EvidenceLevel } from "@/types/supplement";
+import type { EvidenceLevel, SupplementCategory } from "@/types/supplement";
 import {
+	Brain,
 	ChevronDown,
 	ChevronUp,
-	Search,
 	Filter,
-	Brain,
 	Heart,
+	Info,
+	Search,
 	Shield,
 	Star,
 	TrendingUp,
 	X,
-	Info,
 } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 
 interface DetailedFilterPopoverProps {
 	children: React.ReactNode;
@@ -68,11 +72,7 @@ export function DetailedFilterPopover({
 	availableTags = [],
 	onFiltersChange,
 }: DetailedFilterPopoverProps) {
-	const {
-		filters,
-		updateFilter,
-		clearFilterSection,
-	} = useFilters();
+	const { filters, updateFilter, clearFilterSection } = useFilters();
 
 	const [searchTerms, setSearchTerms] = useState<Record<string, string>>({
 		compounds: "",
@@ -83,43 +83,66 @@ export function DetailedFilterPopover({
 	});
 
 	const [expandedSections, setExpandedSections] = useState<Set<string>>(
-		new Set(["categories", "evidence"])
+		new Set(["categories", "evidence"]),
 	);
 
 	// Filter options based on search terms
-	const filteredCompounds = useMemo(() =>
-		availableCompounds.filter(compound =>
-			compound.toLowerCase().includes((searchTerms.compounds || "").toLowerCase())
-		).slice(0, 50),
-		[availableCompounds, searchTerms.compounds]
+	const filteredCompounds = useMemo(
+		() =>
+			availableCompounds
+				.filter((compound) =>
+					compound
+						.toLowerCase()
+						.includes((searchTerms.compounds || "").toLowerCase()),
+				)
+				.slice(0, 50),
+		[availableCompounds, searchTerms.compounds],
 	);
 
-	const filteredConditions = useMemo(() =>
-		availableConditions.filter(condition =>
-			condition.toLowerCase().includes((searchTerms.conditions || "").toLowerCase())
-		).slice(0, 50),
-		[availableConditions, searchTerms.conditions]
+	const filteredConditions = useMemo(
+		() =>
+			availableConditions
+				.filter((condition) =>
+					condition
+						.toLowerCase()
+						.includes((searchTerms.conditions || "").toLowerCase()),
+				)
+				.slice(0, 50),
+		[availableConditions, searchTerms.conditions],
 	);
 
-	const filteredMechanisms = useMemo(() =>
-		availableMechanisms.filter(mechanism =>
-			mechanism.toLowerCase().includes((searchTerms.mechanisms || "").toLowerCase())
-		).slice(0, 50),
-		[availableMechanisms, searchTerms.mechanisms]
+	const filteredMechanisms = useMemo(
+		() =>
+			availableMechanisms
+				.filter((mechanism) =>
+					mechanism
+						.toLowerCase()
+						.includes((searchTerms.mechanisms || "").toLowerCase()),
+				)
+				.slice(0, 50),
+		[availableMechanisms, searchTerms.mechanisms],
 	);
 
-	const filteredSideEffects = useMemo(() =>
-		availableSideEffects.filter(effect =>
-			effect.toLowerCase().includes((searchTerms.sideEffects || "").toLowerCase())
-		).slice(0, 50),
-		[availableSideEffects, searchTerms.sideEffects]
+	const filteredSideEffects = useMemo(
+		() =>
+			availableSideEffects
+				.filter((effect) =>
+					effect
+						.toLowerCase()
+						.includes((searchTerms.sideEffects || "").toLowerCase()),
+				)
+				.slice(0, 50),
+		[availableSideEffects, searchTerms.sideEffects],
 	);
 
-	const filteredTags = useMemo(() =>
-		availableTags.filter(tag =>
-			tag.toLowerCase().includes((searchTerms.tags || "").toLowerCase())
-		).slice(0, 50),
-		[availableTags, searchTerms.tags]
+	const filteredTags = useMemo(
+		() =>
+			availableTags
+				.filter((tag) =>
+					tag.toLowerCase().includes((searchTerms.tags || "").toLowerCase()),
+				)
+				.slice(0, 50),
+		[availableTags, searchTerms.tags],
 	);
 
 	// Category and evidence level options
@@ -169,7 +192,7 @@ export function DetailedFilterPopover({
 
 	// Toggle section expansion
 	const toggleSection = (section: string) => {
-		setExpandedSections(prev => {
+		setExpandedSections((prev) => {
 			const newSet = new Set(prev);
 			if (newSet.has(section)) {
 				newSet.delete(section);
@@ -189,12 +212,12 @@ export function DetailedFilterPopover({
 	const handleMultiSelectChange = (
 		filterKey: keyof typeof filters,
 		value: string,
-		checked: boolean
+		checked: boolean,
 	) => {
 		const currentValues = (filters[filterKey] as string[]) || [];
 		const newValues = checked
 			? [...currentValues, value]
-			: currentValues.filter(v => v !== value);
+			: currentValues.filter((v) => v !== value);
 		updateFilter(filterKey, newValues);
 		handleFilterChange();
 	};
@@ -207,14 +230,15 @@ export function DetailedFilterPopover({
 
 	return (
 		<Popover>
-			<PopoverTrigger asChild>
-				{children}
-			</PopoverTrigger>
-			<PopoverContent className="w-[500px] max-h-[80vh] overflow-hidden" align="start">
+			<PopoverTrigger asChild>{children}</PopoverTrigger>
+			<PopoverContent
+				className="max-h-[80vh] w-[500px] overflow-hidden"
+				align="start"
+			>
 				<TooltipProvider>
 					<div className="space-y-4">
 						<div className="flex items-center justify-between">
-							<h3 className="font-semibold flex items-center gap-2">
+							<h3 className="flex items-center gap-2 font-semibold">
 								<Filter className="h-4 w-4" />
 								Szczegółowe filtry
 							</h3>
@@ -228,13 +252,13 @@ export function DetailedFilterPopover({
 							</TabsList>
 
 							{/* Basic Filters Tab */}
-							<TabsContent value="basic" className="space-y-4 mt-4">
+							<TabsContent value="basic" className="mt-4 space-y-4">
 								{/* Categories */}
 								<Collapsible
 									open={expandedSections.has("categories")}
 									onOpenChange={() => toggleSection("categories")}
 								>
-									<CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-muted rounded-md">
+									<CollapsibleTrigger className="flex w-full items-center justify-between rounded-md p-2 hover:bg-muted">
 										<div className="flex items-center gap-2">
 											<Brain className="h-4 w-4" />
 											<span className="font-medium">Kategorie</span>
@@ -265,15 +289,22 @@ export function DetailedFilterPopover({
 											)}
 										</div>
 									</CollapsibleTrigger>
-									<CollapsibleContent className="space-y-2 mt-2">
-										<div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+									<CollapsibleContent className="mt-2 space-y-2">
+										<div className="grid max-h-48 grid-cols-2 gap-2 overflow-y-auto">
 											{categories.map((category) => (
-												<div key={category} className="flex items-center space-x-2">
+												<div
+													key={category}
+													className="flex items-center space-x-2"
+												>
 													<Checkbox
 														id={`category-${category}`}
 														checked={filters.categories.includes(category)}
 														onCheckedChange={(checked) =>
-															handleMultiSelectChange("categories", category, !!checked)
+															handleMultiSelectChange(
+																"categories",
+																category,
+																!!checked,
+															)
 														}
 													/>
 													<Label
@@ -293,7 +324,7 @@ export function DetailedFilterPopover({
 									open={expandedSections.has("evidence")}
 									onOpenChange={() => toggleSection("evidence")}
 								>
-									<CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-muted rounded-md">
+									<CollapsibleTrigger className="flex w-full items-center justify-between rounded-md p-2 hover:bg-muted">
 										<div className="flex items-center gap-2">
 											<Star className="h-4 w-4" />
 											<span className="font-medium">Dowody naukowe</span>
@@ -324,20 +355,27 @@ export function DetailedFilterPopover({
 											)}
 										</div>
 									</CollapsibleTrigger>
-									<CollapsibleContent className="space-y-2 mt-2">
+									<CollapsibleContent className="mt-2 space-y-2">
 										<div className="grid grid-cols-1 gap-2">
 											{evidenceLevels.map((level) => (
-												<div key={level} className="flex items-center space-x-2">
+												<div
+													key={level}
+													className="flex items-center space-x-2"
+												>
 													<Checkbox
 														id={`evidence-${level}`}
 														checked={filters.evidenceLevels.includes(level)}
 														onCheckedChange={(checked) =>
-															handleMultiSelectChange("evidenceLevels", level, !!checked)
+															handleMultiSelectChange(
+																"evidenceLevels",
+																level,
+																!!checked,
+															)
 														}
 													/>
 													<Label
 														htmlFor={`evidence-${level}`}
-														className="cursor-pointer text-sm flex-1"
+														className="flex-1 cursor-pointer text-sm"
 													>
 														{evidenceLabels[level]}
 													</Label>
@@ -349,14 +387,14 @@ export function DetailedFilterPopover({
 							</TabsContent>
 
 							{/* Advanced Filters Tab */}
-							<TabsContent value="advanced" className="space-y-4 mt-4">
+							<TabsContent value="advanced" className="mt-4 space-y-4">
 								{/* Active Compounds */}
 								{availableCompounds.length > 0 && (
 									<Collapsible
 										open={expandedSections.has("compounds")}
 										onOpenChange={() => toggleSection("compounds")}
 									>
-										<CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-muted rounded-md">
+										<CollapsibleTrigger className="flex w-full items-center justify-between rounded-md p-2 hover:bg-muted">
 											<div className="flex items-center gap-2">
 												<Search className="h-4 w-4" />
 												<span className="font-medium">Substancje czynne</span>
@@ -387,26 +425,40 @@ export function DetailedFilterPopover({
 												)}
 											</div>
 										</CollapsibleTrigger>
-										<CollapsibleContent className="space-y-3 mt-2">
+										<CollapsibleContent className="mt-2 space-y-3">
 											<Input
 												placeholder="Szukaj substancji czynnych..."
 												value={searchTerms.compounds}
-												onChange={(e) => setSearchTerms(prev => ({ ...prev, compounds: e.target.value }))}
+												onChange={(e) =>
+													setSearchTerms((prev) => ({
+														...prev,
+														compounds: e.target.value,
+													}))
+												}
 												className="text-sm"
 											/>
-											<div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto">
+											<div className="grid max-h-40 grid-cols-1 gap-2 overflow-y-auto">
 												{filteredCompounds.map((compound) => (
-													<div key={compound} className="flex items-center space-x-2">
+													<div
+														key={compound}
+														className="flex items-center space-x-2"
+													>
 														<Checkbox
 															id={`compound-${compound}`}
-															checked={filters.activeCompounds.includes(compound)}
+															checked={filters.activeCompounds.includes(
+																compound,
+															)}
 															onCheckedChange={(checked) =>
-																handleMultiSelectChange("activeCompounds", compound, !!checked)
+																handleMultiSelectChange(
+																	"activeCompounds",
+																	compound,
+																	!!checked,
+																)
 															}
 														/>
 														<Label
 															htmlFor={`compound-${compound}`}
-															className="cursor-pointer text-sm flex-1"
+															className="flex-1 cursor-pointer text-sm"
 														>
 															{compound}
 														</Label>
@@ -423,10 +475,12 @@ export function DetailedFilterPopover({
 										open={expandedSections.has("conditions")}
 										onOpenChange={() => toggleSection("conditions")}
 									>
-										<CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-muted rounded-md">
+										<CollapsibleTrigger className="flex w-full items-center justify-between rounded-md p-2 hover:bg-muted">
 											<div className="flex items-center gap-2">
 												<Heart className="h-4 w-4" />
-												<span className="font-medium">Zastosowania kliniczne</span>
+												<span className="font-medium">
+													Zastosowania kliniczne
+												</span>
 												{filters.clinicalConditions.length > 0 && (
 													<Badge variant="secondary" className="text-xs">
 														{filters.clinicalConditions.length}
@@ -454,26 +508,40 @@ export function DetailedFilterPopover({
 												)}
 											</div>
 										</CollapsibleTrigger>
-										<CollapsibleContent className="space-y-3 mt-2">
+										<CollapsibleContent className="mt-2 space-y-3">
 											<Input
 												placeholder="Szukaj zastosowań..."
 												value={searchTerms.conditions}
-												onChange={(e) => setSearchTerms(prev => ({ ...prev, conditions: e.target.value }))}
+												onChange={(e) =>
+													setSearchTerms((prev) => ({
+														...prev,
+														conditions: e.target.value,
+													}))
+												}
 												className="text-sm"
 											/>
-											<div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto">
+											<div className="grid max-h-40 grid-cols-1 gap-2 overflow-y-auto">
 												{filteredConditions.map((condition) => (
-													<div key={condition} className="flex items-center space-x-2">
+													<div
+														key={condition}
+														className="flex items-center space-x-2"
+													>
 														<Checkbox
 															id={`condition-${condition}`}
-															checked={filters.clinicalConditions.includes(condition)}
+															checked={filters.clinicalConditions.includes(
+																condition,
+															)}
 															onCheckedChange={(checked) =>
-																handleMultiSelectChange("clinicalConditions", condition, !!checked)
+																handleMultiSelectChange(
+																	"clinicalConditions",
+																	condition,
+																	!!checked,
+																)
 															}
 														/>
 														<Label
 															htmlFor={`condition-${condition}`}
-															className="cursor-pointer text-sm flex-1"
+															className="flex-1 cursor-pointer text-sm"
 														>
 															{condition}
 														</Label>
@@ -490,10 +558,12 @@ export function DetailedFilterPopover({
 										open={expandedSections.has("mechanisms")}
 										onOpenChange={() => toggleSection("mechanisms")}
 									>
-										<CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-muted rounded-md">
+										<CollapsibleTrigger className="flex w-full items-center justify-between rounded-md p-2 hover:bg-muted">
 											<div className="flex items-center gap-2">
 												<TrendingUp className="h-4 w-4" />
-												<span className="font-medium">Mechanizmy działania</span>
+												<span className="font-medium">
+													Mechanizmy działania
+												</span>
 												{filters.mechanisms.length > 0 && (
 													<Badge variant="secondary" className="text-xs">
 														{filters.mechanisms.length}
@@ -521,26 +591,38 @@ export function DetailedFilterPopover({
 												)}
 											</div>
 										</CollapsibleTrigger>
-										<CollapsibleContent className="space-y-3 mt-2">
+										<CollapsibleContent className="mt-2 space-y-3">
 											<Input
 												placeholder="Szukaj mechanizmów..."
 												value={searchTerms.mechanisms}
-												onChange={(e) => setSearchTerms(prev => ({ ...prev, mechanisms: e.target.value }))}
+												onChange={(e) =>
+													setSearchTerms((prev) => ({
+														...prev,
+														mechanisms: e.target.value,
+													}))
+												}
 												className="text-sm"
 											/>
-											<div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto">
+											<div className="grid max-h-40 grid-cols-1 gap-2 overflow-y-auto">
 												{filteredMechanisms.map((mechanism) => (
-													<div key={mechanism} className="flex items-center space-x-2">
+													<div
+														key={mechanism}
+														className="flex items-center space-x-2"
+													>
 														<Checkbox
 															id={`mechanism-${mechanism}`}
 															checked={filters.mechanisms.includes(mechanism)}
 															onCheckedChange={(checked) =>
-																handleMultiSelectChange("mechanisms", mechanism, !!checked)
+																handleMultiSelectChange(
+																	"mechanisms",
+																	mechanism,
+																	!!checked,
+																)
 															}
 														/>
 														<Label
 															htmlFor={`mechanism-${mechanism}`}
-															className="cursor-pointer text-sm flex-1"
+															className="flex-1 cursor-pointer text-sm"
 														>
 															{mechanism}
 														</Label>
@@ -557,7 +639,7 @@ export function DetailedFilterPopover({
 										open={expandedSections.has("tags")}
 										onOpenChange={() => toggleSection("tags")}
 									>
-										<CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-muted rounded-md">
+										<CollapsibleTrigger className="flex w-full items-center justify-between rounded-md p-2 hover:bg-muted">
 											<div className="flex items-center gap-2">
 												<Filter className="h-4 w-4" />
 												<span className="font-medium">Tagi</span>
@@ -588,16 +670,24 @@ export function DetailedFilterPopover({
 												)}
 											</div>
 										</CollapsibleTrigger>
-										<CollapsibleContent className="space-y-3 mt-2">
+										<CollapsibleContent className="mt-2 space-y-3">
 											<Input
 												placeholder="Szukaj tagów..."
 												value={searchTerms.tags}
-												onChange={(e) => setSearchTerms(prev => ({ ...prev, tags: e.target.value }))}
+												onChange={(e) =>
+													setSearchTerms((prev) => ({
+														...prev,
+														tags: e.target.value,
+													}))
+												}
 												className="text-sm"
 											/>
-											<div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+											<div className="grid max-h-40 grid-cols-2 gap-2 overflow-y-auto">
 												{filteredTags.map((tag) => (
-													<div key={tag} className="flex items-center space-x-2">
+													<div
+														key={tag}
+														className="flex items-center space-x-2"
+													>
 														<Checkbox
 															id={`tag-${tag}`}
 															checked={filters.tags.includes(tag)}
@@ -620,13 +710,15 @@ export function DetailedFilterPopover({
 							</TabsContent>
 
 							{/* Range Filters Tab */}
-							<TabsContent value="ranges" className="space-y-6 mt-4">
+							<TabsContent value="ranges" className="mt-4 space-y-6">
 								{/* Price Range */}
 								<div className="space-y-3">
 									<div className="flex items-center justify-between">
-										<Label className="text-sm font-medium">Zakres cenowy (PLN)</Label>
+										<Label className="font-medium text-sm">
+											Zakres cenowy (PLN)
+										</Label>
 										<div className="flex items-center gap-2">
-											<span className="text-xs text-muted-foreground">
+											<span className="text-muted-foreground text-xs">
 												{filters.priceRange[0]} - {filters.priceRange[1]} zł
 											</span>
 											<Button
@@ -658,9 +750,11 @@ export function DetailedFilterPopover({
 								{/* Dosage Range */}
 								<div className="space-y-3">
 									<div className="flex items-center justify-between">
-										<Label className="text-sm font-medium">Zakres dawkowania (mg)</Label>
+										<Label className="font-medium text-sm">
+											Zakres dawkowania (mg)
+										</Label>
 										<div className="flex items-center gap-2">
-											<span className="text-xs text-muted-foreground">
+											<span className="text-muted-foreground text-xs">
 												{filters.dosageRange[0]} - {filters.dosageRange[1]} mg
 											</span>
 											<Button
@@ -692,9 +786,11 @@ export function DetailedFilterPopover({
 								{/* User Rating */}
 								<div className="space-y-3">
 									<div className="flex items-center justify-between">
-										<Label className="text-sm font-medium">Ocena użytkowników</Label>
+										<Label className="font-medium text-sm">
+											Ocena użytkowników
+										</Label>
 										<div className="flex items-center gap-2">
-											<span className="text-xs text-muted-foreground">
+											<span className="text-muted-foreground text-xs">
 												{filters.ratingRange[0]} - {filters.ratingRange[1]}/5
 											</span>
 											<Button
@@ -726,9 +822,11 @@ export function DetailedFilterPopover({
 								{/* Safety Rating */}
 								<div className="space-y-3">
 									<div className="flex items-center justify-between">
-										<Label className="text-sm font-medium">Ocena bezpieczeństwa</Label>
+										<Label className="font-medium text-sm">
+											Ocena bezpieczeństwa
+										</Label>
 										<div className="flex items-center gap-2">
-											<span className="text-xs text-muted-foreground">
+											<span className="text-muted-foreground text-xs">
 												{filters.safetyRating[0]} - {filters.safetyRating[1]}/10
 											</span>
 											<Button
@@ -761,7 +859,10 @@ export function DetailedFilterPopover({
 								<div className="space-y-4 border-t pt-4">
 									<div className="flex items-center justify-between">
 										<div className="flex items-center gap-2">
-											<Label htmlFor="hasStudies" className="cursor-pointer text-sm">
+											<Label
+												htmlFor="hasStudies"
+												className="cursor-pointer text-sm"
+											>
 												Tylko suplementy z badaniami
 											</Label>
 											<Tooltip>
@@ -769,7 +870,8 @@ export function DetailedFilterPopover({
 													<Info className="h-3 w-3 text-muted-foreground" />
 												</TooltipTrigger>
 												<TooltipContent>
-													Wyświetl tylko suplementy z opublikowanymi badaniami naukowymi
+													Wyświetl tylko suplementy z opublikowanymi badaniami
+													naukowymi
 												</TooltipContent>
 											</Tooltip>
 										</div>
@@ -785,7 +887,10 @@ export function DetailedFilterPopover({
 
 									<div className="flex items-center justify-between">
 										<div className="flex items-center gap-2">
-											<Label htmlFor="hasReviews" className="cursor-pointer text-sm">
+											<Label
+												htmlFor="hasReviews"
+												className="cursor-pointer text-sm"
+											>
 												Tylko suplementy z opiniami
 											</Label>
 											<Tooltip>
@@ -809,7 +914,10 @@ export function DetailedFilterPopover({
 
 									<div className="flex items-center justify-between">
 										<div className="flex items-center gap-2">
-											<Label htmlFor="onlyNatural" className="cursor-pointer text-sm">
+											<Label
+												htmlFor="onlyNatural"
+												className="cursor-pointer text-sm"
+											>
 												Tylko suplementy naturalne
 											</Label>
 											<Tooltip>
@@ -817,7 +925,8 @@ export function DetailedFilterPopover({
 													<Info className="h-3 w-3 text-muted-foreground" />
 												</TooltipTrigger>
 												<TooltipContent>
-													Wyświetl tylko suplementy pochodzenia naturalnego (zioła, adaptogeny)
+													Wyświetl tylko suplementy pochodzenia naturalnego
+													(zioła, adaptogeny)
 												</TooltipContent>
 											</Tooltip>
 										</div>

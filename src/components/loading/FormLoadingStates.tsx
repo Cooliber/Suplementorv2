@@ -5,15 +5,20 @@
  * Interactive feedback during async operations
  */
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, XCircle, AlertCircle, Loader2 } from "lucide-react";
-import { LoadingSpinner, DotsLoader, PulseLoader } from "./AnimatedLoadingIndicators";
+import { durations, easings, springs } from "@/lib/animations/config";
 import { useReducedMotion } from "@/lib/animations/hooks";
-import { easings, durations, springs } from "@/lib/animations/config";
+import { AnimatePresence, motion } from "framer-motion";
+import { AlertCircle, CheckCircle, Loader2, XCircle } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
+import {
+	DotsLoader,
+	LoadingSpinner,
+	PulseLoader,
+} from "./AnimatedLoadingIndicators";
 
 type LoadingState = "idle" | "loading" | "success" | "error";
 
@@ -24,7 +29,13 @@ interface LoadingButtonProps {
 	successText?: string;
 	onClick?: () => void | Promise<void>;
 	disabled?: boolean;
-	variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+	variant?:
+		| "default"
+		| "destructive"
+		| "outline"
+		| "secondary"
+		| "ghost"
+		| "link";
 	size?: "default" | "sm" | "lg" | "icon";
 	className?: string;
 }
@@ -156,7 +167,7 @@ export const FormSubmissionState: React.FC<FormSubmissionStateProps> = ({
 										<LoadingSpinner size="md" />
 										<div>
 											<p className="font-medium">Wysyłanie formularza...</p>
-											<p className="text-sm text-muted-foreground">
+											<p className="text-muted-foreground text-sm">
 												Proszę czekać, przetwarzamy Twoje dane.
 											</p>
 										</div>
@@ -172,7 +183,7 @@ export const FormSubmissionState: React.FC<FormSubmissionStateProps> = ({
 											<p className="font-medium text-green-700 dark:text-green-400">
 												{successMessage}
 											</p>
-											<p className="text-sm text-muted-foreground">
+											<p className="text-muted-foreground text-sm">
 												Dziękujemy za przesłanie formularza.
 											</p>
 										</div>
@@ -219,7 +230,9 @@ interface DataProcessingIndicatorProps {
 	className?: string;
 }
 
-export const DataProcessingIndicator: React.FC<DataProcessingIndicatorProps> = ({
+export const DataProcessingIndicator: React.FC<
+	DataProcessingIndicatorProps
+> = ({
 	isProcessing = false,
 	progress = 0,
 	currentStep = "",
@@ -249,15 +262,17 @@ export const DataProcessingIndicator: React.FC<DataProcessingIndicatorProps> = (
 								<div>
 									<p className="font-medium">Przetwarzanie danych</p>
 									{currentStep && (
-										<p className="text-sm text-muted-foreground">
+										<p className="text-muted-foreground text-sm">
 											Krok: {currentStep}
 										</p>
 									)}
 								</div>
 								{estimatedTime && (
 									<div className="ml-auto text-right">
-										<p className="text-sm font-medium">Pozostały czas</p>
-										<p className="text-sm text-muted-foreground">{estimatedTime}</p>
+										<p className="font-medium text-sm">Pozostały czas</p>
+										<p className="text-muted-foreground text-sm">
+											{estimatedTime}
+										</p>
 									</div>
 								)}
 							</div>
@@ -276,14 +291,21 @@ export const DataProcessingIndicator: React.FC<DataProcessingIndicatorProps> = (
 								<div className="flex justify-between">
 									{Array.from({ length: totalSteps }).map((_, index) => {
 										const stepNumber = index + 1;
-										const isCompleted = progress >= (stepNumber / totalSteps) * 100;
-										const isCurrent = progress >= ((stepNumber - 1) / totalSteps) * 100 && !isCompleted;
+										const isCompleted =
+											progress >= (stepNumber / totalSteps) * 100;
+										const isCurrent =
+											progress >= ((stepNumber - 1) / totalSteps) * 100 &&
+											!isCompleted;
 
 										return (
 											<motion.div
 												key={stepNumber}
 												className={`flex flex-col items-center gap-1 ${
-													isCompleted ? "text-primary" : isCurrent ? "text-primary/60" : "text-muted-foreground"
+													isCompleted
+														? "text-primary"
+														: isCurrent
+															? "text-primary/60"
+															: "text-muted-foreground"
 												}`}
 												initial={shouldReduceMotion ? {} : { scale: 0 }}
 												animate={{ scale: 1 }}
@@ -293,12 +315,12 @@ export const DataProcessingIndicator: React.FC<DataProcessingIndicatorProps> = (
 												}}
 											>
 												<div
-													className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+													className={`flex h-6 w-6 items-center justify-center rounded-full font-medium text-xs ${
 														isCompleted
 															? "bg-primary text-primary-foreground"
 															: isCurrent
-															? "bg-primary/10 text-primary border border-primary"
-															: "bg-muted"
+																? "border border-primary bg-primary/10 text-primary"
+																: "bg-muted"
 													}`}
 												>
 													{isCompleted ? "✓" : stepNumber}
@@ -365,10 +387,10 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
 						<div className="flex flex-col items-center gap-4">
 							<LoadingSpinner size="lg" />
 
-							<div className="text-center space-y-2">
+							<div className="space-y-2 text-center">
 								<p className="font-medium">{message}</p>
 								{details && (
-									<p className="text-sm text-muted-foreground">{details}</p>
+									<p className="text-muted-foreground text-sm">{details}</p>
 								)}
 							</div>
 
@@ -416,12 +438,12 @@ export const StepByStepLoader: React.FC<StepByStepLoaderProps> = ({
 				return (
 					<motion.div
 						key={index}
-						className={`flex items-start gap-3 p-3 rounded-lg border ${
+						className={`flex items-start gap-3 rounded-lg border p-3 ${
 							isActive
-								? "bg-primary/5 border-primary/20"
+								? "border-primary/20 bg-primary/5"
 								: isCompleted
-								? "bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800"
-								: "bg-muted/30"
+									? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
+									: "bg-muted/30"
 						}`}
 						initial={shouldReduceMotion ? {} : { opacity: 0, x: -20 }}
 						animate={{ opacity: 1, x: 0 }}
@@ -432,23 +454,23 @@ export const StepByStepLoader: React.FC<StepByStepLoaderProps> = ({
 						}}
 					>
 						{/* Status indicator */}
-						<div className="flex-shrink-0 mt-0.5">
+						<div className="mt-0.5 flex-shrink-0">
 							{isCompleted && (
-								<div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-									<CheckCircle className="w-4 h-4 text-white" />
+								<div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500">
+									<CheckCircle className="h-4 w-4 text-white" />
 								</div>
 							)}
 							{isActive && step.status === "loading" && (
 								<LoadingSpinner size="sm" />
 							)}
 							{isActive && step.status === "error" && (
-								<div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-									<XCircle className="w-4 h-4 text-white" />
+								<div className="flex h-6 w-6 items-center justify-center rounded-full bg-red-500">
+									<XCircle className="h-4 w-4 text-white" />
 								</div>
 							)}
 							{isPending && (
-								<div className="w-6 h-6 bg-muted rounded-full flex items-center justify-center">
-									<span className="text-xs font-medium text-muted-foreground">
+								<div className="flex h-6 w-6 items-center justify-center rounded-full bg-muted">
+									<span className="font-medium text-muted-foreground text-xs">
 										{index + 1}
 									</span>
 								</div>
@@ -457,13 +479,19 @@ export const StepByStepLoader: React.FC<StepByStepLoaderProps> = ({
 
 						{/* Step content */}
 						<div className="flex-1">
-							<p className={`font-medium ${
-								isActive ? "text-primary" : isCompleted ? "text-green-700 dark:text-green-400" : ""
-							}`}>
+							<p
+								className={`font-medium ${
+									isActive
+										? "text-primary"
+										: isCompleted
+											? "text-green-700 dark:text-green-400"
+											: ""
+								}`}
+							>
 								{step.label}
 							</p>
 							{step.details && (
-								<p className="text-sm text-muted-foreground mt-1">
+								<p className="mt-1 text-muted-foreground text-sm">
 									{step.details}
 								</p>
 							)}
@@ -523,7 +551,7 @@ export const AsyncActionIndicator: React.FC<AsyncActionIndicatorProps> = ({
 				animate={{ opacity: 1, scale: 1 }}
 				exit={{ opacity: 0, scale: 0.95 }}
 				transition={{ ...springs.gentle }}
-				className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm ${className}`}
+				className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm ${className}`}
 			>
 				{state === "loading" && (
 					<>
@@ -534,15 +562,19 @@ export const AsyncActionIndicator: React.FC<AsyncActionIndicatorProps> = ({
 
 				{state === "success" && (
 					<>
-						{showIcon && <CheckCircle className="w-4 h-4 text-green-500" />}
-						<span className="text-green-700 dark:text-green-400">{successMessage}</span>
+						{showIcon && <CheckCircle className="h-4 w-4 text-green-500" />}
+						<span className="text-green-700 dark:text-green-400">
+							{successMessage}
+						</span>
 					</>
 				)}
 
 				{state === "error" && (
 					<div className="flex items-center gap-2">
-						{showIcon && <XCircle className="w-4 h-4 text-red-500" />}
-						<span className="text-red-700 dark:text-red-400">{errorMessage}</span>
+						{showIcon && <XCircle className="h-4 w-4 text-red-500" />}
+						<span className="text-red-700 dark:text-red-400">
+							{errorMessage}
+						</span>
 						{onRetry && (
 							<Button variant="outline" size="sm" onClick={onRetry}>
 								Spróbuj ponownie

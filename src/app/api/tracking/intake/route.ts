@@ -3,8 +3,6 @@
  * Handles logging and retrieving supplement intake data
  */
 
-import { SupplementIntakeLog } from "@/lib/db/models";
-import connectToDatabase from "@/lib/db/mongodb";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -95,26 +93,28 @@ const GetIntakeLogsSchema = z.object({
 
 /**
  * POST /api/tracking/intake
- * Log a supplement intake
+ * Log a supplement intake (using hardcoded data - no persistence)
  */
 export async function POST(request: NextRequest) {
 	try {
-		await connectToDatabase();
-
 		const body = await request.json();
 
 		// Validate request body
 		const validatedData = LogIntakeSchema.parse(body);
 
-		// Create new intake log
-		const intakeLog = new SupplementIntakeLog(validatedData);
-		const savedLog = await intakeLog.save();
+		// For hardcoded deployment, simulate saving
+		const mockSavedLog = {
+			_id: `mock_${Date.now()}`,
+			...validatedData,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		};
 
 		return NextResponse.json(
 			{
 				success: true,
-				data: savedLog,
-				message: "Intake logged successfully",
+				data: mockSavedLog,
+				message: "Intake logged successfully (hardcoded data mode)",
 			},
 			{ status: 201 },
 		);
@@ -144,67 +144,20 @@ export async function POST(request: NextRequest) {
 
 /**
  * GET /api/tracking/intake
- * Retrieve intake logs with filtering and pagination
+ * Retrieve intake logs with filtering and pagination (using hardcoded data - no persistence)
  */
 export async function GET(request: NextRequest) {
 	try {
-		await connectToDatabase();
-
 		const { searchParams } = new URL(request.url);
 		const params = Object.fromEntries(searchParams.entries());
 
 		// Validate query parameters
 		const validatedParams = GetIntakeLogsSchema.parse(params);
 
-		// Build MongoDB query
-		const query: any = { userId: validatedParams.userId };
-
-		// Supplement filter
-		if (validatedParams.supplementId) {
-			query.supplementId = validatedParams.supplementId;
-		}
-
-		// Date range filter
-		if (validatedParams.startDate || validatedParams.endDate) {
-			query["timing.timestamp"] = {};
-			if (validatedParams.startDate) {
-				query["timing.timestamp"].$gte = new Date(validatedParams.startDate);
-			}
-			if (validatedParams.endDate) {
-				query["timing.timestamp"].$lte = new Date(validatedParams.endDate);
-			}
-		}
-
-		// Time of day filter
-		if (validatedParams.timeOfDay) {
-			query["timing.timeOfDay"] = validatedParams.timeOfDay;
-		}
-
-		// Planned/unplanned filter
-		if (validatedParams.planned !== undefined) {
-			query["adherence.planned"] = validatedParams.planned;
-		}
-
-		// Build sort object
-		let sortField: string = validatedParams.sortBy;
-		if (sortField === "timestamp") {
-			sortField = "timing.timestamp";
-		}
-		const sortOrder = validatedParams.sortOrder === "desc" ? -1 : 1;
-		const sort: Record<string, 1 | -1> = { [sortField]: sortOrder };
-
-		// Calculate pagination
-		const skip = (validatedParams.page - 1) * validatedParams.limit;
-
-		// Execute query with pagination
-		const [intakeLogs, totalCount] = await Promise.all([
-			SupplementIntakeLog.find(query)
-				.sort(sort)
-				.skip(skip)
-				.limit(validatedParams.limit)
-				.lean(),
-			SupplementIntakeLog.countDocuments(query),
-		]);
+		// For hardcoded deployment, return empty array since no data is persisted
+		// In a real deployment, this would return actual user data
+		const intakeLogs: any[] = [];
+		const totalCount = 0;
 
 		// Calculate pagination metadata
 		const totalPages = Math.ceil(totalCount / validatedParams.limit);
@@ -230,6 +183,7 @@ export async function GET(request: NextRequest) {
 				timeOfDay: validatedParams.timeOfDay,
 				planned: validatedParams.planned,
 			},
+			message: "No intake logs available in hardcoded data mode",
 		});
 	} catch (error) {
 		console.error("Error fetching intake logs:", error);

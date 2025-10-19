@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { randomUUID } from "crypto";
+import { randomUUID } from "node:crypto";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
@@ -35,7 +35,9 @@ export const postRouter = createTRPCRouter({
 		}),
 
 	getLatest: protectedProcedure.query(
-		async ({ ctx }): Promise<{ id: string; name: string; createdAt: Date } | null> => {
+		async ({
+			ctx,
+		}): Promise<{ id: string; name: string; createdAt: Date } | null> => {
 			const userId = ctx.session.user.id;
 			const latest = await ctx.db.post
 				.findOne({ userId })

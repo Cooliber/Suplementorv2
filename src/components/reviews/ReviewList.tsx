@@ -1,18 +1,28 @@
 "use client";
 
-import * as React from "react";
 import { Filter, SortAsc, SortDesc, Star } from "lucide-react";
+import * as React from "react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ReviewCard } from "./ReviewCard";
 import { SkeletonReviewList } from "@/components/loading/SkeletonCard";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import type { ReviewWithUser, ReviewStats, ReviewFilters } from "@/types/review";
+import type {
+	ReviewFilters,
+	ReviewStats,
+	ReviewWithUser,
+} from "@/types/review";
+import { ReviewCard } from "./ReviewCard";
 
 interface ReviewListProps {
 	reviews: ReviewWithUser[];
@@ -57,7 +67,8 @@ export function ReviewList({
 
 	// Handle sort change
 	const handleSortChange = (newSortBy: string) => {
-		const newSortOrder = sortBy === newSortBy && sortOrder === "desc" ? "asc" : "desc";
+		const newSortOrder =
+			sortBy === newSortBy && sortOrder === "desc" ? "asc" : "desc";
 		setSortBy(newSortBy);
 		setSortOrder(newSortOrder);
 		onSortChange?.(newSortBy, newSortOrder);
@@ -76,23 +87,23 @@ export function ReviewList({
 			<Card className="mb-6">
 				<CardHeader>
 					<CardTitle className="flex items-center gap-2">
-						<Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+						<Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
 						Oceny i opinie ({totalCount})
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
 						{/* Average rating */}
 						<div className="text-center">
-							<div className="text-3xl font-bold text-primary">
+							<div className="font-bold text-3xl text-primary">
 								{averageRating.toFixed(1)}
 							</div>
-							<div className="flex items-center justify-center gap-1 mt-1">
+							<div className="mt-1 flex items-center justify-center gap-1">
 								{Array.from({ length: 5 }, (_, i) => (
 									<Star
 										key={i}
 										className={cn(
-											"w-4 h-4",
+											"h-4 w-4",
 											i < Math.floor(averageRating)
 												? "fill-yellow-400 text-yellow-400"
 												: "text-gray-300",
@@ -100,15 +111,15 @@ export function ReviewList({
 									/>
 								))}
 							</div>
-							<div className="text-sm text-muted-foreground mt-1">
+							<div className="mt-1 text-muted-foreground text-sm">
 								Średnia ocena
 							</div>
 						</div>
 
 						{/* Total reviews */}
 						<div className="text-center">
-							<div className="text-3xl font-bold">{totalCount}</div>
-							<div className="text-sm text-muted-foreground mt-1">
+							<div className="font-bold text-3xl">{totalCount}</div>
+							<div className="mt-1 text-muted-foreground text-sm">
 								Łącznie opinii
 							</div>
 						</div>
@@ -117,15 +128,22 @@ export function ReviewList({
 						<div className="col-span-2">
 							<div className="space-y-2">
 								{[5, 4, 3, 2, 1].map((rating) => {
-									const count = stats.distribution[rating as keyof typeof stats.distribution];
-									const percentage = totalCount > 0 ? (count / totalCount) * 100 : 0;
+									const count =
+										stats.distribution[
+											rating as keyof typeof stats.distribution
+										];
+									const percentage =
+										totalCount > 0 ? (count / totalCount) * 100 : 0;
 
 									return (
-										<div key={rating} className="flex items-center gap-2 text-sm">
+										<div
+											key={rating}
+											className="flex items-center gap-2 text-sm"
+										>
 											<span className="w-8">{rating}★</span>
-											<div className="flex-1 bg-gray-200 rounded-full h-2">
+											<div className="h-2 flex-1 rounded-full bg-gray-200">
 												<div
-													className="bg-yellow-400 h-2 rounded-full"
+													className="h-2 rounded-full bg-yellow-400"
 													style={{ width: `${percentage}%` }}
 												/>
 											</div>
@@ -144,14 +162,14 @@ export function ReviewList({
 	// Render sort and filter controls
 	const renderControls = () => {
 		return (
-			<div className="flex items-center justify-between mb-4">
+			<div className="mb-4 flex items-center justify-between">
 				<div className="flex items-center gap-2">
 					<Button
 						variant="outline"
 						size="sm"
 						onClick={() => setShowFilters(!showFilters)}
 					>
-						<Filter className="w-4 h-4 mr-2" />
+						<Filter className="mr-2 h-4 w-4" />
 						Filtry
 					</Button>
 
@@ -161,20 +179,24 @@ export function ReviewList({
 						</SelectTrigger>
 						<SelectContent>
 							<SelectItem value="createdAt">
-								Najnowsze {sortBy === "createdAt" && (sortOrder === "desc" ? "↓" : "↑")}
+								Najnowsze{" "}
+								{sortBy === "createdAt" && (sortOrder === "desc" ? "↓" : "↑")}
 							</SelectItem>
 							<SelectItem value="rating">
-								Ocena {sortBy === "rating" && (sortOrder === "desc" ? "↓" : "↑")}
+								Ocena{" "}
+								{sortBy === "rating" && (sortOrder === "desc" ? "↓" : "↑")}
 							</SelectItem>
 							<SelectItem value="helpful">
-								Najbardziej pomocne {sortBy === "helpful" && (sortOrder === "desc" ? "↓" : "↑")}
+								Najbardziej pomocne{" "}
+								{sortBy === "helpful" && (sortOrder === "desc" ? "↓" : "↑")}
 							</SelectItem>
 						</SelectContent>
 					</Select>
 				</div>
 
-				<div className="text-sm text-muted-foreground">
-					{totalCount} opin{totalCount === 1 ? "ia" : totalCount < 5 ? "ie" : "ii"}
+				<div className="text-muted-foreground text-sm">
+					{totalCount} opin
+					{totalCount === 1 ? "ia" : totalCount < 5 ? "ie" : "ii"}
 				</div>
 			</div>
 		);
@@ -185,7 +207,7 @@ export function ReviewList({
 		if (totalCount === 0 || (!hasNextPage && !hasPrevPage)) return null;
 
 		return (
-			<div className="flex items-center justify-center gap-2 mt-6">
+			<div className="mt-6 flex items-center justify-center gap-2">
 				<Button
 					variant="outline"
 					size="sm"
@@ -196,22 +218,25 @@ export function ReviewList({
 				</Button>
 
 				<div className="flex items-center gap-1">
-					{Array.from({ length: Math.min(5, Math.ceil(totalCount / 10)) }, (_, i) => {
-						const page = currentPage - 2 + i;
-						if (page < 1 || page > Math.ceil(totalCount / 10)) return null;
+					{Array.from(
+						{ length: Math.min(5, Math.ceil(totalCount / 10)) },
+						(_, i) => {
+							const page = currentPage - 2 + i;
+							if (page < 1 || page > Math.ceil(totalCount / 10)) return null;
 
-						return (
-							<Button
-								key={page}
-								variant={page === currentPage ? "default" : "outline"}
-								size="sm"
-								onClick={() => onPageChange?.(page)}
-								disabled={isLoading}
-							>
-								{page}
-							</Button>
-						);
-					})}
+							return (
+								<Button
+									key={page}
+									variant={page === currentPage ? "default" : "outline"}
+									size="sm"
+									onClick={() => onPageChange?.(page)}
+									disabled={isLoading}
+								>
+									{page}
+								</Button>
+							);
+						},
+					)}
 				</div>
 
 				<Button
@@ -251,11 +276,7 @@ export function ReviewList({
 					renderLoadingSkeletons()
 				) : reviews.length > 0 ? (
 					reviews.map((review) => (
-						<ReviewCard
-							key={review.id}
-							review={review}
-							onHelpful={onHelpful}
-						/>
+						<ReviewCard key={review.id} review={review} onHelpful={onHelpful} />
 					))
 				) : (
 					<Card>

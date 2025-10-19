@@ -1,16 +1,38 @@
 "use client";
 
-import type { Metadata } from "next";
-import { useState, useMemo } from "react";
-import { FlaskConical, Filter, Search, BookOpen, Award, TrendingUp } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { BreadcrumbNavigation } from "@/components/navigation/BreadcrumbNavigation";
 import ResearchStudyCard from "@/components/learning/ResearchStudyCard";
-import { allResearchCitations, type ResearchCitation } from "@/data/research-citations";
+import { BreadcrumbNavigation } from "@/components/navigation/BreadcrumbNavigation";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import {
+	type ResearchCitation,
+	allResearchCitations,
+} from "@/data/research-citations";
+import {
+	Award,
+	BookOpen,
+	Filter,
+	FlaskConical,
+	Search,
+	TrendingUp,
+} from "lucide-react";
+import type { Metadata } from "next";
+import { useMemo, useState } from "react";
 
 // Evidence level definitions for display
 const EVIDENCE_LEVELS = {
@@ -57,7 +79,8 @@ const STUDY_TYPES = {
 
 export default function ResearchPage() {
 	const [searchQuery, setSearchQuery] = useState("");
-	const [selectedEvidenceLevel, setSelectedEvidenceLevel] = useState<string>("ALL");
+	const [selectedEvidenceLevel, setSelectedEvidenceLevel] =
+		useState<string>("ALL");
 	const [selectedStudyType, setSelectedStudyType] = useState<string>("ALL");
 	const [selectedSupplement, setSelectedSupplement] = useState<string>("ALL");
 
@@ -88,53 +111,61 @@ export default function ResearchPage() {
 				},
 				dropoutRate: 0,
 			},
-			interventions: [{
-				supplementId: citation.relatedSupplements[0] || "unknown",
-				supplementName: citation.relatedSupplements[0] || "Unknown",
-				polishSupplementName: citation.relatedSupplements[0] || "Nieznany",
-				dosage: citation.dosage,
-				frequency: "Daily",
-				polishFrequency: "Codziennie",
-				duration: citation.duration,
-				polishDuration: citation.duration,
-				compliance: { measured: false, rate: 0 },
-			}],
-			outcomeMeasures: [{
-				name: citation.primaryOutcome,
-				polishName: citation.polishPrimaryOutcome,
-				type: "PRIMARY" as const,
-				category: "COGNITIVE" as const,
-				polishCategory: "Poznawcze",
-				measurementTool: "Standard assessment",
-				polishMeasurementTool: "Standardowa ocena",
-				results: {
-					baseline: {
-						intervention: 0,
-						control: 0,
-						pValue: 0,
-					},
-					endpoint: {
-						intervention: 0,
-						control: 0,
-						pValue: 0,
-						effectSize: 0,
-						confidenceInterval: "",
-					},
-					changeFromBaseline: {
-						intervention: 0,
-						control: 0,
-						difference: 0,
-						pValue: 0,
-						clinicalSignificance: "Not significant",
-						polishClinicalSignificance: "Nieistotne",
-					},
-					polishInterpretation: citation.polishResults,
+			interventions: [
+				{
+					supplementId: citation.relatedSupplements[0] || "unknown",
+					supplementName: citation.relatedSupplements[0] || "Unknown",
+					polishSupplementName: citation.relatedSupplements[0] || "Nieznany",
+					dosage: citation.dosage,
+					frequency: "Daily",
+					polishFrequency: "Codziennie",
+					duration: citation.duration,
+					polishDuration: citation.duration,
+					compliance: { measured: false, rate: 0 },
 				},
-			}],
+			],
+			outcomeMeasures: [
+				{
+					name: citation.primaryOutcome,
+					polishName: citation.polishPrimaryOutcome,
+					type: "PRIMARY" as const,
+					category: "COGNITIVE" as const,
+					polishCategory: "Poznawcze",
+					measurementTool: "Standard assessment",
+					polishMeasurementTool: "Standardowa ocena",
+					results: {
+						baseline: {
+							intervention: 0,
+							control: 0,
+							pValue: 0,
+						},
+						endpoint: {
+							intervention: 0,
+							control: 0,
+							pValue: 0,
+							effectSize: 0,
+							confidenceInterval: "",
+						},
+						changeFromBaseline: {
+							intervention: 0,
+							control: 0,
+							difference: 0,
+							pValue: 0,
+							clinicalSignificance: "Not significant",
+							polishClinicalSignificance: "Nieistotne",
+						},
+						polishInterpretation: citation.polishResults,
+					},
+				},
+			],
 			qualityAssessment: {
 				tool: "COCHRANE_ROB" as const,
-				overallRating: citation.evidenceLevel === "STRONG" ? "HIGH" as const : "MODERATE" as const,
-				polishOverallRating: citation.evidenceLevel === "STRONG" ? "Wysoka" : "Umiarkowana",
+				overallRating:
+					citation.evidenceLevel === "STRONG"
+						? ("HIGH" as const)
+						: ("MODERATE" as const),
+				polishOverallRating:
+					citation.evidenceLevel === "STRONG" ? "Wysoka" : "Umiarkowana",
 				domains: [],
 				limitations: [citation.limitations],
 				polishLimitations: [citation.polishLimitations],
@@ -147,7 +178,10 @@ export default function ResearchPage() {
 			polishConclusions: citation.polishResults,
 			clinicalImplications: "",
 			polishClinicalImplications: "",
-			evidenceLevel: citation.evidenceLevel === "CONFLICTING" ? "INSUFFICIENT" : citation.evidenceLevel,
+			evidenceLevel:
+				citation.evidenceLevel === "CONFLICTING"
+					? "INSUFFICIENT"
+					: citation.evidenceLevel,
 			polishEvidenceLevel: EVIDENCE_LEVELS[citation.evidenceLevel].label,
 			citationCount: citation.citationCount,
 			impactFactor: undefined,
@@ -181,12 +215,18 @@ export default function ResearchPage() {
 			}
 
 			// Evidence level filter
-			if (selectedEvidenceLevel !== "ALL" && study.evidenceLevel !== selectedEvidenceLevel) {
+			if (
+				selectedEvidenceLevel !== "ALL" &&
+				study.evidenceLevel !== selectedEvidenceLevel
+			) {
 				return false;
 			}
 
 			// Study type filter
-			if (selectedStudyType !== "ALL" && study.studyType !== selectedStudyType) {
+			if (
+				selectedStudyType !== "ALL" &&
+				study.studyType !== selectedStudyType
+			) {
 				return false;
 			}
 
@@ -199,7 +239,13 @@ export default function ResearchPage() {
 
 			return true;
 		});
-	}, [transformedStudies, searchQuery, selectedEvidenceLevel, selectedStudyType, selectedSupplement]);
+	}, [
+		transformedStudies,
+		searchQuery,
+		selectedEvidenceLevel,
+		selectedStudyType,
+		selectedSupplement,
+	]);
 
 	const handleBookmark = (studyId: string) => {
 		console.log("Bookmark study:", studyId);
@@ -208,7 +254,10 @@ export default function ResearchPage() {
 	const handleViewFullText = (studyId: string) => {
 		const study = allResearchCitations.find((s) => s.id === studyId);
 		if (study?.pubmedId) {
-			window.open(`https://pubmed.ncbi.nlm.nih.gov/${study.pubmedId}/`, "_blank");
+			window.open(
+				`https://pubmed.ncbi.nlm.nih.gov/${study.pubmedId}/`,
+				"_blank",
+			);
 		} else if (study?.doi) {
 			window.open(`https://doi.org/${study.doi}`, "_blank");
 		}
@@ -224,17 +273,17 @@ export default function ResearchPage() {
 	};
 
 	return (
-		<div className="container mx-auto px-4 py-8 space-y-8">
+		<div className="container mx-auto space-y-8 px-4 py-8">
 			{/* Breadcrumb Navigation */}
 			<BreadcrumbNavigation />
 
 			{/* Hero Section */}
-			<div className="text-center space-y-4">
+			<div className="space-y-4 text-center">
 				<div className="flex justify-center">
 					<FlaskConical className="h-16 w-16 text-primary" />
 				</div>
-				<h1 className="text-4xl md:text-5xl font-bold">Badania Naukowe</h1>
-				<p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+				<h1 className="font-bold text-4xl md:text-5xl">Badania Naukowe</h1>
+				<p className="mx-auto max-w-2xl text-muted-foreground text-xl">
 					Przegląd badań klinicznych i dowodów naukowych dotyczących suplementów
 				</p>
 			</div>
@@ -251,10 +300,13 @@ export default function ResearchPage() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
 						{Object.entries(EVIDENCE_LEVELS).map(([key, value]) => (
-							<div key={key} className={`p-4 rounded-lg border-2 ${value.color}`}>
-								<div className="font-semibold mb-1">{value.label}</div>
+							<div
+								key={key}
+								className={`rounded-lg border-2 p-4 ${value.color}`}
+							>
+								<div className="mb-1 font-semibold">{value.label}</div>
 								<div className="text-xs opacity-90">{value.description}</div>
 							</div>
 						))}
@@ -273,7 +325,7 @@ export default function ResearchPage() {
 				<CardContent className="space-y-4">
 					{/* Search */}
 					<div className="relative">
-						<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+						<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
 						<Input
 							placeholder="Szukaj w tytułach, abstraktach, słowach kluczowych..."
 							value={searchQuery}
@@ -283,47 +335,68 @@ export default function ResearchPage() {
 					</div>
 
 					{/* Filter Controls */}
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 						<div>
-							<label className="text-sm font-medium mb-2 block">Poziom Dowodów</label>
-							<Select value={selectedEvidenceLevel} onValueChange={setSelectedEvidenceLevel}>
+							<label className="mb-2 block font-medium text-sm">
+								Poziom Dowodów
+							</label>
+							<Select
+								value={selectedEvidenceLevel}
+								onValueChange={setSelectedEvidenceLevel}
+							>
 								<SelectTrigger>
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectItem value="ALL">Wszystkie</SelectItem>
 									{Object.entries(EVIDENCE_LEVELS).map(([key, value]) => (
-										<SelectItem key={key} value={key}>{value.label}</SelectItem>
+										<SelectItem key={key} value={key}>
+											{value.label}
+										</SelectItem>
 									))}
 								</SelectContent>
 							</Select>
 						</div>
 
 						<div>
-							<label className="text-sm font-medium mb-2 block">Typ Badania</label>
-							<Select value={selectedStudyType} onValueChange={setSelectedStudyType}>
+							<label className="mb-2 block font-medium text-sm">
+								Typ Badania
+							</label>
+							<Select
+								value={selectedStudyType}
+								onValueChange={setSelectedStudyType}
+							>
 								<SelectTrigger>
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectItem value="ALL">Wszystkie</SelectItem>
 									{Object.entries(STUDY_TYPES).map(([key, value]) => (
-										<SelectItem key={key} value={key}>{value}</SelectItem>
+										<SelectItem key={key} value={key}>
+											{value}
+										</SelectItem>
 									))}
 								</SelectContent>
 							</Select>
 						</div>
 
 						<div>
-							<label className="text-sm font-medium mb-2 block">Suplement</label>
-							<Select value={selectedSupplement} onValueChange={setSelectedSupplement}>
+							<label className="mb-2 block font-medium text-sm">
+								Suplement
+							</label>
+							<Select
+								value={selectedSupplement}
+								onValueChange={setSelectedSupplement}
+							>
 								<SelectTrigger>
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectItem value="ALL">Wszystkie</SelectItem>
 									{uniqueSupplements.map((supp) => (
-										<SelectItem key={supp} value={supp}>{supp}</SelectItem>
+										<SelectItem key={supp} value={supp}>
+											{supp}
+										</SelectItem>
 									))}
 								</SelectContent>
 							</Select>
@@ -331,11 +404,14 @@ export default function ResearchPage() {
 					</div>
 
 					{/* Results Count */}
-					<div className="flex items-center justify-between pt-2 border-t">
-						<div className="text-sm text-muted-foreground">
+					<div className="flex items-center justify-between border-t pt-2">
+						<div className="text-muted-foreground text-sm">
 							Znaleziono <strong>{filteredStudies.length}</strong> badań
 						</div>
-						{(searchQuery || selectedEvidenceLevel !== "ALL" || selectedStudyType !== "ALL" || selectedSupplement !== "ALL") && (
+						{(searchQuery ||
+							selectedEvidenceLevel !== "ALL" ||
+							selectedStudyType !== "ALL" ||
+							selectedSupplement !== "ALL") && (
 							<Button
 								variant="ghost"
 								size="sm"
@@ -358,8 +434,10 @@ export default function ResearchPage() {
 				{filteredStudies.length === 0 ? (
 					<Card>
 						<CardContent className="py-12 text-center">
-							<BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-							<h3 className="text-lg font-semibold mb-2">Nie znaleziono badań</h3>
+							<BookOpen className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+							<h3 className="mb-2 font-semibold text-lg">
+								Nie znaleziono badań
+							</h3>
 							<p className="text-muted-foreground">
 								Spróbuj zmienić kryteria wyszukiwania lub wyczyść filtry
 							</p>
@@ -380,4 +458,3 @@ export default function ResearchPage() {
 		</div>
 	);
 }
-

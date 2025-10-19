@@ -26,10 +26,10 @@ import {
 	Area,
 	AreaChart,
 	Bar,
-	BarChart as RechartsBarChart,
 	CartesianGrid,
 	Cell,
 	Line,
+	BarChart as RechartsBarChart,
 	LineChart as RechartsLineChart,
 	ResponsiveContainer,
 	Tooltip,
@@ -101,7 +101,9 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 	className = "",
 }) => {
 	const [activeTab, setActiveTab] = useState("trends");
-	const [timeRange, setTimeRange] = useState<"30d" | "90d" | "1y" | "all">("90d");
+	const [timeRange, setTimeRange] = useState<"30d" | "90d" | "1y" | "all">(
+		"90d",
+	);
 	const [chartType, setChartType] = useState<"line" | "area" | "bar">("line");
 
 	// Color schemes
@@ -136,7 +138,7 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 	// Get current supplement data
 	const currentSupplement = useMemo(() => {
 		if (selectedSupplement) {
-			return data.find(item => item.supplementId === selectedSupplement);
+			return data.find((item) => item.supplementId === selectedSupplement);
 		}
 		return data[0];
 	}, [data, selectedSupplement]);
@@ -154,10 +156,13 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 		cutoffDate.setDate(cutoffDate.getDate() - days);
 
 		return currentSupplement.reviewsOverTime
-			.filter(item => new Date(item.date) >= cutoffDate)
-			.map(item => ({
+			.filter((item) => new Date(item.date) >= cutoffDate)
+			.map((item) => ({
 				...item,
-				date: new Date(item.date).toLocaleDateString('pl-PL', { month: 'short', day: 'numeric' }),
+				date: new Date(item.date).toLocaleDateString("pl-PL", {
+					month: "short",
+					day: "numeric",
+				}),
 			}));
 	}, [currentSupplement, timeRange]);
 
@@ -165,27 +170,37 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 	const sentimentData = useMemo(() => {
 		if (!currentSupplement) return [];
 
-		const total = currentSupplement.sentimentDistribution.positive +
-					 currentSupplement.sentimentDistribution.neutral +
-					 currentSupplement.sentimentDistribution.negative;
+		const total =
+			currentSupplement.sentimentDistribution.positive +
+			currentSupplement.sentimentDistribution.neutral +
+			currentSupplement.sentimentDistribution.negative;
 
 		return [
 			{
 				sentiment: "Pozytywne",
 				count: currentSupplement.sentimentDistribution.positive,
-				percentage: total > 0 ? (currentSupplement.sentimentDistribution.positive / total * 100) : 0,
+				percentage:
+					total > 0
+						? (currentSupplement.sentimentDistribution.positive / total) * 100
+						: 0,
 				color: sentimentColors.positive,
 			},
 			{
 				sentiment: "Neutralne",
 				count: currentSupplement.sentimentDistribution.neutral,
-				percentage: total > 0 ? (currentSupplement.sentimentDistribution.neutral / total * 100) : 0,
+				percentage:
+					total > 0
+						? (currentSupplement.sentimentDistribution.neutral / total) * 100
+						: 0,
 				color: sentimentColors.neutral,
 			},
 			{
 				sentiment: "Negatywne",
 				count: currentSupplement.sentimentDistribution.negative,
-				percentage: total > 0 ? (currentSupplement.sentimentDistribution.negative / total * 100) : 0,
+				percentage:
+					total > 0
+						? (currentSupplement.sentimentDistribution.negative / total) * 100
+						: 0,
 				color: sentimentColors.negative,
 			},
 		];
@@ -195,25 +210,34 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 	const wordData = useMemo(() => {
 		if (!currentSupplement) return [];
 
-		return currentSupplement.commonWords
-			.slice(0, 10)
-			.map(word => ({
-				word: word.polishWord,
-				count: word.count,
-				sentiment: word.sentiment,
-				color: sentimentColors[word.sentiment],
-			}));
+		return currentSupplement.commonWords.slice(0, 10).map((word) => ({
+			word: word.polishWord,
+			count: word.count,
+			sentiment: word.sentiment,
+			color: sentimentColors[word.sentiment],
+		}));
 	}, [currentSupplement]);
 
 	// Prepare demographic data
 	const ageData = useMemo(() => {
 		if (!currentSupplement) return [];
 
-		return Object.entries(currentSupplement.ageDistribution).map(([age, count]) => ({
-			age: age === "18-25" ? "18-25" : age === "26-35" ? "26-35" : age === "36-45" ? "36-45" : age === "46-55" ? "46-55" : "56+",
-			count,
-			color: ageGroupColors[age as keyof typeof ageGroupColors],
-		}));
+		return Object.entries(currentSupplement.ageDistribution).map(
+			([age, count]) => ({
+				age:
+					age === "18-25"
+						? "18-25"
+						: age === "26-35"
+							? "26-35"
+							: age === "36-45"
+								? "36-45"
+								: age === "46-55"
+									? "46-55"
+									: "56+",
+				count,
+				color: ageGroupColors[age as keyof typeof ageGroupColors],
+			}),
+		);
 	}, [currentSupplement]);
 
 	// Custom tooltip
@@ -255,7 +279,10 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 						Analiza recenzji
 					</CardTitle>
 					<div className="flex items-center gap-2">
-						<Select value={timeRange} onValueChange={(value: any) => setTimeRange(value)}>
+						<Select
+							value={timeRange}
+							onValueChange={(value: any) => setTimeRange(value)}
+						>
 							<SelectTrigger className="w-32">
 								<SelectValue />
 							</SelectTrigger>
@@ -268,13 +295,19 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 						</Select>
 
 						{onSupplementChange && (
-							<Select value={selectedSupplement || currentSupplement.supplementId} onValueChange={onSupplementChange}>
+							<Select
+								value={selectedSupplement || currentSupplement.supplementId}
+								onValueChange={onSupplementChange}
+							>
 								<SelectTrigger className="w-48">
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
-									{data.map(supplement => (
-										<SelectItem key={supplement.supplementId} value={supplement.supplementId}>
+									{data.map((supplement) => (
+										<SelectItem
+											key={supplement.supplementId}
+											value={supplement.supplementId}
+										>
 											{supplement.polishName}
 										</SelectItem>
 									))}
@@ -309,7 +342,9 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 					<TabsContent value="trends" className="mt-6">
 						<Card>
 							<CardHeader>
-								<CardTitle className="text-base">Trendy recenzji w czasie</CardTitle>
+								<CardTitle className="text-base">
+									Trendy recenzji w czasie
+								</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<ResponsiveContainer width="100%" height={400}>
@@ -359,7 +394,11 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 											<XAxis dataKey="date" tick={{ fontSize: 12 }} />
 											<YAxis />
 											<Tooltip content={<CustomTooltip />} />
-											<Bar dataKey="reviewCount" fill="#3B82F6" name="Liczba recenzji" />
+											<Bar
+												dataKey="reviewCount"
+												fill="#3B82F6"
+												name="Liczba recenzji"
+											/>
 										</RechartsBarChart>
 									)}
 								</ResponsiveContainer>
@@ -369,19 +408,31 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 									<div className="text-center">
 										<p className="text-gray-600 text-sm">Średnia ocena</p>
 										<p className="font-bold text-lg">
-											{(filteredTimeData.reduce((sum, item) => sum + item.averageRating, 0) / filteredTimeData.length || 0).toFixed(1)}/5
+											{(
+												filteredTimeData.reduce(
+													(sum, item) => sum + item.averageRating,
+													0,
+												) / filteredTimeData.length || 0
+											).toFixed(1)}
+											/5
 										</p>
 									</div>
 									<div className="text-center">
 										<p className="text-gray-600 text-sm">Łączne recenzje</p>
 										<p className="font-bold text-lg">
-											{filteredTimeData.reduce((sum, item) => sum + item.reviewCount, 0)}
+											{filteredTimeData.reduce(
+												(sum, item) => sum + item.reviewCount,
+												0,
+											)}
 										</p>
 									</div>
 									<div className="text-center">
 										<p className="text-gray-600 text-sm">Głosy pomocne</p>
 										<p className="font-bold text-lg">
-											{filteredTimeData.reduce((sum, item) => sum + item.helpfulVotes, 0)}
+											{filteredTimeData.reduce(
+												(sum, item) => sum + item.helpfulVotes,
+												0,
+											)}
 										</p>
 									</div>
 								</div>
@@ -394,17 +445,25 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 							{/* Sentiment Distribution */}
 							<Card>
 								<CardHeader>
-									<CardTitle className="text-base">Rozkład sentymentu</CardTitle>
+									<CardTitle className="text-base">
+										Rozkład sentymentu
+									</CardTitle>
 								</CardHeader>
 								<CardContent>
 									<div className="space-y-4">
 										{sentimentData.map((item) => (
 											<div key={item.sentiment} className="space-y-2">
 												<div className="flex items-center justify-between">
-													<span className="font-medium text-sm">{item.sentiment}</span>
+													<span className="font-medium text-sm">
+														{item.sentiment}
+													</span>
 													<div className="flex items-center gap-2">
-														<span className="text-gray-600 text-sm">{item.count} recenzji</span>
-														<span className="font-medium text-sm">({item.percentage.toFixed(1)}%)</span>
+														<span className="text-gray-600 text-sm">
+															{item.count} recenzji
+														</span>
+														<span className="font-medium text-sm">
+															({item.percentage.toFixed(1)}%)
+														</span>
 													</div>
 												</div>
 												<div className="h-3 w-full rounded-full bg-gray-200">
@@ -430,30 +489,46 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 								<CardContent>
 									<div className="space-y-4">
 										<div className="flex items-center justify-between">
-											<span className="font-medium text-sm">Recenzje zweryfikowane</span>
-											<span className="font-bold text-sm">{currentSupplement.verifiedReviewPercentage}%</span>
+											<span className="font-medium text-sm">
+												Recenzje zweryfikowane
+											</span>
+											<span className="font-bold text-sm">
+												{currentSupplement.verifiedReviewPercentage}%
+											</span>
 										</div>
 										<div className="h-2 w-full rounded-full bg-gray-200">
 											<div
 												className="h-full rounded-full bg-green-500"
-												style={{ width: `${currentSupplement.verifiedReviewPercentage}%` }}
+												style={{
+													width: `${currentSupplement.verifiedReviewPercentage}%`,
+												}}
 											/>
 										</div>
 
 										<div className="flex items-center justify-between">
-											<span className="font-medium text-sm">Głosy "pomocne"</span>
-											<span className="font-bold text-sm">{currentSupplement.helpfulVotePercentage}%</span>
+											<span className="font-medium text-sm">
+												Głosy "pomocne"
+											</span>
+											<span className="font-bold text-sm">
+												{currentSupplement.helpfulVotePercentage}%
+											</span>
 										</div>
 										<div className="h-2 w-full rounded-full bg-gray-200">
 											<div
 												className="h-full rounded-full bg-blue-500"
-												style={{ width: `${currentSupplement.helpfulVotePercentage}%` }}
+												style={{
+													width: `${currentSupplement.helpfulVotePercentage}%`,
+												}}
 											/>
 										</div>
 
 										<div className="flex items-center justify-between">
-											<span className="font-medium text-sm">Średnia długość recenzji</span>
-											<span className="font-bold text-sm">{currentSupplement.averageReviewLength} słów</span>
+											<span className="font-medium text-sm">
+												Średnia długość recenzji
+											</span>
+											<span className="font-bold text-sm">
+												{currentSupplement.averageReviewLength} słów
+											</span>
 										</div>
 									</div>
 								</CardContent>
@@ -464,19 +539,26 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 					<TabsContent value="words" className="mt-6">
 						<Card>
 							<CardHeader>
-								<CardTitle className="text-base">Najczęściej używane słowa</CardTitle>
+								<CardTitle className="text-base">
+									Najczęściej używane słowa
+								</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<div className="space-y-3">
 									{wordData.map((word, index) => (
-										<div key={index} className="flex items-center justify-between rounded-lg border p-3">
+										<div
+											key={index}
+											className="flex items-center justify-between rounded-lg border p-3"
+										>
 											<div className="flex items-center gap-3">
 												<div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-600 text-sm">
 													{index + 1}
 												</div>
 												<div>
 													<h4 className="font-medium text-sm">{word.word}</h4>
-													<p className="text-gray-600 text-xs">{word.count} wystąpień</p>
+													<p className="text-gray-600 text-xs">
+														{word.count} wystąpień
+													</p>
 												</div>
 											</div>
 											<div className="flex items-center gap-2">
@@ -484,7 +566,11 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 													style={{ backgroundColor: word.color }}
 													className="text-white text-xs"
 												>
-													{word.sentiment === "positive" ? "Pozytywne" : word.sentiment === "negative" ? "Negatywne" : "Neutralne"}
+													{word.sentiment === "positive"
+														? "Pozytywne"
+														: word.sentiment === "negative"
+															? "Negatywne"
+															: "Neutralne"}
 												</Badge>
 											</div>
 										</div>
@@ -506,8 +592,12 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 										{ageData.map((age) => (
 											<div key={age.age} className="space-y-2">
 												<div className="flex items-center justify-between">
-													<span className="font-medium text-sm">{age.age} lat</span>
-													<span className="font-bold text-sm">{age.count}%</span>
+													<span className="font-medium text-sm">
+														{age.age} lat
+													</span>
+													<span className="font-bold text-sm">
+														{age.count}%
+													</span>
 												</div>
 												<div className="h-2 w-full rounded-full bg-gray-200">
 													<div
@@ -527,40 +617,56 @@ const ReviewAnalyticsCharts: React.FC<ReviewAnalyticsChartsProps> = ({
 							{/* Experience Level */}
 							<Card>
 								<CardHeader>
-									<CardTitle className="text-base">Poziom doświadczenia</CardTitle>
+									<CardTitle className="text-base">
+										Poziom doświadczenia
+									</CardTitle>
 								</CardHeader>
 								<CardContent>
 									<div className="space-y-4">
 										<div className="flex items-center justify-between">
 											<span className="font-medium text-sm">Początkujący</span>
-											<span className="font-bold text-sm">{currentSupplement.experienceLevel.beginner}%</span>
+											<span className="font-bold text-sm">
+												{currentSupplement.experienceLevel.beginner}%
+											</span>
 										</div>
 										<div className="h-2 w-full rounded-full bg-gray-200">
 											<div
 												className="h-full rounded-full bg-green-500"
-												style={{ width: `${currentSupplement.experienceLevel.beginner}%` }}
+												style={{
+													width: `${currentSupplement.experienceLevel.beginner}%`,
+												}}
 											/>
 										</div>
 
 										<div className="flex items-center justify-between">
-											<span className="font-medium text-sm">Średniozaawansowani</span>
-											<span className="font-bold text-sm">{currentSupplement.experienceLevel.intermediate}%</span>
+											<span className="font-medium text-sm">
+												Średniozaawansowani
+											</span>
+											<span className="font-bold text-sm">
+												{currentSupplement.experienceLevel.intermediate}%
+											</span>
 										</div>
 										<div className="h-2 w-full rounded-full bg-gray-200">
 											<div
 												className="h-full rounded-full bg-blue-500"
-												style={{ width: `${currentSupplement.experienceLevel.intermediate}%` }}
+												style={{
+													width: `${currentSupplement.experienceLevel.intermediate}%`,
+												}}
 											/>
 										</div>
 
 										<div className="flex items-center justify-between">
 											<span className="font-medium text-sm">Zaawansowani</span>
-											<span className="font-bold text-sm">{currentSupplement.experienceLevel.advanced}%</span>
+											<span className="font-bold text-sm">
+												{currentSupplement.experienceLevel.advanced}%
+											</span>
 										</div>
 										<div className="h-2 w-full rounded-full bg-gray-200">
 											<div
 												className="h-full rounded-full bg-purple-500"
-												style={{ width: `${currentSupplement.experienceLevel.advanced}%` }}
+												style={{
+													width: `${currentSupplement.experienceLevel.advanced}%`,
+												}}
 											/>
 										</div>
 									</div>

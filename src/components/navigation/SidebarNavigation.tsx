@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-// Sidebar Navigation Component
+// Enhanced Sidebar Navigation Component with Search
 import * as React from "react";
 
 import {
@@ -10,6 +10,7 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
@@ -32,6 +33,7 @@ import {
 	Search,
 	Settings,
 	Shield,
+	Star,
 	Target,
 	Trophy,
 	User,
@@ -95,6 +97,15 @@ const navigationItems = [
 	},
 ];
 
+// Quick access items for frequently used functions
+const quickAccessItems = [
+	{ title: "Kalkulator dawek", href: "/kalkulator-dawek", icon: Pill },
+	{ title: "Notatki", href: "/notatki", icon: FileText },
+	{ title: "Zakładki", href: "/zakladki", icon: Star },
+	{ title: "Historia", href: "/historia", icon: Calendar },
+	{ title: "Postęp nauki", href: "/postep", icon: Target },
+];
+
 interface SidebarNavProps extends React.HTMLAttributes<HTMLDivElement> {
 	onItemClick?: () => void;
 }
@@ -105,6 +116,41 @@ export function SidebarNav({
 	...props
 }: SidebarNavProps) {
 	const pathname = usePathname();
+	const [searchQuery, setSearchQuery] = React.useState("");
+
+	// Flatten all navigation items for search
+	const allNavItems = React.useMemo(() => {
+		return navigationItems.flatMap((category) =>
+			category.items.map((item) => ({
+				...item,
+				category: category.title,
+			})),
+		);
+	}, []);
+
+	// Filter items based on search query
+	const filteredNavItems = React.useMemo(() => {
+		if (!searchQuery.trim()) return navigationItems;
+
+		const filtered = navigationItems
+			.map((category) => ({
+				...category,
+				items: category.items.filter((item) =>
+					item.title.toLowerCase().includes(searchQuery.toLowerCase()),
+				),
+			}))
+			.filter((category) => category.items.length > 0);
+
+		return filtered;
+	}, [searchQuery]);
+
+	// Filter quick access items based on search
+	const filteredQuickAccess = React.useMemo(() => {
+		if (!searchQuery.trim()) return quickAccessItems;
+		return quickAccessItems.filter((item) =>
+			item.title.toLowerCase().includes(searchQuery.toLowerCase()),
+		);
+	}, [searchQuery]);
 
 	return (
 		<div className={cn("pb-12", className)} {...props}>
@@ -113,14 +159,61 @@ export function SidebarNav({
 					<h2 className="mb-2 px-4 font-semibold text-lg tracking-tight">
 						Suplementor
 					</h2>
+
+					{/* Search Input */}
+					<div className="mb-4 px-1">
+						<div className="relative">
+							<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
+							<Input
+								placeholder="Szukaj w nawigacji..."
+								value={searchQuery}
+								onChange={(e) => setSearchQuery(e.target.value)}
+								className="h-9 bg-background pl-9"
+							/>
+						</div>
+					</div>
+
+					{/* Quick Access Section */}
+					{(!searchQuery.trim() || filteredQuickAccess.length > 0) && (
+						<div className="mb-4">
+							<h3 className="mb-2 px-3 font-medium text-muted-foreground text-sm">
+								Szybki dostęp
+							</h3>
+							<div className="space-y-1">
+								{filteredQuickAccess.map((item) => (
+									<Link
+										key={item.href}
+										href={item.href}
+										onClick={onItemClick}
+										className={cn(
+											"group flex items-center gap-3 rounded-md px-3 py-2 font-medium text-sm hover:bg-accent hover:text-accent-foreground",
+											pathname === item.href
+												? "bg-accent text-accent-foreground"
+												: "text-muted-foreground",
+										)}
+									>
+										<item.icon className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+										{item.title}
+									</Link>
+								))}
+							</div>
+						</div>
+					)}
+
+					{/* Main Navigation */}
 					<div className="space-y-1">
-						{navigationItems.map((category) => (
+						{filteredNavItems.map((category) => (
 							<Accordion key={category.title} type="single" collapsible>
 								<AccordionItem value={category.title} className="border-b-0">
 									<AccordionTrigger className="py-2 font-medium text-sm transition-colors hover:text-primary data-[state=open]:text-primary">
 										<div className="flex items-center gap-2">
 											<category.icon className="h-4 w-4" />
 											{category.title}
+											{searchQuery.trim() && (
+												<span className="ml-auto text-muted-foreground text-xs">
+													{category.items.length}
+												</span>
+											)}
 										</div>
 									</AccordionTrigger>
 									<AccordionContent className="pb-2 pl-6">

@@ -3,7 +3,7 @@
  * Comprehensive review system with Polish localization and moderation
  */
 
-import type { ReviewWithUser, ReviewStats } from "@/types/review";
+import type { ReviewStats, ReviewWithUser } from "@/types/review";
 import mongoose, { Schema, type Document, type Model } from "mongoose";
 
 // Main Review Schema
@@ -228,7 +228,12 @@ ReviewSchema.statics.findBySupplementId = async function (
 		sortBy?: string;
 	} = {},
 ) {
-	const { status = "approved", page = 1, limit = 10, sortBy = "createdAt" } = options;
+	const {
+		status = "approved",
+		page = 1,
+		limit = 10,
+		sortBy = "createdAt",
+	} = options;
 
 	const query: any = { supplementId, status };
 	const skip = (page - 1) * limit;
@@ -255,9 +260,7 @@ ReviewSchema.statics.findByUserId = function (userId: string) {
 };
 
 ReviewSchema.statics.findPendingReviews = function () {
-	return this.find({ status: "pending" })
-		.sort({ createdAt: 1 })
-		.lean();
+	return this.find({ status: "pending" }).sort({ createdAt: 1 }).lean();
 };
 
 ReviewSchema.statics.getAverageRating = async function (supplementId: string) {
@@ -275,7 +278,9 @@ ReviewSchema.statics.getAverageRating = async function (supplementId: string) {
 	return result.length > 0 ? Math.round(result[0].average * 10) / 10 : 0;
 };
 
-ReviewSchema.statics.getRatingDistribution = async function (supplementId: string) {
+ReviewSchema.statics.getRatingDistribution = async function (
+	supplementId: string,
+) {
 	const result = await this.aggregate([
 		{ $match: { supplementId, status: "approved" } },
 		{
@@ -292,10 +297,19 @@ ReviewSchema.statics.getRatingDistribution = async function (supplementId: strin
 		distribution[item._id as keyof typeof distribution] = item.count;
 	});
 
-	const total = Object.values(distribution).reduce((sum, count) => sum + count, 0);
+	const total = Object.values(distribution).reduce(
+		(sum, count) => sum + count,
+		0,
+	);
 
 	return {
-		average: total > 0 ? Object.entries(distribution).reduce((sum, [rating, count]) => sum + (Number(rating) * count), 0) / total : 0,
+		average:
+			total > 0
+				? Object.entries(distribution).reduce(
+						(sum, [rating, count]) => sum + Number(rating) * count,
+						0,
+					) / total
+				: 0,
 		total,
 		distribution,
 	};

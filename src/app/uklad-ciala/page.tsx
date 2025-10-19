@@ -1,161 +1,171 @@
-import { Metadata } from "next";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { bodySystems } from "@/data/body-systems";
+"use client";
 
-export const metadata: Metadata = {
-	title: "Układy Ciała | Suplementor",
-	description: "Poznaj anatomię i funkcje różnych układów ciała oraz wpływ suplementów",
-};
+import {
+	BodySystemCard,
+	BodySystemCrossReference,
+	BodySystemSearch,
+} from "@/components/features/body-systems";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { type BodySystem, bodySystems } from "@/data/body-systems";
+import { Filter, Grid, List, Search } from "lucide-react";
+import { useMemo, useState } from "react";
+
+type ViewMode = "grid" | "list";
+type SortOption = "name" | "organs" | "supplements";
 
 export default function BodySystemsPage() {
+	const [filteredSystems, setFilteredSystems] =
+		useState<BodySystem[]>(bodySystems);
+	const [viewMode, setViewMode] = useState<ViewMode>("grid");
+	const [showSupplements, setShowSupplements] = useState(true);
+	const [selectedSystemId, setSelectedSystemId] = useState<
+		string | undefined
+	>();
+
+	const handleFilteredResults = (filtered: BodySystem[]) => {
+		setFilteredSystems(filtered);
+	};
+
+	const handleSupplementClick = (supplementId: string) => {
+		// Navigate to supplement detail page or open modal
+		console.log("Navigate to supplement:", supplementId);
+	};
+
+	const handleSystemSelect = (systemId: string) => {
+		setSelectedSystemId(systemId);
+		// Scroll to cross-reference section
+		document
+			.getElementById("cross-reference-section")
+			?.scrollIntoView({ behavior: "smooth" });
+	};
 	return (
 		<div className="container mx-auto py-8">
-			<h1 className="text-3xl font-bold mb-6">Układy Ciała Człowieka</h1>
-			<p className="text-lg mb-8">
-				Poznaj główne układy ciała człowieka, ich funkcje oraz suplementy, które mogą wspierać ich zdrowie.
-			</p>
+			<div className="mb-8">
+				<h1 className="mb-3 font-bold text-2xl md:mb-4 md:text-3xl">
+					Układy Ciała Człowieka
+				</h1>
+				<p className="mb-4 text-base text-gray-700 md:mb-6 md:text-lg">
+					Poznaj {bodySystems.length} układów ciała człowieka, ich funkcje oraz
+					suplementy, które mogą wspierać ich zdrowie.
+				</p>
 
-			{/* Body Systems Grid */}
-			<div className="mb-12">
-				<h2 className="text-2xl font-semibold mb-4">Główne Układy Ciała</h2>
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-					{bodySystems.map((system) => (
-						<Card key={system.id} className="overflow-hidden">
-							<CardHeader className={`bg-gradient-to-r from-${getSystemColor(system.id)}-100 to-${getSystemColor(system.id)}-50`}>
-								<CardTitle>{system.polishName}</CardTitle>
-								<CardDescription>{system.name}</CardDescription>
-							</CardHeader>
-							<CardContent className="pt-6">
-								<p className="mb-4">{system.polishDescription}</p>
-								
-								<h3 className="font-semibold mb-2">Główne Narządy:</h3>
-								<ul className="list-disc pl-5 mb-4">
-									{system.organs.map((organ) => (
-										<li key={organ.id}>
-											<span className="font-medium">{organ.polishName}</span> ({organ.name})
-										</li>
-									))}
-								</ul>
-								
-								<h3 className="font-semibold mb-2">Funkcje:</h3>
-								<ul className="list-disc pl-5 mb-4">
-									{system.polishFunctions.map((func, index) => (
-										<li key={index}>{func}</li>
-									))}
-								</ul>
-								
-								<h3 className="font-semibold mb-2">Powiązane Suplementy:</h3>
-								<div className="space-y-2">
-									{system.relatedSupplements.map((supplement) => (
-										<div key={supplement.supplementId} className="p-2 rounded bg-gray-50">
-											<div className="font-medium">{supplement.polishSupplementName}</div>
-											<div className="text-sm text-gray-600">{supplement.polishMechanism}</div>
-											<div className="text-xs mt-1">
-												Poziom dowodów: {translateEvidenceLevel(supplement.evidenceLevel)}
-											</div>
-										</div>
-									))}
+				{/* Enhanced Search Component */}
+				<BodySystemSearch
+					systems={bodySystems}
+					onFilteredResults={handleFilteredResults}
+				/>
+
+				{/* View Controls */}
+				<Card className="mb-6">
+					<CardContent className="pt-6">
+						<div className="flex items-center justify-between">
+							<div className="flex items-center gap-4">
+								<Button
+									variant={showSupplements ? "default" : "outline"}
+									size="sm"
+									onClick={() => setShowSupplements(!showSupplements)}
+								>
+									{showSupplements ? "Ukryj suplementy" : "Pokaż suplementy"}
+								</Button>
+
+								<div className="flex gap-2">
+									<Badge variant="secondary">
+										Znalezione: {filteredSystems.length}
+									</Badge>
+									<Badge variant="outline">
+										Wszystkie: {bodySystems.length}
+									</Badge>
 								</div>
-								
-								<div className="mt-6 pt-4 border-t">
-									<h3 className="font-semibold mb-2">Znaczenie Kliniczne:</h3>
-									<p className="text-sm text-gray-700">
-										{system.anatomicalInfo.polishClinicalRelevance}
-									</p>
-								</div>
-							</CardContent>
-						</Card>
-					))}
-				</div>
+							</div>
+
+							<div className="flex rounded-lg border">
+								<Button
+									variant={viewMode === "grid" ? "default" : "ghost"}
+									size="sm"
+									onClick={() => setViewMode("grid")}
+									className="rounded-r-none"
+								>
+									<Grid className="h-4 w-4" />
+								</Button>
+								<Button
+									variant={viewMode === "list" ? "default" : "ghost"}
+									size="sm"
+									onClick={() => setViewMode("list")}
+									className="rounded-l-none"
+								>
+									<List className="h-4 w-4" />
+								</Button>
+							</div>
+						</div>
+					</CardContent>
+				</Card>
 			</div>
 
-			{/* Educational Tabs */}
-			<Card>
-				<CardHeader>
-					<CardTitle>Poziomy Wiedzy</CardTitle>
-					<CardDescription>
-						Wybierz poziom szczegółowości wyjaśnień
-					</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<Tabs defaultValue="beginner">
-						<TabsList className="grid w-full grid-cols-3">
-							<TabsTrigger value="beginner">Początkujący</TabsTrigger>
-							<TabsTrigger value="intermediate">Średniozaawansowany</TabsTrigger>
-							<TabsTrigger value="expert">Ekspert</TabsTrigger>
-						</TabsList>
+			{/* Body Systems Display */}
+			<div className="mb-12">
+				{filteredSystems.length === 0 ? (
+					<Card>
+						<CardContent className="py-12 pt-6 text-center">
+							<p className="mb-4 text-gray-500">
+								Nie znaleziono układów ciała spełniających kryteria
+								wyszukiwania.
+							</p>
+							<Button
+								variant="outline"
+								onClick={() => {
+									setFilteredSystems(bodySystems);
+								}}
+							>
+								Wyczyść filtry
+							</Button>
+						</CardContent>
+					</Card>
+				) : (
+					<div
+						className={
+							viewMode === "grid"
+								? "grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3"
+								: "space-y-3 md:space-y-4"
+						}
+					>
+						{filteredSystems.map((system) => (
+							<BodySystemCard
+								key={system.id}
+								system={system}
+								onSupplementClick={handleSupplementClick}
+								compact={viewMode === "list"}
+								showRelatedSupplements={showSupplements}
+							/>
+						))}
+					</div>
+				)}
+			</div>
 
-						<TabsContent value="beginner" className="space-y-4 mt-4">
-							<div className="bg-green-50 p-4 rounded-lg border border-green-200">
-								<h4 className="font-semibold mb-2 text-green-800">Podstawy Anatomii Człowieka</h4>
-								<p className="text-sm text-green-700 leading-relaxed">
-									Ciało człowieka składa się z różnych układów, z których każdy pełni określone funkcje. 
-									Układ sercowo-naczyniowy transportuje krew i składniki odżywcze, układ pokarmowy przetwarza 
-									pożywienie, a układ odpornościowy chroni przed infekcjami. Suplementy mogą wspierać 
-									prawidłowe funkcjonowanie tych układów, dostarczając niezbędnych składników odżywczych.
-								</p>
-							</div>
-						</TabsContent>
-
-						<TabsContent value="intermediate" className="space-y-4 mt-4">
-							<div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-								<h4 className="font-semibold mb-2 text-blue-800">Funkcjonalna Organizacja Ciała</h4>
-								<p className="text-sm text-blue-700 leading-relaxed">
-									Układy ciała człowieka współpracują ze sobą, tworząc zintegrowaną całość. Układ sercowo-naczyniowy 
-									dostarcza tlen i składniki odżywcze do wszystkich tkanek, układ pokarmowy przetwarza pożywienie 
-									na użyteczne substancje, a układ odpornościowy zapewnia ochronę przed patogenami. Suplementy 
-									mogą wpływać na te układy poprzez modulację procesów metabolicznych, wsparcie funkcji narządów 
-									i dostarczanie kofaktorów dla enzymów.
-								</p>
-							</div>
-						</TabsContent>
-
-						<TabsContent value="expert" className="space-y-4 mt-4">
-							<div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-								<h4 className="font-semibold mb-2 text-purple-800">Fizjologia Molekularna</h4>
-								<p className="text-sm text-purple-700 leading-relaxed">
-									Funkcjonowanie układów ciała opiera się na precyzyjnych mechanizmach molekularnych i szlakach 
-									sygnałowych. Układ sercowo-naczyniowy regulowany jest przez mechanizmy neurohormonalne i 
-									śródbłonkowe czynniki wazoaktywne. Układ pokarmowy wykorzystuje złożone procesy enzymatyczne 
-									i transportery błonowe. Układ odpornościowy działa poprzez rozpoznawanie wzorców molekularnych, 
-									prezentację antygenów i kaskady sygnałowe. Suplementy mogą modulować te procesy poprzez 
-									wpływ na ekspresję genów, aktywność enzymów i funkcje receptorów.
-								</p>
-							</div>
-						</TabsContent>
-					</Tabs>
-				</CardContent>
-			</Card>
+			{/* Cross-Reference Section */}
+			<div id="cross-reference-section" className="mb-12">
+				<BodySystemCrossReference
+					systems={bodySystems}
+					selectedSystemId={selectedSystemId}
+					onSystemSelect={handleSystemSelect}
+				/>
+			</div>
 		</div>
 	);
-}
-
-// Helper functions
-function getSystemColor(systemId: string): string {
-	switch (systemId) {
-		case "cardiovascular":
-			return "red";
-		case "digestive":
-			return "amber";
-		case "immune":
-			return "blue";
-		default:
-			return "gray";
-	}
-}
-
-function translateEvidenceLevel(level: string): string {
-	switch (level) {
-		case "STRONG":
-			return "Silny";
-		case "MODERATE":
-			return "Umiarkowany";
-		case "WEAK":
-			return "Słaby";
-		case "INSUFFICIENT":
-			return "Niewystarczający";
-		default:
-			return "Nieznany";
-	}
 }

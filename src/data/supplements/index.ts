@@ -5,6 +5,7 @@ import type { SupplementWithRelations } from "@/types/supplement";
  * Comprehensive collection of evidence-based supplement data with Polish localization
  */
 
+import { fiveHTPProfile } from "./5-htp";
 // Import individual supplement profiles
 import { acetylLCarnitineProfile } from "./acetyl-l-carnitine";
 import { alphaGPCProfile } from "./alpha-gpc";
@@ -21,12 +22,11 @@ import { cdpCholineProfile } from "./cdp-choline";
 import { coq10Profile } from "./coenzyme-q10";
 import { creatineProfile } from "./creatine";
 import { curcuminProfile } from "./curcumin";
-import { fiveHTPProfile } from "./5-htp";
 import { ginkgoBilobaProfile } from "./ginkgo-biloba";
 import { ironBisglycinateProfile } from "./iron-bisglycinate";
 import { lTheanineProfile } from "./l-theanine";
-import { lionsManeProfile } from "./lions-mane";
 import { lTyrosineProfile } from "./l-tyrosine";
+import { lionsManeProfile } from "./lions-mane";
 import { magnesiumProfile } from "./magnesium";
 import { melatoninProfile } from "./melatonin";
 import { nAcetylCysteineProfile } from "./n-acetyl-cysteine";
@@ -34,8 +34,8 @@ import { noopeptProfile } from "./noopept";
 import { omega3Profile } from "./omega-3";
 import { phosphatidylserineProfile } from "./phosphatidylserine";
 import { piracetamProfile } from "./piracetam";
-import { probioticsProfile } from "./probiotics";
 import { pqqProfile } from "./pqq";
+import { probioticsProfile } from "./probiotics";
 import { pterostilbeneProfile } from "./pterostilbene";
 import { pycnogenolProfile } from "./pycnogenol";
 import { resveratrolProfile } from "./resveratrol";

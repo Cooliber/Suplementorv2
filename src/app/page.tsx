@@ -79,8 +79,8 @@ export default function HomePage() {
 					</FadeIn>
 					<SlideIn direction="up" delay={0.2}>
 						<p className="mb-8 text-gray-600 text-xl dark:text-gray-300">
-							Zgłębiaj wiedzę opartą na badaniach naukowych. Odkrywaj,
-							analizuj i porównuj suplementy w jednym miejscu.
+							Zgłębiaj wiedzę opartą na badaniach naukowych. Odkrywaj, analizuj
+							i porównuj suplementy w jednym miejscu.
 						</p>
 					</SlideIn>
 					<SlideIn direction="up" delay={0.4}>

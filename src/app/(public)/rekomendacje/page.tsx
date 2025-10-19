@@ -8,9 +8,15 @@
 import { AnimatedPage, FadeIn, SlideIn } from "@/components/animations";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
 	Select,
 	SelectContent,
@@ -18,39 +24,42 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+	type SampleSupplement,
+	sampleSupplements,
+} from "@/data/sample-supplements";
+import {
+	Activity,
 	BookOpen,
+	Brain,
+	Filter,
+	Heart,
+	Heart as HeartIcon,
+	Info,
+	Minus,
+	Moon,
+	Plus,
+	RefreshCw,
+	Search,
+	Settings,
+	Share2,
+	Shield,
+	ShoppingCart,
 	Sparkles,
 	Star,
-	Info,
-	ShoppingCart,
-	Heart,
-	Share2,
-	Target,
-	Brain,
-	Heart as HeartIcon,
-	Shield,
-	Zap,
-	TrendingUp,
-	Settings,
-	RefreshCw,
-	ThumbsUp,
-	ThumbsDown,
-	Filter,
-	Plus,
-	Minus,
-	Activity,
-	Moon,
 	Sun,
+	Target,
+	ThumbsDown,
+	ThumbsUp,
+	TrendingUp,
 	Users,
-	Search,
+	Zap,
 } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { sampleSupplements, SampleSupplement } from "@/data/sample-supplements";
+import { useEffect, useState } from "react";
 
 interface UserPreferences {
 	healthGoals: string[];
@@ -82,7 +91,9 @@ export default function RekomendacjePage() {
 		preferredEvidenceLevel: "moderate",
 	});
 
-	const [recommendations, setRecommendations] = useState<SampleSupplement[]>([]);
+	const [recommendations, setRecommendations] = useState<SampleSupplement[]>(
+		[],
+	);
 	const [isGenerating, setIsGenerating] = useState(false);
 	const [showPreferences, setShowPreferences] = useState(false);
 
@@ -118,30 +129,41 @@ export default function RekomendacjePage() {
 
 		// Simulate AI processing delay
 		setTimeout(() => {
-			let scoredSupplements = sampleSupplements.map((supplement) => {
+			const scoredSupplements = sampleSupplements.map((supplement) => {
 				let score = 0;
-				let reasons: string[] = [];
+				const reasons: string[] = [];
 				let confidence = 0.5;
 
 				// Score based on health goals
 				userPreferences.healthGoals.forEach((goal) => {
-					const goalMatches = supplement.polishPrimaryBenefits.some(benefit =>
-						benefit.toLowerCase().includes(goal.toLowerCase()) ||
-						benefit.toLowerCase().includes(goal.replace("poprawa", "").toLowerCase())
+					const goalMatches = supplement.polishPrimaryBenefits.some(
+						(benefit) =>
+							benefit.toLowerCase().includes(goal.toLowerCase()) ||
+							benefit
+								.toLowerCase()
+								.includes(goal.replace("poprawa", "").toLowerCase()),
 					);
 
 					if (goalMatches) {
 						score += 25;
-						reasons.push(`Pasuje do celu: ${healthGoalsOptions.find(g => g.id === goal)?.label}`);
+						reasons.push(
+							`Pasuje do celu: ${healthGoalsOptions.find((g) => g.id === goal)?.label}`,
+						);
 					}
 				});
 
 				// Score based on evidence level preference
-				if (userPreferences.preferredEvidenceLevel === "strong" && supplement.evidenceLevel === "STRONG") {
+				if (
+					userPreferences.preferredEvidenceLevel === "strong" &&
+					supplement.evidenceLevel === "STRONG"
+				) {
 					score += 20;
 					reasons.push("Silne dowody naukowe");
-				} else if (userPreferences.preferredEvidenceLevel === "moderate" &&
-						  (supplement.evidenceLevel === "STRONG" || supplement.evidenceLevel === "MODERATE")) {
+				} else if (
+					userPreferences.preferredEvidenceLevel === "moderate" &&
+					(supplement.evidenceLevel === "STRONG" ||
+						supplement.evidenceLevel === "MODERATE")
+				) {
 					score += 15;
 					reasons.push("Dobre dowody naukowe");
 				}
@@ -155,14 +177,17 @@ export default function RekomendacjePage() {
 				// Score based on budget
 				if (supplement.price) {
 					const avgPrice = (supplement.price.min + supplement.price.max) / 2;
-					if (avgPrice >= userPreferences.budget[0] && avgPrice <= userPreferences.budget[1]) {
+					if (
+						avgPrice >= userPreferences.budget[0] &&
+						avgPrice <= userPreferences.budget[1]
+					) {
 						score += 10;
 						reasons.push("W zakresie budżetu");
 					}
 				}
 
 				// Adjust confidence based on study count
-				confidence = Math.min(0.95, 0.5 + (supplement.studyCount / 200));
+				confidence = Math.min(0.95, 0.5 + supplement.studyCount / 200);
 
 				return {
 					supplement,
@@ -176,7 +201,7 @@ export default function RekomendacjePage() {
 			scoredSupplements.sort((a, b) => b.score - a.score);
 			const topRecommendations = scoredSupplements
 				.slice(0, 12)
-				.map(item => item.supplement);
+				.map((item) => item.supplement);
 
 			setRecommendations(topRecommendations);
 			setIsGenerating(false);
@@ -191,33 +216,37 @@ export default function RekomendacjePage() {
 	}, [userPreferences]);
 
 	const toggleHealthGoal = (goalId: string) => {
-		setUserPreferences(prev => ({
+		setUserPreferences((prev) => ({
 			...prev,
 			healthGoals: prev.healthGoals.includes(goalId)
-				? prev.healthGoals.filter(g => g !== goalId)
-				: [...prev.healthGoals, goalId]
+				? prev.healthGoals.filter((g) => g !== goalId)
+				: [...prev.healthGoals, goalId],
 		}));
 	};
 
 	const toggleDietaryRestriction = (restriction: string) => {
-		setUserPreferences(prev => ({
+		setUserPreferences((prev) => ({
 			...prev,
 			dietaryRestrictions: prev.dietaryRestrictions.includes(restriction)
-				? prev.dietaryRestrictions.filter(r => r !== restriction)
-				: [...prev.dietaryRestrictions, restriction]
+				? prev.dietaryRestrictions.filter((r) => r !== restriction)
+				: [...prev.dietaryRestrictions, restriction],
 		}));
 	};
 
-	const RecommendationCard = ({ supplement, score, reasons }: {
+	const RecommendationCard = ({
+		supplement,
+		score,
+		reasons,
+	}: {
 		supplement: SampleSupplement;
 		score: number;
 		reasons: string[];
 	}) => (
-		<Card className="group h-full transition-all duration-200 hover:shadow-lg hover:-translate-y-1 relative">
+		<Card className="group hover:-translate-y-1 relative h-full transition-all duration-200 hover:shadow-lg">
 			{/* AI Score Badge */}
-			<div className="absolute -top-2 -right-2 z-10">
+			<div className="-top-2 -right-2 absolute z-10">
 				<Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-					<Sparkles className="h-3 w-3 mr-1" />
+					<Sparkles className="mr-1 h-3 w-3" />
 					{Math.round(score)}%
 				</Badge>
 			</div>
@@ -225,53 +254,62 @@ export default function RekomendacjePage() {
 			<CardHeader className="pb-3">
 				<div className="flex items-start justify-between">
 					<div className="flex-1">
-						<CardTitle className="text-lg leading-tight mb-1">
+						<CardTitle className="mb-1 text-lg leading-tight">
 							{supplement.polishName}
 						</CardTitle>
-						<CardDescription className="text-sm text-muted-foreground">
+						<CardDescription className="text-muted-foreground text-sm">
 							{supplement.name}
 						</CardDescription>
 					</div>
-					<Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
+					<Button
+						variant="ghost"
+						size="sm"
+						className="opacity-0 transition-opacity group-hover:opacity-100"
+					>
 						<Heart className="h-4 w-4" />
 					</Button>
 				</div>
 
-				<div className="flex items-center gap-2 mt-2">
+				<div className="mt-2 flex items-center gap-2">
 					<Badge variant="outline" className="text-xs">
-						{healthGoalsOptions.find(g => g.id === "cognitive")?.label}
+						{healthGoalsOptions.find((g) => g.id === "cognitive")?.label}
 					</Badge>
-					<Badge className="text-xs bg-green-100 text-green-800">
+					<Badge className="bg-green-100 text-green-800 text-xs">
 						{supplement.evidenceLevel}
 					</Badge>
 				</div>
 			</CardHeader>
 
 			<CardContent className="pt-0">
-				<p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+				<p className="mb-3 line-clamp-2 text-muted-foreground text-sm">
 					{supplement.polishDescription}
 				</p>
 
 				{/* AI Reasons */}
 				<div className="mb-3">
-					<h4 className="text-xs font-medium text-purple-700 mb-1">Dlaczego rekomendowany:</h4>
+					<h4 className="mb-1 font-medium text-purple-700 text-xs">
+						Dlaczego rekomendowany:
+					</h4>
 					<div className="flex flex-wrap gap-1">
 						{reasons.slice(0, 2).map((reason, index) => (
-							<span key={index} className="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded-full">
+							<span
+								key={index}
+								className="rounded-full bg-purple-50 px-2 py-1 text-purple-700 text-xs"
+							>
 								{reason}
 							</span>
 						))}
 					</div>
 				</div>
 
-				<div className="flex items-center justify-between mb-3">
+				<div className="mb-3 flex items-center justify-between">
 					<div className="flex items-center gap-1">
 						<Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-						<span className="text-sm font-medium">{supplement.userRating}</span>
-						<span className="text-xs text-muted-foreground">/5</span>
+						<span className="font-medium text-sm">{supplement.userRating}</span>
+						<span className="text-muted-foreground text-xs">/5</span>
 					</div>
 					<div className="text-right">
-						<div className="text-sm font-semibold">
+						<div className="font-semibold text-sm">
 							{supplement.price?.min}-{supplement.price?.max} zł
 						</div>
 					</div>
@@ -280,7 +318,7 @@ export default function RekomendacjePage() {
 				<div className="flex gap-2">
 					<Link href={`/suplementy/${supplement.id}`} className="flex-1">
 						<Button className="w-full" size="sm">
-							<Info className="h-3 w-3 mr-1" />
+							<Info className="mr-1 h-3 w-3" />
 							Szczegóły
 						</Button>
 					</Link>
@@ -342,16 +380,17 @@ export default function RekomendacjePage() {
 						</h2>
 					</FadeIn>
 					<SlideIn direction="up" delay={0.2}>
-						<p className="text-gray-600 text-xl dark:text-gray-300 max-w-3xl">
-							Otrzymuj spersonalizowane rekomendacje suplementów oparte na Twoich celach zdrowotnych,
-							preferencjach i najnowszych badaniach naukowych.
+						<p className="max-w-3xl text-gray-600 text-xl dark:text-gray-300">
+							Otrzymuj spersonalizowane rekomendacje suplementów oparte na
+							Twoich celach zdrowotnych, preferencjach i najnowszych badaniach
+							naukowych.
 						</p>
 					</SlideIn>
 				</div>
 
 				<div className="grid gap-8 lg:grid-cols-3">
 					{/* Main Content Area */}
-					<div className="lg:col-span-2 space-y-6">
+					<div className="space-y-6 lg:col-span-2">
 						{/* Preferences Toggle */}
 						<Card>
 							<CardHeader>
@@ -378,11 +417,13 @@ export default function RekomendacjePage() {
 								<CardContent className="space-y-6">
 									{/* Health Goals */}
 									<div>
-										<h4 className="font-medium mb-3">Cele zdrowotne</h4>
-										<div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+										<h4 className="mb-3 font-medium">Cele zdrowotne</h4>
+										<div className="grid grid-cols-2 gap-2 md:grid-cols-3">
 											{healthGoalsOptions.map((goal) => {
 												const Icon = goal.icon;
-												const isSelected = userPreferences.healthGoals.includes(goal.id);
+												const isSelected = userPreferences.healthGoals.includes(
+													goal.id,
+												);
 
 												return (
 													<Button
@@ -390,9 +431,9 @@ export default function RekomendacjePage() {
 														variant={isSelected ? "default" : "outline"}
 														size="sm"
 														onClick={() => toggleHealthGoal(goal.id)}
-														className="justify-start h-auto p-3"
+														className="h-auto justify-start p-3"
 													>
-														<Icon className="h-4 w-4 mr-2" />
+														<Icon className="mr-2 h-4 w-4" />
 														<span className="text-xs">{goal.label}</span>
 													</Button>
 												);
@@ -401,31 +442,43 @@ export default function RekomendacjePage() {
 									</div>
 
 									{/* Basic Info */}
-									<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+									<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 										<div>
-											<Label className="text-sm font-medium">Wiek</Label>
+											<Label className="font-medium text-sm">Wiek</Label>
 											<Select
 												value={userPreferences.age.toString()}
-												onValueChange={(value) => setUserPreferences(prev => ({ ...prev, age: parseInt(value) }))}
+												onValueChange={(value) =>
+													setUserPreferences((prev) => ({
+														...prev,
+														age: Number.parseInt(value),
+													}))
+												}
 											>
 												<SelectTrigger className="mt-1">
 													<SelectValue />
 												</SelectTrigger>
 												<SelectContent>
-													{Array.from({ length: 60 }, (_, i) => i + 18).map(age => (
-														<SelectItem key={age} value={age.toString()}>
-															{age} lat
-														</SelectItem>
-													))}
+													{Array.from({ length: 60 }, (_, i) => i + 18).map(
+														(age) => (
+															<SelectItem key={age} value={age.toString()}>
+																{age} lat
+															</SelectItem>
+														),
+													)}
 												</SelectContent>
 											</Select>
 										</div>
 
 										<div>
-											<Label className="text-sm font-medium">Płeć</Label>
+											<Label className="font-medium text-sm">Płeć</Label>
 											<Select
 												value={userPreferences.gender}
-												onValueChange={(value: any) => setUserPreferences(prev => ({ ...prev, gender: value }))}
+												onValueChange={(value: any) =>
+													setUserPreferences((prev) => ({
+														...prev,
+														gender: value,
+													}))
+												}
 											>
 												<SelectTrigger className="mt-1">
 													<SelectValue />
@@ -439,20 +492,35 @@ export default function RekomendacjePage() {
 										</div>
 
 										<div>
-											<Label className="text-sm font-medium">Aktywność fizyczna</Label>
+											<Label className="font-medium text-sm">
+												Aktywność fizyczna
+											</Label>
 											<Select
 												value={userPreferences.activityLevel}
-												onValueChange={(value: any) => setUserPreferences(prev => ({ ...prev, activityLevel: value }))}
+												onValueChange={(value: any) =>
+													setUserPreferences((prev) => ({
+														...prev,
+														activityLevel: value,
+													}))
+												}
 											>
 												<SelectTrigger className="mt-1">
 													<SelectValue />
 												</SelectTrigger>
 												<SelectContent>
-													<SelectItem value="sedentary">Siedzący tryb życia</SelectItem>
+													<SelectItem value="sedentary">
+														Siedzący tryb życia
+													</SelectItem>
 													<SelectItem value="light">Lekka aktywność</SelectItem>
-													<SelectItem value="moderate">Umiarkowana aktywność</SelectItem>
-													<SelectItem value="active">Wysoka aktywność</SelectItem>
-													<SelectItem value="very_active">Bardzo wysoka aktywność</SelectItem>
+													<SelectItem value="moderate">
+														Umiarkowana aktywność
+													</SelectItem>
+													<SelectItem value="active">
+														Wysoka aktywność
+													</SelectItem>
+													<SelectItem value="very_active">
+														Bardzo wysoka aktywność
+													</SelectItem>
 												</SelectContent>
 											</Select>
 										</div>
@@ -460,19 +528,24 @@ export default function RekomendacjePage() {
 
 									{/* Budget Range */}
 									<div>
-										<Label className="text-sm font-medium mb-2 block">
+										<Label className="mb-2 block font-medium text-sm">
 											Zakres budżetu (PLN/miesiąc)
 										</Label>
 										<div className="px-2">
 											<Slider
 												value={userPreferences.budget}
-												onValueChange={(value) => setUserPreferences(prev => ({ ...prev, budget: value as [number, number] }))}
+												onValueChange={(value) =>
+													setUserPreferences((prev) => ({
+														...prev,
+														budget: value as [number, number],
+													}))
+												}
 												max={500}
 												min={0}
 												step={10}
 												className="w-full"
 											/>
-											<div className="flex justify-between text-xs text-muted-foreground mt-1">
+											<div className="mt-1 flex justify-between text-muted-foreground text-xs">
 												<span>{userPreferences.budget[0]} zł</span>
 												<span>{userPreferences.budget[1]} zł</span>
 											</div>
@@ -481,12 +554,20 @@ export default function RekomendacjePage() {
 
 									{/* Dietary Restrictions */}
 									<div>
-										<h4 className="font-medium mb-3">Ograniczenia żywieniowe</h4>
+										<h4 className="mb-3 font-medium">
+											Ograniczenia żywieniowe
+										</h4>
 										<div className="flex flex-wrap gap-2">
 											{dietaryRestrictionsOptions.map((restriction) => (
 												<Button
 													key={restriction}
-													variant={userPreferences.dietaryRestrictions.includes(restriction) ? "default" : "outline"}
+													variant={
+														userPreferences.dietaryRestrictions.includes(
+															restriction,
+														)
+															? "default"
+															: "outline"
+													}
 													size="sm"
 													onClick={() => toggleDietaryRestriction(restriction)}
 												>
@@ -497,7 +578,7 @@ export default function RekomendacjePage() {
 									</div>
 
 									<Button onClick={generateRecommendations} className="w-full">
-										<Sparkles className="h-4 w-4 mr-2" />
+										<Sparkles className="mr-2 h-4 w-4" />
 										Generuj nowe rekomendacje
 									</Button>
 								</CardContent>
@@ -514,7 +595,8 @@ export default function RekomendacjePage() {
 											Rekomendowane suplementy
 										</CardTitle>
 										<CardDescription>
-											Spersonalizowane rekomendacje oparte na Twoich preferencjach
+											Spersonalizowane rekomendacje oparte na Twoich
+											preferencjach
 										</CardDescription>
 									</div>
 									<Button
@@ -524,9 +606,9 @@ export default function RekomendacjePage() {
 										disabled={isGenerating}
 									>
 										{isGenerating ? (
-											<RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+											<RefreshCw className="mr-2 h-4 w-4 animate-spin" />
 										) : (
-											<RefreshCw className="h-4 w-4 mr-2" />
+											<RefreshCw className="mr-2 h-4 w-4" />
 										)}
 										Odśwież
 									</Button>
@@ -540,14 +622,14 @@ export default function RekomendacjePage() {
 											<Card key={index}>
 												<CardHeader>
 													<div className="animate-pulse">
-														<div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-														<div className="h-3 bg-gray-200 rounded w-1/2"></div>
+														<div className="mb-2 h-4 w-3/4 rounded bg-gray-200" />
+														<div className="h-3 w-1/2 rounded bg-gray-200" />
 													</div>
 												</CardHeader>
 												<CardContent>
 													<div className="animate-pulse space-y-2">
-														<div className="h-3 bg-gray-200 rounded"></div>
-														<div className="h-3 bg-gray-200 rounded w-2/3"></div>
+														<div className="h-3 rounded bg-gray-200" />
+														<div className="h-3 w-2/3 rounded bg-gray-200" />
 													</div>
 												</CardContent>
 											</Card>
@@ -563,17 +645,20 @@ export default function RekomendacjePage() {
 												reasons={[
 													"Wysoka zgodność z celami",
 													"Dobre dowody naukowe",
-													"Pozytywne opinie użytkowników"
+													"Pozytywne opinie użytkowników",
 												]}
 											/>
 										))}
 									</div>
 								) : (
-									<div className="text-center py-12">
-										<Sparkles className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-										<h3 className="font-semibold text-lg mb-2">Brak rekomendacji</h3>
-										<p className="text-muted-foreground mb-4">
-											Ustaw swoje cele zdrowotne, aby otrzymać personalne rekomendacje.
+									<div className="py-12 text-center">
+										<Sparkles className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+										<h3 className="mb-2 font-semibold text-lg">
+											Brak rekomendacji
+										</h3>
+										<p className="mb-4 text-muted-foreground">
+											Ustaw swoje cele zdrowotne, aby otrzymać personalne
+											rekomendacje.
 										</p>
 										<Button onClick={() => setShowPreferences(true)}>
 											Ustaw preferencje
@@ -593,15 +678,15 @@ export default function RekomendacjePage() {
 							</CardHeader>
 							<CardContent className="space-y-3">
 								<Button className="w-full justify-start" variant="outline">
-									<Plus className="h-4 w-4 mr-2" />
+									<Plus className="mr-2 h-4 w-4" />
 									Dodaj do ulubionych
 								</Button>
 								<Button className="w-full justify-start" variant="outline">
-									<Share2 className="h-4 w-4 mr-2" />
+									<Share2 className="mr-2 h-4 w-4" />
 									Udostępnij rekomendacje
 								</Button>
 								<Button className="w-full justify-start" variant="outline">
-									<Settings className="h-4 w-4 mr-2" />
+									<Settings className="mr-2 h-4 w-4" />
 									Zarządzaj preferencjami
 								</Button>
 							</CardContent>
@@ -614,34 +699,49 @@ export default function RekomendacjePage() {
 							</CardHeader>
 							<CardContent className="space-y-4">
 								<div>
-									<div className="flex justify-between text-sm mb-1">
+									<div className="mb-1 flex justify-between text-sm">
 										<span>Liczba rekomendacji</span>
-										<span className="font-medium">{recommendations.length}</span>
-									</div>
-									<Progress value={(recommendations.length / 12) * 100} className="h-2" />
-								</div>
-
-								<div>
-									<div className="flex justify-between text-sm mb-1">
-										<span>Średnia ocena</span>
 										<span className="font-medium">
-											{recommendations.length > 0
-												? (recommendations.reduce((acc, s) => acc + s.userRating, 0) / recommendations.length).toFixed(1)
-												: "0.0"
-											}
+											{recommendations.length}
 										</span>
 									</div>
 									<Progress
-										value={recommendations.length > 0
-											? (recommendations.reduce((acc, s) => acc + s.userRating, 0) / recommendations.length) * 20
-											: 0
+										value={(recommendations.length / 12) * 100}
+										className="h-2"
+									/>
+								</div>
+
+								<div>
+									<div className="mb-1 flex justify-between text-sm">
+										<span>Średnia ocena</span>
+										<span className="font-medium">
+											{recommendations.length > 0
+												? (
+														recommendations.reduce(
+															(acc, s) => acc + s.userRating,
+															0,
+														) / recommendations.length
+													).toFixed(1)
+												: "0.0"}
+										</span>
+									</div>
+									<Progress
+										value={
+											recommendations.length > 0
+												? (recommendations.reduce(
+														(acc, s) => acc + s.userRating,
+														0,
+													) /
+														recommendations.length) *
+													20
+												: 0
 										}
 										className="h-2"
 									/>
 								</div>
 
 								<div>
-									<div className="flex justify-between text-sm mb-1">
+									<div className="mb-1 flex justify-between text-sm">
 										<span>Poziom dowodów</span>
 										<span className="font-medium">85%</span>
 									</div>
@@ -653,7 +753,7 @@ export default function RekomendacjePage() {
 						{/* Popular Recommendations */}
 						<Card>
 							<CardHeader>
-								<CardTitle className="text-lg flex items-center gap-2">
+								<CardTitle className="flex items-center gap-2 text-lg">
 									<TrendingUp className="h-5 w-5" />
 									Popularne rekomendacje
 								</CardTitle>
@@ -661,11 +761,17 @@ export default function RekomendacjePage() {
 							<CardContent>
 								<div className="space-y-3">
 									{sampleSupplements.slice(0, 3).map((supplement) => (
-										<div key={supplement.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
+										<div
+											key={supplement.id}
+											className="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-muted/50"
+										>
 											<div className="flex-1">
-												<div className="font-medium text-sm">{supplement.polishName}</div>
-												<div className="text-xs text-muted-foreground">
-													{supplement.userRating}/5 • {supplement.studyCount} badań
+												<div className="font-medium text-sm">
+													{supplement.polishName}
+												</div>
+												<div className="text-muted-foreground text-xs">
+													{supplement.userRating}/5 • {supplement.studyCount}{" "}
+													badań
 												</div>
 											</div>
 											<Button size="sm" variant="ghost">
@@ -688,7 +794,8 @@ export default function RekomendacjePage() {
 							© 2025 Suplementor - Platforma Edukacyjna o Suplementach
 						</p>
 						<p className="text-sm">
-							Rekomendacje AI oparte na badaniach naukowych i danych użytkowników
+							Rekomendacje AI oparte na badaniach naukowych i danych
+							użytkowników
 						</p>
 					</div>
 				</div>

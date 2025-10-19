@@ -25,7 +25,11 @@ export const vitaminCProfile: SupplementWithRelations = {
 			concentration: "500-2000mg",
 			bioavailability: 90,
 			halfLife: "2-4 hours",
-			metabolicPathway: ["Direct absorption", "Cellular uptake", "Oxidation to dehydroascorbate"],
+			metabolicPathway: [
+				"Direct absorption",
+				"Cellular uptake",
+				"Oxidation to dehydroascorbate",
+			],
 			targetReceptors: ["SVCT1/SVCT2 transporters"],
 		},
 	],
@@ -34,8 +38,10 @@ export const vitaminCProfile: SupplementWithRelations = {
 		{
 			condition: "Immune system support",
 			polishCondition: "Wsparcie układu odpornościowego",
-			indication: "Prevention and treatment of common cold and immune enhancement",
-			polishIndication: "Zapobieganie i leczenie przeziębienia oraz wzmacnianie odporności",
+			indication:
+				"Prevention and treatment of common cold and immune enhancement",
+			polishIndication:
+				"Zapobieganie i leczenie przeziębienia oraz wzmacnianie odporności",
 			efficacy: "moderate",
 			effectivenessRating: 6,
 			evidenceLevel: "MODERATE",
@@ -50,7 +56,8 @@ export const vitaminCProfile: SupplementWithRelations = {
 			condition: "Antioxidant protection",
 			polishCondition: "Ochrona antyoksydacyjna",
 			indication: "General antioxidant support and oxidative stress reduction",
-			polishIndication: "Ogólne wsparcie antyoksydacyjne i redukcja stresu oksydacyjnego",
+			polishIndication:
+				"Ogólne wsparcie antyoksydacyjne i redukcja stresu oksydacyjnego",
 			efficacy: "high",
 			effectivenessRating: 8,
 			evidenceLevel: "STRONG",
@@ -114,8 +121,14 @@ export const vitaminCProfile: SupplementWithRelations = {
 		},
 		timing: ["morning", "with_meal"],
 		withFood: true,
-		contraindications: ["Kidney stones (high doses)", "Iron overload disorders"],
-		polishContraindications: ["Kamienie nerkowe (wysokie dawki)", "Zaburzenia przeciążenia żelazem"],
+		contraindications: [
+			"Kidney stones (high doses)",
+			"Iron overload disorders",
+		],
+		polishContraindications: [
+			"Kamienie nerkowe (wysokie dawki)",
+			"Zaburzenia przeciążenia żelazem",
+		],
 		interactions: [
 			{
 				substance: "Iron",
@@ -180,7 +193,8 @@ export const vitaminCProfile: SupplementWithRelations = {
 			primaryOutcome: "Common cold prevention and treatment",
 			polishPrimaryOutcome: "Zapobieganie i leczenie przeziębienia",
 			findings: "Vitamin C reduces cold duration and severity",
-			polishFindings: "Witamina C redukuje czas trwania i nasilenie przeziębienia",
+			polishFindings:
+				"Witamina C redukuje czas trwania i nasilenie przeziębienia",
 			evidenceLevel: "STRONG",
 			lastUpdated: "2024-01-15T00:00:00Z",
 			pubmedId: "23440782",

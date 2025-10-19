@@ -132,8 +132,8 @@ export function SupplementShowcase() {
 								<h4 className="mb-2 font-medium text-sm">Główne korzyści:</h4>
 								<ul className="space-y-1">
 									{supplement.benefits.map((benefit, index) => (
-										<li
-											key={index}
+									<li
+									key={`${supplement.id}-benefit-${benefit}`}
 											className="flex items-center text-gray-600 text-sm dark:text-gray-300"
 										>
 											<span className="mr-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-600" />

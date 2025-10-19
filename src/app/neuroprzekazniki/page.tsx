@@ -1,11 +1,34 @@
-import type { Metadata } from "next";
-import { Zap, Brain, Activity, TrendingUp, Sparkles, AlertCircle, ChevronRight, Clock, Users, BookOpen, Star } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Separator } from "@/components/ui/separator";
-import { BreadcrumbNavigation } from "@/components/navigation/BreadcrumbNavigation";
 import NeurotransmitterEducationModule from "@/components/education/NeurotransmitterEducationModule";
+import { BreadcrumbNavigation } from "@/components/navigation/BreadcrumbNavigation";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import {
+	Activity,
+	AlertCircle,
+	BookOpen,
+	Brain,
+	ChevronRight,
+	Clock,
+	Sparkles,
+	Star,
+	TrendingUp,
+	Users,
+	Zap,
+} from "lucide-react";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
 	title: "Neuroprzekaźniki | Suplementor",
@@ -29,11 +52,24 @@ const NEUROTRANSMITTERS = [
 			"Regulacja nastroju",
 		],
 		relatedSupplements: [
-			{ name: "L-Tyrosine", polishName: "L-Tyrozyna", effect: "Prekursor dopaminy" },
-			{ name: "Mucuna Pruriens", polishName: "Mucuna Pruriens", effect: "Źródło L-DOPA" },
-			{ name: "Rhodiola Rosea", polishName: "Różeniec Górski", effect: "Modulacja receptorów dopaminowych" },
+			{
+				name: "L-Tyrosine",
+				polishName: "L-Tyrozyna",
+				effect: "Prekursor dopaminy",
+			},
+			{
+				name: "Mucuna Pruriens",
+				polishName: "Mucuna Pruriens",
+				effect: "Źródło L-DOPA",
+			},
+			{
+				name: "Rhodiola Rosea",
+				polishName: "Różeniec Górski",
+				effect: "Modulacja receptorów dopaminowych",
+			},
 		],
-		pathways: "Szlak mezolimbiczny, mezokortykalny, nigrostriatalny, tuberoinfundibularny",
+		pathways:
+			"Szlak mezolimbiczny, mezokortykalny, nigrostriatalny, tuberoinfundibularny",
 		disorders: ["Choroba Parkinsona", "ADHD", "Depresja", "Uzależnienia"],
 	},
 	{
@@ -52,11 +88,24 @@ const NEUROTRANSMITTERS = [
 		],
 		relatedSupplements: [
 			{ name: "5-HTP", polishName: "5-HTP", effect: "Prekursor serotoniny" },
-			{ name: "Tryptophan", polishName: "Tryptofan", effect: "Aminokwas prekursorowy" },
-			{ name: "St. John's Wort", polishName: "Dziurawiec", effect: "Inhibitor wychwytu zwrotnego" },
+			{
+				name: "Tryptophan",
+				polishName: "Tryptofan",
+				effect: "Aminokwas prekursorowy",
+			},
+			{
+				name: "St. John's Wort",
+				polishName: "Dziurawiec",
+				effect: "Inhibitor wychwytu zwrotnego",
+			},
 		],
 		pathways: "Jądra szwu, projekcje do kory, hipokampu, ciała migdałowatego",
-		disorders: ["Depresja", "Lęk", "Bezsenność", "Zaburzenia obsesyjno-kompulsywne"],
+		disorders: [
+			"Depresja",
+			"Lęk",
+			"Bezsenność",
+			"Zaburzenia obsesyjno-kompulsywne",
+		],
 	},
 	{
 		id: "gaba",
@@ -73,9 +122,21 @@ const NEUROTRANSMITTERS = [
 			"Kontrola napięcia mięśniowego",
 		],
 		relatedSupplements: [
-			{ name: "L-Theanine", polishName: "L-Teanina", effect: "Modulacja receptorów GABA" },
-			{ name: "Magnesium", polishName: "Magnez", effect: "Kofaktor syntezy GABA" },
-			{ name: "Ashwagandha", polishName: "Ashwagandha", effect: "Agonista receptorów GABA-A" },
+			{
+				name: "L-Theanine",
+				polishName: "L-Teanina",
+				effect: "Modulacja receptorów GABA",
+			},
+			{
+				name: "Magnesium",
+				polishName: "Magnez",
+				effect: "Kofaktor syntezy GABA",
+			},
+			{
+				name: "Ashwagandha",
+				polishName: "Ashwagandha",
+				effect: "Agonista receptorów GABA-A",
+			},
 		],
 		pathways: "Interneurony korowe, móżdżek, jądra podstawy, rdzeń kręgowy",
 		disorders: ["Zaburzenia lękowe", "Bezsenność", "Padaczka", "Napady paniki"],
@@ -95,9 +156,21 @@ const NEUROTRANSMITTERS = [
 			"Rozwój mózgu",
 		],
 		relatedSupplements: [
-			{ name: "Magnesium L-Threonate", polishName: "L-Treonian Magnezu", effect: "Modulacja receptorów NMDA" },
-			{ name: "Lion's Mane", polishName: "Soplówka Jeżowata", effect: "Neuroprotekcja przed ekscytotoksycznością" },
-			{ name: "NAC", polishName: "N-acetylocysteina", effect: "Modulacja uwalniania glutaminianu" },
+			{
+				name: "Magnesium L-Threonate",
+				polishName: "L-Treonian Magnezu",
+				effect: "Modulacja receptorów NMDA",
+			},
+			{
+				name: "Lion's Mane",
+				polishName: "Soplówka Jeżowata",
+				effect: "Neuroprotekcja przed ekscytotoksycznością",
+			},
+			{
+				name: "NAC",
+				polishName: "N-acetylocysteina",
+				effect: "Modulacja uwalniania glutaminianu",
+			},
 		],
 		pathways: "Kora mózgowa, hipokamp, móżdżek, drogi piramidowe",
 		disorders: ["Choroba Alzheimera", "Udar mózgu", "Padaczka", "Schizofrenia"],
@@ -117,12 +190,29 @@ const NEUROTRANSMITTERS = [
 			"Regulacja autonomiczna",
 		],
 		relatedSupplements: [
-			{ name: "Alpha-GPC", polishName: "Alpha-GPC", effect: "Prekursor acetylocholiny" },
-			{ name: "CDP-Choline", polishName: "CDP-Cholina", effect: "Źródło choliny" },
-			{ name: "Huperzine A", polishName: "Huperzyna A", effect: "Inhibitor acetylcholinesterazy" },
+			{
+				name: "Alpha-GPC",
+				polishName: "Alpha-GPC",
+				effect: "Prekursor acetylocholiny",
+			},
+			{
+				name: "CDP-Choline",
+				polishName: "CDP-Cholina",
+				effect: "Źródło choliny",
+			},
+			{
+				name: "Huperzine A",
+				polishName: "Huperzyna A",
+				effect: "Inhibitor acetylcholinesterazy",
+			},
 		],
 		pathways: "Jądro podstawne Meynerta, pień mózgu, układ parasympatyczny",
-		disorders: ["Choroba Alzheimera", "Demencja", "Myasthenia gravis", "Zaburzenia pamięci"],
+		disorders: [
+			"Choroba Alzheimera",
+			"Demencja",
+			"Myasthenia gravis",
+			"Zaburzenia pamięci",
+		],
 	},
 	{
 		id: "norepinephrine",
@@ -139,9 +229,21 @@ const NEUROTRANSMITTERS = [
 			"Kontrola ciśnienia krwi",
 		],
 		relatedSupplements: [
-			{ name: "L-Tyrosine", polishName: "L-Tyrozyna", effect: "Prekursor noradrenaliny" },
-			{ name: "Rhodiola Rosea", polishName: "Różeniec Górski", effect: "Modulacja uwalniania noradrenaliny" },
-			{ name: "Caffeine", polishName: "Kofeina", effect: "Zwiększenie uwalniania noradrenaliny" },
+			{
+				name: "L-Tyrosine",
+				polishName: "L-Tyrozyna",
+				effect: "Prekursor noradrenaliny",
+			},
+			{
+				name: "Rhodiola Rosea",
+				polishName: "Różeniec Górski",
+				effect: "Modulacja uwalniania noradrenaliny",
+			},
+			{
+				name: "Caffeine",
+				polishName: "Kofeina",
+				effect: "Zwiększenie uwalniania noradrenaliny",
+			},
 		],
 		pathways: "Locus coeruleus, projekcje do kory, hipokampu, móżdżku",
 		disorders: ["Depresja", "ADHD", "PTSD", "Zaburzenia lękowe"],
@@ -150,18 +252,19 @@ const NEUROTRANSMITTERS = [
 
 export default function NeurotransmittersPage() {
 	return (
-		<div className="container mx-auto px-4 py-8 space-y-8">
+		<div className="container mx-auto space-y-8 px-4 py-8">
 			{/* Breadcrumb Navigation */}
 			<BreadcrumbNavigation />
 
 			{/* Hero Section */}
-			<div className="text-center space-y-4">
+			<div className="space-y-4 text-center">
 				<div className="flex justify-center">
 					<Zap className="h-16 w-16 text-primary" />
 				</div>
-				<h1 className="text-4xl md:text-5xl font-bold">Neuroprzekaźniki</h1>
-				<p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-					Poznaj chemię mózgu i systemy neuroprzekaźnikowe odpowiedzialne za funkcje poznawcze i emocjonalne
+				<h1 className="font-bold text-4xl md:text-5xl">Neuroprzekaźniki</h1>
+				<p className="mx-auto max-w-2xl text-muted-foreground text-xl">
+					Poznaj chemię mózgu i systemy neuroprzekaźnikowe odpowiedzialne za
+					funkcje poznawcze i emocjonalne
 				</p>
 			</div>
 
@@ -172,51 +275,72 @@ export default function NeurotransmittersPage() {
 				</CardHeader>
 				<CardContent className="space-y-4">
 					<p className="text-sm leading-relaxed">
-						Neuroprzekaźniki to chemiczne posłańcy, które przekazują sygnały między neuronami w mózgu. 
-						Są kluczowe dla wszystkich funkcji mózgu - od myślenia i uczenia się, po regulację nastroju i kontrolę ruchową.
+						Neuroprzekaźniki to chemiczne posłańcy, które przekazują sygnały
+						między neuronami w mózgu. Są kluczowe dla wszystkich funkcji mózgu -
+						od myślenia i uczenia się, po regulację nastroju i kontrolę ruchową.
 					</p>
 					<p className="text-sm leading-relaxed">
-						Każdy neuroprzekaźnik ma swoje unikalne funkcje i wpływa na różne aspekty naszego zdrowia psychicznego i fizycznego. 
-						Suplementy mogą wspierać produkcję, uwalnianie lub działanie neuroprzekaźników, pomagając optymalizować funkcje mózgu.
+						Każdy neuroprzekaźnik ma swoje unikalne funkcje i wpływa na różne
+						aspekty naszego zdrowia psychicznego i fizycznego. Suplementy mogą
+						wspierać produkcję, uwalnianie lub działanie neuroprzekaźników,
+						pomagając optymalizować funkcje mózgu.
 					</p>
 				</CardContent>
 			</Card>
 
 			{/* Neurotransmitters Grid */}
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 				{NEUROTRANSMITTERS.map((nt) => {
 					const Icon = nt.icon;
 					return (
-						<Card key={nt.id} className={`border-2 ${nt.borderColor} hover:shadow-lg transition-all group`}>
-							<CardHeader className={`${nt.bgColor} group-hover:bg-opacity-70 transition-colors`}>
-								<div className="flex items-center gap-3 mb-2">
-									<div className={`p-2 rounded-lg bg-white/50 group-hover:scale-110 transition-transform`}>
+						<Card
+							key={nt.id}
+							className={`border-2 ${nt.borderColor} group transition-all hover:shadow-lg`}
+						>
+							<CardHeader
+								className={`${nt.bgColor} transition-colors group-hover:bg-opacity-70`}
+							>
+								<div className="mb-2 flex items-center gap-3">
+									<div
+										className={
+											"rounded-lg bg-white/50 p-2 transition-transform group-hover:scale-110"
+										}
+									>
 										<Icon className={`h-6 w-6 ${nt.color}`} />
 									</div>
 									<div className="flex-1">
 										<CardTitle className="text-xl">{nt.polishName}</CardTitle>
-										<CardDescription className="text-xs">{nt.name}</CardDescription>
+										<CardDescription className="text-xs">
+											{nt.name}
+										</CardDescription>
 									</div>
 								</div>
 							</CardHeader>
-							<CardContent className="pt-6 space-y-4">
+							<CardContent className="space-y-4 pt-6">
 								{/* Primary Functions */}
 								<div>
 									<Accordion type="single" collapsible className="w-full">
-										<AccordionItem value={`${nt.id}-functions`} className="border-muted">
+										<AccordionItem
+											value={`${nt.id}-functions`}
+											className="border-muted"
+										>
 											<AccordionTrigger className="text-left hover:no-underline">
 												<div className="flex items-center gap-2">
 													<Star className="h-4 w-4 text-muted-foreground" />
-													<span className="font-semibold text-sm text-muted-foreground">
+													<span className="font-semibold text-muted-foreground text-sm">
 														Główne Funkcje ({nt.primaryFunctions.length})
 													</span>
 												</div>
 											</AccordionTrigger>
 											<AccordionContent>
-												<div className="space-y-3 mt-2">
+												<div className="mt-2 space-y-3">
 													<div className="flex flex-wrap gap-2">
 														{nt.primaryFunctions.map((func, idx) => (
-															<Badge key={idx} variant="secondary" className="text-xs">
+															<Badge
+																key={idx}
+																variant="secondary"
+																className="text-xs"
+															>
 																{func}
 															</Badge>
 														))}
@@ -232,18 +356,21 @@ export default function NeurotransmittersPage() {
 								{/* Pathways */}
 								<div>
 									<Accordion type="single" collapsible className="w-full">
-										<AccordionItem value={`${nt.id}-pathways`} className="border-muted">
+										<AccordionItem
+											value={`${nt.id}-pathways`}
+											className="border-muted"
+										>
 											<AccordionTrigger className="text-left hover:no-underline">
 												<div className="flex items-center gap-2">
 													<Brain className="h-4 w-4 text-muted-foreground" />
-													<span className="font-semibold text-sm text-muted-foreground">
+													<span className="font-semibold text-muted-foreground text-sm">
 														Szlaki Nerwowe
 													</span>
 												</div>
 											</AccordionTrigger>
 											<AccordionContent>
 												<div className="mt-2">
-													<p className="text-xs text-muted-foreground leading-relaxed">
+													<p className="text-muted-foreground text-xs leading-relaxed">
 														{nt.pathways}
 													</p>
 												</div>
@@ -257,30 +384,40 @@ export default function NeurotransmittersPage() {
 								{/* Related Supplements */}
 								<div>
 									<Accordion type="single" collapsible className="w-full">
-										<AccordionItem value={`${nt.id}-supplements`} className="border-muted">
+										<AccordionItem
+											value={`${nt.id}-supplements`}
+											className="border-muted"
+										>
 											<AccordionTrigger className="text-left hover:no-underline">
 												<div className="flex items-center gap-2">
 													<Users className="h-4 w-4 text-muted-foreground" />
-													<span className="font-semibold text-sm text-muted-foreground">
-														Powiązane Suplementy ({nt.relatedSupplements.length})
+													<span className="font-semibold text-muted-foreground text-sm">
+														Powiązane Suplementy ({nt.relatedSupplements.length}
+														)
 													</span>
 												</div>
 											</AccordionTrigger>
 											<AccordionContent>
-												<div className="space-y-3 mt-2">
+												<div className="mt-2 space-y-3">
 													{nt.relatedSupplements.map((supp, idx) => (
-														<div key={idx} className="bg-muted/50 p-3 rounded-lg border border-muted/70 hover:bg-muted transition-colors">
+														<div
+															key={idx}
+															className="rounded-lg border border-muted/70 bg-muted/50 p-3 transition-colors hover:bg-muted"
+														>
 															<div className="flex items-start justify-between">
 																<div className="flex-1">
-																	<div className="font-medium text-sm mb-1">
+																	<div className="mb-1 font-medium text-sm">
 																		{supp.polishName}
 																	</div>
-																	<div className="text-xs text-muted-foreground">
+																	<div className="text-muted-foreground text-xs">
 																		{supp.effect}
 																	</div>
 																</div>
-																<Badge variant="outline" className="text-xs ml-2">
-																	{nt.polishName.split(' ')[0]}
+																<Badge
+																	variant="outline"
+																	className="ml-2 text-xs"
+																>
+																	{nt.polishName.split(" ")[0]}
 																</Badge>
 															</div>
 														</div>
@@ -296,11 +433,14 @@ export default function NeurotransmittersPage() {
 								{/* Associated Disorders */}
 								<div>
 									<Accordion type="single" collapsible className="w-full">
-										<AccordionItem value={`${nt.id}-disorders`} className="border-muted">
+										<AccordionItem
+											value={`${nt.id}-disorders`}
+											className="border-muted"
+										>
 											<AccordionTrigger className="text-left hover:no-underline">
 												<div className="flex items-center gap-2">
 													<AlertCircle className="h-4 w-4 text-muted-foreground" />
-													<span className="font-semibold text-sm text-muted-foreground">
+													<span className="font-semibold text-muted-foreground text-sm">
 														Powiązane Zaburzenia ({nt.disorders.length})
 													</span>
 												</div>
@@ -309,7 +449,11 @@ export default function NeurotransmittersPage() {
 												<div className="mt-2">
 													<div className="flex flex-wrap gap-1">
 														{nt.disorders.map((disorder, idx) => (
-															<Badge key={idx} variant="outline" className="text-xs">
+															<Badge
+																key={idx}
+																variant="outline"
+																className="text-xs"
+															>
 																{disorder}
 															</Badge>
 														))}
@@ -321,7 +465,7 @@ export default function NeurotransmittersPage() {
 								</div>
 
 								{/* Quick Stats */}
-								<div className="flex items-center justify-between text-xs text-muted-foreground pt-2">
+								<div className="flex items-center justify-between pt-2 text-muted-foreground text-xs">
 									<div className="flex items-center gap-1">
 										<Users className="h-3 w-3" />
 										<span>{nt.relatedSupplements.length} suplementów</span>
@@ -357,17 +501,23 @@ export default function NeurotransmittersPage() {
 							<AccordionContent>
 								<div className="space-y-3">
 									<p className="text-sm leading-relaxed">
-										Zdrowie mózgu zależy od delikatnej równowagi między różnymi systemami neuroprzekaźnikowymi.
-										Zbyt wysoki lub zbyt niski poziom któregokolwiek neuroprzekaźnika może prowadzić do problemów zdrowotnych.
+										Zdrowie mózgu zależy od delikatnej równowagi między różnymi
+										systemami neuroprzekaźnikowymi. Zbyt wysoki lub zbyt niski
+										poziom któregokolwiek neuroprzekaźnika może prowadzić do
+										problemów zdrowotnych.
 									</p>
 									<div className="grid grid-cols-2 gap-2">
 										{[
 											"Homeostaza",
 											"Regulacja",
 											"Adaptacja",
-											"Neuroplastyczność"
+											"Neuroplastyczność",
 										].map((concept, index) => (
-											<Badge key={index} variant="secondary" className="text-xs justify-center">
+											<Badge
+												key={index}
+												variant="secondary"
+												className="justify-center text-xs"
+											>
 												{concept}
 											</Badge>
 										))}
@@ -376,27 +526,48 @@ export default function NeurotransmittersPage() {
 							</AccordionContent>
 						</AccordionItem>
 
-						<AccordionItem value="excitation-inhibition" className="border-muted">
+						<AccordionItem
+							value="excitation-inhibition"
+							className="border-muted"
+						>
 							<AccordionTrigger className="text-left hover:no-underline">
 								<div className="flex items-center gap-2">
 									<Activity className="h-4 w-4 text-primary" />
-									<span className="font-semibold">Równowaga Pobudzenie-Hamowanie</span>
+									<span className="font-semibold">
+										Równowaga Pobudzenie-Hamowanie
+									</span>
 								</div>
 							</AccordionTrigger>
 							<AccordionContent>
 								<div className="space-y-3">
-									<div className="bg-green-50 p-4 rounded-lg border border-green-200">
-										<h4 className="font-semibold mb-2 text-green-800 flex items-center gap-2">
+									<div className="rounded-lg border border-green-200 bg-green-50 p-4">
+										<h4 className="mb-2 flex items-center gap-2 font-semibold text-green-800">
 											<Zap className="h-4 w-4" />
 											Glutaminian ↔ GABA
 										</h4>
-										<p className="text-sm text-green-700 leading-relaxed">
-											Glutaminian (pobudzający) i GABA (hamujący) muszą być w równowadze dla optymalnej funkcji mózgu.
+										<p className="text-green-700 text-sm leading-relaxed">
+											Glutaminian (pobudzający) i GABA (hamujący) muszą być w
+											równowadze dla optymalnej funkcji mózgu.
 										</p>
 										<div className="mt-2 flex gap-2">
-											<Badge variant="outline" className="text-green-700 text-xs">Uczenie się</Badge>
-											<Badge variant="outline" className="text-green-700 text-xs">Spokój</Badge>
-											<Badge variant="outline" className="text-green-700 text-xs">Fokus</Badge>
+											<Badge
+												variant="outline"
+												className="text-green-700 text-xs"
+											>
+												Uczenie się
+											</Badge>
+											<Badge
+												variant="outline"
+												className="text-green-700 text-xs"
+											>
+												Spokój
+											</Badge>
+											<Badge
+												variant="outline"
+												className="text-green-700 text-xs"
+											>
+												Fokus
+											</Badge>
 										</div>
 									</div>
 								</div>
@@ -412,18 +583,34 @@ export default function NeurotransmittersPage() {
 							</AccordionTrigger>
 							<AccordionContent>
 								<div className="space-y-3">
-									<div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-										<h4 className="font-semibold mb-2 text-blue-800 flex items-center gap-2">
+									<div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+										<h4 className="mb-2 flex items-center gap-2 font-semibold text-blue-800">
 											<Sparkles className="h-4 w-4" />
 											Serotonina • Dopamina • Noradrenalina
 										</h4>
-										<p className="text-sm text-blue-700 leading-relaxed">
-											Serotonina, dopamina i noradrenalina współpracują w regulacji nastroju i emocji.
+										<p className="text-blue-700 text-sm leading-relaxed">
+											Serotonina, dopamina i noradrenalina współpracują w
+											regulacji nastroju i emocji.
 										</p>
 										<div className="mt-2 flex gap-2">
-											<Badge variant="outline" className="text-blue-700 text-xs">Motywacja</Badge>
-											<Badge variant="outline" className="text-blue-700 text-xs">Radość</Badge>
-											<Badge variant="outline" className="text-blue-700 text-xs">Energia</Badge>
+											<Badge
+												variant="outline"
+												className="text-blue-700 text-xs"
+											>
+												Motywacja
+											</Badge>
+											<Badge
+												variant="outline"
+												className="text-blue-700 text-xs"
+											>
+												Radość
+											</Badge>
+											<Badge
+												variant="outline"
+												className="text-blue-700 text-xs"
+											>
+												Energia
+											</Badge>
 										</div>
 									</div>
 								</div>
@@ -439,18 +626,22 @@ export default function NeurotransmittersPage() {
 							</AccordionTrigger>
 							<AccordionContent>
 								<div className="space-y-3">
-									<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-										<div className="bg-orange-50 p-3 rounded-lg border border-orange-200">
-											<h5 className="font-medium text-sm text-orange-800 mb-1">Nadmiar Pobudzenia</h5>
-											<ul className="text-xs text-orange-700 space-y-1">
+									<div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+										<div className="rounded-lg border border-orange-200 bg-orange-50 p-3">
+											<h5 className="mb-1 font-medium text-orange-800 text-sm">
+												Nadmiar Pobudzenia
+											</h5>
+											<ul className="space-y-1 text-orange-700 text-xs">
 												<li>• Lęk i niepokój</li>
 												<li>• Problemy ze snem</li>
 												<li>• Rozdrażnienie</li>
 											</ul>
 										</div>
-										<div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
-											<h5 className="font-medium text-sm text-purple-800 mb-1">Nadmiar Hamowania</h5>
-											<ul className="text-xs text-purple-700 space-y-1">
+										<div className="rounded-lg border border-purple-200 bg-purple-50 p-3">
+											<h5 className="mb-1 font-medium text-purple-800 text-sm">
+												Nadmiar Hamowania
+											</h5>
+											<ul className="space-y-1 text-purple-700 text-xs">
 												<li>• Apatia</li>
 												<li>• Spowolnienie</li>
 												<li>• Problemy z koncentracją</li>
@@ -466,13 +657,14 @@ export default function NeurotransmittersPage() {
 
 			{/* Advanced Module */}
 			<div className="space-y-4">
-				<h2 className="text-2xl font-bold">Szczegółowa Analiza</h2>
+				<h2 className="font-bold text-2xl">Szczegółowa Analiza</h2>
 				<p className="text-muted-foreground">
-					Poniżej znajdziesz zaawansowany moduł edukacyjny z interaktywnymi zakładkami i szczegółowymi informacjami o systemach neuroprzekaźnikowych.
+					Poniżej znajdziesz zaawansowany moduł edukacyjny z interaktywnymi
+					zakładkami i szczegółowymi informacjami o systemach
+					neuroprzekaźnikowych.
 				</p>
 				<NeurotransmitterEducationModule />
 			</div>
 		</div>
 	);
 }
-

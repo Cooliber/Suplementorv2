@@ -1,7 +1,13 @@
-// Public supplement detail page
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
 	AlertTriangle,
@@ -22,9 +28,18 @@ import { notFound } from "next/navigation";
 import type React from "react";
 import { Suspense } from "react";
 
+import { CircadianTimingPanel } from "@/components/education/CircadianTimingPanel";
+import {
+	RelatedContent,
+	type RelatedContentItem,
+	createRelatedContentItem,
+} from "@/components/education/RelatedContent";
 import EvidenceBasedInformationPanel from "@/components/evidence/EvidenceBasedInformationPanel";
+import RelatedHistory from "@/components/history/RelatedHistory";
 import DrugInteractionChecker from "@/components/interactions/DrugInteractionChecker";
 import ResearchStudyCard from "@/components/learning/ResearchStudyCard";
+import { ReviewForm } from "@/components/reviews/ReviewForm";
+import { ReviewList } from "@/components/reviews/ReviewList";
 // Component imports
 import ComprehensiveSupplementCard from "@/components/supplements/ComprehensiveSupplementCard";
 import DosageCalculator from "@/components/supplements/DosageCalculator";
@@ -35,12 +50,17 @@ import SynergyAnalyzer from "@/components/supplements/SynergyAnalyzer";
 import BrainRegionDiagram from "@/components/visualization/BrainRegionDiagram";
 import SupplementEffectChart from "@/components/visualization/SupplementEffectChart";
 import SupplementInteractionNetwork from "@/components/visualization/SupplementInteractionNetwork";
-import RelatedHistory from "@/components/history/RelatedHistory";
-import { RelatedContent, createRelatedContentItem, type RelatedContentItem } from "@/components/education/RelatedContent";
-import { CircadianTimingPanel } from "@/components/education/CircadianTimingPanel";
-import { ReviewList } from "@/components/reviews/ReviewList";
-import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { api } from "@/trpc/server";
+
+// Simple auth check - replace with actual auth implementation
+const auth = async () => {
+	try {
+		// This would be replaced with actual auth logic
+		return { user: null };
+	} catch {
+		return { user: null };
+	}
+};
 
 interface SupplementDetailPageProps {
 	params: {
@@ -180,12 +200,22 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 }) => {
 	let supplement;
 	let supplementMongoId: string | undefined;
+	let isAuthenticated = false;
 
 	try {
 		const data = await api.supplement.getById({ id: params.id });
 		supplement = data;
 		// Extract MongoDB _id for RelatedHistory
 		supplementMongoId = (data as any)._id?.toString();
+
+		// Check authentication status
+		try {
+			const session = await auth();
+			isAuthenticated = !!session?.user;
+		} catch {
+			// Auth check failed, assume not authenticated
+			isAuthenticated = false;
+		}
 	} catch {
 		notFound();
 	}
@@ -197,13 +227,14 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 				id: "research-omega3-cognition",
 				title: "Omega-3 and Cognitive Function",
 				polishTitle: "Omega-3 a Funkcje Poznawcze",
-				polishDescription: "Przegląd badań nad wpływem kwasów omega-3 na pamięć i koncentrację",
+				polishDescription:
+					"Przegląd badań nad wpływem kwasów omega-3 na pamięć i koncentrację",
 				tags: ["omega-3", "cognition", "memory"],
 				polishTags: ["omega-3", "poznanie", "pamięć"],
 			},
 			"research",
 			"/badania",
-			{ evidenceLevel: "STRONG", readTime: "10 min" }
+			{ evidenceLevel: "STRONG", readTime: "10 min" },
 		),
 	];
 
@@ -219,7 +250,7 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 			},
 			"mechanism",
 			"/mechanizmy",
-			{ difficulty: "intermediate" }
+			{ difficulty: "intermediate" },
 		),
 	];
 
@@ -229,13 +260,14 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 				id: "neurotransmitter-serotonin",
 				title: "Serotonin",
 				polishTitle: "Serotonina",
-				polishDescription: "Neuroprzekaźnik odpowiedzialny za regulację nastroju",
+				polishDescription:
+					"Neuroprzekaźnik odpowiedzialny za regulację nastroju",
 				tags: ["serotonin", "mood"],
 				polishTags: ["serotonina", "nastrój"],
 			},
 			"neurotransmitter",
 			"/neuroprzekazniki",
-			{ difficulty: "beginner" }
+			{ difficulty: "beginner" },
 		),
 	];
 
@@ -251,7 +283,7 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 			},
 			"brain-region",
 			"/obszary-mozgu",
-			{ difficulty: "intermediate" }
+			{ difficulty: "intermediate" },
 		),
 	];
 
@@ -311,18 +343,22 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 						</p>
 
 						<div className="mb-6 flex flex-wrap gap-2">
-							{displayData.polishPrimaryBenefits.map((benefit: string, index: number) => (
-								<Badge key={index} variant="outline" className="text-sm">
-									{benefit}
-								</Badge>
-							))}
+							{displayData.polishPrimaryBenefits.map(
+								(benefit: string, index: number) => (
+									<Badge key={index} variant="outline" className="text-sm">
+										{benefit}
+									</Badge>
+								),
+							)}
 						</div>
 					</div>
 
 					<div className="flex flex-col gap-3">
 						<Button variant="outline" className="gap-2">
 							<Heart className="h-4 w-4" />
-							Zaloguj się, aby dodać do ulubionych
+							{isAuthenticated
+								? "Dodaj do Ulubionych"
+								: "Zaloguj się, aby dodać do ulubionych"}
 						</Button>
 						<Button variant="outline" className="gap-2">
 							<Calculator className="h-4 w-4" />
@@ -397,15 +433,15 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 								</div>
 
 								<div className="flex items-center justify-between">
-									<span className="text-gray-600 text-sm">Ocena Użytkowników</span>
+									<span className="text-gray-600 text-sm">
+										Ocena Użytkowników
+									</span>
 									<div className="flex items-center gap-1">
 										<Star className="h-4 w-4 fill-current text-yellow-500" />
 										<span className="font-medium text-sm">
 											{displayData.userRating}
 										</span>
-										<span className="text-gray-500 text-xs">
-											(0 opinii)
-										</span>
+										<span className="text-gray-500 text-xs">(0 opinii)</span>
 									</div>
 								</div>
 							</CardContent>
@@ -460,8 +496,8 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 								<div className="py-12 text-center text-gray-500">
 									Szczegółowe informacje o mechanizmach działania
 								</div>
-									{/* Historia powiązana */}
-									<RelatedHistory supplementMongoId={supplementMongoId} />
+								{/* Historia powiązana */}
+								<RelatedHistory supplementMongoId={supplementMongoId} />
 							</TabsContent>
 
 							{/* Mechanism Tab */}
@@ -588,7 +624,7 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 													overallRating: 0,
 													studyCount: 0,
 												}}
-												/>
+											/>
 										</div>
 									</CardContent>
 								</Card>
@@ -600,15 +636,17 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 										</CardHeader>
 										<CardContent>
 											<ul className="space-y-2">
-												{displayData.polishSideEffects.map((effect: string, index: number) => (
-													<li
-														key={index}
-														className="flex items-center gap-2 text-sm"
-													>
-														<div className="h-2 w-2 rounded-full bg-yellow-400" />
-														{effect}
-													</li>
-												))}
+												{displayData.polishSideEffects.map(
+													(effect: string, index: number) => (
+														<li
+															key={index}
+															className="flex items-center gap-2 text-sm"
+														>
+															<div className="h-2 w-2 rounded-full bg-yellow-400" />
+															{effect}
+														</li>
+													),
+												)}
 											</ul>
 										</CardContent>
 									</Card>
@@ -692,22 +730,47 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 											totalCount={0}
 											averageRating={0}
 											showStats={true}
-											emptyMessage="Ten suplement nie ma jeszcze żadnych opinii. Zaloguj się, aby dodać swoją opinię!"
+											emptyMessage={
+												isAuthenticated
+													? "Ten suplement nie ma jeszcze żadnych opinii. Bądź pierwszy i podziel się swoją opinią!"
+													: "Ten suplement nie ma jeszcze żadnych opinii. Zaloguj się, aby dodać swoją opinię!"
+											}
 											onPageChange={(page) => console.log("Page change:", page)}
-											onSortChange={(sortBy, sortOrder) => console.log("Sort change:", sortBy, sortOrder)}
-											onHelpful={(reviewId, helpful) => console.log("Helpful vote:", reviewId, helpful)}
+											onSortChange={(sortBy, sortOrder) =>
+												console.log("Sort change:", sortBy, sortOrder)
+											}
+											onHelpful={(reviewId, helpful) =>
+												console.log("Helpful vote:", reviewId, helpful)
+											}
 										/>
 									</CardContent>
 								</Card>
 
 								<Card>
 									<CardHeader>
-										<CardTitle>Zaloguj się, aby dodać opinię</CardTitle>
+										<CardTitle>
+											{isAuthenticated
+												? "Dodaj swoją opinię"
+												: "Zaloguj się, aby dodać opinię"}
+										</CardTitle>
 									</CardHeader>
 									<CardContent>
-										<Button className="w-full">
-											Zaloguj się, aby zostawić opinię
-										</Button>
+										{isAuthenticated ? (
+											<ReviewForm
+												supplementId={params.id}
+												userId="current-user-id" // This should come from authentication
+												supplementName={displayData.polishName}
+												onSubmit={async (reviewData) => {
+													// Handle review submission
+													console.log("Submitting review:", reviewData);
+													// TODO: Implement actual API call
+												}}
+											/>
+										) : (
+											<Button className="w-full">
+												Zaloguj się, aby zostawić opinię
+											</Button>
+										)}
 									</CardContent>
 								</Card>
 							</TabsContent>
@@ -763,7 +826,8 @@ const SupplementDetailPage: React.FC<SupplementDetailPageProps> = async ({
 										Optymalne Dawkowanie w Ciągu Dnia
 									</CardTitle>
 									<CardDescription>
-										Dowiedz się, kiedy najlepiej przyjmować ten suplement zgodnie z rytmem dobowym organizmu
+										Dowiedz się, kiedy najlepiej przyjmować ten suplement
+										zgodnie z rytmem dobowym organizmu
 									</CardDescription>
 								</CardHeader>
 								<CardContent>

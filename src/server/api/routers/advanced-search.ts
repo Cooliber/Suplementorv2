@@ -3,7 +3,6 @@
  * Provides advanced search capabilities with Polish NLP
  */
 
-
 import { polishSearchService } from "@/lib/services/polish-search-service";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import {
@@ -43,7 +42,6 @@ export const advancedSearchRouter = createTRPCRouter({
 	search: publicProcedure
 		.input(AdvancedSearchInputSchema)
 		.query(async ({ ctx, input }) => {
-
 			// Process query with Polish NLP
 			const processedQuery = polishSearchService.processQuery(input.query, {
 				language: input.language,
@@ -82,7 +80,8 @@ export const advancedSearchRouter = createTRPCRouter({
 			}
 
 			// Fetch supplements
-			const supplements = await ctx.db.comprehensiveSupplement.find(mongoQuery)
+			const supplements = await ctx.db.comprehensiveSupplement
+				.find(mongoQuery)
 				.select(
 					"id name polishName category description polishDescription tags evidenceLevel",
 				)
@@ -149,18 +148,18 @@ export const advancedSearchRouter = createTRPCRouter({
 	autocomplete: publicProcedure
 		.input(AutocompleteInputSchema)
 		.query(async ({ ctx, input }) => {
-
 			const searchRegex = new RegExp(input.query, "i");
 
-			const supplements = await ctx.db.comprehensiveSupplement.find({
-				isActive: true,
-				$or: [
-					{ name: searchRegex },
-					{ polishName: searchRegex },
-					{ searchKeywords: searchRegex },
-					{ polishSearchKeywords: searchRegex },
-				],
-			})
+			const supplements = await ctx.db.comprehensiveSupplement
+				.find({
+					isActive: true,
+					$or: [
+						{ name: searchRegex },
+						{ polishName: searchRegex },
+						{ searchKeywords: searchRegex },
+						{ polishSearchKeywords: searchRegex },
+					],
+				})
 				.select("id name polishName category")
 				.limit(input.limit)
 				.lean();
@@ -238,10 +237,10 @@ export const advancedSearchRouter = createTRPCRouter({
 	 * Get search statistics
 	 */
 	searchStats: publicProcedure.query(async ({ ctx }) => {
-
-		const totalSupplements = await ctx.db.comprehensiveSupplement.countDocuments({
-			isActive: true,
-		});
+		const totalSupplements =
+			await ctx.db.comprehensiveSupplement.countDocuments({
+				isActive: true,
+			});
 
 		const categoryStats = await ctx.db.comprehensiveSupplement.aggregate([
 			{ $match: { isActive: true } },
@@ -279,26 +278,28 @@ export const advancedSearchRouter = createTRPCRouter({
 			}),
 		)
 		.query(async ({ ctx, input }) => {
-
 			// Get the reference supplement
-			const supplement = await ctx.db.comprehensiveSupplement.findOne({
-				id: input.supplementId,
-				isActive: true,
-			}).lean();
+			const supplement = await ctx.db.comprehensiveSupplement
+				.findOne({
+					id: input.supplementId,
+					isActive: true,
+				})
+				.lean();
 
 			if (!supplement) {
 				throw new Error("Supplement not found");
 			}
 
 			// Find similar supplements based on category and tags
-			const similar = await ctx.db.comprehensiveSupplement.find({
-				isActive: true,
-				id: { $ne: supplement.id },
-				$or: [
-					{ category: supplement.category },
-					{ tags: { $in: supplement.tags || [] } },
-				],
-			})
+			const similar = await ctx.db.comprehensiveSupplement
+				.find({
+					isActive: true,
+					id: { $ne: supplement.id },
+					$or: [
+						{ category: supplement.category },
+						{ tags: { $in: supplement.tags || [] } },
+					],
+				})
 				.select("id name polishName category evidenceLevel tags")
 				.limit(input.limit * 2) // Get more to score
 				.lean();

@@ -15,9 +15,15 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import type { EvidenceLevel, SupplementCategory } from "@/types/supplement";
+import type { ComprehensiveSupplementProfile } from "@/data/comprehensive-supplements/types";
+import type {
+	EvidenceLevel,
+	SupplementCategory,
+	SupplementWithRelations,
+} from "@/types/supplement";
 import {
 	BookOpen,
+	Brain,
 	Calculator,
 	ExternalLink,
 	Heart,
@@ -25,24 +31,25 @@ import {
 	Shield,
 	Star,
 	TrendingUp,
-	Brain,
 } from "lucide-react";
 import { useState } from "react";
 
 interface CompactSupplementCardProps {
-	id: string;
-	name: string;
-	polishName: string;
-	category: SupplementCategory;
-	polishCategory: string;
-	description: string;
-	polishDescription: string;
-	evidenceLevel: EvidenceLevel;
-	safetyRating: number;
-	userRating: number;
-	primaryBenefits: string[];
-	polishPrimaryBenefits: string[];
-	studyCount: number;
+	// Support both comprehensive data and individual props for backward compatibility
+	supplement?: ComprehensiveSupplementProfile | SupplementWithRelations;
+	id?: string;
+	name?: string;
+	polishName?: string;
+	category?: SupplementCategory;
+	polishCategory?: string;
+	description?: string;
+	polishDescription?: string;
+	evidenceLevel?: EvidenceLevel;
+	safetyRating?: number;
+	userRating?: number;
+	primaryBenefits?: string[];
+	polishPrimaryBenefits?: string[];
+	studyCount?: number;
 	price?: {
 		min: number;
 		max: number;
@@ -69,7 +76,8 @@ const evidenceLevelConfig = {
 		icon: TrendingUp,
 	},
 	WEAK: {
-		color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+		color:
+			"bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
 		label: "Słabe",
 		icon: Info,
 	},
@@ -100,20 +108,21 @@ const categoryIcons: Record<SupplementCategory, React.ComponentType<any>> = {
 };
 
 export function CompactSupplementCard({
-	id,
-	name,
-	polishName,
-	category,
-	polishCategory,
-	description,
-	polishDescription,
-	evidenceLevel,
-	safetyRating,
-	userRating,
-	primaryBenefits,
-	polishPrimaryBenefits,
-	studyCount,
-	price,
+	id: propId,
+	name: propName,
+	polishName: propPolishName,
+	category: propCategory,
+	polishCategory: propPolishCategory,
+	description: propDescription,
+	polishDescription: propPolishDescription,
+	evidenceLevel: propEvidenceLevel,
+	safetyRating: propSafetyRating,
+	userRating: propUserRating,
+	primaryBenefits: propPrimaryBenefits,
+	polishPrimaryBenefits: propPolishPrimaryBenefits,
+	studyCount: propStudyCount,
+	price: propPrice,
+	supplement,
 	onCardClick,
 	onFavoriteClick,
 	onDosageClick,
@@ -124,23 +133,80 @@ export function CompactSupplementCard({
 }: CompactSupplementCardProps) {
 	const [isFavorited, setIsFavorited] = useState(false);
 
-	const EvidenceIcon = evidenceLevelConfig[evidenceLevel].icon;
-	const CategoryIcon = categoryIcons[category];
+	// Extract data from comprehensive supplement or use props
+	const data =
+		supplement && "safetyProfile" in supplement
+			? {
+					id: (supplement as any).id,
+					name: (supplement as any).name,
+					polishName: (supplement as any).polishName,
+					category: (supplement as any).category,
+					polishCategory: (supplement as any).category, // Use category as polishCategory for now
+					description: (supplement as any).description || "",
+					polishDescription: (supplement as any).polishDescription || "",
+					evidenceLevel: (supplement as any).evidenceLevel,
+					safetyRating:
+						(supplement as any).safetyProfile?.pregnancyCategory === "A"
+							? 9
+							: (supplement as any).safetyProfile?.pregnancyCategory === "B"
+								? 8
+								: 6,
+					userRating: 0, // Would need to be calculated from reviews
+					primaryBenefits:
+						(supplement as any).clinicalApplications?.map(
+							(app: any) => app.condition,
+						) || [],
+					polishPrimaryBenefits:
+						(supplement as any).clinicalApplications?.map(
+							(app: any) => app.polishCondition,
+						) || [],
+					studyCount: (supplement as any).clinicalEvidence?.totalStudies || 0,
+					price: (supplement as any).economicData?.averageCostPerMonth
+						? {
+								min: (supplement as any).economicData.averageCostPerMonth.low,
+								max: (supplement as any).economicData.averageCostPerMonth.high,
+								currency: (supplement as any).economicData.averageCostPerMonth
+									.currency,
+							}
+						: undefined,
+				}
+			: {
+					id: propId || "",
+					name: propName || "",
+					polishName: propPolishName || "",
+					category: propCategory || "OTHER",
+					polishCategory: propPolishCategory || "",
+					description: propDescription || "",
+					polishDescription: propPolishDescription || "",
+					evidenceLevel: propEvidenceLevel || "INSUFFICIENT",
+					safetyRating: propSafetyRating || 5,
+					userRating: propUserRating || 0,
+					primaryBenefits: propPrimaryBenefits || [],
+					polishPrimaryBenefits: propPolishPrimaryBenefits || [],
+					studyCount: propStudyCount || 0,
+					price: propPrice,
+				};
+
+	const EvidenceIcon =
+		evidenceLevelConfig[data.evidenceLevel as keyof typeof evidenceLevelConfig]
+			.icon;
+	const CategoryIcon =
+		categoryIcons[data.category as keyof typeof categoryIcons];
 
 	const handleFavoriteClick = (e: React.MouseEvent) => {
 		e.stopPropagation();
 		setIsFavorited(!isFavorited);
-		onFavoriteClick?.(id);
+		onFavoriteClick?.(data.id);
 	};
 
 	const handleDosageClick = (e: React.MouseEvent) => {
 		e.stopPropagation();
-		onDosageClick?.(id);
+		onDosageClick?.(data.id);
 	};
 
 	const handleSafetyClick = (e: React.MouseEvent) => {
 		e.stopPropagation();
-		onSafetyClick?.(id);
+		onSafetyClick?.(data.id);
 	};
 
 	const getSafetyColor = (rating: number) => {
@@ -152,19 +218,19 @@ export function CompactSupplementCard({
 	return (
 		<TooltipProvider>
 			<Card
-				className="group relative overflow-hidden transition-all duration-300 hover:shadow-md cursor-pointer h-full"
-				onClick={() => onCardClick?.(id)}
+				className="group relative h-full cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-md"
+				onClick={() => onCardClick?.(data.id)}
 			>
 				<CardHeader className="pb-2">
 					<div className="flex items-start justify-between gap-2">
-						<div className="flex items-center gap-2 flex-1 min-w-0">
-							<CategoryIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-							<div className="flex-1 min-w-0">
-								<CardTitle className="text-sm leading-tight line-clamp-1">
-									{polishName}
+						<div className="flex min-w-0 flex-1 items-center gap-2">
+							<CategoryIcon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+							<div className="min-w-0 flex-1">
+								<CardTitle className="line-clamp-1 text-sm leading-tight">
+									{data.polishName}
 								</CardTitle>
-								<CardDescription className="text-xs text-muted-foreground line-clamp-1">
-									{polishCategory}
+								<CardDescription className="line-clamp-1 text-muted-foreground text-xs">
+									{data.polishCategory}
 								</CardDescription>
 							</div>
 						</div>
@@ -172,16 +238,16 @@ export function CompactSupplementCard({
 						<div className="flex flex-col items-end gap-1">
 							<Badge
 								variant="secondary"
-								className={`${evidenceLevelConfig[evidenceLevel].color} text-xs px-1 py-0`}
+								className={`${(evidenceLevelConfig as any)[data.evidenceLevel]?.color} px-1 py-0 text-xs`}
 							>
-								<EvidenceIcon className="h-2 w-2 mr-1" />
-								{evidenceLevelConfig[evidenceLevel].label}
+								<EvidenceIcon className="mr-1 h-2 w-2" />
+								{(evidenceLevelConfig as any)[data.evidenceLevel]?.label}
 							</Badge>
 
-							{userRating > 0 && (
+							{data.userRating > 0 && (
 								<div className="flex items-center gap-1">
 									<Star className="h-2 w-2 fill-current text-yellow-500" />
-									<span className="text-xs">{userRating}</span>
+									<span className="text-xs">{data.userRating}</span>
 								</div>
 							)}
 						</div>
@@ -189,31 +255,35 @@ export function CompactSupplementCard({
 				</CardHeader>
 
 				<CardContent className="pt-0">
-					<CardDescription className="text-xs leading-relaxed line-clamp-2 mb-3">
-						{polishDescription}
+					<CardDescription className="mb-3 line-clamp-2 text-xs leading-relaxed">
+						{data.polishDescription}
 					</CardDescription>
 
 					{/* Benefits */}
-					{showBenefits && polishPrimaryBenefits.length > 0 && (
+					{showBenefits && data.polishPrimaryBenefits.length > 0 && (
 						<div className="mb-3">
 							<div className="flex flex-wrap gap-1">
-								{polishPrimaryBenefits.slice(0, 2).map((benefit, index) => (
-									<Badge key={index} variant="outline" className="text-xs">
-										{benefit}
-									</Badge>
-								))}
-								{polishPrimaryBenefits.length > 2 && (
+								{data.polishPrimaryBenefits
+									.slice(0, 2)
+									.map((benefit: string, index: number) => (
+										<Badge key={index} variant="outline" className="text-xs">
+											{benefit}
+										</Badge>
+									))}
+								{data.polishPrimaryBenefits.length > 2 && (
 									<Tooltip>
 										<TooltipTrigger asChild>
 											<Badge variant="outline" className="text-xs">
-												+{polishPrimaryBenefits.length - 2}
+												+{data.polishPrimaryBenefits.length - 2}
 											</Badge>
 										</TooltipTrigger>
 										<TooltipContent>
 											<div className="space-y-1">
-												{polishPrimaryBenefits.slice(2).map((benefit, index) => (
-													<div key={index}>{benefit}</div>
-												))}
+												{data.polishPrimaryBenefits
+													.slice(2)
+													.map((benefit: string, index: number) => (
+														<div key={index}>{benefit}</div>
+													))}
 											</div>
 										</TooltipContent>
 									</Tooltip>
@@ -223,22 +293,24 @@ export function CompactSupplementCard({
 					)}
 
 					{/* Quick Stats Row */}
-					<div className="flex items-center justify-between text-xs mb-3">
-						{showStudyCount && studyCount > 0 && (
+					<div className="mb-3 flex items-center justify-between text-xs">
+						{showStudyCount && data.studyCount > 0 && (
 							<div className="flex items-center gap-1">
 								<BookOpen className="h-3 w-3 text-muted-foreground" />
-								<span>{studyCount}</span>
+								<span>{data.studyCount}</span>
 							</div>
 						)}
 
-						<div className={`flex items-center gap-1 ${getSafetyColor(safetyRating)}`}>
+						<div
+							className={`flex items-center gap-1 ${getSafetyColor(data.safetyRating)}`}
+						>
 							<Shield className="h-3 w-3" />
-							<span>{safetyRating}/10</span>
+							<span>{data.safetyRating}/10</span>
 						</div>
 
-						{showPrice && price && (
+						{showPrice && data.price && (
 							<div className="font-medium text-primary">
-								{price.min}-{price.max} {price.currency}
+								{data.price.min}-{data.price.max} {data.price.currency}
 							</div>
 						)}
 					</div>
@@ -248,20 +320,20 @@ export function CompactSupplementCard({
 						<Button
 							variant="outline"
 							size="sm"
-							className="flex-1 h-7 text-xs"
+							className="h-7 flex-1 text-xs"
 							onClick={handleDosageClick}
 						>
-							<Calculator className="h-3 w-3 mr-1" />
+							<Calculator className="mr-1 h-3 w-3" />
 							Dawka
 						</Button>
 
 						<Button
 							variant="outline"
 							size="sm"
-							className="flex-1 h-7 text-xs"
+							className="h-7 flex-1 text-xs"
 							onClick={handleSafetyClick}
 						>
-							<Shield className="h-3 w-3 mr-1" />
+							<Shield className="mr-1 h-3 w-3" />
 							Bezpieczeństwo
 						</Button>
 
@@ -271,7 +343,9 @@ export function CompactSupplementCard({
 							className={`h-7 w-7 p-0 ${isFavorited ? "text-red-500" : ""}`}
 							onClick={handleFavoriteClick}
 						>
-							<Heart className={`h-3 w-3 ${isFavorited ? "fill-current" : ""}`} />
+							<Heart
+								className={`h-3 w-3 ${isFavorited ? "fill-current" : ""}`}
+							/>
 						</Button>
 					</div>
 				</CardContent>

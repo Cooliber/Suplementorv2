@@ -27,7 +27,13 @@ export interface ISupplementRecommendation {
 
 export interface ICircadianSupplementTiming extends Document {
 	id: string;
-	timeOfDay: "EARLY_MORNING" | "LATE_MORNING" | "AFTERNOON" | "EVENING" | "NIGHT" | "DEEP_NIGHT";
+	timeOfDay:
+		| "EARLY_MORNING"
+		| "LATE_MORNING"
+		| "AFTERNOON"
+		| "EVENING"
+		| "NIGHT"
+		| "DEEP_NIGHT";
 	polishTimeOfDay: string;
 	timeRange: string; // e.g., "5:00-8:00"
 	description: string;
@@ -80,7 +86,14 @@ const CircadianSupplementTimingSchema = new Schema(
 		id: { type: String, required: true, unique: true, index: true },
 		timeOfDay: {
 			type: String,
-			enum: ["EARLY_MORNING", "LATE_MORNING", "AFTERNOON", "EVENING", "NIGHT", "DEEP_NIGHT"],
+			enum: [
+				"EARLY_MORNING",
+				"LATE_MORNING",
+				"AFTERNOON",
+				"EVENING",
+				"NIGHT",
+				"DEEP_NIGHT",
+			],
 			required: true,
 			index: true,
 		},
@@ -106,7 +119,9 @@ const CircadianSupplementTimingSchema = new Schema(
 // ==================== INDEXES ====================
 
 CircadianSupplementTimingSchema.index({ timeOfDay: 1 });
-CircadianSupplementTimingSchema.index({ "recommendedSupplements.supplementId": 1 });
+CircadianSupplementTimingSchema.index({
+	"recommendedSupplements.supplementId": 1,
+});
 CircadianSupplementTimingSchema.index({ tags: 1 });
 
 // ==================== MODEL ====================
@@ -119,4 +134,3 @@ const CircadianSupplementTiming =
 	);
 
 export default CircadianSupplementTiming;
-

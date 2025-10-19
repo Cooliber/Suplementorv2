@@ -11,7 +11,13 @@ export const UserProfileSchema = z.object({
 	gender: z.enum(["male", "female", "other"]),
 	weight: z.number().min(30).max(300), // kg
 	height: z.number().min(100).max(250), // cm
-	activityLevel: z.enum(["sedentary", "light", "moderate", "active", "very_active"]),
+	activityLevel: z.enum([
+		"sedentary",
+		"light",
+		"moderate",
+		"active",
+		"very_active",
+	]),
 	healthConditions: z.array(z.string()),
 	currentMedications: z.array(z.string()),
 	allergies: z.array(z.string()),
@@ -23,7 +29,9 @@ export const SupplementInputSchema = z.object({
 	supplementId: z.string().cuid(),
 	desiredEffect: z.enum(["therapeutic", "preventive", "optimal"]),
 	customDosage: z.number().positive().optional(),
-	timingPreference: z.array(z.enum(["morning", "afternoon", "evening", "night"])).optional(),
+	timingPreference: z
+		.array(z.enum(["morning", "afternoon", "evening", "night"]))
+		.optional(),
 	withFood: z.boolean().optional(),
 });
 
@@ -68,7 +76,12 @@ export const DosageAdjustmentSchema = z.object({
 
 // Safety analysis types
 export const SafetyAlertSchema = z.object({
-	type: z.enum(["contraindication", "interaction", "overdose_risk", "side_effect_risk"]),
+	type: z.enum([
+		"contraindication",
+		"interaction",
+		"overdose_risk",
+		"side_effect_risk",
+	]),
 	severity: z.enum(["low", "medium", "high", "critical"]),
 	message: z.string(),
 	polishMessage: z.string(),
@@ -81,7 +94,12 @@ export const SafetyAlertSchema = z.object({
 export const InteractionAnalysisSchema = z.object({
 	supplement1: z.string(),
 	supplement2: z.string(),
-	interactionType: z.enum(["synergistic", "antagonistic", "additive", "competitive"]),
+	interactionType: z.enum([
+		"synergistic",
+		"antagonistic",
+		"additive",
+		"competitive",
+	]),
 	severity: z.enum(["severe", "moderate", "minor", "beneficial"]),
 	mechanism: z.string(),
 	polishMechanism: z.string(),
@@ -128,13 +146,19 @@ export const DosageCalculationResultSchema = z.object({
 // TypeScript type exports
 export type UserProfile = z.infer<typeof UserProfileSchema>;
 export type SupplementInput = z.infer<typeof SupplementInputSchema>;
-export type DosageCalculationInput = z.infer<typeof DosageCalculationInputSchema>;
-export type PharmacokineticFactors = z.infer<typeof PharmacokineticFactorsSchema>;
+export type DosageCalculationInput = z.infer<
+	typeof DosageCalculationInputSchema
+>;
+export type PharmacokineticFactors = z.infer<
+	typeof PharmacokineticFactorsSchema
+>;
 export type DosageAdjustment = z.infer<typeof DosageAdjustmentSchema>;
 export type SafetyAlert = z.infer<typeof SafetyAlertSchema>;
 export type InteractionAnalysis = z.infer<typeof InteractionAnalysisSchema>;
 export type DosageRecommendation = z.infer<typeof DosageRecommendationSchema>;
-export type DosageCalculationResult = z.infer<typeof DosageCalculationResultSchema>;
+export type DosageCalculationResult = z.infer<
+	typeof DosageCalculationResultSchema
+>;
 
 // Validation functions
 export const validateUserProfile = (data: unknown) => {
@@ -146,7 +170,10 @@ export const validateUserProfile = (data: unknown) => {
 	} catch (error) {
 		return {
 			success: false as const,
-			error: error instanceof z.ZodError ? error.issues : [{ message: "Unknown validation error" }],
+			error:
+				error instanceof z.ZodError
+					? error.issues
+					: [{ message: "Unknown validation error" }],
 		};
 	}
 };
@@ -160,7 +187,10 @@ export const validateDosageCalculationInput = (data: unknown) => {
 	} catch (error) {
 		return {
 			success: false as const,
-			error: error instanceof z.ZodError ? error.issues : [{ message: "Unknown validation error" }],
+			error:
+				error instanceof z.ZodError
+					? error.issues
+					: [{ message: "Unknown validation error" }],
 		};
 	}
 };

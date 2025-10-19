@@ -1,38 +1,47 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import ErrorAlert, { createErrorInfo } from "@/components/ui/error-alert";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useErrorHandler } from "@/hooks/use-error-handler";
 import { useDosageCalculation } from "@/lib/services/dosage-calculation-service";
 import {
+	AlertTriangle,
+	Brain,
+	Calculator,
+	CheckCircle,
 	ChevronLeft,
 	ChevronRight,
-	Calculator,
-	Shield,
-	AlertTriangle,
-	CheckCircle,
-	Info,
-	Pill,
 	Clock,
-	Users,
 	Heart,
-	Brain,
-	Zap,
+	Info,
 	Moon,
+	Pill,
+	Shield,
+	Users,
+	Zap,
 } from "lucide-react";
+import { useState } from "react";
 
-// Import our custom components and types
-import { UserProfileStep } from "./steps/UserProfileStep";
-import { SupplementSelectionStep } from "./steps/SupplementSelectionStep";
+import type {
+	DosageCalculationInput,
+	DosageCalculationResult,
+} from "@/types/dosage-calculator";
 import { CalculationOptionsStep } from "./steps/CalculationOptionsStep";
 import { ResultsStep } from "./steps/ResultsStep";
-import { type DosageCalculationInput, type DosageCalculationResult } from "@/types/dosage-calculator";
+import { SupplementSelectionStep } from "./steps/SupplementSelectionStep";
+// Import our custom components and types
+import { UserProfileStep } from "./steps/UserProfileStep";
 
 interface DosageCalculatorProps {
 	className?: string;
@@ -87,15 +96,24 @@ const POPULAR_COMBINATIONS = [
 ];
 
 export function DosageCalculator({ className }: DosageCalculatorProps) {
- 	const [currentStep, setCurrentStep] = useState<CalculationStep>("profile");
- 	const [calculationResult, setCalculationResult] = useState<DosageCalculationResult | null>(null);
+	const [currentStep, setCurrentStep] = useState<CalculationStep>("profile");
+	const [calculationResult, setCalculationResult] =
+		useState<DosageCalculationResult | null>(null);
 
- 	// Use our new error handling system
- 	const errorHandler = useErrorHandler();
- 	const { calculateDosage, retryCalculation, isCalculating, error, clearError } = useDosageCalculation();
+	// Use our new error handling system
+	const errorHandler = useErrorHandler();
+	const {
+		calculateDosage,
+		retryCalculation,
+		isCalculating,
+		error,
+		clearError,
+	} = useDosageCalculation();
 
 	// Form data state
-	const [userProfile, setUserProfile] = useState<Partial<DosageCalculationInput["userProfile"]>>({
+	const [userProfile, setUserProfile] = useState<
+		Partial<DosageCalculationInput["userProfile"]>
+	>({
 		age: 25,
 		gender: "other",
 		weight: 70,
@@ -108,7 +126,9 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 		breastfeeding: false,
 	});
 
-	const [supplements, setSupplements] = useState<DosageCalculationInput["supplements"]>([]);
+	const [supplements, setSupplements] = useState<
+		DosageCalculationInput["supplements"]
+	>([]);
 	const [calculationOptions, setCalculationOptions] = useState({
 		calculationType: "stack" as const,
 		includeInteractions: true,
@@ -119,7 +139,12 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 
 	// Step navigation
 	const goToNextStep = () => {
-		const steps: CalculationStep[] = ["profile", "supplements", "options", "results"];
+		const steps: CalculationStep[] = [
+			"profile",
+			"supplements",
+			"options",
+			"results",
+		];
 		const currentIndex = steps.indexOf(currentStep);
 		if (currentIndex < steps.length - 1) {
 			setCurrentStep(steps[currentIndex + 1]!);
@@ -127,7 +152,12 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 	};
 
 	const goToPreviousStep = () => {
-		const steps: CalculationStep[] = ["profile", "supplements", "options", "results"];
+		const steps: CalculationStep[] = [
+			"profile",
+			"supplements",
+			"options",
+			"results",
+		];
 		const currentIndex = steps.indexOf(currentStep);
 		if (currentIndex > 0) {
 			setCurrentStep(steps[currentIndex - 1]!);
@@ -142,14 +172,19 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 			userProfile.weight &&
 			userProfile.height &&
 			userProfile.activityLevel &&
-			userProfile.age >= 18 && userProfile.age <= 120 &&
-			userProfile.weight >= 30 && userProfile.weight <= 300 &&
-			userProfile.height >= 100 && userProfile.height <= 250
+			userProfile.age >= 18 &&
+			userProfile.age <= 120 &&
+			userProfile.weight >= 30 &&
+			userProfile.weight <= 300 &&
+			userProfile.height >= 100 &&
+			userProfile.height <= 250
 		);
 	};
 
 	const canProceedFromSupplements = () => {
-		return supplements.length > 0 && supplements.every(supp => supp.supplementId);
+		return (
+			supplements.length > 0 && supplements.every((supp) => supp.supplementId)
+		);
 	};
 
 	const canProceedFromOptions = () => {
@@ -157,7 +192,11 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 	};
 
 	const canCalculate = () => {
-		return canProceedFromProfile() && canProceedFromSupplements() && canProceedFromOptions();
+		return (
+			canProceedFromProfile() &&
+			canProceedFromSupplements() &&
+			canProceedFromOptions()
+		);
 	};
 
 	// Enhanced step validation with visual feedback
@@ -181,73 +220,79 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 
 		switch (step) {
 			case "profile":
-				return isPolish ? "Uzupełnij podstawowe informacje" : "Complete basic information";
+				return isPolish
+					? "Uzupełnij podstawowe informacje"
+					: "Complete basic information";
 			case "supplements":
 				return isPolish ? "Wybierz suplementy" : "Select supplements";
 			case "options":
-				return isPolish ? "Sprawdź opcje obliczeń" : "Review calculation options";
+				return isPolish
+					? "Sprawdź opcje obliczeń"
+					: "Review calculation options";
 			default:
 				return "";
 		}
 	};
 
 	// Calculate dosage with enhanced error handling
-		const handleCalculate = async () => {
-			if (!canCalculate()) return;
+	const handleCalculate = async () => {
+		if (!canCalculate()) return;
 
-			try {
-				const calculationInput: DosageCalculationInput = {
-					userProfile: userProfile as DosageCalculationInput["userProfile"],
-					supplements,
-					calculationType: calculationOptions.calculationType,
-					includeInteractions: calculationOptions.includeInteractions,
-					includeContraindications: calculationOptions.includeContraindications,
-				};
+		try {
+			const calculationInput: DosageCalculationInput = {
+				userProfile: userProfile as DosageCalculationInput["userProfile"],
+				supplements,
+				calculationType: calculationOptions.calculationType,
+				includeInteractions: calculationOptions.includeInteractions,
+				includeContraindications: calculationOptions.includeContraindications,
+			};
 
-				const result = await calculateDosage(calculationInput, {
-					includeInteractions: calculationOptions.includeInteractions,
-					includeContraindications: calculationOptions.includeContraindications,
-					timeout: 30000,
-				});
+			const result = await calculateDosage(calculationInput, {
+				includeInteractions: calculationOptions.includeInteractions,
+				includeContraindications: calculationOptions.includeContraindications,
+				timeout: 30000,
+			});
 
-				if (result) {
-					setCalculationResult(result);
-					setCurrentStep("results");
-				}
-			} catch (err) {
-				// Error is already handled by the useDosageCalculation hook
-				console.error("Calculation error:", err);
+			if (result) {
+				setCalculationResult(result);
+				setCurrentStep("results");
 			}
-		};
+		} catch (err) {
+			// Error is already handled by the useDosageCalculation hook
+			console.error("Calculation error:", err);
+		}
+	};
 
-		// Retry calculation
-		const handleRetryCalculation = async () => {
-			try {
-				const calculationInput: DosageCalculationInput = {
-					userProfile: userProfile as DosageCalculationInput["userProfile"],
-					supplements,
-					calculationType: calculationOptions.calculationType,
-					includeInteractions: calculationOptions.includeInteractions,
-					includeContraindications: calculationOptions.includeContraindications,
-				};
+	// Retry calculation
+	const handleRetryCalculation = async () => {
+		try {
+			const calculationInput: DosageCalculationInput = {
+				userProfile: userProfile as DosageCalculationInput["userProfile"],
+				supplements,
+				calculationType: calculationOptions.calculationType,
+				includeInteractions: calculationOptions.includeInteractions,
+				includeContraindications: calculationOptions.includeContraindications,
+			};
 
-				const result = await retryCalculation(calculationInput, {
-					includeInteractions: calculationOptions.includeInteractions,
-					includeContraindications: calculationOptions.includeContraindications,
-				});
+			const result = await retryCalculation(calculationInput, {
+				includeInteractions: calculationOptions.includeInteractions,
+				includeContraindications: calculationOptions.includeContraindications,
+			});
 
-				if (result) {
-					setCalculationResult(result);
-					setCurrentStep("results");
-				}
-			} catch (err) {
-				console.error("Retry calculation error:", err);
+			if (result) {
+				setCalculationResult(result);
+				setCurrentStep("results");
 			}
-		};
+		} catch (err) {
+			console.error("Retry calculation error:", err);
+		}
+	};
 
 	// Quick selection handlers
 	const handlePopularCombinationSelect = (combinationId: string) => {
-		const combination = POPULAR_COMBINATIONS.find(c => c.id === combinationId);
+		const combination = POPULAR_COMBINATIONS.find(
+			(c) => c.id === combinationId,
+		);
 		if (combination) {
 			// This would typically load supplements based on the combination
 			// For now, just show a message
@@ -256,7 +301,12 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 	};
 
 	const getStepProgress = () => {
-		const steps: CalculationStep[] = ["profile", "supplements", "options", "results"];
+		const steps: CalculationStep[] = [
+			"profile",
+			"supplements",
+			"options",
+			"results",
+		];
 		return ((steps.indexOf(currentStep) + 1) / steps.length) * 100;
 	};
 
@@ -265,21 +315,23 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 	};
 
 	return (
-		<div className={`max-w-5xl mx-auto p-6 ${className}`}>
+		<div className={`mx-auto max-w-5xl p-6 ${className}`}>
 			{/* Enhanced Header */}
 			<div className="mb-8">
-				<div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 p-8 mb-6">
+				<div className="relative mb-6 overflow-hidden rounded-2xl bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 p-8">
 					<div className="absolute inset-0 bg-grid-pattern opacity-5" />
-					<div className="relative flex items-center gap-4 mb-4">
-						<div className="relative p-4 bg-gradient-to-br from-primary to-primary/80 rounded-2xl shadow-lg">
+					<div className="relative mb-4 flex items-center gap-4">
+						<div className="relative rounded-2xl bg-gradient-to-br from-primary to-primary/80 p-4 shadow-lg">
 							<Calculator className="h-10 w-10 text-white" />
-							<div className="absolute -top-1 -right-1 h-4 w-4 bg-green-500 rounded-full animate-pulse" />
+							<div className="-top-1 -right-1 absolute h-4 w-4 animate-pulse rounded-full bg-green-500" />
 						</div>
 						<div className="flex-1">
-							<h1 className="text-4xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-								{isPolish ? "Kalkulator dawek suplementów" : "Supplement Dosage Calculator"}
+							<h1 className="bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text font-bold text-4xl text-transparent">
+								{isPolish
+									? "Kalkulator dawek suplementów"
+									: "Supplement Dosage Calculator"}
 							</h1>
-							<p className="text-muted-foreground mt-2 text-lg">
+							<p className="mt-2 text-lg text-muted-foreground">
 								{isPolish
 									? "Oblicz bezpieczne i skuteczne dawki suplementów dostosowane do Twojego profilu"
 									: "Calculate safe and effective supplement dosages tailored to your profile"}
@@ -289,18 +341,22 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 
 					{/* Enhanced Progress bar */}
 					<div className="space-y-3">
-						<div className="flex justify-between items-center text-sm">
+						<div className="flex items-center justify-between text-sm">
 							<span className="font-medium">{getCurrentStepTitle()}</span>
 							<div className="flex items-center gap-2">
-								<span className="text-muted-foreground">{Math.round(getStepProgress())}%</span>
-								<span className="text-xs text-muted-foreground">
-									{isPolish ? "Krok" : "Step"} {Math.floor(getStepProgress() / 25) + 1} {isPolish ? "z 4" : "of 4"}
+								<span className="text-muted-foreground">
+									{Math.round(getStepProgress())}%
+								</span>
+								<span className="text-muted-foreground text-xs">
+									{isPolish ? "Krok" : "Step"}{" "}
+									{Math.floor(getStepProgress() / 25) + 1}{" "}
+									{isPolish ? "z 4" : "of 4"}
 								</span>
 							</div>
 						</div>
 						<div className="relative">
 							<Progress value={getStepProgress()} className="h-3 bg-muted/50" />
-							<div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/5 rounded-full" />
+							<div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 to-primary/5" />
 						</div>
 					</div>
 				</div>
@@ -311,7 +367,7 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 				<Card className="mb-6 border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
 					<CardHeader className="pb-4">
 						<CardTitle className="flex items-center gap-3 text-xl">
-							<div className="p-2 bg-primary/10 rounded-lg">
+							<div className="rounded-lg bg-primary/10 p-2">
 								<Users className="h-6 w-6 text-primary" />
 							</div>
 							{isPolish ? "Popularne kombinacje" : "Popular Combinations"}
@@ -323,30 +379,41 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 							{POPULAR_COMBINATIONS.map((combination) => {
 								const IconComponent = combination.icon;
 								return (
 									<Button
 										key={combination.id}
 										variant="outline"
-										className="h-auto p-6 flex flex-col items-start gap-3 hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 group"
-										onClick={() => handlePopularCombinationSelect(combination.id)}
+										className="group flex h-auto flex-col items-start gap-3 p-6 transition-all duration-200 hover:border-primary/50 hover:bg-primary/5"
+										onClick={() =>
+											handlePopularCombinationSelect(combination.id)
+										}
 									>
-										<div className="flex items-center gap-3 w-full">
-											<div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
+										<div className="flex w-full items-center gap-3">
+											<div className="rounded-lg bg-primary/10 p-2 transition-colors group-hover:bg-primary/20">
 												<IconComponent className="h-6 w-6 text-primary" />
 											</div>
-											<div className="text-left flex-1">
-												<div className="font-semibold text-base">{isPolish ? combination.polishName : combination.name}</div>
-												<div className="text-sm text-muted-foreground leading-tight">
-													{isPolish ? combination.polishDescription : combination.description}
+											<div className="flex-1 text-left">
+												<div className="font-semibold text-base">
+													{isPolish ? combination.polishName : combination.name}
+												</div>
+												<div className="text-muted-foreground text-sm leading-tight">
+													{isPolish
+														? combination.polishDescription
+														: combination.description}
 												</div>
 											</div>
 										</div>
-										<div className="w-full flex items-center justify-between text-xs text-muted-foreground">
-											<span>{combination.supplements.length} {isPolish ? "suplementów" : "supplements"}</span>
-											<span className="text-primary font-medium">{isPolish ? "Kliknij aby wybrać" : "Click to select"}</span>
+										<div className="flex w-full items-center justify-between text-muted-foreground text-xs">
+											<span>
+												{combination.supplements.length}{" "}
+												{isPolish ? "suplementów" : "supplements"}
+											</span>
+											<span className="font-medium text-primary">
+												{isPolish ? "Kliknij aby wybrać" : "Click to select"}
+											</span>
 										</div>
 									</Button>
 								);
@@ -357,29 +424,45 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 			)}
 
 			{/* Enhanced Main content */}
-			<Card className="shadow-lg border-0 bg-gradient-to-br from-background to-muted/20">
+			<Card className="border-0 bg-gradient-to-br from-background to-muted/20 shadow-lg">
 				<CardHeader className="pb-6">
 					<div className="flex items-center justify-between">
 						<div className="flex items-center gap-4">
-							<div className="p-3 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl">
-								{currentStep === "profile" && <Users className="h-6 w-6 text-primary" />}
-								{currentStep === "supplements" && <Pill className="h-6 w-6 text-primary" />}
-								{currentStep === "options" && <Info className="h-6 w-6 text-primary" />}
-								{currentStep === "results" && <CheckCircle className="h-6 w-6 text-primary" />}
+							<div className="rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 p-3">
+								{currentStep === "profile" && (
+									<Users className="h-6 w-6 text-primary" />
+								)}
+								{currentStep === "supplements" && (
+									<Pill className="h-6 w-6 text-primary" />
+								)}
+								{currentStep === "options" && (
+									<Info className="h-6 w-6 text-primary" />
+								)}
+								{currentStep === "results" && (
+									<CheckCircle className="h-6 w-6 text-primary" />
+								)}
 							</div>
 							<div>
 								<CardTitle className="text-2xl">
 									{getCurrentStepTitle()}
 								</CardTitle>
-								<CardDescription className="text-base mt-1">
+								<CardDescription className="mt-1 text-base">
 									{currentStep === "profile" &&
-										(isPolish ? "Podaj informacje o swoim zdrowiu i stylu życia" : "Provide information about your health and lifestyle")}
+										(isPolish
+											? "Podaj informacje o swoim zdrowiu i stylu życia"
+											: "Provide information about your health and lifestyle")}
 									{currentStep === "supplements" &&
-										(isPolish ? "Wybierz suplementy do obliczenia dawek" : "Select supplements for dosage calculation")}
+										(isPolish
+											? "Wybierz suplementy do obliczenia dawek"
+											: "Select supplements for dosage calculation")}
 									{currentStep === "options" &&
-										(isPolish ? "Dostosuj opcje obliczeń" : "Customize calculation options")}
+										(isPolish
+											? "Dostosuj opcje obliczeń"
+											: "Customize calculation options")}
 									{currentStep === "results" &&
-										(isPolish ? "Zobacz swoje spersonalizowane rekomendacje" : "View your personalized recommendations")}
+										(isPolish
+											? "Zobacz swoje spersonalizowane rekomendacje"
+											: "View your personalized recommendations")}
 								</CardDescription>
 							</div>
 						</div>
@@ -387,7 +470,7 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 							variant="ghost"
 							size="sm"
 							onClick={() => setIsPolish(!isPolish)}
-							className="hover:bg-primary/10 transition-colors"
+							className="transition-colors hover:bg-primary/10"
 						>
 							{isPolish ? "EN" : "PL"}
 						</Button>
@@ -395,28 +478,36 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 				</CardHeader>
 
 				<CardContent className="space-y-6">
-						{/* Enhanced Error display */}
-						{error && (
-							<ErrorAlert
-								error={createErrorInfo.dosageCalculation(error instanceof Error ? error.message : String(error))}
-								onRetry={handleRetryCalculation}
-								onDismiss={clearError}
-							/>
-						)}
+					{/* Enhanced Error display */}
+					{error && (
+						<ErrorAlert
+							error={createErrorInfo.dosageCalculation(
+								error instanceof Error ? error.message : String(error),
+							)}
+							onRetry={handleRetryCalculation}
+							onDismiss={clearError}
+						/>
+					)}
 
-						{/* Show error handler errors if any */}
-						{errorHandler.errors.length > 0 && (
-							<div className="space-y-2">
-								{errorHandler.errors.map((errorInfo, index) => (
-									<ErrorAlert
-										key={errorInfo.timestamp.getTime()}
-										error={errorInfo}
-										onRetry={errorInfo.retryable ? handleRetryCalculation : undefined}
-										onDismiss={() => errorHandler.clearError(errorInfo.timestamp.getTime().toString())}
-									/>
-								))}
-							</div>
-						)}
+					{/* Show error handler errors if any */}
+					{errorHandler.errors.length > 0 && (
+						<div className="space-y-2">
+							{errorHandler.errors.map((errorInfo, index) => (
+								<ErrorAlert
+									key={errorInfo.timestamp.getTime()}
+									error={errorInfo}
+									onRetry={
+										errorInfo.retryable ? handleRetryCalculation : undefined
+									}
+									onDismiss={() =>
+										errorHandler.clearError(
+											errorInfo.timestamp.getTime().toString(),
+										)
+									}
+								/>
+							))}
+						</div>
+					)}
 
 					{/* Step content */}
 					{currentStep === "profile" && (
@@ -444,29 +535,29 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 					)}
 
 					{currentStep === "results" && calculationResult && (
-						<ResultsStep
-							result={calculationResult}
-							isPolish={isPolish}
-						/>
+						<ResultsStep result={calculationResult} isPolish={isPolish} />
 					)}
 				</CardContent>
 			</Card>
 
 			{/* Enhanced Navigation */}
-			<div className="flex justify-between items-center mt-8 p-6 bg-muted/30 rounded-2xl">
+			<div className="mt-8 flex items-center justify-between rounded-2xl bg-muted/30 p-6">
 				<Button
 					variant="outline"
 					onClick={goToPreviousStep}
 					disabled={currentStep === "profile"}
-					className="flex items-center gap-2 px-6 py-3 hover:bg-primary/5 transition-all duration-200"
+					className="flex items-center gap-2 px-6 py-3 transition-all duration-200 hover:bg-primary/5"
 				>
 					<ChevronLeft className="h-4 w-4" />
 					{isPolish ? "Wstecz" : "Previous"}
 				</Button>
 
-				<div className="flex items-center gap-2 text-sm text-muted-foreground">
-					<span>{isPolish ? "Krok" : "Step"} {Math.floor(getStepProgress() / 25) + 1} {isPolish ? "z 4" : "of 4"}</span>
-					<div className="w-16 h-1 bg-muted rounded-full overflow-hidden">
+				<div className="flex items-center gap-2 text-muted-foreground text-sm">
+					<span>
+						{isPolish ? "Krok" : "Step"}{" "}
+						{Math.floor(getStepProgress() / 25) + 1} {isPolish ? "z 4" : "of 4"}
+					</span>
+					<div className="h-1 w-16 overflow-hidden rounded-full bg-muted">
 						<div
 							className="h-full bg-primary transition-all duration-300"
 							style={{ width: `${getStepProgress()}%` }}
@@ -478,11 +569,11 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 					<Button
 						onClick={handleCalculate}
 						disabled={!canCalculate() || isCalculating}
-						className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-200"
+						className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary/80 px-8 py-3 shadow-lg transition-all duration-200 hover:from-primary/90 hover:to-primary/70 hover:shadow-xl"
 					>
 						{isCalculating ? (
 							<>
-								<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+								<div className="h-4 w-4 animate-spin rounded-full border-white border-b-2" />
 								{isPolish ? "Obliczanie..." : "Calculating..."}
 							</>
 						) : (
@@ -499,7 +590,7 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 							(currentStep === "profile" && !canProceedFromProfile()) ||
 							(currentStep === "supplements" && !canProceedFromSupplements())
 						}
-						className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-200"
+						className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary/80 px-8 py-3 shadow-lg transition-all duration-200 hover:from-primary/90 hover:to-primary/70 hover:shadow-xl"
 					>
 						{isPolish ? "Dalej" : "Next"}
 						<ChevronRight className="h-4 w-4" />
@@ -510,13 +601,15 @@ export function DosageCalculator({ className }: DosageCalculatorProps) {
 			{/* Enhanced Safety notice */}
 			<Alert className="mt-6 border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50">
 				<div className="flex items-center gap-3">
-					<div className="p-2 bg-amber-100 rounded-full">
+					<div className="rounded-full bg-amber-100 p-2">
 						<Shield className="h-5 w-5 text-amber-600" />
 					</div>
 					<AlertDescription className="text-amber-800">
 						<div className="space-y-1">
 							<p className="font-medium">
-								{isPolish ? "⚠️ Ważna informacja bezpieczeństwa" : "⚠️ Important Safety Notice"}
+								{isPolish
+									? "⚠️ Ważna informacja bezpieczeństwa"
+									: "⚠️ Important Safety Notice"}
 							</p>
 							<p className="text-sm">
 								{isPolish

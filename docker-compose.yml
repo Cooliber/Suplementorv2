@@ -1,0 +1,172 @@
+version: '3.8'
+
+services:
+  # Main application
+  suplementor:
+    build:
+      context: .
+      target: development
+    container_name: suplementor-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://suplementor:suplementor_password@postgres:5432/suplementor_dev
+      - MONGODB_URI=mongodb://mongo:27017/suplementor_dev
+      - NEXTAUTH_SECRET=development-secret-key-change-in-production
+      - NEXTAUTH_URL=http://localhost:3000
+      - MEDICAL_DATA_PROTECTION=enabled
+      - GDPR_COMPLIANCE_MODE=strict
+      - POLISH_LOCALIZATION=enabled
+      - ENABLE_DEBUG_LOGS=true
+      - ENABLE_MOCK_DATA=true
+    depends_on:
+      - postgres
+      - mongo
+    networks:
+      - suplementor-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PostgreSQL database for Prisma
+  postgres:
+    image: postgres:16-alpine
+    container_name: suplementor-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=suplementor_dev
+      - POSTGRES_USER=suplementor
+      - POSTGRES_PASSWORD=suplementor_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - suplementor-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U suplementor -d suplementor_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MongoDB for additional data storage
+  mongo:
+    image: mongo:7-jammy
+    container_name: suplementor-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=suplementor_dev
+      - MONGO_INITDB_ROOT_USERNAME=suplementor
+      - MONGO_INITDB_ROOT_PASSWORD=suplementor_password
+    volumes:
+      - mongo_data:/data/db
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+    networks:
+      - suplementor-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and sessions
+  redis:
+    image: redis:7-alpine
+    container_name: suplementor-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - suplementor-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    command: redis-server --appendonly yes
+
+  # Elasticsearch for advanced search (optional)
+  elasticsearch:
+    image: elasticsearch:8.11.0
+    container_name: suplementor-elasticsearch
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - suplementor-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Embedding service for AI features
+  embedding-service:
+    build:
+      context: .
+      dockerfile: Containerfile.embedding
+    container_name: suplementor-embedding
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHON_ENV=development
+    volumes:
+      - ./requirements-embedding.txt:/app/requirements.txt
+    networks:
+      - suplementor-network
+    restart: unless-stopped
+    profiles:
+      - ai
+
+  # Nginx reverse proxy for production-like setup
+  nginx:
+    image: nginx:alpine
+    container_name: suplementor-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - suplementor
+    networks:
+      - suplementor-network
+    restart: unless-stopped
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+    driver: local
+  mongo_data:
+    driver: local
+  redis_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+
+networks:
+  suplementor-network:
+    driver: bridge

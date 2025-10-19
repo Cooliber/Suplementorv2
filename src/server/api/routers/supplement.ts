@@ -3,8 +3,7 @@
  * Comprehensive API for supplement data management with Polish localization
  */
 
-
-import { mongoDBSupplementsService } from "@/lib/services/mongodb-supplements-service";
+import { hybridSupplementsService } from "@/lib/services/hybrid-supplements-service";
 import {
 	createTRPCRouter,
 	protectedProcedure,
@@ -71,7 +70,6 @@ export const supplementRouter = createTRPCRouter({
 	getAll: publicProcedure
 		.input(GetSupplementsInputSchema)
 		.query(async ({ ctx, input }) => {
-
 			const {
 				category,
 				evidenceLevel,
@@ -112,14 +110,24 @@ export const supplementRouter = createTRPCRouter({
 			const sort: any = {};
 			sort[sortBy] = sortOrder === "asc" ? 1 : -1;
 
-			const [supplements, totalCount] = await Promise.all([
-				ctx.db.comprehensiveSupplement.find({ ...filter, isActive: true })
-					.sort(sort)
-					.limit(limit)
-					.skip(offset)
-					.lean(),
-				ctx.db.comprehensiveSupplement.countDocuments({ ...filter, isActive: true }),
-			]);
+			const result = await hybridSupplementsService.getAllSupplements(
+				{
+					category: filter.category,
+					evidenceLevel: filter.evidenceLevel,
+					searchTerm: search,
+					conditions: filter.conditions,
+					mechanisms: filter.mechanisms,
+				},
+				{
+					page: Math.floor(offset / limit) + 1,
+					limit,
+					sortBy: sortBy,
+					sortOrder: sortOrder,
+				},
+			);
+
+			const supplements = result.supplements;
+			const totalCount = result.pagination.total;
 
 			return {
 				supplements: supplements as any[],
@@ -134,13 +142,9 @@ export const supplementRouter = createTRPCRouter({
 	getById: publicProcedure
 		.input(GetSupplementByIdInputSchema)
 		.query(async ({ ctx, input }) => {
-
 			const { id } = input;
 
-			const supplement = await ctx.db.comprehensiveSupplement.findOne({
-				id,
-				isActive: true,
-			}).lean();
+			const supplement = await hybridSupplementsService.getSupplementById(id);
 
 			if (!supplement) {
 				throw new Error("Supplement not found");
@@ -155,7 +159,6 @@ export const supplementRouter = createTRPCRouter({
 	search: publicProcedure
 		.input(SearchSupplementsInputSchema)
 		.query(async ({ ctx, input }) => {
-
 			const { query, limit, categories, evidenceLevels } = input;
 
 			const filter: any = {
@@ -178,13 +181,11 @@ export const supplementRouter = createTRPCRouter({
 				filter.evidenceLevel = { $in: evidenceLevels };
 			}
 
-			const supplements = await ctx.db.comprehensiveSupplement.find({
-				...filter,
-				isActive: true,
-			})
-				.limit(limit)
-				.sort({ evidenceLevel: -1, polishName: 1 })
-				.lean();
+			const supplements = await hybridSupplementsService.searchSupplements(
+				query,
+				"pl",
+				limit,
+			);
 
 			return supplements as any[];
 		}),
@@ -198,13 +199,12 @@ export const supplementRouter = createTRPCRouter({
 			const { supplementIds, severityFilter } = input;
 
 			// Fetch supplements with their interaction data
-			const supplements = await ctx.db.comprehensiveSupplement
-				.find({
-					id: { $in: supplementIds },
-					isActive: true,
-				})
-				.select("id name polishName interactions")
-				.lean();
+			const supplementPromises = supplementIds.map((id) =>
+				hybridSupplementsService.getSupplementById(id),
+			);
+			const supplements = (await Promise.all(supplementPromises)).filter(
+				Boolean,
+			);
 
 			if (supplements.length < 2) {
 				return {
@@ -293,7 +293,6 @@ export const supplementRouter = createTRPCRouter({
 	getRecommendations: publicProcedure
 		.input(GetRecommendationsInputSchema)
 		.query(async ({ ctx, input }) => {
-
 			const {
 				goals,
 				currentSupplements = [],
@@ -302,12 +301,13 @@ export const supplementRouter = createTRPCRouter({
 			} = input;
 
 			// Get all supplements for analysis
-			const allSupplements = await ctx.db.comprehensiveSupplement.find({
-				id: { $nin: currentSupplements },
-				isActive: true,
-			})
-				.sort({ evidenceLevel: -1 })
-				.lean();
+			const result = await hybridSupplementsService.getAllSupplements(
+				{},
+				{ limit: 1000 }, // Get all supplements for analysis
+			);
+			const allSupplements = result.supplements.filter(
+				(supplement) => !currentSupplements.includes(supplement.id),
+			);
 
 			// Simple recommendation algorithm based on goals and evidence
 			const recommendations = allSupplements
@@ -368,16 +368,18 @@ export const supplementRouter = createTRPCRouter({
 	 * Get supplement categories with counts
 	 */
 	getCategories: publicProcedure.query(async ({ ctx }) => {
-		const categories = await ctx.db.comprehensiveSupplement.aggregate([
-			{ $match: { isActive: true } },
-			{ $group: { _id: "$category", count: { $sum: 1 } } },
-			{ $sort: { count: -1 } },
-		]);
+		const statistics = await hybridSupplementsService.getStatistics();
 
-		return categories.map((cat: any) => ({
-			category: cat.category,
-			count: cat._count.category,
-		}));
+		const statsData =
+			statistics && typeof statistics === "object" && "byCategory" in statistics
+				? statistics
+				: (statistics as any).data || { byCategory: {} };
+		return Object.entries(statsData.byCategory || {}).map(
+			([category, count]) => ({
+				category,
+				count,
+			}),
+		);
 	}),
 
 	/**
@@ -392,12 +394,8 @@ export const supplementRouter = createTRPCRouter({
 		.query(async ({ ctx, input }) => {
 			const { limit } = input;
 
-			const popularSupplements = await ctx.db.comprehensiveSupplement.find({
-				isActive: true,
-			})
-				.sort({ "clinicalEvidence.totalStudies": -1, evidenceLevel: -1 })
-				.limit(limit)
-				.lean();
+			const popularSupplements =
+				await hybridSupplementsService.getPopularSupplements(limit);
 
 			return popularSupplements as any[];
 		}),

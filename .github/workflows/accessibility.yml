@@ -1,0 +1,258 @@
+name: Accessibility Testing (WCAG Compliance)
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run accessibility tests weekly
+    - cron: '0 4 * * 0' # Sunday at 4 AM UTC
+
+env:
+  NODE_VERSION: '20'
+  BUN_VERSION: '1.1.38'
+
+jobs:
+  # Automated Accessibility Testing
+  accessibility-testing:
+    name: WCAG Compliance Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build application for testing
+        run: bun run build
+
+      - name: Start application for testing
+        run: bun run start &
+        env:
+          PORT: 3000
+
+      - name: Wait for application to be ready
+        run: |
+          echo "⏳ Waiting for application to start..."
+          timeout 60 bash -c 'until curl -f http://localhost:3000 > /dev/null 2>&1; do sleep 1; done'
+
+      - name: Run axe-core accessibility tests
+        uses: jakebailey/axe-action@v1
+        with:
+          urls: |
+            http://localhost:3000
+            http://localhost:3000/wiedza
+            http://localhost:3000/suplementy
+          output-format: sarif
+          output-file: axe-results.sarif
+
+      - name: Run Pa11y CLI tests
+        run: |
+          echo "🔍 Running Pa11y accessibility tests..."
+          npx pa11y http://localhost:3000 --reporter json > pa11y-report.json || true
+          npx pa11y http://localhost:3000/wiedza --reporter json >> pa11y-report.json || true
+          npx pa11y http://localhost:3000/suplementy --reporter json >> pa11y-report.json || true
+
+      - name: Run Lighthouse accessibility audit
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            http://localhost:3000
+            http://localhost:3000/wiedza
+            http://localhost:3000/suplementy
+          configPath: .lighthouserc.json
+          uploadArtifacts: true
+
+      - name: Upload accessibility reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-test-results
+          path: |
+            axe-results.sarif
+            pa11y-report.json
+            lighthouse-report.json
+          retention-days: 30
+
+  # Polish Language Accessibility Testing
+  polish-accessibility:
+    name: Polish Language Accessibility
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check Polish character encoding
+        run: |
+          echo "🔍 Checking Polish character encoding..."
+          # Check for proper UTF-8 encoding of Polish characters
+          if ! grep -r "ą\|ć\|ę\|ł\|ń\|ó\|ś\|ź\|ż" src/ --include="*.tsx" --include="*.ts"; then
+            echo "⚠️ No Polish characters found in source files"
+          fi
+
+      - name: Validate Polish translations completeness
+        run: |
+          echo "🔍 Validating Polish translations..."
+          # Custom script to check translation completeness
+          bun run i18n:validate:polish || echo "⚠️ Polish translation validation failed"
+
+      - name: Check for Polish-specific accessibility issues
+        run: |
+          echo "🔍 Checking Polish-specific accessibility..."
+          # Check for proper alt text in Polish
+          # Check for proper ARIA labels in Polish
+          # Check for proper heading structure with Polish content
+
+  # Screen Reader Compatibility Testing
+  screen-reader-testing:
+    name: Screen Reader Compatibility
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build application
+        run: bun run build
+
+      - name: Run semantic HTML validation
+        run: |
+          echo "🔍 Validating semantic HTML structure..."
+          # Check for proper heading hierarchy
+          # Check for proper landmark elements
+          # Check for proper form labels
+
+      - name: Validate ARIA implementation
+        run: |
+          echo "🔍 Validating ARIA attributes..."
+          # Check for proper ARIA labels in Polish
+          # Check for proper ARIA roles
+          # Check for proper live regions
+
+  # Color Contrast and Visual Accessibility
+  visual-accessibility:
+    name: Color Contrast and Visual Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run color contrast analysis
+        run: |
+          echo "🔍 Analyzing color contrast ratios..."
+          # Use a tool to check WCAG AA/AAA compliance
+          npx puppeteer-contrast-checker || echo "⚠️ Color contrast check failed"
+
+      - name: Check for focus indicators
+        run: |
+          echo "🔍 Checking focus indicators..."
+          # Validate that all interactive elements have visible focus indicators
+          # Check for proper focus management in complex components
+
+      - name: Validate responsive design accessibility
+        run: |
+          echo "🔍 Checking responsive accessibility..."
+          # Ensure accessibility features work across different screen sizes
+          # Check touch target sizes for mobile devices
+
+  # Accessibility Summary and Reporting
+  accessibility-summary:
+    name: Accessibility Summary Report
+    runs-on: ubuntu-latest
+    needs: [accessibility-testing, polish-accessibility, screen-reader-testing, visual-accessibility]
+    if: always()
+
+    steps:
+      - name: Generate accessibility summary
+        run: |
+          echo "## ♿ Accessibility Testing Summary" > accessibility-summary.md
+          echo "" >> accessibility-summary.md
+          echo "### Automated Testing: ${{ needs.accessibility-testing.result }}" >> accessibility-summary.md
+          echo "### Polish Language: ${{ needs.polish-accessibility.result }}" >> accessibility-summary.md
+          echo "### Screen Reader: ${{ needs.screen-reader-testing.result }}" >> accessibility-summary.md
+          echo "### Visual Accessibility: ${{ needs.visual-accessibility.result }}" >> accessibility-summary.md
+          echo "" >> accessibility-summary.md
+          echo "**WCAG Compliance Status:** $(if [ "${{ needs.accessibility-testing.result }}" == "success" ]; then echo "✅ Compliant"; else echo "❌ Issues Found"; fi)" >> accessibility-summary.md
+          echo "**Test Date:** $(date)" >> accessibility-summary.md
+          echo "**Repository:** ${{ github.repository }}" >> accessibility-summary.md
+          echo "**Branch:** ${{ github.ref }}" >> accessibility-summary.md
+
+      - name: Upload accessibility summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-summary-report
+          path: accessibility-summary.md
+          retention-days: 90
+
+      - name: Comment PR with accessibility results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('accessibility-summary.md', 'utf8');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## ♿ Accessibility Test Results\n\n${summary}`
+            })

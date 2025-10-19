@@ -9,7 +9,14 @@
  * =================================================================
  */
 
-import type { EvidenceLevel, StudyType } from '@prisma/client';
+// Define locally since they don't exist in Prisma client
+export type EvidenceLevel = "STRONG" | "MODERATE" | "WEAK" | "INSUFFICIENT";
+export type StudyType =
+	| "RANDOMIZED_CONTROLLED_TRIAL"
+	| "OBSERVATIONAL"
+	| "META_ANALYSIS"
+	| "CASE_STUDY"
+	| "REVIEW";
 
 // ----------------------------------------------------------------
 // 1. ENHANCED ATOMS (Smallest, indivisible pieces of content)
@@ -21,8 +28,18 @@ import type { EvidenceLevel, StudyType } from '@prisma/client';
  */
 export interface DosageAtom {
 	id: string;
-	type: 'loading' | 'maintenance' | 'therapeutic' | 'general' | 'acute' | 'chronic';
-	amount: { value: number; unit: 'g' | 'mg' | 'mcg' | 'iu'; per: 'day' | 'kg' | 'dose' };
+	type:
+		| "loading"
+		| "maintenance"
+		| "therapeutic"
+		| "general"
+		| "acute"
+		| "chronic";
+	amount: {
+		value: number;
+		unit: "g" | "mg" | "mcg" | "iu";
+		per: "day" | "kg" | "dose";
+	};
 	frequency?: string;
 	duration?: string;
 	timing?: string;
@@ -32,7 +49,7 @@ export interface DosageAtom {
 	halfLife?: string;
 	absorptionRate?: string;
 	peakTime?: string;
-	foodInteraction?: 'with_food' | 'without_food' | 'either';
+	foodInteraction?: "with_food" | "without_food" | "either";
 	cycling?: {
 		onWeeks: number;
 		offWeeks: number;
@@ -71,14 +88,21 @@ export interface MechanismAtom {
  */
 export interface SafetyAtom {
 	id: string;
-	type: 'general' | 'precaution' | 'side-effect' | 'contraindication' | 'interaction' | 'overdose' | 'long-term';
+	type:
+		| "general"
+		| "precaution"
+		| "side-effect"
+		| "contraindication"
+		| "interaction"
+		| "overdose"
+		| "long-term";
 	summary: string;
 	details: string;
 	evidenceLevel: EvidenceLevel;
 	citations?: string[];
 	// Enhanced safety data
-	frequency?: 'common' | 'uncommon' | 'rare' | 'very_rare';
-	severity?: 'mild' | 'moderate' | 'severe' | 'critical';
+	frequency?: "common" | "uncommon" | "rare" | "very_rare";
+	severity?: "mild" | "moderate" | "severe" | "critical";
 	populationRisk?: string[];
 	monitoringRequired?: boolean;
 	management?: string;
@@ -98,7 +122,7 @@ export interface ClinicalApplicationAtom {
 	polishCondition?: string;
 	indication: string;
 	polishIndication?: string;
-	efficacy: 'high' | 'moderate' | 'low' | 'insufficient' | 'conflicting';
+	efficacy: "high" | "moderate" | "low" | "insufficient" | "conflicting";
 	effectivenessRating: number; // 0-10 scale
 	evidenceLevel: EvidenceLevel;
 	// Enhanced clinical data
@@ -159,8 +183,8 @@ export interface InteractionAtom {
 	id: string;
 	substance: string;
 	polishSubstance?: string;
-	type: 'synergistic' | 'antagonistic' | 'additive' | 'competitive' | 'unknown';
-	severity: 'severe' | 'moderate' | 'minor' | 'beneficial' | 'unknown';
+	type: "synergistic" | "antagonistic" | "additive" | "competitive" | "unknown";
+	severity: "severe" | "moderate" | "minor" | "beneficial" | "unknown";
 	mechanism?: string;
 	polishMechanism?: string;
 	description: string;
@@ -232,8 +256,8 @@ export interface SafetyMolecule {
 	safetyAspects: SafetyAtom[];
 	// Enhanced safety data
 	riskAssessment?: {
-		overall: 'low' | 'medium' | 'high' | 'very_high';
-		population: Record<string, 'low' | 'medium' | 'high'>;
+		overall: "low" | "medium" | "high" | "very_high";
+		population: Record<string, "low" | "medium" | "high">;
 		doseDependent: boolean;
 	};
 	monitoringRequirements?: string[];
@@ -278,9 +302,9 @@ export interface ResearchMolecule {
 	// Enhanced research data
 	evidenceSynthesis?: {
 		overallLevel: EvidenceLevel;
-		consistency: 'high' | 'moderate' | 'low' | 'conflicting';
+		consistency: "high" | "moderate" | "low" | "conflicting";
 		quality: number; // 0-10 scale
-		publicationBias: 'low' | 'moderate' | 'high' | 'unknown';
+		publicationBias: "low" | "moderate" | "high" | "unknown";
 	};
 	metaAnalysis?: {
 		effectSize: number;
@@ -307,7 +331,7 @@ export interface SupplementContentOrganism {
 		primaryBenefit: string;
 		polishPrimaryBenefit?: string;
 		secondaryBenefits?: string[];
-		riskLevel: 'low' | 'medium' | 'high';
+		riskLevel: "low" | "medium" | "high";
 	};
 	dosage: DosageMolecule;
 	mechanisms: MechanismsMolecule;
@@ -359,7 +383,7 @@ export interface InteractionNetwork {
 	supplementId: string;
 	interactions: {
 		with: string;
-		type: 'synergistic' | 'antagonistic' | 'additive' | 'competitive';
+		type: "synergistic" | "antagonistic" | "additive" | "competitive";
 		strength: number; // 0-1 scale
 		mechanism: string;
 		evidence: EvidenceLevel;
@@ -378,13 +402,20 @@ export interface UserProfile {
 	age?: number;
 	weight?: number;
 	height?: number;
-	gender?: 'male' | 'female' | 'other';
-	activityLevel?: 'sedentary' | 'light' | 'moderate' | 'active' | 'very_active';
+	gender?: "male" | "female" | "other";
+	activityLevel?: "sedentary" | "light" | "moderate" | "active" | "very_active";
 	healthConditions?: string[];
 	medications?: string[];
 	allergies?: string[];
 	dietaryRestrictions?: string[];
-	goals?: ('cognitive_enhancement' | 'physical_performance' | 'longevity' | 'general_health' | 'weight_management' | 'stress_reduction')[];
+	goals?: (
+		| "cognitive_enhancement"
+		| "physical_performance"
+		| "longevity"
+		| "general_health"
+		| "weight_management"
+		| "stress_reduction"
+	)[];
 	preferences?: {
 		vegan: boolean;
 		vegetarian: boolean;
@@ -421,7 +452,7 @@ export interface DosingSchedule {
 	polishName?: string;
 	description: string;
 	polishDescription?: string;
-	protocol: 'fixed' | 'titrating' | 'cycling' | 'conditional' | 'adaptive';
+	protocol: "fixed" | "titrating" | "cycling" | "conditional" | "adaptive";
 	schedule: {
 		time: string; // HH:MM format
 		dose: number;
@@ -470,7 +501,7 @@ export interface Biomarker {
 	id: string;
 	name: string;
 	polishName?: string;
-	category: 'blood' | 'cognitive' | 'physical' | 'metabolic' | 'hormonal';
+	category: "blood" | "cognitive" | "physical" | "metabolic" | "hormonal";
 	normalRange?: {
 		min: number;
 		max: number;
@@ -520,7 +551,7 @@ export interface ProgressReport {
 	biomarkers: {
 		biomarkerId: string;
 		values: { date: string; value: number }[];
-		trend: 'improving' | 'stable' | 'declining' | 'fluctuating';
+		trend: "improving" | "stable" | "declining" | "fluctuating";
 	}[];
 	outcomes: {
 		goal: string;
@@ -540,7 +571,7 @@ export interface KnowledgeBaseEntry {
 	version: string;
 	lastUpdated: string;
 	updatedBy: string;
-	status: 'draft' | 'review' | 'published' | 'deprecated';
+	status: "draft" | "review" | "published" | "deprecated";
 	content: SupplementContentOrganism;
 	reviewHistory?: {
 		date: string;
@@ -565,7 +596,7 @@ export interface EvidenceUpdate {
 	newValue: any;
 	evidence: string[]; // PMID references
 	reason: string;
-	impact: 'minor' | 'moderate' | 'major';
+	impact: "minor" | "moderate" | "major";
 	approvedBy: string;
 	date: string;
 }

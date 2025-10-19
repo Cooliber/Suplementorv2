@@ -73,7 +73,11 @@ export function buildTextSearchQuery(
 		fuzzy?: boolean;
 	} = {},
 ): any {
-	const { useTextIndex = false, caseSensitive = false, fuzzy = false } = options;
+	const {
+		useTextIndex = false,
+		caseSensitive = false,
+		fuzzy = false,
+	} = options;
 
 	// Use MongoDB text search if available
 	if (useTextIndex) {
@@ -191,8 +195,8 @@ export function buildSortQuery(
  * @returns Skip and limit values
  */
 export function buildPaginationParams(
-	page: number = 1,
-	limit: number = 20,
+	page = 1,
+	limit = 20,
 ): { skip: number; limit: number } {
 	const safePage = Math.max(1, page);
 	const safeLimit = Math.min(Math.max(1, limit), 100);
@@ -202,4 +206,3 @@ export function buildPaginationParams(
 		limit: safeLimit,
 	};
 }
-

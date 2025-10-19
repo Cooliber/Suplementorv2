@@ -346,13 +346,20 @@ const ProgressTrackingPage = () => {
 									<div className="space-y-3">
 										{mockSupplements.map((supplement) => (
 											<div
-												key={supplement.id}
-												className={`cursor-pointer rounded-lg border p-3 transition-colors ${
-													selectedSupplement === supplement.id
-														? "border-blue-500 bg-blue-50"
-														: "hover:bg-gray-50"
-												}`}
-												onClick={() => setSelectedSupplement(supplement.id)}
+											key={supplement.id}
+											tabIndex={0}
+											className={`cursor-pointer rounded-lg border p-3 transition-colors ${
+											selectedSupplement === supplement.id
+											? "border-blue-500 bg-blue-50"
+											  : "hover:bg-gray-50"
+											}`}
+											 onClick={() => setSelectedSupplement(supplement.id)}
+												onKeyDown={(e) => {
+													if (e.key === 'Enter' || e.key === ' ') {
+															e.preventDefault();
+															setSelectedSupplement(supplement.id);
+													}
+												}}
 											>
 												<h3 className="font-medium">{supplement.polishName}</h3>
 												<p className="text-gray-600 text-sm">

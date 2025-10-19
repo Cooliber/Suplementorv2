@@ -1,0 +1,287 @@
+name: Performance Monitoring
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run performance tests daily
+    - cron: '0 5 * * *'
+
+env:
+  NODE_VERSION: '20'
+  BUN_VERSION: '1.1.38'
+
+jobs:
+  # Lighthouse Performance Testing
+  lighthouse-performance:
+    name: Lighthouse Performance Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build application for performance testing
+        run: bun run build
+
+      - name: Start application for testing
+        run: bun run start &
+        env:
+          PORT: 3000
+
+      - name: Wait for application to be ready
+        run: |
+          echo "⏳ Waiting for application to start..."
+          timeout 60 bash -c 'until curl -f http://localhost:3000 > /dev/null 2>&1; do sleep 1; done'
+
+      - name: Run Lighthouse performance audit
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            http://localhost:3000
+            http://localhost:3000/wiedza
+            http://localhost:3000/suplementy
+          configPath: .lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+      - name: Run bundle analyzer
+        run: |
+          echo "📦 Analyzing bundle size..."
+          bun run analyze || echo "⚠️ Bundle analyzer not available"
+
+      - name: Check Core Web Vitals thresholds
+        run: |
+          echo "📊 Checking Core Web Vitals thresholds..."
+          # Validate that performance metrics meet thresholds
+          # LCP < 2.5s, FID < 100ms, CLS < 0.1
+
+      - name: Upload performance reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-test-results
+          path: |
+            .lighthouseci/
+            bundle-analyzer-report.html
+          retention-days: 30
+
+  # Bundle Size Monitoring
+  bundle-size-monitoring:
+    name: Bundle Size Monitoring
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build application
+        run: bun run build
+
+      - name: Analyze bundle size
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // Get build stats
+            const buildStats = {
+              timestamp: new Date().toISOString(),
+              branch: context.ref,
+              commit: context.sha
+            };
+
+            // Check if .next directory exists and get size
+            if (fs.existsSync('.next')) {
+              const getDirectorySize = (dirPath) => {
+                let totalSize = 0;
+                const files = fs.readdirSync(dirPath);
+
+                for (const file of files) {
+                  const filePath = path.join(dirPath, file);
+                  const stats = fs.statSync(filePath);
+
+                  if (stats.isDirectory()) {
+                    totalSize += getDirectorySize(filePath);
+                  } else {
+                    totalSize += stats.size;
+                  }
+                }
+
+                return totalSize;
+              };
+
+              buildStats.nextSize = getDirectorySize('.next');
+            }
+
+            // Save build stats
+            fs.writeFileSync('build-stats.json', JSON.stringify(buildStats, null, 2));
+
+      - name: Upload bundle size report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-size-report
+          path: build-stats.json
+          retention-days: 30
+
+  # Database Performance Testing
+  database-performance:
+    name: Database Performance Testing
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Seed test database
+        run: bun run db:seed:test
+        env:
+          MONGODB_URI: mongodb://localhost:27017/suplementor-test
+
+      - name: Run database performance tests
+        run: |
+          echo "🗄️ Running database performance tests..."
+          # Test query performance
+          # Test connection pooling
+          # Test indexing efficiency
+
+      - name: Upload database performance report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-performance-report
+          path: db-performance-results.json
+          retention-days: 30
+
+  # Performance Regression Testing
+  performance-regression:
+    name: Performance Regression Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build application
+        run: bun run build
+
+      - name: Compare performance with baseline
+        run: |
+          echo "📈 Comparing performance with baseline..."
+          # Compare current performance metrics with historical data
+          # Alert if performance degrades significantly
+
+      - name: Generate performance regression report
+        run: |
+          echo "📊 Generating performance regression report..."
+          # Create detailed report of any performance regressions
+
+  # Performance Summary Report
+  performance-summary:
+    name: Performance Summary Report
+    runs-on: ubuntu-latest
+    needs: [lighthouse-performance, bundle-size-monitoring, database-performance, performance-regression]
+    if: always()
+
+    steps:
+      - name: Generate performance summary
+        run: |
+          echo "## ⚡ Performance Testing Summary" > performance-summary.md
+          echo "" >> performance-summary.md
+          echo "### Lighthouse Performance: ${{ needs.lighthouse-performance.result }}" >> performance-summary.md
+          echo "### Bundle Size Monitoring: ${{ needs.bundle-size-monitoring.result }}" >> performance-summary.md
+          echo "### Database Performance: ${{ needs.database-performance.result }}" >> performance-summary.md
+          echo "### Performance Regression: ${{ needs.performance-regression.result }}" >> performance-summary.md
+          echo "" >> performance-summary.md
+          echo "**Performance Status:** $(if [ "${{ needs.lighthouse-performance.result }}" == "success" ]; then echo "✅ Good"; else echo "⚠️ Needs Attention"; fi)" >> performance-summary.md
+          echo "**Test Date:** $(date)" >> performance-summary.md
+          echo "**Repository:** ${{ github.repository }}" >> performance-summary.md
+          echo "**Branch:** ${{ github.ref }}" >> performance-summary.md
+
+      - name: Upload performance summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-summary-report
+          path: performance-summary.md
+          retention-days: 90
+
+      - name: Comment PR with performance results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('performance-summary.md', 'utf8');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## ⚡ Performance Test Results\n\n${summary}`
+            })

@@ -132,9 +132,20 @@ export async function fetchGraphData(): Promise<ApiResponse<GraphData>> {
 	}
 }
 
+interface SupplementInteractionAnalysis {
+interactions: Array<{
+		supplements: string[];
+		type: string;
+		description: string;
+		severity: string;
+	}>;
+	safetyScore: number;
+	recommendations: string[];
+}
+
 export async function analyzeSupplementInteractions(
 	supplementIds: string[],
-): Promise<ApiResponse<any>> {
+): Promise<ApiResponse<SupplementInteractionAnalysis>> {
 	try {
 		// Simulate API delay
 		await new Promise((resolve) => setTimeout(resolve, 800));
@@ -168,7 +179,7 @@ export async function analyzeSupplementInteractions(
 }
 
 // Helper function for error handling
-export function handleApiError(error: any): string {
+export function handleApiError(error: unknown): string {
 	if (typeof error === "string") {
 		return error;
 	}

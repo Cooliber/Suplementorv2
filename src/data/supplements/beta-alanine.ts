@@ -41,7 +41,8 @@ export const betaAlanineProfile: SupplementWithRelations = {
 			condition: "Exercise performance",
 			polishCondition: "Wydajność wysiłkowa",
 			indication: "Enhanced high-intensity exercise capacity and endurance",
-			polishIndication: "Zwiększona zdolność wysiłkowa o wysokiej intensywności i wytrzymałość",
+			polishIndication:
+				"Zwiększona zdolność wysiłkowa o wysokiej intensywności i wytrzymałość",
 			efficacy: "high",
 			effectivenessRating: 9,
 			evidenceLevel: "STRONG",
@@ -56,7 +57,8 @@ export const betaAlanineProfile: SupplementWithRelations = {
 			condition: "Muscle endurance",
 			polishCondition: "Wytrzymałość mięśni",
 			indication: "Delayed fatigue in repeated high-intensity efforts",
-			polishIndication: "Opóźnione zmęczenie w powtarzających się wysiłkach o wysokiej intensywności",
+			polishIndication:
+				"Opóźnione zmęczenie w powtarzających się wysiłkach o wysokiej intensywności",
 			efficacy: "high",
 			effectivenessRating: 8,
 			evidenceLevel: "STRONG",
@@ -70,8 +72,10 @@ export const betaAlanineProfile: SupplementWithRelations = {
 		{
 			condition: "Anaerobic capacity",
 			polishCondition: "Zdolność anaerobowa",
-			indication: "Improved performance in short-duration, high-intensity activities",
-			polishIndication: "Poprawiona wydajność w krótkotrwałych, wysokointensywnych aktywnościach",
+			indication:
+				"Improved performance in short-duration, high-intensity activities",
+			polishIndication:
+				"Poprawiona wydajność w krótkotrwałych, wysokointensywnych aktywnościach",
 			efficacy: "moderate",
 			effectivenessRating: 7,
 			evidenceLevel: "MODERATE",
@@ -86,7 +90,8 @@ export const betaAlanineProfile: SupplementWithRelations = {
 			condition: "Muscle recovery",
 			polishCondition: "Regeneracja mięśni",
 			indication: "Enhanced recovery from high-intensity training",
-			polishIndication: "Zwiększona regeneracja po treningu o wysokiej intensywności",
+			polishIndication:
+				"Zwiększona regeneracja po treningu o wysokiej intensywności",
 			efficacy: "moderate",
 			effectivenessRating: 6,
 			evidenceLevel: "MODERATE",
@@ -132,7 +137,11 @@ export const betaAlanineProfile: SupplementWithRelations = {
 			polishDescription:
 				"Utrzymując pH w mięśniach, beta-alanina opóźnia gromadzenie kwaśnych metabolitów, które upośledzają skurcz mięśni, umożliwiając utrzymaną wysokointensywną wydajność i zwiększoną zdolność pracy.",
 			evidenceLevel: "STRONG",
-			targetSystems: ["Muscle contraction", "Energy metabolism", "Fatigue pathways"],
+			targetSystems: [
+				"Muscle contraction",
+				"Energy metabolism",
+				"Fatigue pathways",
+			],
 			timeToEffect: "30-60 minutes",
 			duration: "2-4 hours",
 		},
@@ -147,7 +156,11 @@ export const betaAlanineProfile: SupplementWithRelations = {
 			polishDescription:
 				"Beta-Alanina może wzmacniać funkcję neuromięśniową i zapewniać ochronę przeciwutleniającą podczas intensywnego wysiłku, wspierając ogólną wydajność mięśni i regenerację.",
 			evidenceLevel: "MODERATE",
-			targetSystems: ["Neuromuscular junction", "Antioxidant systems", "Muscle recovery"],
+			targetSystems: [
+				"Neuromuscular junction",
+				"Antioxidant systems",
+				"Muscle recovery",
+			],
 			timeToEffect: "1-2 hours",
 			duration: "4-6 hours",
 		},
@@ -163,7 +176,11 @@ export const betaAlanineProfile: SupplementWithRelations = {
 		timing: ["daily divided doses", "pre-workout"],
 		withFood: false,
 		contraindications: ["Pregnancy", "Breastfeeding", "Severe kidney disease"],
-		polishContraindications: ["Ciąża", "Karmienie piersią", "Ciężka choroba nerek"],
+		polishContraindications: [
+			"Ciąża",
+			"Karmienie piersią",
+			"Ciężka choroba nerek",
+		],
 		interactions: [
 			{
 				substance: "Taurine",
@@ -192,7 +209,8 @@ export const betaAlanineProfile: SupplementWithRelations = {
 				mechanism: "Complementary buffering mechanisms",
 				polishMechanism: "Komplementarne mechanizmy buforowania",
 				recommendation: "Beneficial for short-term high-intensity exercise",
-				polishRecommendation: "Korzystne dla krótkotrwałego wysiłku wysokointensywnego",
+				polishRecommendation:
+					"Korzystne dla krótkotrwałego wysiłku wysokointensywnego",
 				evidenceLevel: "MODERATE",
 			},
 		],
@@ -209,7 +227,8 @@ export const betaAlanineProfile: SupplementWithRelations = {
 			dosageDependent: true,
 			timeToOnset: "15-30 minutes",
 			management: "Divide doses, use sustained-release formulations",
-			polishManagement: "Dziel dawki, używaj formulacji o przedłużonym uwalnianiu",
+			polishManagement:
+				"Dziel dawki, używaj formulacji o przedłużonym uwalnianiu",
 		},
 		{
 			effect: "Skin flushing",
@@ -297,8 +316,10 @@ export const betaAlanineProfile: SupplementWithRelations = {
 			studyType: "META_ANALYSIS",
 			primaryOutcome: "Exercise performance improvement",
 			polishPrimaryOutcome: "Poprawa wydajności wysiłkowej",
-			findings: "Beta-alanine supplementation significantly improved exercise performance",
-			polishFindings: "Suplementacja beta-alaniny znacząco poprawiła wydajność wysiłkową",
+			findings:
+				"Beta-alanine supplementation significantly improved exercise performance",
+			polishFindings:
+				"Suplementacja beta-alaniny znacząco poprawiła wydajność wysiłkową",
 			evidenceLevel: "STRONG",
 			lastUpdated: "2024-01-15T00:00:00Z",
 			pubmedId: "23075550",
@@ -310,16 +331,29 @@ export const betaAlanineProfile: SupplementWithRelations = {
 		},
 		{
 			id: "hill-2007",
-			title: "Influence of β-alanine supplementation on skeletal muscle carnosine concentrations",
-			polishTitle: "Wpływ suplementacji β-alaniny na stężenie karnozyny w mięśniach szkieletowych",
-			authors: ["Hill CA", "Harris RC", "Kim HJ", "Harris BD", "Sale C", "Boobis LH", "Kim CK", "Wise JA"],
+			title:
+				"Influence of β-alanine supplementation on skeletal muscle carnosine concentrations",
+			polishTitle:
+				"Wpływ suplementacji β-alaniny na stężenie karnozyny w mięśniach szkieletowych",
+			authors: [
+				"Hill CA",
+				"Harris RC",
+				"Kim HJ",
+				"Harris BD",
+				"Sale C",
+				"Boobis LH",
+				"Kim CK",
+				"Wise JA",
+			],
 			journal: "Amino Acids",
 			year: 2007,
 			studyType: "RANDOMIZED_CONTROLLED_TRIAL",
 			primaryOutcome: "Muscle carnosine levels",
 			polishPrimaryOutcome: "Poziomy karnozyny w mięśniach",
-			findings: "Beta-alanine supplementation increased muscle carnosine by 60%",
-			polishFindings: "Suplementacja beta-alaniny zwiększyła karnozynę w mięśniach o 60%",
+			findings:
+				"Beta-alanine supplementation increased muscle carnosine by 60%",
+			polishFindings:
+				"Suplementacja beta-alaniny zwiększyła karnozynę w mięśniach o 60%",
 			evidenceLevel: "STRONG",
 			lastUpdated: "2024-01-15T00:00:00Z",
 			pubmedId: "16868650",
@@ -331,16 +365,29 @@ export const betaAlanineProfile: SupplementWithRelations = {
 		},
 		{
 			id: "stout-2006",
-			title: "Effects of twenty-eight days of beta-alanine and creatine monohydrate supplementation",
-			polishTitle: "Efekty dwudziestu ośmiu dni suplementacji beta-alaniny i monohydratu kreatyny",
-			authors: ["Stout JR", "Cramer JT", "Zoeller RF", "Torok D", "Costa P", "Hoffman JR", "Harris RC", "O'Kroy J"],
+			title:
+				"Effects of twenty-eight days of beta-alanine and creatine monohydrate supplementation",
+			polishTitle:
+				"Efekty dwudziestu ośmiu dni suplementacji beta-alaniny i monohydratu kreatyny",
+			authors: [
+				"Stout JR",
+				"Cramer JT",
+				"Zoeller RF",
+				"Torok D",
+				"Costa P",
+				"Hoffman JR",
+				"Harris RC",
+				"O'Kroy J",
+			],
 			journal: "Journal of Strength and Conditioning Research",
 			year: 2006,
 			studyType: "RANDOMIZED_CONTROLLED_TRIAL",
 			primaryOutcome: "Physical working capacity",
 			polishPrimaryOutcome: "Zdolność pracy fizycznej",
-			findings: "Beta-alanine + creatine improved physical working capacity at fatigue threshold",
-			polishFindings: "Beta-alanina + kreatyna poprawiły zdolność pracy fizycznej na progu zmęczenia",
+			findings:
+				"Beta-alanine + creatine improved physical working capacity at fatigue threshold",
+			polishFindings:
+				"Beta-alanina + kreatyna poprawiły zdolność pracy fizycznej na progu zmęczenia",
 			evidenceLevel: "MODERATE",
 			lastUpdated: "2024-01-15T00:00:00Z",
 			pubmedId: "17194236",

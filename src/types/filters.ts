@@ -3,7 +3,7 @@
  * Comprehensive filtering with Polish localization and multiple filter types
  */
 
-import type { SupplementCategory, EvidenceLevel } from "./supplement";
+import type { EvidenceLevel, SupplementCategory } from "./supplement";
 
 // Core filter state interface
 export interface FilterState {
@@ -130,7 +130,10 @@ export interface RangeFilterProps {
 export interface UseFiltersReturn {
 	filters: FilterState;
 	setFilters: (filters: Partial<FilterState>) => void;
-	updateFilter: <K extends keyof FilterState>(key: K, value: FilterState[K]) => void;
+	updateFilter: <K extends keyof FilterState>(
+		key: K,
+		value: FilterState[K],
+	) => void;
 	clearFilters: () => void;
 	clearFilterSection: (section: keyof FilterState) => void;
 	hasActiveFilters: boolean;

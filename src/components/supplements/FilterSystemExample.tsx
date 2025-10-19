@@ -5,27 +5,33 @@
  * Demonstrates how to integrate the advanced filtering system
  */
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
-	SupplementFilterSystem,
-	useFilters,
-	filterSupplements,
-	extractFilterOptions,
-} from "./index";
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import type { SupplementWithRelations } from "@/types/supplement";
 import {
 	Database,
-	Filter,
-	Search,
-	Info,
 	ExternalLink,
+	Filter,
 	Github,
+	Info,
+	Search,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+	SupplementFilterSystem,
+	extractFilterOptions,
+	filterSupplements,
+	useFilters,
+} from "./index";
 
 // Mock data for demonstration
 const mockSupplements: SupplementWithRelations[] = [
@@ -38,9 +44,10 @@ const mockSupplements: SupplementWithRelations[] = [
 		category: "HERB",
 		evidenceLevel: "MODERATE",
 		description: "Naturalny suplement poprawiający pamięć i funkcje poznawcze",
-		polishDescription: "Naturalny suplement poprawiający pamięć i funkcje poznawcze",
+		polishDescription:
+			"Naturalny suplement poprawiający pamięć i funkcje poznawcze",
 		activeCompounds: [
-			{ name: "Bacosides", polishName: "Bakozydy", concentration: "55%" }
+			{ name: "Bacosides", polishName: "Bakozydy", concentration: "55%" },
 		],
 		clinicalApplications: [
 			{
@@ -50,7 +57,7 @@ const mockSupplements: SupplementWithRelations[] = [
 				effectivenessRating: 7,
 				evidenceLevel: "MODERATE",
 				recommendedDose: "300mg",
-			}
+			},
 		],
 		mechanisms: [
 			{
@@ -59,7 +66,7 @@ const mockSupplements: SupplementWithRelations[] = [
 				description: "Chroni neurony przed uszkodzeniami",
 				polishDescription: "Chroni neurony przed uszkodzeniami",
 				evidenceLevel: "MODERATE",
-			}
+			},
 		],
 		dosageGuidelines: {
 			therapeuticRange: { min: 300, max: 450, unit: "mg" },
@@ -85,9 +92,10 @@ const mockSupplements: SupplementWithRelations[] = [
 		category: "VITAMIN",
 		evidenceLevel: "STRONG",
 		description: "Essential vitamin for bone health and immune function",
-		polishDescription: "Esencjonalna witamina dla zdrowia kości i funkcji odpornościowych",
+		polishDescription:
+			"Esencjonalna witamina dla zdrowia kości i funkcji odpornościowych",
 		activeCompounds: [
-			{ name: "Cholecalciferol", polishName: "Cholekalcyferol" }
+			{ name: "Cholecalciferol", polishName: "Cholekalcyferol" },
 		],
 		clinicalApplications: [
 			{
@@ -97,7 +105,7 @@ const mockSupplements: SupplementWithRelations[] = [
 				effectivenessRating: 9,
 				evidenceLevel: "STRONG",
 				recommendedDose: "2000 IU",
-			}
+			},
 		],
 		mechanisms: [
 			{
@@ -106,7 +114,7 @@ const mockSupplements: SupplementWithRelations[] = [
 				description: "Enhances calcium absorption in the gut",
 				polishDescription: "Zwiększa wchłanianie wapnia w jelitach",
 				evidenceLevel: "STRONG",
-			}
+			},
 		],
 		dosageGuidelines: {
 			therapeuticRange: { min: 1000, max: 4000, unit: "IU" },
@@ -135,7 +143,7 @@ const mockSupplements: SupplementWithRelations[] = [
 		polishDescription: "Adaptogenne zioło do zarządzania stresem i energią",
 		activeCompounds: [
 			{ name: "Rosavins", polishName: "Rozawiny", concentration: "3%" },
-			{ name: "Salidroside", polishName: "Salidrozyd", concentration: "1%" }
+			{ name: "Salidroside", polishName: "Salidrozyd", concentration: "1%" },
 		],
 		clinicalApplications: [
 			{
@@ -145,7 +153,7 @@ const mockSupplements: SupplementWithRelations[] = [
 				effectivenessRating: 7,
 				evidenceLevel: "MODERATE",
 				recommendedDose: "400mg",
-			}
+			},
 		],
 		mechanisms: [
 			{
@@ -154,7 +162,7 @@ const mockSupplements: SupplementWithRelations[] = [
 				description: "Modulates stress response systems",
 				polishDescription: "Moduluje systemy odpowiedzi na stres",
 				evidenceLevel: "MODERATE",
-			}
+			},
 		],
 		dosageGuidelines: {
 			therapeuticRange: { min: 200, max: 600, unit: "mg" },
@@ -175,7 +183,9 @@ const mockSupplements: SupplementWithRelations[] = [
 
 export function FilterSystemExample() {
 	const [supplements] = useState<SupplementWithRelations[]>(mockSupplements);
-	const [filteredResults, setFilteredResults] = useState<SupplementWithRelations[]>([]);
+	const [filteredResults, setFilteredResults] = useState<
+		SupplementWithRelations[]
+	>([]);
 	const [isLoading, setIsLoading] = useState(false);
 
 	// Handle filtered results
@@ -190,21 +200,22 @@ export function FilterSystemExample() {
 				<div className="container mx-auto px-4 py-6">
 					<div className="flex items-center justify-between">
 						<div>
-							<h1 className="text-3xl font-bold flex items-center gap-2">
+							<h1 className="flex items-center gap-2 font-bold text-3xl">
 								<Filter className="h-8 w-8" />
 								Zaawansowane filtrowanie suplementów
 							</h1>
-							<p className="text-muted-foreground mt-2">
-								Kompletny system filtrowania z analizą wydajności i polską lokalizacją
+							<p className="mt-2 text-muted-foreground">
+								Kompletny system filtrowania z analizą wydajności i polską
+								lokalizacją
 							</p>
 						</div>
 						<div className="flex items-center gap-2">
 							<Button variant="outline" size="sm">
-								<Github className="h-4 w-4 mr-2" />
+								<Github className="mr-2 h-4 w-4" />
 								Kod źródłowy
 							</Button>
 							<Button variant="outline" size="sm">
-								<ExternalLink className="h-4 w-4 mr-2" />
+								<ExternalLink className="mr-2 h-4 w-4" />
 								Dokumentacja
 							</Button>
 						</div>
@@ -215,7 +226,7 @@ export function FilterSystemExample() {
 			<div className="container mx-auto px-4 py-8">
 				<div className="grid gap-8 lg:grid-cols-3">
 					{/* Filter System - Takes up 2 columns */}
-					<div className="lg:col-span-2 space-y-6">
+					<div className="space-y-6 lg:col-span-2">
 						<SupplementFilterSystem
 							supplements={supplements}
 							onFilteredResults={handleFilteredResults}
@@ -243,30 +254,45 @@ export function FilterSystemExample() {
 											<Card key={supplement.id} className="p-4">
 												<div className="flex items-start justify-between">
 													<div className="flex-1">
-														<div className="flex items-center gap-2 mb-2">
+														<div className="mb-2 flex items-center gap-2">
 															<h3 className="font-semibold">
 																{supplement.polishName}
 															</h3>
 															<Badge variant="outline">
-																{supplement.category === "HERB" ? "Zioło" :
-																 supplement.category === "VITAMIN" ? "Witamina" :
-																 supplement.category === "ADAPTOGEN" ? "Adaptogen" :
-																 supplement.category}
+																{supplement.category === "HERB"
+																	? "Zioło"
+																	: supplement.category === "VITAMIN"
+																		? "Witamina"
+																		: supplement.category === "ADAPTOGEN"
+																			? "Adaptogen"
+																			: supplement.category}
 															</Badge>
-															<Badge variant={
-																supplement.evidenceLevel === "STRONG" ? "default" :
-																supplement.evidenceLevel === "MODERATE" ? "secondary" : "outline"
-															}>
-																{supplement.evidenceLevel === "STRONG" ? "Silne dowody" :
-																 supplement.evidenceLevel === "MODERATE" ? "Umiarkowane" : "Słabe"}
+															<Badge
+																variant={
+																	supplement.evidenceLevel === "STRONG"
+																		? "default"
+																		: supplement.evidenceLevel === "MODERATE"
+																			? "secondary"
+																			: "outline"
+																}
+															>
+																{supplement.evidenceLevel === "STRONG"
+																	? "Silne dowody"
+																	: supplement.evidenceLevel === "MODERATE"
+																		? "Umiarkowane"
+																		: "Słabe"}
 															</Badge>
 														</div>
-														<p className="text-sm text-muted-foreground mb-2">
+														<p className="mb-2 text-muted-foreground text-sm">
 															{supplement.polishDescription}
 														</p>
 														<div className="flex flex-wrap gap-1">
 															{supplement.tags.map((tag) => (
-																<Badge key={tag} variant="outline" className="text-xs">
+																<Badge
+																	key={tag}
+																	variant="outline"
+																	className="text-xs"
+																>
 																	{tag}
 																</Badge>
 															))}
@@ -277,13 +303,12 @@ export function FilterSystemExample() {
 										))}
 									</div>
 								) : (
-									<div className="text-center py-8">
-										<Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-										<h3 className="text-lg font-semibold mb-2">
-											Brak wyników
-										</h3>
+									<div className="py-8 text-center">
+										<Search className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+										<h3 className="mb-2 font-semibold text-lg">Brak wyników</h3>
 										<p className="text-muted-foreground">
-											Spróbuj zmienić kryteria filtrowania, aby znaleźć odpowiednie suplementy.
+											Spróbuj zmienić kryteria filtrowania, aby znaleźć
+											odpowiednie suplementy.
 										</p>
 									</div>
 								)}
@@ -304,27 +329,29 @@ export function FilterSystemExample() {
 							<CardContent className="space-y-3">
 								<div className="space-y-2 text-sm">
 									<div className="flex items-center gap-2">
-										<div className="w-2 h-2 bg-green-500 rounded-full"></div>
+										<div className="h-2 w-2 rounded-full bg-green-500" />
 										<span>Wyszukiwanie tekstowe z punktacją trafności</span>
 									</div>
 									<div className="flex items-center gap-2">
-										<div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+										<div className="h-2 w-2 rounded-full bg-blue-500" />
 										<span>Filtrowanie po kategoriach i poziomie dowodów</span>
 									</div>
 									<div className="flex items-center gap-2">
-										<div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-										<span>Multi-select dla substancji czynnych i zastosowań</span>
+										<div className="h-2 w-2 rounded-full bg-purple-500" />
+										<span>
+											Multi-select dla substancji czynnych i zastosowań
+										</span>
 									</div>
 									<div className="flex items-center gap-2">
-										<div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+										<div className="h-2 w-2 rounded-full bg-orange-500" />
 										<span>Zakresowe filtry dla ceny, dawki i oceny</span>
 									</div>
 									<div className="flex items-center gap-2">
-										<div className="w-2 h-2 bg-red-500 rounded-full"></div>
+										<div className="h-2 w-2 rounded-full bg-red-500" />
 										<span>Boolowskie filtry dla badań i opinii</span>
 									</div>
 									<div className="flex items-center gap-2">
-										<div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+										<div className="h-2 w-2 rounded-full bg-teal-500" />
 										<span>Synchronizacja URL i presety filtrów</span>
 									</div>
 								</div>
@@ -338,7 +365,9 @@ export function FilterSystemExample() {
 							</CardHeader>
 							<CardContent className="space-y-3">
 								<div className="flex items-center justify-between text-sm">
-									<span className="text-muted-foreground">Wszystkie suplementy</span>
+									<span className="text-muted-foreground">
+										Wszystkie suplementy
+									</span>
 									<Badge variant="outline">{supplements.length}</Badge>
 								</div>
 								<div className="flex items-center justify-between text-sm">
@@ -346,9 +375,14 @@ export function FilterSystemExample() {
 									<Badge variant="outline">{filteredResults.length}</Badge>
 								</div>
 								<div className="flex items-center justify-between text-sm">
-									<span className="text-muted-foreground">Skuteczność filtra</span>
+									<span className="text-muted-foreground">
+										Skuteczność filtra
+									</span>
 									<Badge variant="outline">
-										{Math.round((filteredResults.length / supplements.length) * 100)}%
+										{Math.round(
+											(filteredResults.length / supplements.length) * 100,
+										)}
+										%
 									</Badge>
 								</div>
 							</CardContent>
@@ -366,7 +400,9 @@ export function FilterSystemExample() {
 								<Alert>
 									<Info className="h-4 w-4" />
 									<AlertDescription className="text-sm">
-										To demo używa przykładowych danych suplementów. W rzeczywistej aplikacji dane pochodziłyby z bazy danych lub API.
+										To demo używa przykładowych danych suplementów. W
+										rzeczywistej aplikacji dane pochodziłyby z bazy danych lub
+										API.
 									</AlertDescription>
 								</Alert>
 							</CardContent>
@@ -379,9 +415,9 @@ export function FilterSystemExample() {
 							</CardHeader>
 							<CardContent className="space-y-3 text-sm">
 								<div>
-									<h4 className="font-medium mb-2">Podstawowe użycie:</h4>
-									<pre className="bg-muted p-2 rounded text-xs overflow-x-auto">
-{`import { SupplementFilterSystem } from "@/components/supplements";
+									<h4 className="mb-2 font-medium">Podstawowe użycie:</h4>
+									<pre className="overflow-x-auto rounded bg-muted p-2 text-xs">
+										{`import { SupplementFilterSystem } from "@/components/supplements";
 
 <SupplementFilterSystem
   supplements={supplements}
@@ -392,9 +428,9 @@ export function FilterSystemExample() {
 								</div>
 
 								<div>
-									<h4 className="font-medium mb-2">Zaawansowane filtry:</h4>
-									<pre className="bg-muted p-2 rounded text-xs overflow-x-auto">
-{`import { useFilters } from "@/hooks/useFilters";
+									<h4 className="mb-2 font-medium">Zaawansowane filtry:</h4>
+									<pre className="overflow-x-auto rounded bg-muted p-2 text-xs">
+										{`import { useFilters } from "@/hooks/useFilters";
 
 const { filters, updateFilter } = useFilters();
 updateFilter("categories", ["HERB", "VITAMIN"]);`}

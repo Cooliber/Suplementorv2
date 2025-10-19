@@ -25,7 +25,11 @@ export const pqqProfile: SupplementWithRelations = {
 			concentration: "10-20mg",
 			bioavailability: 85,
 			halfLife: "3-6 hours",
-			metabolicPathway: ["Direct absorption", "Cellular uptake", "Mitochondrial targeting"],
+			metabolicPathway: [
+				"Direct absorption",
+				"Cellular uptake",
+				"Mitochondrial targeting",
+			],
 			targetReceptors: ["Mitochondrial membranes", "NRF-1/NRF-2 pathways"],
 		},
 	],
@@ -34,8 +38,10 @@ export const pqqProfile: SupplementWithRelations = {
 		{
 			condition: "Mitochondrial function and energy metabolism",
 			polishCondition: "Funkcja mitochondrialna i metabolizm energetyczny",
-			indication: "Support for mitochondrial biogenesis and cellular energy production",
-			polishIndication: "Wsparcie biogenezy mitochondrialnej i produkcji energii komórkowej",
+			indication:
+				"Support for mitochondrial biogenesis and cellular energy production",
+			polishIndication:
+				"Wsparcie biogenezy mitochondrialnej i produkcji energii komórkowej",
 			efficacy: "moderate",
 			effectivenessRating: 7,
 			evidenceLevel: "MODERATE",
@@ -49,8 +55,10 @@ export const pqqProfile: SupplementWithRelations = {
 		{
 			condition: "Cognitive function and neuroprotection",
 			polishCondition: "Funkcja poznawcza i neuroprotekcja",
-			indication: "Support for cognitive performance and protection against neurodegeneration",
-			polishIndication: "Wsparcie wydajności poznawczej i ochrona przed neurodegeneracją",
+			indication:
+				"Support for cognitive performance and protection against neurodegeneration",
+			polishIndication:
+				"Wsparcie wydajności poznawczej i ochrona przed neurodegeneracją",
 			efficacy: "moderate",
 			effectivenessRating: 6,
 			evidenceLevel: "WEAK",
@@ -140,7 +148,8 @@ export const pqqProfile: SupplementWithRelations = {
 			type: "synergistic",
 			severity: "beneficial",
 			description: "Enhanced mitochondrial support and energy production",
-			polishDescription: "Wzmocnione wsparcie mitochondrialne i produkcja energii",
+			polishDescription:
+				"Wzmocnione wsparcie mitochondrialne i produkcja energii",
 			clinicalSignificance: "Improved cellular energy metabolism",
 			polishClinicalSignificance: "Poprawiony metabolizm energetyczny komórek",
 			mechanism: "Complementary mitochondrial targeting",

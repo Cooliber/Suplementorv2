@@ -1,38 +1,141 @@
-# Bun Configuration for Suplementor
-# Optimized for Next.js 15, TypeScript 5.8+, and Polish educational platform
+# Bun 1.3 Configuration for Suplementor Project
+# Leveraging Bun's advanced capabilities for optimal performance
 
 [install]
-# Use Bun's native package manager
-registry = "https://registry.npmjs.org/"
-cache = "~/.bun/install/cache"
+# Use the fastest registry
+registry = "https://registry.npmjs.org"
 
-# Optimize for performance
-production = false
-optional = true
-dev = true
+# Cache settings for better performance
+cache = true
+# Lockfile path (Bun uses bun.lockb by default, but we can specify)
+lockfile = "bun.lock"
+
+# Peer dependencies handling
 peer = true
 
-# Lockfile configuration
-lockfile = true
-exact = false
-
-[install.scopes]
-# Configure scoped registries if needed
+# Optional dependencies
+optional = true
 
 [run]
-# Shell configuration for scripts
-# Use 'system' for Netlify compatibility (bash not supported in Bun on Netlify)
+# Environment variables
+env = { NODE_ENV = "development", BUN_ENV = "development" }
+
+# Shell integration
 shell = "system"
-bun = true
+
+[dev]
+# Development server settings
+port = 3000
+host = "0.0.0.0"
+
+# Hot reload settings
+hot = true
+
+# Source maps for debugging
+sourcemap = true
 
 [test]
-# Test configuration
-preload = ["./vitest.setup.ts"]
+# Test runner configuration
+timeout = 30000  # 30 seconds
 coverage = true
 
-[build]
-# Build optimizations
-minify = true
-sourcemap = "external"
-target = "browser"
+# Test environment
+env = { NODE_ENV = "test" }
 
+# Parallel test execution
+parallel = true
+
+# Test patterns
+include = ["**/*.{test,spec}.{js,jsx,ts,tsx}"]
+exclude = ["node_modules/**", ".next/**", "dist/**"]
+
+[build]
+# Build optimization settings
+minify = true
+sourcemap = false
+
+# Target environments
+target = ["browser", "node"]
+
+# External dependencies (don't bundle)
+external = ["@vercel/analytics", "@vercel/speed-insights"]
+
+# Bundle splitting
+splitting = true
+
+# Output directory
+outdir = ".next"
+
+[lint]
+# Linting configuration (complements Biome)
+enabled = true
+
+# Rules to enable/disable
+rules = [
+  "no-unused-vars",
+  "prefer-const",
+  "no-console"
+]
+
+[format]
+# Code formatting (complements Biome)
+enabled = true
+
+# Formatting options
+indent = "tab"
+lineEnding = "lf"
+quoteStyle = "double"
+
+[shell]
+# Bun Shell configuration for advanced shell operations
+enabled = true
+
+# Default shell
+shell = "bash"
+
+# Environment variables for shell scripts
+env = { BUN_SHELL = "enabled" }
+
+[macros]
+# Custom macros for development
+dev = "bun run dev"
+build = "bun run build"
+test = "bun run test:all"
+lint = "bun run check"
+clean = "bun run dev:clean"
+
+# Advanced development macros
+"dev:full" = "bun run dev:clean && bun install && bun run dev"
+"build:analyze" = "ANALYZE=true bun run build"
+"deploy:preview" = "bun run build && bun run vercel-deploy:preview"
+
+# Database operations
+"db:setup" = "bun run db:reset && bun run db:seed"
+"db:migrate" = "bun run migrate:supplements && bun run migrate:brain-regions"
+
+# Testing macros
+"test:ci" = "bun run typecheck && bun run test:run && bun run test:e2e"
+"test:coverage" = "bun run test:coverage && bun run test:e2e:report"
+
+# Development utilities
+"dev:health" = "bun run db:health && bun run health:check"
+"dev:validate" = "bun run validate:components && bun run localization:validate"
+
+[workspaces]
+# If we have workspaces in the future
+# enabled = true
+# packages = ["packages/*"]
+
+# Telemetry settings
+telemetry = false
+
+[experimental]
+# Experimental Bun features
+# Enable SQLite support (Bun 1.3)
+sqlite = true
+
+# WebAssembly support
+wasm = true
+
+# Native Node.js APIs
+node_compat = true

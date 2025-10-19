@@ -3,7 +3,13 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -87,7 +93,8 @@ const evidenceLevelConfig = {
 		progressColor: "bg-blue-500",
 	},
 	WEAK: {
-		color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+		color:
+			"bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
 		label: "Słabe dowody",
 		icon: Info,
 		progressColor: "bg-yellow-500",
@@ -205,7 +212,7 @@ export function EnhancedSupplementDetail({
 												variant="secondary"
 												className={`${evidenceLevelConfig[evidenceLevel].color} text-sm`}
 											>
-												<EvidenceIcon className="h-4 w-4 mr-1" />
+												<EvidenceIcon className="mr-1 h-4 w-4" />
 												{evidenceLevelConfig[evidenceLevel].label}
 											</Badge>
 										</TooltipTrigger>
@@ -216,9 +223,7 @@ export function EnhancedSupplementDetail({
 
 									<div className="flex items-center gap-1">
 										<Star className="h-4 w-4 fill-current text-yellow-500" />
-										<span className="font-medium text-sm">
-											{userRating}
-										</span>
+										<span className="font-medium text-sm">{userRating}</span>
 									</div>
 								</div>
 
@@ -243,17 +248,21 @@ export function EnhancedSupplementDetail({
 										<BookOpen className="h-5 w-5 text-muted-foreground" />
 										<div>
 											<div className="font-semibold">{studyCount}</div>
-											<div className="text-xs text-muted-foreground">badań</div>
+											<div className="text-muted-foreground text-xs">badań</div>
 										</div>
 									</div>
 
 									<div className="flex items-center gap-2">
-										<Shield className={`h-5 w-5 ${getSafetyColor(safetyRating)}`} />
+										<Shield
+											className={`h-5 w-5 ${getSafetyColor(safetyRating)}`}
+										/>
 										<div>
-											<div className={`font-semibold ${getSafetyColor(safetyRating)}`}>
+											<div
+												className={`font-semibold ${getSafetyColor(safetyRating)}`}
+											>
 												{safetyRating}/10
 											</div>
-											<div className="text-xs text-muted-foreground">
+											<div className="text-muted-foreground text-xs">
 												{getSafetyLabel(safetyRating)}
 											</div>
 										</div>
@@ -261,7 +270,7 @@ export function EnhancedSupplementDetail({
 
 									{price && (
 										<div className="flex items-center gap-2">
-											<span className="text-lg font-semibold text-primary">
+											<span className="font-semibold text-lg text-primary">
 												{price.min}-{price.max} {price.currency}
 											</span>
 										</div>
@@ -272,7 +281,7 @@ export function EnhancedSupplementDetail({
 											value={getEvidenceProgress(evidenceLevel)}
 											className="h-2 flex-1"
 										/>
-										<span className="text-xs text-muted-foreground">
+										<span className="text-muted-foreground text-xs">
 											{Math.round(getEvidenceProgress(evidenceLevel))}%
 										</span>
 									</div>
@@ -286,17 +295,27 @@ export function EnhancedSupplementDetail({
 									onClick={handleFavoriteClick}
 									variant={isFavorited ? "default" : "outline"}
 								>
-									<Heart className={`h-4 w-4 ${isFavorited ? "fill-current" : ""}`} />
+									<Heart
+										className={`h-4 w-4 ${isFavorited ? "fill-current" : ""}`}
+									/>
 									{isFavorited ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
 								</Button>
 
 								<div className="flex gap-2">
-									<Button variant="outline" className="gap-2" onClick={() => onDosageCalculate?.(id)}>
+									<Button
+										variant="outline"
+										className="gap-2"
+										onClick={() => onDosageCalculate?.(id)}
+									>
 										<Calculator className="h-4 w-4" />
 										Kalkulator dawki
 									</Button>
 
-									<Button variant="outline" className="gap-2" onClick={() => onSafetyCheck?.(id)}>
+									<Button
+										variant="outline"
+										className="gap-2"
+										onClick={() => onSafetyCheck?.(id)}
+									>
 										<Shield className="h-4 w-4" />
 										Sprawdź bezpieczeństwo
 									</Button>
@@ -317,7 +336,11 @@ export function EnhancedSupplementDetail({
 					)}
 
 					{/* Main Content Tabs */}
-					<Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+					<Tabs
+						value={activeTab}
+						onValueChange={setActiveTab}
+						className="space-y-6"
+					>
 						<TabsList className="grid w-full grid-cols-2 lg:grid-cols-6">
 							<TabsTrigger value="overview">Przegląd</TabsTrigger>
 							<TabsTrigger value="mechanism">Mechanizm</TabsTrigger>
@@ -348,7 +371,11 @@ export function EnhancedSupplementDetail({
 												<h4 className="mb-2 font-medium">Składniki aktywne</h4>
 												<div className="flex flex-wrap gap-1">
 													{activeCompounds.map((compound, index) => (
-														<Badge key={index} variant="outline" className="text-xs">
+														<Badge
+															key={index}
+															variant="outline"
+															className="text-xs"
+														>
 															{compound}
 														</Badge>
 													))}
@@ -358,10 +385,16 @@ export function EnhancedSupplementDetail({
 
 										{brainRegions && brainRegions.length > 0 && (
 											<div>
-												<h4 className="mb-2 font-medium">Wpływ na obszary mózgu</h4>
+												<h4 className="mb-2 font-medium">
+													Wpływ na obszary mózgu
+												</h4>
 												<div className="flex flex-wrap gap-1">
 													{brainRegions.map((region, index) => (
-														<Badge key={index} variant="outline" className="text-xs">
+														<Badge
+															key={index}
+															variant="outline"
+															className="text-xs"
+														>
 															{region}
 														</Badge>
 													))}
@@ -424,9 +457,13 @@ export function EnhancedSupplementDetail({
 									<CardContent className="space-y-4">
 										<div className="grid gap-4 md:grid-cols-2">
 											<div>
-												<h4 className="mb-2 font-medium">Zakres terapeutyczny</h4>
-												<p className="text-lg font-semibold text-primary">
-													{dosageGuidelines.therapeuticRange.min} - {dosageGuidelines.therapeuticRange.max} {dosageGuidelines.therapeuticRange.unit}
+												<h4 className="mb-2 font-medium">
+													Zakres terapeutyczny
+												</h4>
+												<p className="font-semibold text-lg text-primary">
+													{dosageGuidelines.therapeuticRange.min} -{" "}
+													{dosageGuidelines.therapeuticRange.max}{" "}
+													{dosageGuidelines.therapeuticRange.unit}
 												</p>
 											</div>
 
@@ -479,14 +516,19 @@ export function EnhancedSupplementDetail({
 										{sideEffects && sideEffects.length > 0 ? (
 											<ul className="space-y-2">
 												{sideEffects.map((effect, index) => (
-													<li key={index} className="flex items-center gap-2 text-sm">
+													<li
+														key={index}
+														className="flex items-center gap-2 text-sm"
+													>
 														<div className="h-2 w-2 rounded-full bg-orange-400" />
 														{effect}
 													</li>
 												))}
 											</ul>
 										) : (
-											<p className="text-muted-foreground">Brak zgłoszonych działań niepożądanych</p>
+											<p className="text-muted-foreground">
+												Brak zgłoszonych działań niepożądanych
+											</p>
 										)}
 									</CardContent>
 								</Card>
@@ -502,14 +544,19 @@ export function EnhancedSupplementDetail({
 										{contraindications && contraindications.length > 0 ? (
 											<ul className="space-y-2">
 												{contraindications.map((contraindication, index) => (
-													<li key={index} className="flex items-center gap-2 text-sm">
+													<li
+														key={index}
+														className="flex items-center gap-2 text-sm"
+													>
 														<div className="h-2 w-2 rounded-full bg-red-400" />
 														{contraindication}
 													</li>
 												))}
 											</ul>
 										) : (
-											<p className="text-muted-foreground">Brak przeciwwskazań</p>
+											<p className="text-muted-foreground">
+												Brak przeciwwskazań
+											</p>
 										)}
 									</CardContent>
 								</Card>
@@ -529,9 +576,10 @@ export function EnhancedSupplementDetail({
 									</CardDescription>
 								</CardHeader>
 								<CardContent>
-									<div className="text-center py-8">
+									<div className="py-8 text-center">
 										<p className="text-muted-foreground">
-											Szczegółowe informacje o badaniach naukowych będą dostępne wkrótce.
+											Szczegółowe informacje o badaniach naukowych będą dostępne
+											wkrótce.
 										</p>
 									</div>
 								</CardContent>
@@ -551,14 +599,19 @@ export function EnhancedSupplementDetail({
 									{interactions && interactions.length > 0 ? (
 										<div className="space-y-2">
 											{interactions.map((interaction, index) => (
-												<div key={index} className="flex items-center gap-2 text-sm">
+												<div
+													key={index}
+													className="flex items-center gap-2 text-sm"
+												>
 													<div className="h-2 w-2 rounded-full bg-indigo-400" />
 													{interaction}
 												</div>
 											))}
 										</div>
 									) : (
-										<p className="text-muted-foreground">Brak zgłoszonych interakcji</p>
+										<p className="text-muted-foreground">
+											Brak zgłoszonych interakcji
+										</p>
 									)}
 								</CardContent>
 							</Card>

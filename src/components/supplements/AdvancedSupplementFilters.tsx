@@ -7,9 +7,19 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -33,20 +43,20 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useFilters } from "@/hooks/useFilters";
-import type { SupplementCategory, EvidenceLevel } from "@/types/supplement";
+import type { EvidenceLevel, SupplementCategory } from "@/types/supplement";
 import {
+	Bookmark,
+	BookmarkCheck,
 	ChevronDown,
 	ChevronUp,
 	Filter,
+	RotateCcw,
 	Search,
+	Share2,
 	SlidersHorizontal,
 	Star,
 	TrendingUp,
 	X,
-	Bookmark,
-	BookmarkCheck,
-	Share2,
-	RotateCcw,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -83,7 +93,7 @@ export function AdvancedSupplementFilters({
 	} = useFilters();
 
 	const [expandedSections, setExpandedSections] = useState<Set<string>>(
-		new Set(["categories", "evidence"])
+		new Set(["categories", "evidence"]),
 	);
 	const [showSavePresetDialog, setShowSavePresetDialog] = useState(false);
 	const [presetName, setPresetName] = useState("");
@@ -148,7 +158,7 @@ export function AdvancedSupplementFilters({
 
 	// Toggle section expansion
 	const toggleSection = (section: string) => {
-		setExpandedSections(prev => {
+		setExpandedSections((prev) => {
 			const newSet = new Set(prev);
 			if (newSet.has(section)) {
 				newSet.delete(section);
@@ -206,12 +216,8 @@ export function AdvancedSupplementFilters({
 							</div>
 							<div className="flex items-center gap-2">
 								{hasActiveFilters && (
-									<Button
-										variant="outline"
-										size="sm"
-										onClick={clearFilters}
-									>
-										<RotateCcw className="h-4 w-4 mr-1" />
+									<Button variant="outline" size="sm" onClick={clearFilters}>
+										<RotateCcw className="mr-1 h-4 w-4" />
 										Wyczyść
 									</Button>
 								)}
@@ -226,14 +232,15 @@ export function AdvancedSupplementFilters({
 							</div>
 						</CardTitle>
 						<CardDescription>
-							Dokładne filtrowanie suplementów według kategorii, dowodów naukowych i właściwości
+							Dokładne filtrowanie suplementów według kategorii, dowodów
+							naukowych i właściwości
 						</CardDescription>
 					</CardHeader>
 
 					<CardContent className="space-y-4">
 						{/* Search Query */}
 						<div className="relative">
-							<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+							<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
 							<Input
 								placeholder="Szukaj suplementów, korzyści, składników..."
 								value={filters.query}
@@ -263,7 +270,7 @@ export function AdvancedSupplementFilters({
 								onClick={() => setShowSavePresetDialog(true)}
 								disabled={!hasActiveFilters}
 							>
-								<Bookmark className="h-4 w-4 mr-1" />
+								<Bookmark className="mr-1 h-4 w-4" />
 								Zapisz filtr
 							</Button>
 						</div>
@@ -272,7 +279,7 @@ export function AdvancedSupplementFilters({
 						<Popover>
 							<PopoverTrigger asChild>
 								<Button variant="outline" className="w-full">
-									<SlidersHorizontal className="h-4 w-4 mr-2" />
+									<SlidersHorizontal className="mr-2 h-4 w-4" />
 									Zaawansowane filtry
 									{hasActiveFilters && (
 										<Badge variant="secondary" className="ml-2">
@@ -281,14 +288,17 @@ export function AdvancedSupplementFilters({
 									)}
 								</Button>
 							</PopoverTrigger>
-							<PopoverContent className="w-96 max-h-[80vh] overflow-y-auto" align="start">
+							<PopoverContent
+								className="max-h-[80vh] w-96 overflow-y-auto"
+								align="start"
+							>
 								<div className="space-y-6">
 									{/* Categories Section */}
 									<Collapsible
 										open={expandedSections.has("categories")}
 										onOpenChange={() => toggleSection("categories")}
 									>
-										<CollapsibleTrigger className="flex items-center justify-between w-full">
+										<CollapsibleTrigger className="flex w-full items-center justify-between">
 											<h4 className="font-medium">Kategorie suplementów</h4>
 											{expandedSections.has("categories") ? (
 												<ChevronUp className="h-4 w-4" />
@@ -296,24 +306,29 @@ export function AdvancedSupplementFilters({
 												<ChevronDown className="h-4 w-4" />
 											)}
 										</CollapsibleTrigger>
-										<CollapsibleContent className="space-y-3 mt-3">
+										<CollapsibleContent className="mt-3 space-y-3">
 											<div className="grid grid-cols-1 gap-3">
 												{categories.map((category) => (
-													<div key={category} className="flex items-center space-x-2">
+													<div
+														key={category}
+														className="flex items-center space-x-2"
+													>
 														<Checkbox
 															id={`category-${category}`}
 															checked={filters.categories.includes(category)}
 															onCheckedChange={(checked) => {
 																const newCategories = checked
 																	? [...filters.categories, category]
-																	: filters.categories.filter(c => c !== category);
+																	: filters.categories.filter(
+																			(c) => c !== category,
+																		);
 																updateFilter("categories", newCategories);
 																handleFilterChange();
 															}}
 														/>
 														<Label
 															htmlFor={`category-${category}`}
-															className="cursor-pointer text-sm flex-1"
+															className="flex-1 cursor-pointer text-sm"
 														>
 															{categoryLabels[category]}
 														</Label>
@@ -328,7 +343,7 @@ export function AdvancedSupplementFilters({
 										open={expandedSections.has("evidence")}
 										onOpenChange={() => toggleSection("evidence")}
 									>
-										<CollapsibleTrigger className="flex items-center justify-between w-full">
+										<CollapsibleTrigger className="flex w-full items-center justify-between">
 											<h4 className="font-medium">Poziom dowodów naukowych</h4>
 											{expandedSections.has("evidence") ? (
 												<ChevronUp className="h-4 w-4" />
@@ -336,24 +351,29 @@ export function AdvancedSupplementFilters({
 												<ChevronDown className="h-4 w-4" />
 											)}
 										</CollapsibleTrigger>
-										<CollapsibleContent className="space-y-3 mt-3">
+										<CollapsibleContent className="mt-3 space-y-3">
 											<div className="grid grid-cols-1 gap-3">
 												{evidenceLevels.map((level) => (
-													<div key={level} className="flex items-center space-x-2">
+													<div
+														key={level}
+														className="flex items-center space-x-2"
+													>
 														<Checkbox
 															id={`evidence-${level}`}
 															checked={filters.evidenceLevels.includes(level)}
 															onCheckedChange={(checked) => {
 																const newLevels = checked
 																	? [...filters.evidenceLevels, level]
-																	: filters.evidenceLevels.filter(l => l !== level);
+																	: filters.evidenceLevels.filter(
+																			(l) => l !== level,
+																		);
 																updateFilter("evidenceLevels", newLevels);
 																handleFilterChange();
 															}}
 														/>
 														<Label
 															htmlFor={`evidence-${level}`}
-															className="cursor-pointer text-sm flex-1"
+															className="flex-1 cursor-pointer text-sm"
 														>
 															{evidenceLabels[level]}
 														</Label>
@@ -367,9 +387,11 @@ export function AdvancedSupplementFilters({
 									<div className="space-y-4">
 										{/* Price Range */}
 										<div>
-											<div className="flex items-center justify-between mb-2">
-												<Label className="text-sm font-medium">Zakres cenowy</Label>
-												<span className="text-xs text-muted-foreground">
+											<div className="mb-2 flex items-center justify-between">
+												<Label className="font-medium text-sm">
+													Zakres cenowy
+												</Label>
+												<span className="text-muted-foreground text-xs">
 													{filters.priceRange[0]} - {filters.priceRange[1]} zł
 												</span>
 											</div>
@@ -388,16 +410,22 @@ export function AdvancedSupplementFilters({
 
 										{/* Safety Rating */}
 										<div>
-											<div className="flex items-center justify-between mb-2">
-												<Label className="text-sm font-medium">Ocena bezpieczeństwa</Label>
-												<span className="text-xs text-muted-foreground">
-													{filters.safetyRating[0]} - {filters.safetyRating[1]}/10
+											<div className="mb-2 flex items-center justify-between">
+												<Label className="font-medium text-sm">
+													Ocena bezpieczeństwa
+												</Label>
+												<span className="text-muted-foreground text-xs">
+													{filters.safetyRating[0]} - {filters.safetyRating[1]}
+													/10
 												</span>
 											</div>
 											<Slider
 												value={filters.safetyRating}
 												onValueChange={(value) => {
-													updateFilter("safetyRating", value as [number, number]);
+													updateFilter(
+														"safetyRating",
+														value as [number, number],
+													);
 													handleFilterChange();
 												}}
 												max={10}
@@ -409,16 +437,21 @@ export function AdvancedSupplementFilters({
 
 										{/* User Rating */}
 										<div>
-											<div className="flex items-center justify-between mb-2">
-												<Label className="text-sm font-medium">Ocena użytkowników</Label>
-												<span className="text-xs text-muted-foreground">
+											<div className="mb-2 flex items-center justify-between">
+												<Label className="font-medium text-sm">
+													Ocena użytkowników
+												</Label>
+												<span className="text-muted-foreground text-xs">
 													{filters.ratingRange[0]} - {filters.ratingRange[1]}/5
 												</span>
 											</div>
 											<Slider
 												value={filters.ratingRange}
 												onValueChange={(value) => {
-													updateFilter("ratingRange", value as [number, number]);
+													updateFilter(
+														"ratingRange",
+														value as [number, number],
+													);
 													handleFilterChange();
 												}}
 												max={5}
@@ -432,7 +465,10 @@ export function AdvancedSupplementFilters({
 									{/* Boolean Filters */}
 									<div className="space-y-3 border-t pt-4">
 										<div className="flex items-center justify-between">
-											<Label htmlFor="hasStudies" className="cursor-pointer text-sm">
+											<Label
+												htmlFor="hasStudies"
+												className="cursor-pointer text-sm"
+											>
 												Tylko suplementy z badaniami
 											</Label>
 											<Switch
@@ -446,7 +482,10 @@ export function AdvancedSupplementFilters({
 										</div>
 
 										<div className="flex items-center justify-between">
-											<Label htmlFor="hasReviews" className="cursor-pointer text-sm">
+											<Label
+												htmlFor="hasReviews"
+												className="cursor-pointer text-sm"
+											>
 												Tylko suplementy z opiniami
 											</Label>
 											<Switch
@@ -460,7 +499,10 @@ export function AdvancedSupplementFilters({
 										</div>
 
 										<div className="flex items-center justify-between">
-											<Label htmlFor="onlyNatural" className="cursor-pointer text-sm">
+											<Label
+												htmlFor="onlyNatural"
+												className="cursor-pointer text-sm"
+											>
 												Tylko suplementy naturalne
 											</Label>
 											<Switch
@@ -476,7 +518,9 @@ export function AdvancedSupplementFilters({
 
 									{/* Sort Options */}
 									<div className="border-t pt-4">
-										<Label className="text-sm font-medium mb-3 block">Sortowanie</Label>
+										<Label className="mb-3 block font-medium text-sm">
+											Sortowanie
+										</Label>
 										<div className="space-y-2">
 											<Select
 												value={filters.sortBy}
@@ -533,7 +577,9 @@ export function AdvancedSupplementFilters({
 											size="sm"
 											className="h-4 w-4 p-0 hover:bg-transparent"
 											onClick={() => {
-												const newCategories = filters.categories.filter(c => c !== category);
+												const newCategories = filters.categories.filter(
+													(c) => c !== category,
+												);
 												updateFilter("categories", newCategories);
 												handleFilterChange();
 											}}
@@ -551,7 +597,9 @@ export function AdvancedSupplementFilters({
 											size="sm"
 											className="h-4 w-4 p-0 hover:bg-transparent"
 											onClick={() => {
-												const newLevels = filters.evidenceLevels.filter(l => l !== level);
+												const newLevels = filters.evidenceLevels.filter(
+													(l) => l !== level,
+												);
 												updateFilter("evidenceLevels", newLevels);
 												handleFilterChange();
 											}}
@@ -561,7 +609,8 @@ export function AdvancedSupplementFilters({
 									</Badge>
 								))}
 
-								{(filters.priceRange[0] !== 0 || filters.priceRange[1] !== 1000) && (
+								{(filters.priceRange[0] !== 0 ||
+									filters.priceRange[1] !== 1000) && (
 									<Badge variant="outline" className="gap-1">
 										Cena: {filters.priceRange[0]}-{filters.priceRange[1]} zł
 										<Button
@@ -625,7 +674,10 @@ export function AdvancedSupplementFilters({
 								onKeyPress={(e) => e.key === "Enter" && handleSavePreset()}
 							/>
 							<div className="flex gap-2">
-								<Button onClick={handleSavePreset} disabled={!presetName.trim()}>
+								<Button
+									onClick={handleSavePreset}
+									disabled={!presetName.trim()}
+								>
 									Zapisz
 								</Button>
 								<Button

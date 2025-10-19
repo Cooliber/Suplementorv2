@@ -5,28 +5,38 @@
  * Status indicators and notifications for async background tasks
  */
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import {
-	CheckCircle,
-	XCircle,
-	AlertCircle,
-	Clock,
-	Play,
-	Pause,
-	X,
-	RefreshCw,
-	Info
-} from "lucide-react";
-import { LoadingSpinner, PulseLoader, DotsLoader } from "./AnimatedLoadingIndicators";
+import { durations, easings, springs } from "@/lib/animations/config";
 import { useReducedMotion } from "@/lib/animations/hooks";
-import { easings, durations, springs } from "@/lib/animations/config";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+	AlertCircle,
+	CheckCircle,
+	Clock,
+	Info,
+	Pause,
+	Play,
+	RefreshCw,
+	X,
+	XCircle,
+} from "lucide-react";
+import type React from "react";
+import { useEffect, useState } from "react";
+import {
+	DotsLoader,
+	LoadingSpinner,
+	PulseLoader,
+} from "./AnimatedLoadingIndicators";
 
-type OperationStatus = "pending" | "running" | "completed" | "failed" | "cancelled";
+type OperationStatus =
+	| "pending"
+	| "running"
+	| "completed"
+	| "failed"
+	| "cancelled";
 
 interface BackgroundOperation {
 	id: string;
@@ -49,7 +59,9 @@ interface BackgroundOperationIndicatorProps {
 	className?: string;
 }
 
-export const BackgroundOperationIndicator: React.FC<BackgroundOperationIndicatorProps> = ({
+export const BackgroundOperationIndicator: React.FC<
+	BackgroundOperationIndicatorProps
+> = ({
 	operations,
 	onCancel,
 	onRetry,
@@ -61,21 +73,23 @@ export const BackgroundOperationIndicator: React.FC<BackgroundOperationIndicator
 	const shouldReduceMotion = useReducedMotion();
 	const [expanded, setExpanded] = useState(false);
 
-	const visibleOperations = expanded ? operations : operations.slice(0, maxVisible);
+	const visibleOperations = expanded
+		? operations
+		: operations.slice(0, maxVisible);
 	const hasMore = operations.length > maxVisible;
 
 	const getStatusIcon = (status: OperationStatus) => {
 		switch (status) {
 			case "pending":
-				return <Clock className="w-4 h-4 text-yellow-500" />;
+				return <Clock className="h-4 w-4 text-yellow-500" />;
 			case "running":
 				return <LoadingSpinner size="sm" />;
 			case "completed":
-				return <CheckCircle className="w-4 h-4 text-green-500" />;
+				return <CheckCircle className="h-4 w-4 text-green-500" />;
 			case "failed":
-				return <XCircle className="w-4 h-4 text-red-500" />;
+				return <XCircle className="h-4 w-4 text-red-500" />;
 			case "cancelled":
-				return <AlertCircle className="w-4 h-4 text-gray-500" />;
+				return <AlertCircle className="h-4 w-4 text-gray-500" />;
 		}
 	};
 
@@ -108,7 +122,9 @@ export const BackgroundOperationIndicator: React.FC<BackgroundOperationIndicator
 								size="sm"
 								onClick={() => setExpanded(!expanded)}
 							>
-								{expanded ? "Pokaż mniej" : `Pokaż więcej (${operations.length - maxVisible})`}
+								{expanded
+									? "Pokaż mniej"
+									: `Pokaż więcej (${operations.length - maxVisible})`}
 							</Button>
 						)}
 					</div>
@@ -126,45 +142,53 @@ export const BackgroundOperationIndicator: React.FC<BackgroundOperationIndicator
 										duration: durations.normal,
 										ease: easings.calm,
 									}}
-									className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg"
+									className="flex items-center gap-3 rounded-lg bg-muted/30 p-3"
 								>
 									{/* Status icon */}
 									{getStatusIcon(operation.status)}
 
 									{/* Operation info */}
-									<div className="flex-1 min-w-0">
-										<div className="flex items-center gap-2 mb-1">
-											<p className="font-medium truncate">{operation.name}</p>
-											<Badge variant="secondary" className={getStatusColor(operation.status)}>
+									<div className="min-w-0 flex-1">
+										<div className="mb-1 flex items-center gap-2">
+											<p className="truncate font-medium">{operation.name}</p>
+											<Badge
+												variant="secondary"
+												className={getStatusColor(operation.status)}
+											>
 												{operation.status}
 											</Badge>
 										</div>
 
 										{operation.description && (
-											<p className="text-sm text-muted-foreground truncate mb-2">
+											<p className="mb-2 truncate text-muted-foreground text-sm">
 												{operation.description}
 											</p>
 										)}
 
 										{/* Progress bar for running operations */}
-										{operation.status === "running" && operation.progress !== undefined && (
-											<div className="space-y-1">
-												<div className="flex justify-between text-xs">
-													<span>Postęp</span>
-													<span>{Math.round(operation.progress)}%</span>
+										{operation.status === "running" &&
+											operation.progress !== undefined && (
+												<div className="space-y-1">
+													<div className="flex justify-between text-xs">
+														<span>Postęp</span>
+														<span>{Math.round(operation.progress)}%</span>
+													</div>
+													<Progress
+														value={operation.progress}
+														className="h-1"
+													/>
 												</div>
-												<Progress value={operation.progress} className="h-1" />
-											</div>
-										)}
+											)}
 
 										{/* Time info */}
-										<div className="flex items-center gap-4 text-xs text-muted-foreground mt-2">
+										<div className="mt-2 flex items-center gap-4 text-muted-foreground text-xs">
 											<span>
 												Rozpoczęto: {operation.startTime.toLocaleTimeString()}
 											</span>
 											{operation.estimatedTime && (
 												<span>
-													Szacowany czas: {Math.round(operation.estimatedTime / 1000)}s
+													Szacowany czas:{" "}
+													{Math.round(operation.estimatedTime / 1000)}s
 												</span>
 											)}
 										</div>
@@ -173,28 +197,46 @@ export const BackgroundOperationIndicator: React.FC<BackgroundOperationIndicator
 									{/* Action buttons */}
 									<div className="flex gap-1">
 										{operation.status === "running" && onPause && (
-											<Button variant="ghost" size="sm" onClick={() => onPause(operation.id)}>
-												<Pause className="w-3 h-3" />
+											<Button
+												variant="ghost"
+												size="sm"
+												onClick={() => onPause(operation.id)}
+											>
+												<Pause className="h-3 w-3" />
 											</Button>
 										)}
 
 										{operation.status === "pending" && onResume && (
-											<Button variant="ghost" size="sm" onClick={() => onResume(operation.id)}>
-												<Play className="w-3 h-3" />
+											<Button
+												variant="ghost"
+												size="sm"
+												onClick={() => onResume(operation.id)}
+											>
+												<Play className="h-3 w-3" />
 											</Button>
 										)}
 
 										{operation.status === "failed" && onRetry && (
-											<Button variant="ghost" size="sm" onClick={() => onRetry(operation.id)}>
-												<RefreshCw className="w-3 h-3" />
+											<Button
+												variant="ghost"
+												size="sm"
+												onClick={() => onRetry(operation.id)}
+											>
+												<RefreshCw className="h-3 w-3" />
 											</Button>
 										)}
 
-										{(operation.status === "pending" || operation.status === "running") && onCancel && (
-											<Button variant="ghost" size="sm" onClick={() => onCancel(operation.id)}>
-												<X className="w-3 h-3" />
-											</Button>
-										)}
+										{(operation.status === "pending" ||
+											operation.status === "running") &&
+											onCancel && (
+												<Button
+													variant="ghost"
+													size="sm"
+													onClick={() => onCancel(operation.id)}
+												>
+													<X className="h-3 w-3" />
+												</Button>
+											)}
 									</div>
 								</motion.div>
 							))}
@@ -224,12 +266,17 @@ export const FloatingNotification: React.FC<FloatingNotificationProps> = ({
 	className = "",
 }) => {
 	const shouldReduceMotion = useReducedMotion();
-	const [visibleOperations, setVisibleOperations] = useState<BackgroundOperation[]>([]);
+	const [visibleOperations, setVisibleOperations] = useState<
+		BackgroundOperation[]
+	>([]);
 
 	useEffect(() => {
 		// Filter to only show running, completed, and failed operations
-		const relevantOps = operations.filter(op =>
-			op.status === "running" || op.status === "completed" || op.status === "failed"
+		const relevantOps = operations.filter(
+			(op) =>
+				op.status === "running" ||
+				op.status === "completed" ||
+				op.status === "failed",
 		);
 
 		setVisibleOperations(relevantOps.slice(0, maxNotifications));
@@ -239,10 +286,12 @@ export const FloatingNotification: React.FC<FloatingNotificationProps> = ({
 	useEffect(() => {
 		if (!autoHide) return;
 
-		visibleOperations.forEach(operation => {
+		visibleOperations.forEach((operation) => {
 			if (operation.status === "completed" || operation.status === "failed") {
 				setTimeout(() => {
-					setVisibleOperations(prev => prev.filter(op => op.id !== operation.id));
+					setVisibleOperations((prev) =>
+						prev.filter((op) => op.id !== operation.id),
+					);
 				}, autoHideDelay);
 			}
 		});
@@ -258,47 +307,66 @@ export const FloatingNotification: React.FC<FloatingNotificationProps> = ({
 	if (visibleOperations.length === 0) return null;
 
 	return (
-		<div className={`fixed ${positionClasses[position]} z-50 space-y-2 ${className}`}>
+		<div
+			className={`fixed ${positionClasses[position]} z-50 space-y-2 ${className}`}
+		>
 			<AnimatePresence>
 				{visibleOperations.map((operation, index) => (
 					<motion.div
 						key={operation.id}
-						initial={shouldReduceMotion ? {} : { opacity: 0, x: position.includes("right") ? 300 : -300, scale: 0.8 }}
+						initial={
+							shouldReduceMotion
+								? {}
+								: {
+										opacity: 0,
+										x: position.includes("right") ? 300 : -300,
+										scale: 0.8,
+									}
+						}
 						animate={{ opacity: 1, x: 0, scale: 1 }}
-						exit={{ opacity: 0, x: position.includes("right") ? 300 : -300, scale: 0.8 }}
+						exit={{
+							opacity: 0,
+							x: position.includes("right") ? 300 : -300,
+							scale: 0.8,
+						}}
 						transition={{
 							...springs.gentle,
 						}}
-						className="bg-background border rounded-lg shadow-lg p-3 max-w-sm"
+						className="max-w-sm rounded-lg border bg-background p-3 shadow-lg"
 					>
 						<div className="flex items-start gap-3">
 							{/* Status icon */}
 							{operation.status === "running" && <PulseLoader size="sm" />}
-							{operation.status === "completed" && <CheckCircle className="w-5 h-5 text-green-500 mt-0.5" />}
-							{operation.status === "failed" && <XCircle className="w-5 h-5 text-red-500 mt-0.5" />}
+							{operation.status === "completed" && (
+								<CheckCircle className="mt-0.5 h-5 w-5 text-green-500" />
+							)}
+							{operation.status === "failed" && (
+								<XCircle className="mt-0.5 h-5 w-5 text-red-500" />
+							)}
 
 							{/* Content */}
-							<div className="flex-1 min-w-0">
-								<p className="font-medium truncate">{operation.name}</p>
+							<div className="min-w-0 flex-1">
+								<p className="truncate font-medium">{operation.name}</p>
 								{operation.description && (
-									<p className="text-sm text-muted-foreground truncate">
+									<p className="truncate text-muted-foreground text-sm">
 										{operation.description}
 									</p>
 								)}
 
 								{/* Progress for running operations */}
-								{operation.status === "running" && operation.progress !== undefined && (
-									<div className="mt-2">
-										<Progress value={operation.progress} className="h-1" />
-										<p className="text-xs text-muted-foreground mt-1">
-											{Math.round(operation.progress)}%
-										</p>
-									</div>
-								)}
+								{operation.status === "running" &&
+									operation.progress !== undefined && (
+										<div className="mt-2">
+											<Progress value={operation.progress} className="h-1" />
+											<p className="mt-1 text-muted-foreground text-xs">
+												{Math.round(operation.progress)}%
+											</p>
+										</div>
+									)}
 
 								{/* Error message */}
 								{operation.status === "failed" && operation.error && (
-									<p className="text-xs text-red-600 dark:text-red-400 mt-1">
+									<p className="mt-1 text-red-600 text-xs dark:text-red-400">
 										{operation.error}
 									</p>
 								)}
@@ -331,15 +399,15 @@ export const OperationQueue: React.FC<OperationQueueProps> = ({
 	const getStatusIcon = (status: OperationStatus) => {
 		switch (status) {
 			case "pending":
-				return <Clock className="w-4 h-4 text-yellow-500" />;
+				return <Clock className="h-4 w-4 text-yellow-500" />;
 			case "running":
 				return <LoadingSpinner size="sm" />;
 			case "completed":
-				return <CheckCircle className="w-4 h-4 text-green-500" />;
+				return <CheckCircle className="h-4 w-4 text-green-500" />;
 			case "failed":
-				return <XCircle className="w-4 h-4 text-red-500" />;
+				return <XCircle className="h-4 w-4 text-red-500" />;
 			case "cancelled":
-				return <AlertCircle className="w-4 h-4 text-gray-500" />;
+				return <AlertCircle className="h-4 w-4 text-gray-500" />;
 		}
 	};
 
@@ -375,12 +443,16 @@ export const OperationQueue: React.FC<OperationQueueProps> = ({
 									duration: durations.normal,
 									ease: easings.calm,
 								}}
-								className={`flex items-center gap-3 p-3 border-l-4 rounded-r-lg ${getStatusColor(operation.status)}`}
+								className={`flex items-center gap-3 rounded-r-lg border-l-4 p-3 ${getStatusColor(operation.status)}`}
 							>
 								{/* Drag handle */}
 								{onReorder && (
 									<div className="cursor-move text-muted-foreground">
-										<svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+										<svg
+											className="h-4 w-4"
+											fill="currentColor"
+											viewBox="0 0 20 20"
+										>
 											<path d="M4 7a1 1 0 011-1h.01a1 1 0 110 2H5a1 1 0 01-1-1zM4 12a1 1 0 011-1h.01a1 1 0 110 2H5a1 1 0 01-1-1zM4 17a1 1 0 011-1h.01a1 1 0 110 2H5a1 1 0 01-1-1zM9 7a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zM9 12a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zM9 17a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" />
 										</svg>
 									</div>
@@ -390,35 +462,46 @@ export const OperationQueue: React.FC<OperationQueueProps> = ({
 								{getStatusIcon(operation.status)}
 
 								{/* Operation info */}
-								<div className="flex-1 min-w-0">
-									<p className="font-medium truncate">{operation.name}</p>
+								<div className="min-w-0 flex-1">
+									<p className="truncate font-medium">{operation.name}</p>
 									{operation.description && (
-										<p className="text-sm text-muted-foreground truncate">
+										<p className="truncate text-muted-foreground text-sm">
 											{operation.description}
 										</p>
 									)}
 
 									{/* Progress */}
-									{operation.status === "running" && operation.progress !== undefined && (
-										<div className="mt-2">
-											<Progress value={operation.progress} className="h-1" />
-										</div>
-									)}
+									{operation.status === "running" &&
+										operation.progress !== undefined && (
+											<div className="mt-2">
+												<Progress value={operation.progress} className="h-1" />
+											</div>
+										)}
 								</div>
 
 								{/* Actions */}
 								<div className="flex gap-1">
 									{operation.status === "failed" && onRetry && (
-										<Button variant="ghost" size="sm" onClick={() => onRetry(operation.id)}>
-											<RefreshCw className="w-3 h-3" />
+										<Button
+											variant="ghost"
+											size="sm"
+											onClick={() => onRetry(operation.id)}
+										>
+											<RefreshCw className="h-3 w-3" />
 										</Button>
 									)}
 
-									{(operation.status === "pending" || operation.status === "running") && onCancel && (
-										<Button variant="ghost" size="sm" onClick={() => onCancel(operation.id)}>
-											<X className="w-3 h-3" />
-										</Button>
-									)}
+									{(operation.status === "pending" ||
+										operation.status === "running") &&
+										onCancel && (
+											<Button
+												variant="ghost"
+												size="sm"
+												onClick={() => onCancel(operation.id)}
+											>
+												<X className="h-3 w-3" />
+											</Button>
+										)}
 								</div>
 							</motion.div>
 						))}
@@ -439,7 +522,9 @@ interface PersistentLoadingIndicatorProps {
 	className?: string;
 }
 
-export const PersistentLoadingIndicator: React.FC<PersistentLoadingIndicatorProps> = ({
+export const PersistentLoadingIndicator: React.FC<
+	PersistentLoadingIndicatorProps
+> = ({
 	isVisible = false,
 	message = "Wykonywanie operacji...",
 	progress = 0,
@@ -465,7 +550,7 @@ export const PersistentLoadingIndicator: React.FC<PersistentLoadingIndicatorProp
 				animate={{ opacity: 1, scale: 1 }}
 				exit={{ opacity: 0, scale: 0.95 }}
 				transition={{ ...springs.gentle }}
-				className={`flex items-center gap-3 p-3 bg-primary/10 border border-primary/20 rounded-lg ${className}`}
+				className={`flex items-center gap-3 rounded-lg border border-primary/20 bg-primary/10 p-3 ${className}`}
 			>
 				<LoadingSpinner size="sm" />
 				<div className="flex-1">
@@ -478,7 +563,7 @@ export const PersistentLoadingIndicator: React.FC<PersistentLoadingIndicatorProp
 				</div>
 				{showCloseButton && onClose && (
 					<Button variant="ghost" size="sm" onClick={onClose}>
-						<X className="w-4 h-4" />
+						<X className="h-4 w-4" />
 					</Button>
 				)}
 			</motion.div>
@@ -487,7 +572,11 @@ export const PersistentLoadingIndicator: React.FC<PersistentLoadingIndicatorProp
 
 	return (
 		<motion.div
-			initial={shouldReduceMotion ? {} : { opacity: 0, y: position === "top" ? -100 : 100 }}
+			initial={
+				shouldReduceMotion
+					? {}
+					: { opacity: 0, y: position === "top" ? -100 : 100 }
+			}
 			animate={{ opacity: 1, y: 0 }}
 			exit={{ opacity: 0, y: position === "top" ? -100 : 100 }}
 			transition={{ ...springs.gentle }}
@@ -511,7 +600,7 @@ export const PersistentLoadingIndicator: React.FC<PersistentLoadingIndicatorProp
 						</div>
 						{showCloseButton && onClose && (
 							<Button variant="ghost" size="sm" onClick={onClose}>
-								<X className="w-4 h-4" />
+								<X className="h-4 w-4" />
 							</Button>
 						)}
 					</div>
@@ -537,12 +626,16 @@ export const StatusToast: React.FC<StatusToastProps> = ({
 	const shouldReduceMotion = useReducedMotion();
 
 	useEffect(() => {
-		if (autoHide && (operation.status === "completed" || operation.status === "failed")) {
+		if (
+			autoHide &&
+			(operation.status === "completed" || operation.status === "failed")
+		) {
 			const timer = setTimeout(() => {
 				onDismiss?.();
 			}, 5000);
 			return () => clearTimeout(timer);
 		}
+		return undefined;
 	}, [operation.status, autoHide, onDismiss]);
 
 	const getStatusColor = (status: OperationStatus) => {
@@ -561,13 +654,13 @@ export const StatusToast: React.FC<StatusToastProps> = ({
 	const getStatusIcon = (status: OperationStatus) => {
 		switch (status) {
 			case "completed":
-				return <CheckCircle className="w-5 h-5 text-green-500" />;
+				return <CheckCircle className="h-5 w-5 text-green-500" />;
 			case "failed":
-				return <XCircle className="w-5 h-5 text-red-500" />;
+				return <XCircle className="h-5 w-5 text-red-500" />;
 			case "running":
 				return <LoadingSpinner size="sm" />;
 			default:
-				return <Info className="w-5 h-5 text-blue-500" />;
+				return <Info className="h-5 w-5 text-blue-500" />;
 		}
 	};
 
@@ -578,7 +671,7 @@ export const StatusToast: React.FC<StatusToastProps> = ({
 				animate={{ opacity: 1, scale: 1, y: 0 }}
 				exit={{ opacity: 0, scale: 0.8, y: 50 }}
 				transition={{ ...springs.gentle }}
-				className={`border rounded-lg p-4 ${getStatusColor(operation.status)} ${className}`}
+				className={`rounded-lg border p-4 ${getStatusColor(operation.status)} ${className}`}
 			>
 				<div className="flex items-start gap-3">
 					{getStatusIcon(operation.status)}
@@ -586,22 +679,23 @@ export const StatusToast: React.FC<StatusToastProps> = ({
 					<div className="flex-1">
 						<p className="font-medium">{operation.name}</p>
 						{operation.description && (
-							<p className="text-sm text-muted-foreground mt-1">
+							<p className="mt-1 text-muted-foreground text-sm">
 								{operation.description}
 							</p>
 						)}
 
-						{operation.status === "running" && operation.progress !== undefined && (
-							<div className="mt-2">
-								<Progress value={operation.progress} className="h-1" />
-								<p className="text-xs text-muted-foreground mt-1">
-									{Math.round(operation.progress)}% ukończone
-								</p>
-							</div>
-						)}
+						{operation.status === "running" &&
+							operation.progress !== undefined && (
+								<div className="mt-2">
+									<Progress value={operation.progress} className="h-1" />
+									<p className="mt-1 text-muted-foreground text-xs">
+										{Math.round(operation.progress)}% ukończone
+									</p>
+								</div>
+							)}
 
 						{operation.status === "failed" && operation.error && (
-							<p className="text-sm text-red-600 dark:text-red-400 mt-1">
+							<p className="mt-1 text-red-600 text-sm dark:text-red-400">
 								{operation.error}
 							</p>
 						)}
@@ -609,7 +703,7 @@ export const StatusToast: React.FC<StatusToastProps> = ({
 
 					{onDismiss && (
 						<Button variant="ghost" size="sm" onClick={onDismiss}>
-							<X className="w-4 h-4" />
+							<X className="h-4 w-4" />
 						</Button>
 					)}
 				</div>

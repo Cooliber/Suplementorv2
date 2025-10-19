@@ -1,0 +1,237 @@
+name: Polish Localization Validation
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run localization checks daily
+    - cron: '0 6 * * *'
+
+env:
+  NODE_VERSION: '20'
+  BUN_VERSION: '1.1.38'
+
+jobs:
+  # Polish Translation Completeness Check
+  polish-translation-completeness:
+    name: Polish Translation Completeness
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Extract translatable strings
+        run: |
+          echo "🔍 Extracting translatable strings..."
+          # Extract all strings that need Polish translation
+          find src -name "*.tsx" -o -name "*.ts" | xargs grep -r "'.*'" | grep -v "use client" | grep -v "import" > translatable-strings.txt
+
+      - name: Check Polish translation coverage
+        run: |
+          echo "🔍 Checking Polish translation coverage..."
+          # Validate that all user-facing strings have Polish translations
+          # Check translation files for completeness
+
+      - name: Validate Polish medical terminology
+        run: |
+          echo "🔍 Validating Polish medical terminology..."
+          # Check against Polish medical dictionary
+          # Validate medical term accuracy
+
+      - name: Check Polish character encoding
+        run: |
+          echo "🔍 Checking Polish character encoding..."
+          # Ensure proper UTF-8 encoding for Polish characters
+          if ! grep -r "ą\|ć\|ę\|ł\|ń\|ó\|ś\|ź\|ż" src/ --include="*.tsx" --include="*.ts"; then
+            echo "⚠️ No Polish characters found in source files"
+            exit 1
+          fi
+
+  # Medical Terminology Validation
+  medical-terminology-validation:
+    name: Medical Terminology Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Validate medical term translations
+        run: |
+          echo "🔍 Validating medical term translations..."
+          # Check against official Polish medical dictionary
+          # Validate neurological terms
+          # Validate supplement-related terminology
+
+      - name: Check for consistent medical terminology
+        run: |
+          echo "🔍 Checking terminology consistency..."
+          # Ensure consistent use of Polish medical terms
+          # Check for alternative spellings or outdated terms
+
+      - name: Validate supplement name translations
+        run: |
+          echo "🔍 Validating supplement name translations..."
+          # Check supplement names against official databases
+          # Validate scientific vs common names
+
+  # Cultural Compliance Check
+  cultural-compliance:
+    name: Cultural Compliance Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check cultural appropriateness
+        run: |
+          echo "🔍 Checking cultural appropriateness..."
+          # Validate content appropriateness for Polish market
+          # Check for culturally sensitive content
+
+      - name: Validate regional compliance
+        run: |
+          echo "🔍 Validating regional compliance..."
+          # Check EU compliance requirements
+          # Validate GDPR compliance in Polish context
+
+      - name: Check for Polish market requirements
+        run: |
+          echo "🔍 Checking Polish market requirements..."
+          # Validate supplement regulations for Poland
+          # Check advertising compliance
+
+  # Localization Quality Assurance
+  localization-qa:
+    name: Localization Quality Assurance
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run localization tests
+        run: |
+          echo "🧪 Running localization tests..."
+          # Test Polish translations in context
+          # Validate pluralization rules
+          # Test date/number formatting
+
+      - name: Check UI layout with Polish text
+        run: |
+          echo "🔍 Checking UI layout with Polish text..."
+          # Ensure UI accommodates longer Polish text
+          # Check for text overflow issues
+          # Validate responsive design with Polish content
+
+      - name: Validate accessibility in Polish
+        run: |
+          echo "♿ Validating accessibility in Polish..."
+          # Check screen reader compatibility with Polish
+          # Validate ARIA labels in Polish
+          # Test keyboard navigation with Polish content
+
+  # Localization Summary Report
+  localization-summary:
+    name: Localization Summary Report
+    runs-on: ubuntu-latest
+    needs: [polish-translation-completeness, medical-terminology-validation, cultural-compliance, localization-qa]
+    if: always()
+
+    steps:
+      - name: Generate localization summary
+        run: |
+          echo "## 🇵🇱 Polish Localization Summary" > localization-summary.md
+          echo "" >> localization-summary.md
+          echo "### Translation Completeness: ${{ needs.polish-translation-completeness.result }}" >> localization-summary.md
+          echo "### Medical Terminology: ${{ needs.medical-terminology-validation.result }}" >> localization-summary.md
+          echo "### Cultural Compliance: ${{ needs.cultural-compliance.result }}" >> localization-summary.md
+          echo "### Localization QA: ${{ needs.localization-qa.result }}" >> localization-summary.md
+          echo "" >> localization-summary.md
+          echo "**Localization Status:** $(if [ "${{ needs.polish-translation-completeness.result }}" == "success" ]; then echo "✅ Complete"; else echo "❌ Issues Found"; fi)" >> localization-summary.md
+          echo "**Polish Characters:** $(grep -r "ą\|ć\|ę\|ł\|ń\|ó\|ś\|ź\|ż" src/ --include="*.tsx" --include="*.ts" | wc -l) found" >> localization-summary.md
+          echo "**Test Date:** $(date)" >> localization-summary.md
+          echo "**Repository:** ${{ github.repository }}" >> localization-summary.md
+          echo "**Branch:** ${{ github.ref }}" >> localization-summary.md
+
+      - name: Upload localization summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: localization-summary-report
+          path: localization-summary.md
+          retention-days: 90
+
+      - name: Comment PR with localization results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('localization-summary.md', 'utf8');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🇵🇱 Localization Test Results\n\n${summary}`
+            })

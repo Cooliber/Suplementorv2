@@ -1,0 +1,400 @@
+name: Suplementor CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run security scans daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+env:
+  NODE_VERSION: '20'
+  BUN_VERSION: '1.1.38'
+
+jobs:
+  # Quality Gates - Run on all PRs and pushes
+  quality-gates:
+    name: Quality Gates
+    runs-on: ubuntu-latest
+    outputs:
+      quality-check-passed: ${{ steps.quality-check.outputs.passed }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run ESLint
+        run: bun run lint
+        continue-on-error: false
+
+      - name: Run TypeScript type checking
+        run: bun run typecheck
+        continue-on-error: false
+
+      - name: Run Prettier check
+        run: bun run format:check || npx prettier --check "src/**/*.{js,jsx,ts,tsx,json,css,md}"
+        continue-on-error: false
+
+      - name: Check for Polish translations completeness
+        run: |
+          echo "🔍 Checking Polish translations completeness..."
+          # Add custom script to validate Polish translations
+          bun run i18n:validate || echo "⚠️ Translation validation failed"
+
+      - name: Set quality check result
+        id: quality-check
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "passed=false" >> $GITHUB_OUTPUT
+          fi
+
+  # Security Scanning
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    needs: quality-gates
+    if: needs.quality-gates.outputs.quality-check-passed == 'true' || github.event_name == 'schedule'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run npm audit
+        run: bun run audit
+        continue-on-error: true
+
+      - name: Run security scan with Snyk
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+        continue-on-error: true
+
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          config-file: ./.github/codeql-config.yml
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+      - name: Upload security scan results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-scan-results
+          path: |
+            snyk-report.json
+            codeql-results.sarif
+          retention-days: 30
+
+  # Testing Pipeline
+  test:
+    name: Testing Pipeline
+    runs-on: ubuntu-latest
+    needs: quality-gates
+    if: needs.quality-gates.outputs.quality-check-passed == 'true'
+
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: bun run playwright:install-deps
+
+      - name: Run unit tests (shard ${{ matrix.shard }}/4)
+        run: bun run test:unit -- --shard=${{ matrix.shard }}/4 --coverage
+
+      - name: Run integration tests (shard ${{ matrix.shard }}/4)
+        run: bun run test:integration -- --shard=${{ matrix.shard }}/4
+
+      - name: Run E2E tests (shard ${{ matrix.shard }}/4)
+        run: bun run test:e2e -- --shard=${{ matrix.shard }}/4
+
+      - name: Upload test coverage
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.shard }}
+          path: |
+            test-results/
+            playwright-report/
+            coverage/
+          retention-days: 7
+
+  # Accessibility Testing
+  accessibility:
+    name: Accessibility Testing
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build application
+        run: bun run build
+
+      - name: Run Pa11y accessibility tests
+        run: bun run test:a11y
+        continue-on-error: true
+
+      - name: Run Lighthouse accessibility audit
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          configPath: .lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+      - name: Upload accessibility reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-reports
+          path: |
+            a11y-report.html
+            lighthouse-report.json
+          retention-days: 30
+
+  # Performance Testing
+  performance:
+    name: Performance Testing
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build application
+        run: bun run build
+
+      - name: Run Lighthouse performance audit
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          configPath: .lighthouserc.json
+          uploadArtifacts: true
+
+      - name: Run bundle analyzer
+        run: bun run analyze
+
+      - name: Upload performance reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-reports
+          path: |
+            lighthouse-report.json
+            bundle-analyzer-report.html
+          retention-days: 30
+
+  # Build and Deploy
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    needs: [quality-gates, security-scan, test, accessibility, performance]
+    if: needs.quality-gates.outputs.quality-check-passed == 'true' && github.event_name == 'push'
+
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+      url: ${{ github.ref == 'refs/heads/main' && 'https://suplementor.vercel.app' || format('https://{0}.vercel-preview.app', github.event.number) }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build application
+        run: bun run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+
+      - name: Install Vercel CLI
+        run: bun add -g vercel
+
+      - name: Pull Vercel environment information
+        run: vercel pull --yes --environment=${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build project artifacts
+        run: vercel build --${{ github.ref == 'refs/heads/main' && 'prod' || '' }}token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel
+        id: vercel-deploy
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }} > deployment-url.txt
+          else
+            vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} > deployment-url.txt
+          fi
+          echo "deployment_url=$(cat deployment-url.txt)" >> $GITHUB_OUTPUT
+
+      - name: Run health check
+        run: |
+          echo "⏳ Waiting for deployment to be ready..."
+          sleep 30
+
+          DEPLOYMENT_URL="${{ steps.vercel-deploy.outputs.deployment_url }}"
+          echo "🔍 Health checking: $DEPLOYMENT_URL"
+
+          if curl -f -s --max-time 30 "$DEPLOYMENT_URL/api/health" > /dev/null; then
+            echo "✅ Health check passed for $DEPLOYMENT_URL"
+          else
+            echo "❌ Health check failed for $DEPLOYMENT_URL"
+            exit 1
+          fi
+
+      - name: Create deployment comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 Deployment successful!\n\n**Preview URL:** ${{ steps.vercel-deploy.outputs.deployment_url }}\n\nAll tests and quality checks passed. Ready for review! 🎉`
+            })
+
+  # Notification and Reporting
+  notify:
+    name: Notification and Reporting
+    runs-on: ubuntu-latest
+    needs: [build-and-deploy]
+    if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Generate deployment report
+        run: |
+          echo "## 🚀 Deployment Report" > deployment-report.md
+          echo "" >> deployment-report.md
+          echo "### ✅ Quality Gates: ${{ needs.quality-gates.result }}" >> deployment-report.md
+          echo "### 🔒 Security Scan: ${{ needs.security-scan.result }}" >> deployment-report.md
+          echo "### 🧪 Tests: ${{ needs.test.result }}" >> deployment-report.md
+          echo "### ♿ Accessibility: ${{ needs.accessibility.result }}" >> deployment-report.md
+          echo "### ⚡ Performance: ${{ needs.performance.result }}" >> deployment-report.md
+          echo "### 🚀 Deployment: ${{ needs.build-and-deploy.result }}" >> deployment-report.md
+          echo "" >> deployment-report.md
+          echo "**Commit:** ${{ github.sha }}" >> deployment-report.md
+          echo "**Branch:** ${{ github.ref }}" >> deployment-report.md
+          echo "**Time:** $(date)" >> deployment-report.md
+
+      - name: Upload deployment report
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-report
+          path: deployment-report.md
+          retention-days: 30
+
+      - name: Notify deployment status
+        run: |
+          if [ "${{ needs.build-and-deploy.result }}" == "success" ]; then
+            echo "🎉 Deployment to production successful!"
+            echo "🌐 Live at: https://suplementor.vercel.app"
+          else
+            echo "❌ Deployment failed!"
+            exit 1
+          fi

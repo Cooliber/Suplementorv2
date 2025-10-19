@@ -39,8 +39,16 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			concentration: "25mg",
 			bioavailability: 90,
 			halfLife: "2-4 hours",
-			metabolicPathway: ["Amino acid transport", "Heme synthesis", "Hemoglobin incorporation"],
-			targetReceptors: ["Divalent metal transporter 1", "Ferroportin", "Transferrin receptors"],
+			metabolicPathway: [
+				"Amino acid transport",
+				"Heme synthesis",
+				"Hemoglobin incorporation",
+			],
+			targetReceptors: [
+				"Divalent metal transporter 1",
+				"Ferroportin",
+				"Transferrin receptors",
+			],
 		},
 		{
 			name: "Elemental iron",
@@ -48,7 +56,11 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			concentration: "5mg",
 			bioavailability: 95,
 			halfLife: "2-4 hours",
-			metabolicPathway: ["Iron absorption", "Storage in ferritin", "Cellular utilization"],
+			metabolicPathway: [
+				"Iron absorption",
+				"Storage in ferritin",
+				"Cellular utilization",
+			],
 			targetReceptors: ["Iron regulatory proteins", "Heme oxygenase"],
 		},
 	],
@@ -59,7 +71,8 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			condition: "Iron deficiency anemia",
 			polishCondition: "Niedokrwistość z niedoboru żelaza",
 			indication: "Treatment of iron deficiency anemia and low ferritin levels",
-			polishIndication: "Leczenie niedokrwistości z niedoboru żelaza i niskiego poziomu ferrytyny",
+			polishIndication:
+				"Leczenie niedokrwistości z niedoboru żelaza i niskiego poziomu ferrytyny",
 			efficacy: "high",
 			effectivenessRating: 9,
 			evidenceLevel: "STRONG",
@@ -73,8 +86,10 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 		{
 			condition: "Iron deficiency prevention",
 			polishCondition: "Zapobieganie niedoborowi żelaza",
-			indication: "Prevention in high-risk groups including pregnant women and vegetarians",
-			polishIndication: "Zapobieganie w grupach wysokiego ryzyka, w tym kobiety w ciąży i wegetarianie",
+			indication:
+				"Prevention in high-risk groups including pregnant women and vegetarians",
+			polishIndication:
+				"Zapobieganie w grupach wysokiego ryzyka, w tym kobiety w ciąży i wegetarianie",
 			efficacy: "high",
 			effectivenessRating: 8,
 			evidenceLevel: "STRONG",
@@ -89,7 +104,8 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			condition: "Energy and fatigue",
 			polishCondition: "Energia i zmęczenie",
 			indication: "Fatigue reduction and energy metabolism support",
-			polishIndication: "Redukcja zmęczenia i wsparcie metabolizmu energetycznego",
+			polishIndication:
+				"Redukcja zmęczenia i wsparcie metabolizmu energetycznego",
 			efficacy: "moderate",
 			effectivenessRating: 7,
 			evidenceLevel: "MODERATE",
@@ -119,7 +135,8 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			condition: "Immune function",
 			polishCondition: "Funkcja odpornościowa",
 			indication: "Immune system support and infection resistance",
-			polishIndication: "Wsparcie układu odpornościowego i odporność na infekcje",
+			polishIndication:
+				"Wsparcie układu odpornościowego i odporność na infekcje",
 			efficacy: "moderate",
 			effectivenessRating: 6,
 			evidenceLevel: "MODERATE",
@@ -145,7 +162,11 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			polishDescription:
 				"Żelazo jest niezbędne do syntezy hemoglobiny, umożliwiając czerwonym krwinkom transport tlenu w całym organizmie. Wspiera produkcję energii i oddychanie komórkowe.",
 			evidenceLevel: "STRONG",
-			targetSystems: ["Hematopoietic system", "Cardiovascular system", "Cellular respiration"],
+			targetSystems: [
+				"Hematopoietic system",
+				"Cardiovascular system",
+				"Cellular respiration",
+			],
 			timeToEffect: "2-4 weeks",
 			duration: "Ongoing for blood cell production",
 		},
@@ -160,7 +181,11 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			polishDescription:
 				"Żelazo służy jako kofaktor dla enzymów zaangażowanych w produkcję energii, w tym oksydazy cytochromowej i dehydrogenazy bursztynianowej w mitochondrialnym łańcuchu transportu elektronów.",
 			evidenceLevel: "STRONG",
-			targetSystems: ["Mitochondria", "Energy metabolism", "Cellular ATP production"],
+			targetSystems: [
+				"Mitochondria",
+				"Energy metabolism",
+				"Cellular ATP production",
+			],
 			timeToEffect: "1-2 weeks",
 			duration: "Ongoing for energy production",
 		},
@@ -175,7 +200,11 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			polishDescription:
 				"Żelazo jest wymagane do syntezy neurotransmiterów i produkcji mieliny, wspierając funkcję poznawczą, pamięć i zdrowie neurologiczne.",
 			evidenceLevel: "MODERATE",
-			targetSystems: ["Central nervous system", "Neurotransmitter systems", "Myelin sheath"],
+			targetSystems: [
+				"Central nervous system",
+				"Neurotransmitter systems",
+				"Myelin sheath",
+			],
 			timeToEffect: "4-8 weeks",
 			duration: "Chronic supplementation required",
 		},
@@ -190,7 +219,11 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			polishDescription:
 				"Żelazo wspiera proliferację i funkcję komórek odpornościowych, przyczyniając się do mechanizmów obrony gospodarza i odporności na infekcje.",
 			evidenceLevel: "MODERATE",
-			targetSystems: ["Immune system", "White blood cells", "Cytokine production"],
+			targetSystems: [
+				"Immune system",
+				"White blood cells",
+				"Cytokine production",
+			],
 			timeToEffect: "2-4 weeks",
 			duration: "Ongoing for immune maintenance",
 		},
@@ -225,10 +258,8 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 				severity: "beneficial",
 				description: "Vitamin C enhances iron absorption",
 				clinicalSignificance: "Improved iron bioavailability",
-				polishClinicalSignificance:
-					"Poprawiona biodostępność żelaza",
-				polishDescription:
-					"Witamina C wzmacnia wchłanianie żelaza",
+				polishClinicalSignificance: "Poprawiona biodostępność żelaza",
+				polishDescription: "Witamina C wzmacnia wchłanianie żelaza",
 				recommendation: "Take together for enhanced absorption",
 				polishRecommendation: "Przyjmuj razem dla lepszego wchłaniania",
 				evidenceLevel: "STRONG",
@@ -240,10 +271,8 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 				severity: "moderate",
 				description: "Calcium may interfere with iron absorption",
 				clinicalSignificance: "May reduce iron absorption",
-				polishClinicalSignificance:
-					"Może zmniejszyć wchłanianie żelaza",
-				polishDescription:
-					"Wapń może zakłócać wchłanianie żelaza",
+				polishClinicalSignificance: "Może zmniejszyć wchłanianie żelaza",
+				polishDescription: "Wapń może zakłócać wchłanianie żelaza",
 				recommendation: "Take iron 2 hours before or after calcium",
 				polishRecommendation: "Przyjmuj żelazo 2 godziny przed lub po wapniu",
 				evidenceLevel: "STRONG",
@@ -255,10 +284,8 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 				severity: "minor",
 				description: "Tannins may reduce iron absorption",
 				clinicalSignificance: "May decrease iron bioavailability",
-				polishClinicalSignificance:
-					"Może zmniejszyć biodostępność żelaza",
-				polishDescription:
-					"Garbniki mogą zmniejszyć wchłanianie żelaza",
+				polishClinicalSignificance: "Może zmniejszyć biodostępność żelaza",
+				polishDescription: "Garbniki mogą zmniejszyć wchłanianie żelaza",
 				recommendation: "Avoid taking with tea or coffee",
 				polishRecommendation: "Unikaj przyjmowania z herbatą lub kawą",
 				evidenceLevel: "MODERATE",
@@ -277,7 +304,8 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			dosageDependent: true,
 			timeToOnset: "1-4 hours",
 			management: "Take with food, reduce dose, or use lower dose initially",
-			polishManagement: "Przyjmuj z jedzeniem, zmniejsz dawkę lub użyj niższej dawki początkowo",
+			polishManagement:
+				"Przyjmuj z jedzeniem, zmniejsz dawkę lub użyj niższej dawki początkowo",
 		},
 		{
 			effect: "Constipation",
@@ -288,7 +316,8 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			dosageDependent: true,
 			timeToOnset: "1-3 days",
 			management: "Increase fiber intake, ensure adequate hydration",
-			polishManagement: "Zwiększ spożycie błonnika, zapewnij odpowiednie nawodnienie",
+			polishManagement:
+				"Zwiększ spożycie błonnika, zapewnij odpowiednie nawodnienie",
 		},
 		{
 			effect: "Dark stools",
@@ -317,8 +346,7 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			mechanism: "Reduction of ferric to ferrous iron",
 			polishMechanism: "Redukcja żelaza ferrycznego do ferrous",
 			recommendation: "Beneficial combination for iron deficiency treatment",
-			polishRecommendation:
-				"Korzystne połączenie w leczeniu niedoboru żelaza",
+			polishRecommendation: "Korzystne połączenie w leczeniu niedoboru żelaza",
 			evidenceLevel: "STRONG",
 		},
 		{
@@ -326,7 +354,8 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 			polishSubstance: "Witamina A",
 			type: "synergistic",
 			clinicalSignificance: "Enhanced iron utilization and immune function",
-			polishClinicalSignificance: "Wzmocnione wykorzystanie żelaza i funkcja odpornościowa",
+			polishClinicalSignificance:
+				"Wzmocnione wykorzystanie żelaza i funkcja odpornościowa",
 			severity: "beneficial",
 			mechanism: "Complementary roles in hematopoiesis",
 			polishMechanism: "Komplementarne role w hematopoezie",
@@ -346,8 +375,10 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 	researchStudies: [
 		{
 			id: "cancelo-2014",
-			title: "Efficacy of a new ferrous bisglycinate formulation in iron deficient pregnant women",
-			polishTitle: "Skuteczność nowej formulacji bisglicynianu żelaza u kobiet w ciąży z niedoborem żelaza",
+			title:
+				"Efficacy of a new ferrous bisglycinate formulation in iron deficient pregnant women",
+			polishTitle:
+				"Skuteczność nowej formulacji bisglicynianu żelaza u kobiet w ciąży z niedoborem żelaza",
 			authors: ["Cancelo-Hidalgo MJ", "Castelo-Branco C", "Palacios S"],
 			journal: "Current Medical Research and Opinion",
 			year: 2014,
@@ -366,8 +397,10 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 		},
 		{
 			id: "bovell-benjamin-2000",
-			title: "Iron absorption from ferrous bisglycinate and ferric trisglycinate",
-			polishTitle: "Wchłanianie żelaza z bisglicynianu żelaza i trisglicynianu żelaza",
+			title:
+				"Iron absorption from ferrous bisglycinate and ferric trisglycinate",
+			polishTitle:
+				"Wchłanianie żelaza z bisglicynianu żelaza i trisglicynianu żelaza",
 			authors: ["Bovell-Benjamin AC", "Viteri FE", "Allen LH"],
 			journal: "American Journal of Clinical Nutrition",
 			year: 2000,
@@ -387,7 +420,8 @@ export const ironBisglycinateProfile: SupplementWithRelations = {
 		{
 			id: "who-2001",
 			title: "Iron deficiency anaemia: assessment, prevention and control",
-			polishTitle: "Niedokrwistość z niedoboru żelaza: ocena, zapobieganie i kontrola",
+			polishTitle:
+				"Niedokrwistość z niedoboru żelaza: ocena, zapobieganie i kontrola",
 			authors: ["World Health Organization"],
 			journal: "WHO Guidelines",
 			year: 2001,

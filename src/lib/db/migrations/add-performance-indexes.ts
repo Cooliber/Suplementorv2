@@ -1,7 +1,7 @@
 /**
  * Database Migration: Add Performance Indexes
  * Adds optimized indexes for popular sorting and search operations
- * 
+ *
  * Run with: bun run src/lib/db/migrations/add-performance-indexes.ts
  */
 
@@ -75,4 +75,3 @@ async function addPerformanceIndexes() {
 
 // Run migration
 addPerformanceIndexes();
-
