@@ -68,7 +68,7 @@ jobs:
           npx pa11y http://localhost:3000/suplementy --reporter json >> pa11y-report.json || true
 
       - name: Run Lighthouse accessibility audit
-        uses: treosh/lighthouse-ci-action@v11
+        uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
             http://localhost:3000
