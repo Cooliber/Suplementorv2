@@ -2,7 +2,7 @@
 # Optimized for development and production environments
 
 # Base stage with common dependencies
-FROM node:20-alpine AS base
+FROM node:25-alpine AS base
 RUN apk add --no-cache libc6-compat
 RUN apk update
 
