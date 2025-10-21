@@ -1,10 +1,10 @@
 import * as matchers from "@testing-library/jest-dom/matchers";
-import { cleanup } from "@testing-library/react";
-import { afterEach, expect } from "vitest";
+import { expect } from "vitest";
 
 expect.extend(matchers);
 
-// Cleanup after each test
-afterEach(() => {
-	cleanup();
-});
+// Polyfill for requestAnimationFrame
+global.requestAnimationFrame = (callback) => {
+	setTimeout(callback, 0);
+	return 0; // Return a dummy ID
+};

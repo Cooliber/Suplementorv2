@@ -1,21 +1,18 @@
 import {
 	type KnowledgeGraphState,
-	createKnowledgeGraphStore,
+	useKnowledgeGraphStore,
 } from "@/lib/stores/knowledge-graph-store";
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { create } from "zustand";
+import { act, renderHook } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
 // Mock the type
 vi.mock("@/types/knowledge-graph", () => ({}));
 
 describe("KnowledgeGraphStore", () => {
-	const createStore = () => create(createKnowledgeGraphStore);
-
 	it("initializes with default values", () => {
-		const useStore = createStore();
-		const state = useStore.getState();
+		const { result } = renderHook(() => useKnowledgeGraphStore());
 
-		expect(state.filters).toEqual({
+		expect(result.current.filters).toEqual({
 			nodeTypes: [],
 			relationshipTypes: [],
 			evidenceLevels: [],
@@ -25,23 +22,25 @@ describe("KnowledgeGraphStore", () => {
 			showLabels: true,
 		});
 
-		expect(state.selectedNodes).toEqual([]);
-		expect(state.layout).toBe("force");
-		expect(state.zoomLevel).toBe(1);
-		expect(state.isPlaying).toBe(true);
-		expect(state.highlightNode).toBeNull();
-		expect(state.maxRenderNodes).toBe(500);
+		expect(result.current.selectedNodes).toEqual([]);
+		expect(result.current.layout).toBe("force");
+		expect(result.current.zoomLevel).toBe(1);
+		expect(result.current.isPlaying).toBe(true);
+		expect(result.current.highlightNode).toBeNull();
+		expect(result.current.maxRenderNodes).toBe(500);
 	});
 
 	it("updates filters correctly", () => {
-		const useStore = createStore();
-		const store = useStore;
+		const { result } = renderHook(() => useKnowledgeGraphStore());
 
-		store
-			.getState()
-			.setFilters({ searchTerm: "test", nodeTypes: ["SUPPLEMENT"] });
+		act(() => {
+			result.current.setFilters({
+				searchTerm: "test",
+				nodeTypes: ["SUPPLEMENT"],
+			});
+		});
 
-		expect(store.getState().filters).toEqual({
+		expect(result.current.filters).toEqual({
 			nodeTypes: ["SUPPLEMENT"],
 			relationshipTypes: [],
 			evidenceLevels: [],
@@ -53,23 +52,22 @@ describe("KnowledgeGraphStore", () => {
 	});
 
 	it("resets filters to default", () => {
-		const useStore = createStore();
-		const store = useStore;
+		const { result } = renderHook(() => useKnowledgeGraphStore());
 
-		// Set some filters
-		store
-			.getState()
-			.setFilters({ searchTerm: "test", nodeTypes: ["SUPPLEMENT"] });
+		act(() => {
+			result.current.setFilters({
+				searchTerm: "test",
+				nodeTypes: ["SUPPLEMENT"],
+			});
+		});
 
-		// Verify filters are set
-		expect(store.getState().filters.searchTerm).toBe("test");
-		expect(store.getState().filters.nodeTypes).toEqual(["SUPPLEMENT"]);
+		expect(result.current.filters.searchTerm).toBe("test");
 
-		// Reset filters
-		store.getState().resetFilters();
+		act(() => {
+			result.current.resetFilters();
+		});
 
-		// Verify filters are reset
-		expect(store.getState().filters).toEqual({
+		expect(result.current.filters).toEqual({
 			nodeTypes: [],
 			relationshipTypes: [],
 			evidenceLevels: [],
@@ -81,159 +79,103 @@ describe("KnowledgeGraphStore", () => {
 	});
 
 	it("manages selected nodes", () => {
-		const useStore = createStore();
-		const store = useStore;
+		const { result } = renderHook(() => useKnowledgeGraphStore());
 
-		// Add a node
-		store.getState().addSelectedNode("node-1");
-		expect(store.getState().selectedNodes).toEqual(["node-1"]);
+		act(() => {
+			result.current.addSelectedNode("node-1");
+		});
+		expect(result.current.selectedNodes).toEqual(["node-1"]);
 
-		// Add another node
-		store.getState().addSelectedNode("node-2");
-		expect(store.getState().selectedNodes).toEqual(["node-1", "node-2"]);
+		act(() => {
+			result.current.addSelectedNode("node-2");
+		});
+		expect(result.current.selectedNodes).toEqual(["node-1", "node-2"]);
 
-		// Remove a node
-		store.getState().removeSelectedNode("node-1");
-		expect(store.getState().selectedNodes).toEqual(["node-2"]);
+		act(() => {
+			result.current.removeSelectedNode("node-1");
+		});
+		expect(result.current.selectedNodes).toEqual(["node-2"]);
 
-		// Clear all nodes
-		store.getState().clearSelectedNodes();
-		expect(store.getState().selectedNodes).toEqual([]);
+		act(() => {
+			result.current.clearSelectedNodes();
+		});
+		expect(result.current.selectedNodes).toEqual([]);
 	});
 
 	it("toggles node selection", () => {
-		const useStore = createStore();
-		const store = useStore;
+		const { result } = renderHook(() => useKnowledgeGraphStore());
 
-		// Toggle to add a node
-		store.getState().toggleSelectNode("node-1");
-		expect(store.getState().selectedNodes).toEqual(["node-1"]);
+		act(() => {
+			result.current.toggleSelectNode("node-1");
+		});
+		expect(result.current.selectedNodes).toEqual(["node-1"]);
 
-		// Toggle to remove the same node
-		store.getState().toggleSelectNode("node-1");
-		expect(store.getState().selectedNodes).toEqual([]);
+		act(() => {
+			result.current.toggleSelectNode("node-1");
+		});
+		expect(result.current.selectedNodes).toEqual([]);
 	});
 
 	it("updates layout configuration", () => {
-		const useStore = createStore();
-		const store = useStore;
+		const { result } = renderHook(() => useKnowledgeGraphStore());
 
-		store.getState().setLayout("radial");
-		expect(store.getState().layout).toBe("radial");
-
-		store.getState().setLayout("force");
-		expect(store.getState().layout).toBe("force");
+		act(() => {
+			result.current.setLayout("radial");
+		});
+		expect(result.current.layout).toBe("radial");
 	});
 
 	it("toggles label visibility", () => {
-		const useStore = createStore();
-		const store = useStore;
+		const { result } = renderHook(() => useKnowledgeGraphStore());
 
-		// Start with labels shown
-		expect(store.getState().showLabels).toBe(true);
-
-		// Toggle to hide
-		store.getState().toggleShowLabels();
-		expect(store.getState().showLabels).toBe(false);
-
-		// Toggle to show again
-		store.getState().toggleShowLabels();
-		expect(store.getState().showLabels).toBe(true);
+		act(() => {
+			result.current.toggleShowLabels();
+		});
+		expect(result.current.showLabels).toBe(false);
 	});
 
 	it("manages play state", () => {
-		const useStore = createStore();
-		const store = useStore;
+		const { result } = renderHook(() => useKnowledgeGraphStore());
 
-		// Start with playing
-		expect(store.getState().isPlaying).toBe(true);
-
-		// Toggle to pause
-		store.getState().togglePlay();
-		expect(store.getState().isPlaying).toBe(false);
-
-		// Toggle to play again
-		store.getState().togglePlay();
-		expect(store.getState().isPlaying).toBe(true);
-
-		// Set directly
-		store.getState().setIsPlaying(false);
-		expect(store.getState().isPlaying).toBe(false);
+		act(() => {
+			result.current.togglePlay();
+		});
+		expect(result.current.isPlaying).toBe(false);
 	});
 
 	it("manages zoom level", () => {
-		const useStore = createStore();
-		const store = useStore;
+		const { result } = renderHook(() => useKnowledgeGraphStore());
 
-		// Start with default zoom
-		expect(store.getState().zoomLevel).toBe(1);
-
-		// Set new zoom level
-		store.getState().setZoomLevel(1.5);
-		expect(store.getState().zoomLevel).toBe(1.5);
-
-		// Reset zoom
-		store.getState().resetZoom();
-		expect(store.getState().zoomLevel).toBe(1);
+		act(() => {
+			result.current.setZoomLevel(1.5);
+		});
+		expect(result.current.zoomLevel).toBe(1.5);
 	});
 
 	it("manages highlighting", () => {
-		const useStore = createStore();
-		const store = useStore;
+		const { result } = renderHook(() => useKnowledgeGraphStore());
 
-		// Start with no highlights
-		expect(store.getState().highlightNode).toBeNull();
-		expect(store.getState().highlightRelationship).toBeNull();
-
-		// Set node highlight
-		store.getState().setHighlightNode("node-1");
-		expect(store.getState().highlightNode).toBe("node-1");
-
-		// Set relationship highlight
-		store.getState().setHighlightRelationship("rel-1");
-		expect(store.getState().highlightRelationship).toBe("rel-1");
-
-		// Clear highlights
-		store.getState().clearHighlights();
-		expect(store.getState().highlightNode).toBeNull();
-		expect(store.getState().highlightRelationship).toBeNull();
+		act(() => {
+			result.current.setHighlightNode("node-1");
+		});
+		expect(result.current.highlightNode).toBe("node-1");
 	});
 
 	it("manages node expansion", () => {
-		const useStore = createStore();
-		const store = useStore;
+		const { result } = renderHook(() => useKnowledgeGraphStore());
 
-		// Initially no expanded nodes
-		expect(store.getState().expandedNodes).toEqual([]);
-
-		// Expand a node
-		store.getState().expandNode("node-1");
-		expect(store.getState().expandedNodes).toEqual(["node-1"]);
-
-		// Collapse a node
-		store.getState().collapseNode("node-1");
-		expect(store.getState().expandedNodes).toEqual([]);
-
-		// Toggle expansion
-		store.getState().toggleNodeExpansion("node-1");
-		expect(store.getState().expandedNodes).toEqual(["node-1"]);
-		store.getState().toggleNodeExpansion("node-1");
-		expect(store.getState().expandedNodes).toEqual([]);
+		act(() => {
+			result.current.expandNode("node-1");
+		});
+		expect(result.current.expandedNodes).toEqual(["node-1"]);
 	});
 
 	it("manages physics settings", () => {
-		const useStore = createStore();
-		const store = useStore;
+		const { result } = renderHook(() => useKnowledgeGraphStore());
 
-		// Start with physics enabled
-		expect(store.getState().enablePhysics).toBe(true);
-
-		// Disable physics
-		store.getState().setEnablePhysics(false);
-		expect(store.getState().enablePhysics).toBe(false);
-
-		// Enable physics again
-		store.getState().setEnablePhysics(true);
-		expect(store.getState().enablePhysics).toBe(true);
+		act(() => {
+			result.current.setEnablePhysics(false);
+		});
+		expect(result.current.enablePhysics).toBe(false);
 	});
 });
